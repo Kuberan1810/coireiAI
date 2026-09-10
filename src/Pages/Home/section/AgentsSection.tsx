@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React from 'react';
 import { Link } from 'react-router-dom';
 import {
   ArrowRight,
@@ -141,7 +141,6 @@ const AGENTS: AgentCard[] = [
 ];
 
 export const AgentsSection: React.FC = () => {
-  const [activeAgent, setActiveAgent] = useState<string | null>(null);
 
   return (
     <section className="relative w-full min-h-screen flex items-center justify-center overflow-hidden bg-white GlobalPadding">
@@ -230,19 +229,14 @@ export const AgentsSection: React.FC = () => {
                 {/* 8 Specialized Agent Cards (All placed outside the 287px dotted circle) */}
                 {AGENTS.map((agent) => {
                   const IconComponent = agent.icon;
-                  const isHovered = activeAgent === agent.id;
 
                   return (
                     <div
                       key={agent.id}
-                      onMouseEnter={() => setActiveAgent(agent.id)}
-                      onMouseLeave={() => setActiveAgent(null)}
                       style={agent.style}
-                      className={`absolute z-20 transition-all duration-200 cursor-pointer ${
-                        isHovered ? 'scale-105 z-30' : 'scale-100'
-                      }`}
+                      className="absolute z-20 select-none"
                     >
-                      <div className="bg-white rounded-[12px] px-3.5 py-2.5 flex items-center gap-2.5 shadow-[0_4px_16px_rgba(0,0,0,0.06),0_1px_3px_rgba(0,0,0,0.04)] border border-neutral-100/90 hover:border-neutral-200 hover:shadow-[0_8px_24px_rgba(0,0,0,0.09)] whitespace-nowrap transition-all duration-200">
+                      <div className="bg-white rounded-[12px] px-3.5 py-2.5 flex items-center gap-2.5 shadow-[0_2px_8px_rgba(0,0,0,0.04),0_1px_2px_rgba(0,0,0,0.02)] border border-neutral-100 whitespace-nowrap">
                         {/* Agent Pastel Icon Container */}
                         <div className={`w-8 h-8 rounded-[8px] flex items-center justify-center shrink-0 ${agent.iconBg} ${agent.iconColor}`}>
                           <IconComponent className="w-4 h-4" />
