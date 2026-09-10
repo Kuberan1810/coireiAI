@@ -22,7 +22,7 @@ export const CtaSection: React.FC = () => {
         </h2>
 
         {/* Subtitle */}
-        <p className="mt-5 text-base sm:text-lg text-[#64748B] max-w-xl mx-auto leading-relaxed font-normal">
+        <p className="mt-5 text-base sm:text-lg text-[#64748B] max-w-2xl mx-auto leading-relaxed font-normal">
           Smarter insights. Better leads. More revenue. All in one unified AI-powered{' '}
           <br className="hidden sm:inline" />
           strategic growth partner.
