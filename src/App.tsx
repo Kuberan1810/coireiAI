@@ -82,15 +82,7 @@ export const App: FC = () => {
                 />
               }
             />
-            <Route
-              path="/get-started"
-              element={
-                <PagePlaceholder
-                  title="Start Your GTM Journey"
-                  subtitle="Get started in minutes. No credit card required."
-                />
-              }
-            />
+            <Route path="/get-started" element={<Home />} />
             <Route path="*" element={<Home />} />
           </Routes>
         </main>

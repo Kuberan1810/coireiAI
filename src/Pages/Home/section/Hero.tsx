@@ -1,16 +1,6 @@
-import React, { useState } from 'react';
-import { Link } from 'react-router-dom';
+import React from 'react';
 import mockupImg from '../../../assets/home/mockups.svg';
-import {
-  Play,
-  Pause,
-  Check,
-  Sparkles,
-  Zap,
-  Target,
-  BarChart3,
-  X
-} from 'lucide-react';
+import { Check, Play } from 'lucide-react';
 
 const companyLogos = [
   {
@@ -73,8 +63,13 @@ const companyLogos = [
 ];
 
 export const Hero: React.FC = () => {
-  const [isDemoOpen, setIsDemoOpen] = useState(false);
-  const [isPlaying, setIsPlaying] = useState(true);
+  const handleScrollToCta = (e: React.MouseEvent) => {
+    e.preventDefault();
+    const elem = document.getElementById('get-started') || document.getElementById('cta');
+    if (elem) {
+      elem.scrollIntoView({ behavior: 'smooth' });
+    }
+  };
 
   return (
     <section className="relative w-full overflow-hidden bg-white">
@@ -102,17 +97,18 @@ export const Hero: React.FC = () => {
 
         {/* Action Buttons */}
         <div className="mt-8 flex flex-wrap items-center justify-center gap-4">
-          <Link
-            to="/get-started"
-            className="inline-flex items-center justify-center bg-[#0B0F19] hover:bg-neutral-800 text-white font-medium text-[14.5px] px-6 sm:px-7 py-3 rounded-full shadow-sm hover:shadow transition-all"
+          <a
+            href="#get-started"
+            onClick={handleScrollToCta}
+            className="inline-flex items-center justify-center bg-[#0B0F19] hover:bg-neutral-800 text-white font-medium text-[14.5px] px-7 py-3 rounded-full shadow-sm hover:shadow transition-all cursor-pointer select-none"
           >
             <span>Start your GTM journey</span>
-          </Link>
+          </a>
 
           <button
             type="button"
-            onClick={() => setIsDemoOpen(true)}
-            className="inline-flex items-center justify-center gap-2.5 bg-white hover:bg-neutral-50 text-neutral-800 font-medium text-[14.5px] px-6 py-3 rounded-full border border-neutral-200 shadow-xs hover:border-neutral-300 transition-all cursor-pointer"
+            onClick={handleScrollToCta}
+            className="inline-flex items-center justify-center gap-2.5 bg-white hover:bg-neutral-50 text-neutral-800 font-medium text-[14.5px] px-6 py-3 rounded-full border border-neutral-200 shadow-xs hover:border-neutral-300 transition-all cursor-pointer select-none"
           >
             <Play className="w-3.5 h-3.5 fill-neutral-800 text-neutral-800 ml-0.5" />
             <span>Watch demo</span>
@@ -188,133 +184,6 @@ export const Hero: React.FC = () => {
           </div>
         </div>
       </div>
-
-      {/* High-End Interactive SaaS Demo Modal */}
-      {isDemoOpen && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/75 backdrop-blur-md p-4 sm:p-6 animate-in fade-in duration-200">
-          <div className="relative w-full max-w-3xl bg-[#0F172A] border border-slate-700/80 rounded-3xl shadow-[0_25px_80px_-15px_rgba(0,0,0,0.7)] text-white overflow-hidden flex flex-col">
-            {/* Modal Top Header */}
-            <div className="flex items-center justify-between px-6 py-4 border-b border-slate-800 bg-[#0B1120]">
-              <div className="flex items-center gap-3">
-                <div className="flex items-center gap-1.5">
-                  <div className="w-3 h-3 rounded-full bg-red-500/80" />
-                  <div className="w-3 h-3 rounded-full bg-yellow-500/80" />
-                  <div className="w-3 h-3 rounded-full bg-green-500/80" />
-                </div>
-                <div className="h-4 w-px bg-slate-800 mx-1" />
-                <div className="flex items-center gap-2">
-                  <span className="w-2 h-2 rounded-full bg-emerald-400 animate-ping" />
-                  <span className="text-xs font-semibold text-slate-300 tracking-wide uppercase">
-                    Coirei AI Strategist — Live Simulation
-                  </span>
-                </div>
-              </div>
-
-              <div className="flex items-center gap-2">
-                <button
-                  onClick={() => setIsDemoOpen(false)}
-                  className="p-1.5 rounded-lg text-slate-400 hover:text-white hover:bg-slate-800 transition-colors"
-                  aria-label="Close modal"
-                >
-                  <X className="w-5 h-5" />
-                </button>
-              </div>
-            </div>
-
-            {/* Simulated Live Product Screen / Player */}
-            <div className="p-6 sm:p-8 space-y-6 bg-gradient-to-b from-[#0F172A] to-[#0A0F1D]">
-              {/* Simulated Command Bar */}
-              <div className="flex items-center justify-between p-3.5 rounded-2xl bg-slate-900/90 border border-slate-800 shadow-inner">
-                <div className="flex items-center gap-3 text-sm">
-                  <Sparkles className="w-4 h-4 text-blue-400 shrink-0" />
-                  <span className="text-slate-400 font-mono text-xs sm:text-sm">
-                    Target: <span className="text-white">Enterprise AI & B2B SaaS Decision Makers</span>
-                  </span>
-                </div>
-                <span className="text-[11px] font-semibold bg-blue-500/10 text-blue-400 border border-blue-500/20 px-2.5 py-0.5 rounded-full">
-                  Automating
-                </span>
-              </div>
-
-              {/* Execution Pipeline Cards */}
-              <div className="grid grid-cols-1 sm:grid-cols-3 gap-3.5">
-                <div className="p-4 rounded-2xl bg-slate-900/60 border border-slate-800/80">
-                  <div className="flex items-center gap-2 text-blue-400 text-xs font-semibold mb-1">
-                    <Target className="w-4 h-4" />
-                    <span>ICP Discovery</span>
-                  </div>
-                  <div className="text-xl font-bold text-white mt-1">1,420</div>
-                  <p className="text-[11px] text-slate-400 mt-0.5">High-intent accounts matched</p>
-                </div>
-
-                <div className="p-4 rounded-2xl bg-slate-900/60 border border-slate-800/80">
-                  <div className="flex items-center gap-2 text-emerald-400 text-xs font-semibold mb-1">
-                    <Zap className="w-4 h-4" />
-                    <span>Multi-Channel Angle</span>
-                  </div>
-                  <div className="text-xl font-bold text-white mt-1">28.4%</div>
-                  <p className="text-[11px] text-slate-400 mt-0.5">Predicted response velocity</p>
-                </div>
-
-                <div className="p-4 rounded-2xl bg-slate-900/60 border border-slate-800/80">
-                  <div className="flex items-center gap-2 text-indigo-400 text-xs font-semibold mb-1">
-                    <BarChart3 className="w-4 h-4" />
-                    <span>Pipeline Goal</span>
-                  </div>
-                  <div className="text-xl font-bold text-white mt-1">$1.2M</div>
-                  <p className="text-[11px] text-slate-400 mt-0.5">Autonomous Q3 target</p>
-                </div>
-              </div>
-
-              {/* Live Playback Timeline Controls */}
-              <div className="pt-2">
-                <div className="flex items-center justify-between text-xs text-slate-400 mb-2 font-mono">
-                  <div className="flex items-center gap-2">
-                    <button
-                      onClick={() => setIsPlaying(!isPlaying)}
-                      className="w-7 h-7 rounded-full bg-blue-600 hover:bg-blue-500 text-white flex items-center justify-center transition-transform hover:scale-105"
-                    >
-                      {isPlaying ? <Pause className="w-3.5 h-3.5" /> : <Play className="w-3.5 h-3.5 fill-current ml-0.5" />}
-                    </button>
-                    <span>Simulation Progress</span>
-                  </div>
-                  <span>01:24 / 02:00</span>
-                </div>
-
-                {/* Progress Bar */}
-                <div className="w-full h-1.5 bg-slate-800 rounded-full overflow-hidden">
-                  <div className="h-full bg-gradient-to-r from-blue-600 via-indigo-500 to-cyan-400 w-3/4 rounded-full" />
-                </div>
-              </div>
-            </div>
-
-            {/* Bottom Modal CTA Bar */}
-            <div className="p-6 bg-[#0B1120] border-t border-slate-800 flex flex-col sm:flex-row items-center justify-between gap-4">
-              <div className="text-center sm:text-left">
-                <h5 className="font-bold text-sm text-white">Ready to automate your Go-To-Market?</h5>
-                <p className="text-xs text-slate-400 mt-0.5">Set up in minutes. No credit card required.</p>
-              </div>
-
-              <div className="flex items-center gap-3 w-full sm:w-auto">
-                <button
-                  type="button"
-                  onClick={() => setIsDemoOpen(false)}
-                  className="w-full sm:w-auto px-4 py-2.5 text-xs font-semibold text-slate-300 hover:text-white transition-colors"
-                >
-                  Close
-                </button>
-                <Link
-                  to="/get-started"
-                  onClick={() => setIsDemoOpen(false)}
-                  className="w-full sm:w-auto inline-flex items-center justify-center bg-blue-600 hover:bg-blue-500 text-white font-semibold text-xs px-6 py-2.5 rounded-full shadow-lg shadow-blue-500/25 transition-all"
-                >
-                  Start Your Free Trial
-                </Link>
-              </div>
-            </div>
-          </div>
-        </div>
-      )}
     </section>
   );
 };

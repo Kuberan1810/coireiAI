@@ -148,11 +148,11 @@ export const AgentsSection: React.FC = () => {
           
           {/* Left Column: Headline & Call to Action */}
           <div className="lg:col-span-5 text-left z-10 max-w-xl mx-auto lg:mx-0">
-            {/* Pill Tag */}
-            <div className="inline-flex items-center px-3.5 py-1.5 rounded-full bg-[#EFF6FF] border border-blue-100/70 mb-6 shadow-[0_1px_2px_rgba(37,99,235,0.06)]">
-              <span className="text-[11px] sm:text-xs font-semibold text-[#2563EB] tracking-wider uppercase">
+            {/* Pill Badge */}
+            <div className="mb-5">
+              <div className="toggle">
                 AI AGENTS AT WORK
-              </span>
+              </div>
             </div>
 
             {/* Main Headline */}
@@ -167,11 +167,11 @@ export const AgentsSection: React.FC = () => {
               Our AI GTM Strategist coordinates a team of expert agents to research, plan, execute and optimize your growth.
             </p>
 
-            {/* Dark Pill CTA Button */}
-            <div className="mt-8 sm:mt-10">
+            {/* Explore Button matching Explore all features */}
+            <div className="mt-8">
               <Link
-                to="/get-started"
-                className="inline-flex items-center justify-center bg-[#0B0F19] hover:bg-neutral-800 text-white font-medium text-[15px] px-7 py-3.5 rounded-full shadow-[0_4px_14px_rgba(11,15,25,0.15)] hover:shadow-[0_6px_20px_rgba(11,15,25,0.25)] transition-all duration-200 cursor-pointer"
+                to="/product"
+                className="inline-flex items-center justify-center bg-[#0F172A] hover:bg-neutral-800 text-white text-[14.5px] font-medium px-6 py-2.5 rounded-full shadow-sm hover:shadow transition-all"
               >
                 <span>Meet the agents</span>
               </Link>

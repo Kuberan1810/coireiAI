@@ -64,12 +64,19 @@ export const Navbar: React.FC = () => {
           >
             Sign in
           </Link>
-          <Link
-            to="/get-started"
-            className="inline-flex items-center justify-center bg-[#0B0F19] hover:bg-neutral-800 text-white text-[14px] font-medium px-5 py-2.5 rounded-full shadow-sm hover:shadow-md transition-all"
+          <a
+            href="#get-started"
+            onClick={(e) => {
+              if (window.location.pathname === '/') {
+                e.preventDefault();
+                const elem = document.getElementById('get-started');
+                if (elem) elem.scrollIntoView({ behavior: 'smooth' });
+              }
+            }}
+            className="inline-flex items-center justify-center bg-[#0B0F19] hover:bg-neutral-800 text-white text-[14px] font-medium px-5 py-2.5 rounded-full shadow-sm hover:shadow-md transition-all cursor-pointer"
           >
             <span>Get Started</span>
-          </Link>
+          </a>
         </div>
 
         {/* Mobile menu button */}
@@ -130,13 +137,20 @@ export const Navbar: React.FC = () => {
             >
               Sign in
             </Link>
-            <Link
-              to="/get-started"
-              onClick={() => setMobileMenuOpen(false)}
-              className="w-full text-center py-2.5 bg-[#0B0F19] text-white font-medium rounded-full"
+            <a
+              href="#get-started"
+              onClick={(e) => {
+                setMobileMenuOpen(false);
+                if (window.location.pathname === '/') {
+                  e.preventDefault();
+                  const elem = document.getElementById('get-started');
+                  if (elem) elem.scrollIntoView({ behavior: 'smooth' });
+                }
+              }}
+              className="w-full text-center py-2.5 bg-[#0B0F19] text-white font-medium rounded-full cursor-pointer"
             >
               Get Started
-            </Link>
+            </a>
           </div>
         </div>
       )}
