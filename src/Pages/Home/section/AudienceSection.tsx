@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { CheckCircle2 } from 'lucide-react';
-import rightWhiteCardImg from '../../../assets/RightWhiteCardSection.png';
+import rightWhiteCardSvg from '../../../assets/RightWhiteCardSection.svg';
 
 const b2bBenefits = [
   'Find high-intent companies and decision makers',
@@ -30,7 +30,7 @@ export const AudienceSection: React.FC = () => {
         <div className="w-full lg:w-1/2 flex items-center justify-start">
           <div className="w-full max-w-[680px] lg:max-w-[680px] xl:max-w-[780px] 2xl:max-w-[860px] relative group transition-transform duration-300 hover:scale-[1.01]">
             <img
-              src={rightWhiteCardImg}
+              src={rightWhiteCardSvg}
               alt="High-quality leads, on autopilot"
               className="w-full h-auto object-contain rounded-[24px] sm:rounded-[28px] shadow-[0_20px_50px_rgba(0,0,0,0.12)] border border-neutral-800/10"
             />
