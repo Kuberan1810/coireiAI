@@ -67,7 +67,7 @@ export const Steps: React.FC = () => {
                 </div>
 
                 {/* Headline */}
-                <h2 className="text-3xl sm:text-4xl md:text-5xl font-extrabold text-[#0B0F19] tracking-tight leading-tight max-w-3xl mx-auto">
+                <h2 className="text-2xl sm:text-3xl md:text-[44px] font-semibold text-[#0F172A] tracking-tight leading-[1.18] max-w-3xl mx-auto">
                     From understanding to sustainable growth
                 </h2>
 

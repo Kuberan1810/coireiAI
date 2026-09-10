@@ -74,8 +74,8 @@ export const AudienceSection: React.FC = () => {
               </div>
             </div>
 
-            {/* Headline matching exact font size and color of other sections */}
-            <h2 className="text-4xl sm:text-5xl lg:text-[52px] font-extrabold text-[#0B0F19] tracking-[-0.03em] leading-[1.12] mb-7 sm:mb-8">
+            {/* Headline */}
+            <h2 className="text-2xl sm:text-3xl md:text-[44px] font-semibold text-[#0F172A] tracking-tight leading-[1.18] mb-7 sm:mb-8">
               Whether you're selling to <br className="hidden sm:inline" />
               businesses or consumers, <br className="hidden sm:inline" />
               we've got you covered.

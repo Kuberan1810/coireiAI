@@ -1,7 +1,6 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
 import {
-  ArrowRight,
   Search,
   Swords,
   Target,
@@ -157,14 +156,14 @@ export const AgentsSection: React.FC = () => {
             </div>
 
             {/* Main Headline */}
-            <h2 className="text-3xl sm:text-5xl lg:text-[52px] font-extrabold text-[#0B0F19] tracking-[-0.03em] leading-[1.12]">
+            <h2 className="text-2xl sm:text-3xl md:text-[44px] font-semibold text-[#0F172A] tracking-tight leading-[1.18]">
               A team of specialized <br />
               agents, working for <br />
               you.
             </h2>
 
             {/* Description */}
-            <p className="mt-6 text-base sm:text-lg text-[#64748B] leading-relaxed font-normal max-w-md">
+            <p className="mt-4 text-neutral-500 text-sm sm:text-base max-w-xl leading-relaxed">
               Our AI GTM Strategist coordinates a team of expert agents to research, plan, execute and optimize your growth.
             </p>
 
@@ -172,10 +171,9 @@ export const AgentsSection: React.FC = () => {
             <div className="mt-8 sm:mt-10">
               <Link
                 to="/get-started"
-                className="inline-flex items-center justify-center gap-2.5 bg-[#0B0F19] hover:bg-neutral-800 text-white font-medium text-[15px] px-7 py-3.5 rounded-full shadow-[0_4px_14px_rgba(11,15,25,0.15)] hover:shadow-[0_6px_20px_rgba(11,15,25,0.25)] transition-all duration-200 group cursor-pointer"
+                className="inline-flex items-center justify-center bg-[#0B0F19] hover:bg-neutral-800 text-white font-medium text-[15px] px-7 py-3.5 rounded-full shadow-[0_4px_14px_rgba(11,15,25,0.15)] hover:shadow-[0_6px_20px_rgba(11,15,25,0.25)] transition-all duration-200 cursor-pointer"
               >
                 <span>Meet the agents</span>
-                <ArrowRight className="w-4 h-4 text-white/90 group-hover:translate-x-1 transition-transform duration-200" />
               </Link>
             </div>
           </div>

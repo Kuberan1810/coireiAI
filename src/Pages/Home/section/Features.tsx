@@ -90,7 +90,7 @@ export const Features: React.FC = () => {
                         </div>
 
                         {/* Main Headline */}
-                        <h2 className="text-3xl sm:text-4xl md:text-[46px] font-extrabold text-[#0B0F19] tracking-tight leading-[1.18]">
+                        <h2 className="text-2xl sm:text-3xl md:text-[44px] font-semibold text-[#0F172A] tracking-tight leading-[1.18]">
                             Everything you need to go <br className="hidden sm:inline" />
                             from strategy to revenue
                         </h2>
@@ -108,7 +108,7 @@ export const Features: React.FC = () => {
 
                     {/* Right Column: Explanatory Subtext */}
                     <div className="lg:col-span-5 text-left lg:pt-14">
-                        <p className="text-neutral-500 text-base md:text-[17px] leading-relaxed font-normal">
+                        <p className="mt-4 text-neutral-500 text-sm sm:text-base max-w-xl leading-relaxed">
                             Coirei brings together AI-powered research, strategy and execution — so you can reach the right audience, with the right message, at the right time.
                         </p>
                     </div>
