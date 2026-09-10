@@ -33,13 +33,13 @@
 
 .GlobalPading,
 .GlobalPadding {
-  padding: 60px 24px;
+  padding: 40px 24px;
 }
 
 @media (min-width: 1024px) {
   .GlobalPading,
   .GlobalPadding {
-    padding: 60px 48px;
+    padding: 40px 48px;
   }
 }
 

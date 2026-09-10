@@ -178,7 +178,7 @@ export const AgentsSection: React.FC = () => {
   }, []);
 
   return (
-    <section ref={sectionRef} className="relative w-full min-h-screen flex items-center justify-center overflow-hidden bg-white GlobalPadding">
+    <section ref={sectionRef} className="relative w-full  flex items-center justify-center overflow-hidden bg-white GlobalPadding">
       <div className="w-full">
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-10 lg:gap-8 items-center justify-between">
 
@@ -215,7 +215,7 @@ export const AgentsSection: React.FC = () => {
           </div>
 
           {/* Right Column: Interactive Orbital Hub Ecosystem */}
-          <div className="lg:col-span-7 flex items-center justify-center relative w-full select-none py-4 sm:py-8 lg:py-10">
+          <div className="lg:col-span-7 flex items-center justify-center relative w-full select-none ">
             {/* Scaled container for responsive sizing without horizontal overflow */}
             <div className="w-full flex items-center justify-center overflow-visible h-[280px] min-[375px]:h-[310px] min-[400px]:h-[340px] min-[460px]:h-[390px] sm:h-[440px] lg:h-[500px]">
               <div className="relative shrink-0 w-[630px] h-[480px] flex items-center justify-center transform origin-center scale-[0.50] min-[375px]:scale-[0.55] min-[400px]:scale-[0.60] min-[460px]:scale-[0.70] sm:scale-[0.80] md:scale-[0.90] lg:scale-100 transition-transform duration-200">

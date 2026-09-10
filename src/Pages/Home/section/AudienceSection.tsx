@@ -21,18 +21,18 @@ export const AudienceSection: React.FC = () => {
   const benefits = activeTab === 'B2B' ? b2bBenefits : b2cBenefits;
 
   return (
-    <section className="relative w-full min-h-screen flex items-center justify-center overflow-hidden bg-white GlobalPadding">
+    <section className="relative w-full  flex items-center justify-center overflow-hidden bg-white GlobalPadding">
       {/* Ambient background glow */}
       <div className="absolute top-1/2 left-10 -translate-y-1/2 w-96 h-96 bg-blue-50/50 rounded-full blur-3xl pointer-events-none -z-10" />
 
       <div className="w-full flex flex-col lg:flex-row items-center justify-between gap-12 lg:gap-16 xl:gap-24">
         {/* Left Corner: Card Image */}
         <div className="w-full lg:w-1/2 flex items-center justify-start">
-          <div className="w-full max-w-[680px] lg:max-w-[680px] xl:max-w-[780px] 2xl:max-w-[860px] relative group transition-transform duration-300 hover:scale-[1.01]">
+          <div className="w-full max-w-[680px] lg:max-w-[680px] xl:max-w-[780px] 2xl:max-w-[860px] relative ">
             <img
               src={rightWhiteCardSvg}
               alt="High-quality leads, on autopilot"
-              className="w-full h-auto object-contain rounded-[24px] sm:rounded-[28px] shadow-[0_20px_50px_rgba(0,0,0,0.12)] border border-neutral-800/10"
+              className="w-full h-auto object-contain rounded-[24px] sm:rounded-[28px] "
             />
           </div>
         </div>
@@ -41,7 +41,12 @@ export const AudienceSection: React.FC = () => {
         <div className="w-full lg:w-1/2 flex flex-col justify-center items-start lg:items-end">
           <div className="w-full max-w-xl xl:max-w-2xl">
             {/* Top Bar: Figma Exact Tab & Badge */}
-            <div className="flex items-center justify-between gap-4 mb-6 sm:mb-8 flex-wrap">
+
+            {/* Tag / Badge */}
+            <div className="toggle mb-5">
+              BUILT FOR B2B AND B2C
+            </div>
+            <div className="flex items-center justify-between gap-4 mb-6 sm:mb-4 flex-wrap">
               {/* Tab Frame matching exact Figma Specs: Hug 56px x 24px, radius 9999px, padding 4px 16px, #0D0D0D */}
               <div className="inline-flex items-center p-[2px] bg-[#F8FAFC] border border-slate-200/90 rounded-full shadow-[0_1px_2px_rgba(0,0,0,0.02)]">
                 <button
@@ -68,10 +73,6 @@ export const AudienceSection: React.FC = () => {
                 </button>
               </div>
 
-              {/* Tag / Badge */}
-              <div className="toggle">
-                BUILT FOR B2B AND B2C
-              </div>
             </div>
 
             {/* Headline */}
