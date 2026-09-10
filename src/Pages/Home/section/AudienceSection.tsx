@@ -1,41 +1,25 @@
-import React, { useState } from 'react';
+import React from 'react';
 import { CheckCircle2 } from 'lucide-react';
 import rightWhiteCardImg from '../../../assets/RightWhiteCardSection.png';
 
-interface BenefitItem {
-  id: number;
-  text: string;
-}
-
-const b2bBenefits: BenefitItem[] = [
-  { id: 1, text: 'Find high-intent companies and decision makers' },
-  { id: 2, text: 'Enrich and qualify leads automatically' },
-  { id: 3, text: 'Run personalized email outreach campaigns' },
-  { id: 4, text: 'Get more meetings and close more deals' },
-];
-
-const b2cBenefits: BenefitItem[] = [
-  { id: 1, text: 'Find high-intent consumer segments and target buyers' },
-  { id: 2, text: 'Enrich customer profiles with behavioral data' },
-  { id: 3, text: 'Run personalized omnichannel outreach campaigns' },
-  { id: 4, text: 'Boost conversion rates and maximize customer lifetime value' },
+const benefits = [
+  'Find high-intent companies and decision makers',
+  'Enrich and qualify leads automatically',
+  'Run personalized email outreach campaigns',
+  'Get more meetings and close more deals',
 ];
 
 export const AudienceSection: React.FC = () => {
-  const [activeTab, setActiveTab] = useState<'B2B' | 'B2C'>('B2B');
-
-  const currentBenefits = activeTab === 'B2B' ? b2bBenefits : b2cBenefits;
-
   return (
-    <section className="GlobalPadding w-full bg-white relative overflow-hidden flex items-center">
+    <section className="relative w-full min-h-screen flex items-center justify-center overflow-hidden bg-white GlobalPadding">
       {/* Ambient background glow */}
       <div className="absolute top-1/2 left-10 -translate-y-1/2 w-96 h-96 bg-blue-50/50 rounded-full blur-3xl pointer-events-none -z-10" />
 
-      <div className="max-w-7xl mx-auto w-full">
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 lg:gap-16 items-center">
+      <div className="w-full">
+        <div className="grid grid-cols-1 lg:grid-cols-12 gap-10 lg:gap-16 items-center justify-between">
           {/* Left Column: Card Image */}
-          <div className="w-full flex items-center justify-center order-2 lg:order-1">
-            <div className="w-full max-w-[560px] relative group transition-transform duration-300 hover:scale-[1.01]">
+          <div className="lg:col-span-6 w-full flex items-center justify-center order-2 lg:order-1">
+            <div className="w-full max-w-[580px] relative group transition-transform duration-300 hover:scale-[1.01]">
               <img
                 src={rightWhiteCardImg}
                 alt="High-quality leads, on autopilot"
@@ -45,33 +29,14 @@ export const AudienceSection: React.FC = () => {
           </div>
 
           {/* Right Column: Content */}
-          <div className="w-full flex flex-col justify-center order-1 lg:order-2">
-            {/* Top Bar: Toggle & Badge */}
+          <div className="lg:col-span-6 w-full flex flex-col justify-center order-1 lg:order-2 max-w-xl mx-auto lg:mx-0">
+            {/* Top Bar: B2B pill & Badge */}
             <div className="flex items-center justify-between gap-4 mb-6 flex-wrap">
-              {/* Segmented Control / Toggle */}
+              {/* B2B pill */}
               <div className="inline-flex p-1 bg-[#F1F5F9] rounded-full border border-slate-200/80 shadow-xs">
-                <button
-                  type="button"
-                  onClick={() => setActiveTab('B2B')}
-                  className={`px-4 py-1.5 rounded-full text-xs font-bold transition-all duration-200 cursor-pointer ${
-                    activeTab === 'B2B'
-                      ? 'bg-[#0B0F19] text-white shadow-sm'
-                      : 'text-neutral-500 hover:text-neutral-900'
-                  }`}
-                >
+                <span className="px-4 py-1.5 rounded-full text-xs font-bold bg-[#0B0F19] text-white shadow-xs">
                   B2B
-                </button>
-                <button
-                  type="button"
-                  onClick={() => setActiveTab('B2C')}
-                  className={`px-4 py-1.5 rounded-full text-xs font-bold transition-all duration-200 cursor-pointer ${
-                    activeTab === 'B2C'
-                      ? 'bg-[#0B0F19] text-white shadow-sm'
-                      : 'text-neutral-500 hover:text-neutral-900'
-                  }`}
-                >
-                  B2C
-                </button>
+                </span>
               </div>
 
               {/* Tag / Badge */}
@@ -87,13 +52,13 @@ export const AudienceSection: React.FC = () => {
 
             {/* Features Checklist */}
             <ul className="space-y-4 sm:space-y-5">
-              {currentBenefits.map((item) => (
-                <li key={item.id} className="flex items-center gap-3.5 text-neutral-600 sm:text-base text-sm font-medium">
+              {benefits.map((benefit, index) => (
+                <li key={index} className="flex items-center gap-3.5 text-neutral-600 sm:text-base text-sm font-medium">
                   <CheckCircle2
                     className="w-5 h-5 text-[#3B82F6] shrink-0"
                     strokeWidth={1.75}
                   />
-                  <span>{item.text}</span>
+                  <span>{benefit}</span>
                 </li>
               ))}
             </ul>
