@@ -158,9 +158,9 @@ export const AgentsSection: React.FC = () => {
             </div>
 
             {/* Main Headline */}
-            <h2 className="text-4xl sm:text-5xl lg:text-[52px] font-extrabold text-[#0B0F19] tracking-[-0.03em] leading-[1.12]">
+            <h2 className="text-3xl sm:text-5xl lg:text-[52px] font-extrabold text-[#0B0F19] tracking-[-0.03em] leading-[1.12]">
               A team of specialized <br />
-              agents , working for <br />
+              agents, working for <br />
               you.
             </h2>
 
@@ -182,10 +182,10 @@ export const AgentsSection: React.FC = () => {
           </div>
 
           {/* Right Column: Interactive Orbital Hub Ecosystem */}
-          <div className="lg:col-span-7 flex items-center justify-center relative w-full select-none py-6 sm:py-10">
-            {/* Scrollable / Scaled container for responsive sizing */}
-            <div className="w-full flex items-center justify-center overflow-x-auto sm:overflow-visible py-4 scrollbar-none">
-              <div className="relative shrink-0 w-[630px] h-[480px] flex items-center justify-center">
+          <div className="lg:col-span-7 flex items-center justify-center relative w-full select-none py-4 sm:py-8 lg:py-10">
+            {/* Scaled container for responsive sizing without horizontal overflow */}
+            <div className="w-full flex items-center justify-center overflow-visible h-[280px] min-[375px]:h-[310px] min-[400px]:h-[340px] min-[460px]:h-[390px] sm:h-[440px] lg:h-[500px]">
+              <div className="relative shrink-0 w-[630px] h-[480px] flex items-center justify-center transform origin-center scale-[0.50] min-[375px]:scale-[0.55] min-[400px]:scale-[0.60] min-[460px]:scale-[0.70] sm:scale-[0.80] md:scale-[0.90] lg:scale-100 transition-transform duration-200">
                 
                 {/* 287x287 Outer Dotted Circle (exactly 34.5px gap from the 218px inner circle on all sides) */}
                 <svg
