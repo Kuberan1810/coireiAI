@@ -33,20 +33,20 @@
 
 .GlobalPading,
 .GlobalPadding {
-  padding: 100px 24px;
+  padding: 60px 24px;
 }
 
 @media (min-width: 1024px) {
   .GlobalPading,
   .GlobalPadding {
-    padding: 100px 48px;
+    padding: 60px 48px;
   }
 }
 
 @media (max-width: 640px) {
   .GlobalPading,
   .GlobalPadding {
-    padding: 50px 16px;
+    padding: 30px 16px;
   }
 }
 

@@ -90,7 +90,7 @@ export const Features: React.FC = () => {
                         </div>
 
                         {/* Main Headline */}
-                        <h2 className="text-3xl sm:text-4xl md:text-[46px] font-extrabold text-[#0B0F19] tracking-tight leading-[1.18]">
+                        <h2 className="text-2xl sm:text-3xl md:text-[44px] font-semibold text-[#0F172A] tracking-tight leading-[1.18]">
                             Everything you need to go <br className="hidden sm:inline" />
                             from strategy to revenue
                         </h2>
@@ -99,7 +99,7 @@ export const Features: React.FC = () => {
                         <div className="mt-8">
                             <Link
                                 to="/product"
-                                className="inline-flex items-center justify-center bg-[#0B0F19] hover:bg-neutral-800 text-white text-[14.5px] font-medium px-6 py-3.5 rounded-full shadow-sm hover:shadow transition-all"
+                                className="inline-flex items-center justify-center bg-[#0F172A] hover:bg-neutral-800 text-white text-[14.5px] font-medium px-6 py-2.5 rounded-full shadow-sm hover:shadow transition-all"
                             >
                                 <span>Explore all features</span>
                             </Link>
@@ -136,7 +136,7 @@ export const Features: React.FC = () => {
 
                             {/* Text Information */}
                             <div>
-                                <h3 className="text-[15px] sm:text-base font-bold text-neutral-900 tracking-tight group-hover:text-blue-600 transition-colors">
+                                <h3 className="text-[15px] sm:text-base font-bold text-neutral-900 tracking-tight group-hover:text-Black transition-colors">
                                     {feature.title}
                                 </h3>
                                 <p className="mt-1 text-[13px] text-neutral-500 font-normal">
