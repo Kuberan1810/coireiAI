@@ -8,7 +8,7 @@ export const CtaSection: React.FC = () => {
       {/* Background Soft Lighting Glow */}
       <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[750px] h-[400px] bg-gradient-to-b from-blue-50/80 via-indigo-50/30 to-transparent blur-3xl pointer-events-none -z-10" />
 
-      <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
+      <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
         {/* Top Pill Badge */}
         <div className="inline-flex items-center justify-center mb-6">
           <div className="toggle">
@@ -16,8 +16,8 @@ export const CtaSection: React.FC = () => {
           </div>
         </div>
 
-        {/* Main Headline */}
-        <h2 className="text-4xl sm:text-5xl md:text-6xl lg:text-[62px] font-extrabold text-[#0B0F19] tracking-tight leading-[1.15]">
+        {/* Main Headline - Single Line */}
+        <h2 className="text-3xl sm:text-4xl md:text-5xl lg:text-[56px] font-extrabold text-[#0B0F19] tracking-tight leading-[1.15] whitespace-normal sm:whitespace-nowrap">
           Let your GTM run on autopilot.
         </h2>
 
