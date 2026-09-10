@@ -3,7 +3,7 @@ import Hero from './section/Hero';
 
 export const Product: FC = () => {
   return (
-    <div className="min-h-screen py-16 px-4 max-w-7xl mx-auto text-center">
+    <div className="min-h-screen py-16 px-4   text-center">
       <h1 className="text-4xl font-bold text-neutral-900">Product Overview</h1>
       <p className="mt-4 text-neutral-500 max-w-xl mx-auto">
         Explore the complete autonomous GTM intelligence suite built by Coirei.

@@ -1,27 +1,21 @@
 import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
-import { ChevronDown, ArrowRight, Menu, X } from 'lucide-react';
+import { ChevronDown, Menu, X } from 'lucide-react';
+import coireiLogo from '../assets/logo/coireiLogo.png';
 
 export const Navbar: React.FC = () => {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
 
   return (
     <header className="w-full bg-white/95 backdrop-blur-md sticky top-0 z-50 transition-all">
-      <div className="max-w-7xl mx-auto px-6 sm:px-8 h-20 flex items-center justify-between">
+      <div className="  px-6 sm:px-8 h-20 flex items-center justify-between">
         {/* Logo */}
-        <Link to="/" className="flex items-center gap-2.5 group">
-          <div className="w-8 h-8 rounded-lg bg-gradient-to-tr from-[#2563EB] to-[#3B82F6] flex items-center justify-center shadow-sm shadow-blue-500/20 group-hover:scale-105 transition-transform">
-            <svg
-              className="w-5 h-5 text-white"
-              viewBox="0 0 24 24"
-              fill="currentColor"
-            >
-              <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10c2.4 0 4.6-.85 6.32-2.27l-2.14-2.14C14.98 18.3 13.56 18.8 12 18.8c-3.76 0-6.8-3.04-6.8-6.8 0-3.76 3.04-6.8 6.8-6.8 2.8 0 5.2 1.68 6.24 4.08h3.24C20.16 5.34 16.42 2 12 2z" />
-            </svg>
-          </div>
-          <span className="text-[22px] font-bold tracking-tight text-[#0B0F19]">
-            coirei
-          </span>
+        <Link to="/" className="flex items-center group">
+          <img
+            src={coireiLogo}
+            alt="coirei"
+            className="h-7 sm:h-8 w-auto object-contain group-hover:opacity-90 transition-opacity"
+          />
         </Link>
 
         {/* Center Desktop Navigation */}
@@ -72,10 +66,9 @@ export const Navbar: React.FC = () => {
           </Link>
           <Link
             to="/get-started"
-            className="inline-flex items-center justify-center gap-2 bg-[#0B0F19] hover:bg-neutral-800 text-white text-[14px] font-medium px-5 py-2.5 rounded-full shadow-sm hover:shadow-md transition-all group"
+            className="inline-flex items-center justify-center bg-[#0B0F19] hover:bg-neutral-800 text-white text-[14px] font-medium px-5 py-2.5 rounded-full shadow-sm hover:shadow-md transition-all"
           >
             <span>Get Started</span>
-            <ArrowRight className="w-4 h-4 text-white/80 group-hover:translate-x-0.5 transition-transform" />
           </Link>
         </div>
 
@@ -142,7 +135,7 @@ export const Navbar: React.FC = () => {
               onClick={() => setMobileMenuOpen(false)}
               className="w-full text-center py-2.5 bg-[#0B0F19] text-white font-medium rounded-full"
             >
-              Get Started →
+              Get Started
             </Link>
           </div>
         </div>
