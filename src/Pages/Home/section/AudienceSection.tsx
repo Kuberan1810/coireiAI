@@ -1,15 +1,25 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { CheckCircle2 } from 'lucide-react';
 import rightWhiteCardImg from '../../../assets/RightWhiteCardSection.png';
 
-const benefits = [
+const b2bBenefits = [
   'Find high-intent companies and decision makers',
   'Enrich and qualify leads automatically',
   'Run personalized email outreach campaigns',
   'Get more meetings and close more deals',
 ];
 
+const b2cBenefits = [
+  'Find high-intent consumers and target buyers',
+  'Enrich customer profiles with behavioral data',
+  'Run personalized omnichannel campaigns',
+  'Drive more conversions and repeat purchases',
+];
+
 export const AudienceSection: React.FC = () => {
+  const [activeTab, setActiveTab] = useState<'B2B' | 'B2C'>('B2B');
+  const benefits = activeTab === 'B2B' ? b2bBenefits : b2cBenefits;
+
   return (
     <section className="relative w-full min-h-screen flex items-center justify-center overflow-hidden bg-white GlobalPadding">
       {/* Ambient background glow */}
@@ -30,13 +40,32 @@ export const AudienceSection: React.FC = () => {
         {/* Right Corner: Content */}
         <div className="w-full lg:w-1/2 flex flex-col justify-center items-start lg:items-end">
           <div className="w-full max-w-xl xl:max-w-2xl">
-            {/* Top Bar: B2B pill & Badge */}
+            {/* Top Bar: Figma Exact Tab & Badge */}
             <div className="flex items-center justify-between gap-4 mb-6 sm:mb-8 flex-wrap">
-              {/* B2B pill */}
-              <div className="inline-flex p-1 bg-[#F1F5F9] rounded-full border border-slate-200/80 shadow-xs">
-                <span className="px-4 py-1.5 rounded-full text-xs font-bold bg-[#0B0F19] text-white shadow-xs">
+              {/* Tab Frame matching exact Figma Specs: Hug 56px x 24px, radius 9999px, padding 4px 16px, #0D0D0D */}
+              <div className="inline-flex items-center p-[2px] bg-[#F8FAFC] border border-slate-200/90 rounded-full shadow-[0_1px_2px_rgba(0,0,0,0.02)]">
+                <button
+                  type="button"
+                  onClick={() => setActiveTab('B2B')}
+                  className={`h-[24px] px-[16px] py-[4px] rounded-full text-[12px] font-semibold transition-all duration-150 flex items-center justify-center cursor-pointer select-none ${
+                    activeTab === 'B2B'
+                      ? 'bg-[#0D0D0D] text-white shadow-[0_1px_2px_rgba(0,0,0,0.05)]'
+                      : 'text-[#64748B] hover:text-[#0D0D0D]'
+                  }`}
+                >
                   B2B
-                </span>
+                </button>
+                <button
+                  type="button"
+                  onClick={() => setActiveTab('B2C')}
+                  className={`h-[24px] px-[16px] py-[4px] rounded-full text-[12px] font-semibold transition-all duration-150 flex items-center justify-center cursor-pointer select-none ${
+                    activeTab === 'B2C'
+                      ? 'bg-[#0D0D0D] text-white shadow-[0_1px_2px_rgba(0,0,0,0.05)]'
+                      : 'text-[#64748B] hover:text-[#0D0D0D]'
+                  }`}
+                >
+                  B2C
+                </button>
               </div>
 
               {/* Tag / Badge */}
@@ -55,10 +84,10 @@ export const AudienceSection: React.FC = () => {
             {/* Features Checklist with matching typography and blue icons */}
             <ul className="space-y-4 sm:space-y-5">
               {benefits.map((benefit, index) => (
-                <li key={index} className="flex items-center gap-4 text-base sm:text-lg text-[#64748B] font-normal leading-relaxed">
+                <li key={index} className="flex items-center gap-3.5 text-[15.5px] sm:text-[16.5px] text-[#334155] font-normal leading-relaxed">
                   <CheckCircle2
-                    className="w-6 h-6 text-[#2563EB] shrink-0"
-                    strokeWidth={2}
+                    className="w-5 h-5 sm:w-5.5 sm:h-5.5 text-[#2563EB] shrink-0"
+                    strokeWidth={1.8}
                   />
                   <span>{benefit}</span>
                 </li>
