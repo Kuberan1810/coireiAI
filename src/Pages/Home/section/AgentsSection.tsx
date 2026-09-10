@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { Link } from 'react-router-dom';
 import {
   Search,
@@ -140,9 +140,35 @@ const AGENTS: AgentCard[] = [
 ];
 
 export const AgentsSection: React.FC = () => {
+  const [isVisible, setIsVisible] = useState(false);
+  const sectionRef = useRef<HTMLElement>(null);
+
+  useEffect(() => {
+    const observer = new IntersectionObserver(
+      ([entry]) => {
+        if (entry.isIntersecting) {
+          setIsVisible(true);
+        }
+      },
+      {
+        threshold: 0.2,
+      }
+    );
+
+    const currentRef = sectionRef.current;
+    if (currentRef) {
+      observer.observe(currentRef);
+    }
+
+    return () => {
+      if (currentRef) {
+        observer.unobserve(currentRef);
+      }
+    };
+  }, []);
 
   return (
-    <section className="relative w-full min-h-screen flex items-center justify-center overflow-hidden bg-white GlobalPadding">
+    <section ref={sectionRef} className="relative w-full min-h-screen flex items-center justify-center overflow-hidden bg-white GlobalPadding">
       <div className="w-full">
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-10 lg:gap-8 items-center justify-between">
           
@@ -184,9 +210,11 @@ export const AgentsSection: React.FC = () => {
             <div className="w-full flex items-center justify-center overflow-visible h-[280px] min-[375px]:h-[310px] min-[400px]:h-[340px] min-[460px]:h-[390px] sm:h-[440px] lg:h-[500px]">
               <div className="relative shrink-0 w-[630px] h-[480px] flex items-center justify-center transform origin-center scale-[0.50] min-[375px]:scale-[0.55] min-[400px]:scale-[0.60] min-[460px]:scale-[0.70] sm:scale-[0.80] md:scale-[0.90] lg:scale-100 transition-transform duration-200">
                 
-                {/* 287x287 Outer Dotted Circle (exactly 34.5px gap from the 218px inner circle on all sides) */}
+                {/* 287x287 Outer Dotted Circle (with smooth fade/scale entrance) */}
                 <svg
-                  className="absolute inset-0 m-auto pointer-events-none z-0"
+                  className={`absolute inset-0 m-auto pointer-events-none z-0 transition-all duration-700 ease-out ${
+                    isVisible ? 'opacity-100 scale-100' : 'opacity-0 scale-90'
+                  }`}
                   width="287"
                   height="287"
                   viewBox="0 0 287 287"
@@ -224,8 +252,8 @@ export const AgentsSection: React.FC = () => {
                   </p>
                 </div>
 
-                {/* 8 Specialized Agent Cards (All placed outside the 287px dotted circle) */}
-                {AGENTS.map((agent) => {
+                {/* 8 Specialized Agent Cards (Outer boxes with springy scroll pop-up animation) */}
+                {AGENTS.map((agent, index) => {
                   const IconComponent = agent.icon;
 
                   return (
@@ -234,7 +262,17 @@ export const AgentsSection: React.FC = () => {
                       style={agent.style}
                       className="absolute z-20 select-none"
                     >
-                      <div className="bg-white rounded-[12px] px-3.5 py-2.5 flex items-center gap-2.5 shadow-[0_2px_8px_rgba(0,0,0,0.04),0_1px_2px_rgba(0,0,0,0.02)] border border-neutral-100 whitespace-nowrap">
+                      <div
+                        style={{
+                          transitionDelay: isVisible ? `${index * 65}ms` : '0ms',
+                          transitionTimingFunction: 'cubic-bezier(0.34, 1.56, 0.64, 1)',
+                        }}
+                        className={`bg-white rounded-[12px] px-3.5 py-2.5 flex items-center gap-2.5 shadow-[0_2px_8px_rgba(0,0,0,0.04),0_1px_2px_rgba(0,0,0,0.02)] border border-neutral-100 whitespace-nowrap transition-all duration-500 ${
+                          isVisible
+                            ? 'opacity-100 scale-100 translate-y-0'
+                            : 'opacity-0 scale-50 translate-y-2 pointer-events-none'
+                        }`}
+                      >
                         {/* Agent Pastel Icon Container */}
                         <div className={`w-8 h-8 rounded-[8px] flex items-center justify-center shrink-0 ${agent.iconBg} ${agent.iconColor}`}>
                           <IconComponent className="w-4 h-4" />
