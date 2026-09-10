@@ -117,10 +117,12 @@ export const Steps: React.FC = () => {
                     </p>
                   </div>
 
+
                   {/* Exact 67x66 Blue Badge */}
                   <div className="w-[67px] h-[66px] bg-[#2563EB] text-white font-bold text-2xl flex items-center justify-center rounded-l-[20px] shrink-0 select-none">
                     {step.number}
                   </div>
+
                 </div>
               )}
             </div>

@@ -1,7 +1,6 @@
-import React, { useState } from 'react';
+import React from 'react';
 import { Link } from 'react-router-dom';
 import {
-  ArrowRight,
   Search,
   Swords,
   Target,
@@ -141,7 +140,6 @@ const AGENTS: AgentCard[] = [
 ];
 
 export const AgentsSection: React.FC = () => {
-  const [activeAgent, setActiveAgent] = useState<string | null>(null);
 
   return (
     <section className="relative w-full min-h-screen flex items-center justify-center overflow-hidden bg-white GlobalPadding">
@@ -158,14 +156,14 @@ export const AgentsSection: React.FC = () => {
             </div>
 
             {/* Main Headline */}
-            <h2 className="text-4xl sm:text-5xl lg:text-[52px] font-extrabold text-[#0B0F19] tracking-[-0.03em] leading-[1.12]">
+            <h2 className="text-2xl sm:text-3xl md:text-[44px] font-semibold text-[#0F172A] tracking-tight leading-[1.18]">
               A team of specialized <br />
-              agents , working for <br />
+              agents, working for <br />
               you.
             </h2>
 
             {/* Description */}
-            <p className="mt-6 text-base sm:text-lg text-[#64748B] leading-relaxed font-normal max-w-md">
+            <p className="mt-4 text-neutral-500 text-sm sm:text-base max-w-xl leading-relaxed">
               Our AI GTM Strategist coordinates a team of expert agents to research, plan, execute and optimize your growth.
             </p>
 
@@ -173,19 +171,18 @@ export const AgentsSection: React.FC = () => {
             <div className="mt-8 sm:mt-10">
               <Link
                 to="/get-started"
-                className="inline-flex items-center justify-center gap-2.5 bg-[#0B0F19] hover:bg-neutral-800 text-white font-medium text-[15px] px-7 py-3.5 rounded-full shadow-[0_4px_14px_rgba(11,15,25,0.15)] hover:shadow-[0_6px_20px_rgba(11,15,25,0.25)] transition-all duration-200 group cursor-pointer"
+                className="inline-flex items-center justify-center bg-[#0B0F19] hover:bg-neutral-800 text-white font-medium text-[15px] px-7 py-3.5 rounded-full shadow-[0_4px_14px_rgba(11,15,25,0.15)] hover:shadow-[0_6px_20px_rgba(11,15,25,0.25)] transition-all duration-200 cursor-pointer"
               >
                 <span>Meet the agents</span>
-                <ArrowRight className="w-4 h-4 text-white/90 group-hover:translate-x-1 transition-transform duration-200" />
               </Link>
             </div>
           </div>
 
           {/* Right Column: Interactive Orbital Hub Ecosystem */}
-          <div className="lg:col-span-7 flex items-center justify-center relative w-full select-none py-6 sm:py-10">
-            {/* Scrollable / Scaled container for responsive sizing */}
-            <div className="w-full flex items-center justify-center overflow-x-auto sm:overflow-visible py-4 scrollbar-none">
-              <div className="relative shrink-0 w-[630px] h-[480px] flex items-center justify-center">
+          <div className="lg:col-span-7 flex items-center justify-center relative w-full select-none py-4 sm:py-8 lg:py-10">
+            {/* Scaled container for responsive sizing without horizontal overflow */}
+            <div className="w-full flex items-center justify-center overflow-visible h-[280px] min-[375px]:h-[310px] min-[400px]:h-[340px] min-[460px]:h-[390px] sm:h-[440px] lg:h-[500px]">
+              <div className="relative shrink-0 w-[630px] h-[480px] flex items-center justify-center transform origin-center scale-[0.50] min-[375px]:scale-[0.55] min-[400px]:scale-[0.60] min-[460px]:scale-[0.70] sm:scale-[0.80] md:scale-[0.90] lg:scale-100 transition-transform duration-200">
                 
                 {/* 287x287 Outer Dotted Circle (exactly 34.5px gap from the 218px inner circle on all sides) */}
                 <svg
@@ -230,19 +227,14 @@ export const AgentsSection: React.FC = () => {
                 {/* 8 Specialized Agent Cards (All placed outside the 287px dotted circle) */}
                 {AGENTS.map((agent) => {
                   const IconComponent = agent.icon;
-                  const isHovered = activeAgent === agent.id;
 
                   return (
                     <div
                       key={agent.id}
-                      onMouseEnter={() => setActiveAgent(agent.id)}
-                      onMouseLeave={() => setActiveAgent(null)}
                       style={agent.style}
-                      className={`absolute z-20 transition-all duration-200 cursor-pointer ${
-                        isHovered ? 'scale-105 z-30' : 'scale-100'
-                      }`}
+                      className="absolute z-20 select-none"
                     >
-                      <div className="bg-white rounded-[12px] px-3.5 py-2.5 flex items-center gap-2.5 shadow-[0_4px_16px_rgba(0,0,0,0.06),0_1px_3px_rgba(0,0,0,0.04)] border border-neutral-100/90 hover:border-neutral-200 hover:shadow-[0_8px_24px_rgba(0,0,0,0.09)] whitespace-nowrap transition-all duration-200">
+                      <div className="bg-white rounded-[12px] px-3.5 py-2.5 flex items-center gap-2.5 shadow-[0_2px_8px_rgba(0,0,0,0.04),0_1px_2px_rgba(0,0,0,0.02)] border border-neutral-100 whitespace-nowrap">
                         {/* Agent Pastel Icon Container */}
                         <div className={`w-8 h-8 rounded-[8px] flex items-center justify-center shrink-0 ${agent.iconBg} ${agent.iconColor}`}>
                           <IconComponent className="w-4 h-4" />
