@@ -3,6 +3,7 @@ import Hero from './section/Hero';
 import Features from './section/Features';
 import Steps from './section/Steps';
 import AgentsSection from './section/AgentsSection';
+import AudienceSection from './section/AudienceSection';
 
 
 export const Home: React.FC = () => {
@@ -12,7 +13,7 @@ export const Home: React.FC = () => {
       <Features />
       <Steps />
       <AgentsSection />
-
+      <AudienceSection />
     </main>
   );
 };
