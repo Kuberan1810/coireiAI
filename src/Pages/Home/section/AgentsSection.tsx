@@ -19,6 +19,7 @@ interface AgentCard {
   iconBg: string;
   iconColor: string;
   style: React.CSSProperties;
+  fromCenter: { x: number; y: number };
 }
 
 // 287px outer dotted circle has radius 143.5px
@@ -38,6 +39,7 @@ const AGENTS: AgentCard[] = [
       top: 'calc(50% - 143.5px - 10px)',
       transform: 'translate(-50%, -100%)',
     },
+    fromCenter: { x: 0, y: 153.5 },
   },
   {
     id: 'ads',
@@ -52,6 +54,7 @@ const AGENTS: AgentCard[] = [
       top: 'calc(50% + 143.5px + 10px)',
       transform: 'translate(-50%, 0)',
     },
+    fromCenter: { x: 0, y: -153.5 },
   },
   {
     id: 'outreach',
@@ -66,6 +69,7 @@ const AGENTS: AgentCard[] = [
       top: '50%',
       transform: 'translate(-100%, -50%)',
     },
+    fromCenter: { x: 151.5, y: 0 },
   },
   {
     id: 'icp',
@@ -80,6 +84,7 @@ const AGENTS: AgentCard[] = [
       top: '50%',
       transform: 'translate(0, -50%)',
     },
+    fromCenter: { x: -151.5, y: 0 },
   },
   {
     id: 'growth',
@@ -94,6 +99,7 @@ const AGENTS: AgentCard[] = [
       top: 'calc(50% - 114px)',
       transform: 'translate(-100%, -50%)',
     },
+    fromCenter: { x: 118, y: 114 },
   },
   {
     id: 'competitor',
@@ -108,6 +114,7 @@ const AGENTS: AgentCard[] = [
       top: 'calc(50% - 114px)',
       transform: 'translate(0, -50%)',
     },
+    fromCenter: { x: -118, y: 114 },
   },
   {
     id: 'lead',
@@ -122,6 +129,7 @@ const AGENTS: AgentCard[] = [
       top: 'calc(50% + 114px)',
       transform: 'translate(-100%, -50%)',
     },
+    fromCenter: { x: 118, y: -114 },
   },
   {
     id: 'audience',
@@ -136,6 +144,7 @@ const AGENTS: AgentCard[] = [
       top: 'calc(50% + 114px)',
       transform: 'translate(0, -50%)',
     },
+    fromCenter: { x: -118, y: -114 },
   },
 ];
 
@@ -144,26 +153,27 @@ export const AgentsSection: React.FC = () => {
   const sectionRef = useRef<HTMLElement>(null);
 
   useEffect(() => {
+    const element = sectionRef.current;
+    if (!element) return;
+
     const observer = new IntersectionObserver(
       ([entry]) => {
         if (entry.isIntersecting) {
           setIsVisible(true);
+        } else if (entry.boundingClientRect.top > 0) {
+          // Reset when scrolled back above section so it animates again on scroll down
+          setIsVisible(false);
         }
       },
       {
-        threshold: 0.2,
+        threshold: 0.15,
       }
     );
 
-    const currentRef = sectionRef.current;
-    if (currentRef) {
-      observer.observe(currentRef);
-    }
+    observer.observe(element);
 
     return () => {
-      if (currentRef) {
-        observer.unobserve(currentRef);
-      }
+      observer.disconnect();
     };
   }, []);
 
@@ -171,7 +181,7 @@ export const AgentsSection: React.FC = () => {
     <section ref={sectionRef} className="relative w-full min-h-screen flex items-center justify-center overflow-hidden bg-white GlobalPadding">
       <div className="w-full">
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-10 lg:gap-8 items-center justify-between">
-          
+
           {/* Left Column: Headline & Call to Action */}
           <div className="lg:col-span-5 text-left z-10 max-w-xl mx-auto lg:mx-0">
             {/* Pill Tag */}
@@ -209,12 +219,11 @@ export const AgentsSection: React.FC = () => {
             {/* Scaled container for responsive sizing without horizontal overflow */}
             <div className="w-full flex items-center justify-center overflow-visible h-[280px] min-[375px]:h-[310px] min-[400px]:h-[340px] min-[460px]:h-[390px] sm:h-[440px] lg:h-[500px]">
               <div className="relative shrink-0 w-[630px] h-[480px] flex items-center justify-center transform origin-center scale-[0.50] min-[375px]:scale-[0.55] min-[400px]:scale-[0.60] min-[460px]:scale-[0.70] sm:scale-[0.80] md:scale-[0.90] lg:scale-100 transition-transform duration-200">
-                
-                {/* 287x287 Outer Dotted Circle (with smooth fade/scale entrance) */}
+
+                {/* 287x287 Outer Dotted Circle (exactly 34.5px gap from the 218px inner circle on all sides) */}
                 <svg
-                  className={`absolute inset-0 m-auto pointer-events-none z-0 transition-all duration-700 ease-out ${
-                    isVisible ? 'opacity-100 scale-100' : 'opacity-0 scale-90'
-                  }`}
+                  className="absolute inset-0 m-auto pointer-events-none z-0 transition-opacity duration-700"
+                  style={{ opacity: isVisible ? 1 : 0.3 }}
                   width="287"
                   height="287"
                   viewBox="0 0 287 287"
@@ -252,40 +261,43 @@ export const AgentsSection: React.FC = () => {
                   </p>
                 </div>
 
-                {/* 8 Specialized Agent Cards (Outer boxes with springy scroll pop-up animation) */}
-                {AGENTS.map((agent, index) => {
+                {/* 8 Specialized Agent Cards (Simultaneous explosive pop from inside the center circle) */}
+                {AGENTS.map((agent) => {
                   const IconComponent = agent.icon;
 
                   return (
                     <div
                       key={agent.id}
                       style={agent.style}
-                      className="absolute z-20 select-none"
+                      className="absolute z-20 select-none pointer-events-none"
                     >
                       <div
                         style={{
-                          transitionDelay: isVisible ? `${index * 65}ms` : '0ms',
-                          transitionTimingFunction: 'cubic-bezier(0.34, 1.56, 0.64, 1)',
+                          transform: isVisible
+                            ? 'translate3d(0px, 0px, 0px) scale(1)'
+                            : `translate3d(${agent.fromCenter.x}px, ${agent.fromCenter.y}px, 0px) scale(0)`,
+                          opacity: isVisible ? 1 : 0,
+                          transition: 'transform 750ms cubic-bezier(0.34, 1.56, 0.64, 1), opacity 320ms ease-out',
+                          transformOrigin: 'center center',
+                          willChange: 'transform, opacity',
                         }}
-                        className={`bg-white rounded-[12px] px-3.5 py-2.5 flex items-center gap-2.5 shadow-[0_2px_8px_rgba(0,0,0,0.04),0_1px_2px_rgba(0,0,0,0.02)] border border-neutral-100 whitespace-nowrap transition-all duration-500 ${
-                          isVisible
-                            ? 'opacity-100 scale-100 translate-y-0'
-                            : 'opacity-0 scale-50 translate-y-2 pointer-events-none'
-                        }`}
+                        className="pointer-events-auto"
                       >
-                        {/* Agent Pastel Icon Container */}
-                        <div className={`w-8 h-8 rounded-[8px] flex items-center justify-center shrink-0 ${agent.iconBg} ${agent.iconColor}`}>
-                          <IconComponent className="w-4 h-4" />
-                        </div>
+                        <div className="bg-white rounded-[12px] px-3.5 py-2.5 flex items-center gap-2.5 shadow-[0_2px_8px_rgba(0,0,0,0.04),0_1px_2px_rgba(0,0,0,0.02)] border border-neutral-100 whitespace-nowrap">
+                          {/* Agent Pastel Icon Container */}
+                          <div className={`w-8 h-8 rounded-[8px] flex items-center justify-center shrink-0 ${agent.iconBg} ${agent.iconColor}`}>
+                            <IconComponent className="w-4 h-4" />
+                          </div>
 
-                        {/* Agent Name & Description */}
-                        <div className="flex flex-col text-left">
-                          <span className="text-[13px] font-bold text-[#0B0F19] tracking-tight leading-tight">
-                            {agent.name}
-                          </span>
-                          <span className="text-[11px] text-[#64748B] font-normal leading-tight mt-0.5">
-                            {agent.role}
-                          </span>
+                          {/* Agent Name & Description */}
+                          <div className="flex flex-col text-left">
+                            <span className="text-[13px] font-bold text-[#0B0F19] tracking-tight leading-tight">
+                              {agent.name}
+                            </span>
+                            <span className="text-[11px] text-[#64748B] font-normal leading-tight mt-0.5">
+                              {agent.role}
+                            </span>
+                          </div>
                         </div>
                       </div>
                     </div>
