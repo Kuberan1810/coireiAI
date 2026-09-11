@@ -133,7 +133,7 @@ export const Hero: React.FC = () => {
               <img
                 src={mockupImg}
                 alt="Coirei AI GTM Strategist Platform"
-                className="w-full h-auto object-contain mx-auto drop-shadow-[0_25px_35px_rgba(0,0,0,0.12)] select-none transition-transform duration-500 hover:scale-[1.01]"
+                className="w-full h-auto object-contain mx-auto "
               />
             </div>
 
