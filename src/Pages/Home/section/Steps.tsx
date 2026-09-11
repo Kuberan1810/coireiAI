@@ -1,66 +1,72 @@
 import React from 'react';
+import {
+  Lightbulb,
+  BarChart3,
+  Search,
+  Compass,
+  Target,
+  Rocket,
+  TrendingUp,
+} from 'lucide-react';
 import { ScrollReveal } from '../../../components/ui/ScrollReveal';
 
 interface StepItem {
-  number: string;
+  id: string;
   title: string;
   description: string;
-  alignment: 'left' | 'right';
+  icon: React.ComponentType<{ className?: string; strokeWidth?: number }>;
 }
 
 const stepsData: StepItem[] = [
   {
-    number: '01',
-    title: 'Understand',
+    id: 'understand',
+    title: 'UNDERSTAND',
     description: 'We learn about your company and product.',
-    alignment: 'left',
+    icon: Lightbulb,
   },
   {
-    number: '02',
-    title: 'Analyse',
+    id: 'analyse',
+    title: 'ANALYSE',
     description: 'We analyse your market, competitors and trends.',
-    alignment: 'right',
+    icon: BarChart3,
   },
   {
-    number: '03',
-    title: 'Find',
+    id: 'find',
+    title: 'FIND',
     description: 'We identify your ideal customers (ICP).',
-    alignment: 'left',
+    icon: Search,
   },
   {
-    number: '04',
-    title: 'Discover',
+    id: 'discover',
+    title: 'DISCOVER',
     description: 'We find where your customers are active.',
-    alignment: 'right',
+    icon: Compass,
   },
   {
-    number: '05',
-    title: 'Strategize',
+    id: 'strategize',
+    title: 'STRATEGIZE',
     description: 'We build a complete GTM strategy.',
-    alignment: 'left',
+    icon: Target,
   },
   {
-    number: '06',
-    title: 'Execute',
+    id: 'execute',
+    title: 'EXECUTE',
     description: 'We run campaigns, generate leads and reach out.',
-    alignment: 'right',
+    icon: Rocket,
   },
   {
-    number: '07',
-    title: 'Learn',
+    id: 'learn',
+    title: 'LEARN',
     description: 'We analyse results and continuously improve.',
-    alignment: 'left',
+    icon: TrendingUp,
   },
 ];
 
 export const Steps: React.FC = () => {
   return (
-    <section className="GlobalPading w-full bg-white relative overflow-hidden">
-      {/* Subtle background glow */}
-      <div className="absolute top-1/3 right-10 w-96 h-96 bg-blue-50/40 rounded-full blur-3xl pointer-events-none -z-10 animate-pulse-glow" />
-
-      <div className="text-center">
-        {/* Top Pill Badge */}
+    <section className="GlobalPadding w-full bg-white relative">
+      <div className="w-full max-w-[1500px] mx-auto text-center">
+        {/* Top Heading Box */}
         <ScrollReveal variant="fade-up" delay={50} duration={600} distance={20} className="inline-flex items-center justify-center mb-5">
           <div className="toggle">
             THE 7-STEP GTM PROCESS
@@ -68,74 +74,50 @@ export const Steps: React.FC = () => {
         </ScrollReveal>
 
         {/* Headline */}
-        <ScrollReveal variant="fade-up" delay={150} duration={750} distance={26}>
-          <h2 className="text-2xl sm:text-3xl md:text-[44px] font-semibold text-[#0F172A] tracking-tight leading-[1.18]">
+        <ScrollReveal variant="fade-up" delay={120} duration={750} distance={24}>
+          <h2 className="text-2xl sm:text-3xl md:text-[40px] font-bold text-[#0B0F19] tracking-tight leading-tight">
             From understanding to sustainable growth
           </h2>
         </ScrollReveal>
 
         {/* Subtitle */}
-        <ScrollReveal variant="fade-up" delay={250} duration={750} distance={24}>
-          <p className="mt-4 text-neutral-500 text-sm sm:text-base max-w-xl mx-auto leading-relaxed">
-            A structured, AI-powered process to take you from where you are to <br className="hidden sm:inline" />
-            where you want to be.
+        <ScrollReveal variant="fade-up" delay={200} duration={750} distance={20}>
+          <p className="mt-4 text-[#64748B] text-sm sm:text-base max-w-2xl mx-auto leading-relaxed">
+            A structured, AI-powered process to take you from where you are to<br className="hidden sm:inline" /> where you want to be.
           </p>
         </ScrollReveal>
 
-        {/* 7-Step Cards Container */}
-        <div className="mt-14 max-w-[964px] mx-auto space-y-4 sm:space-y-5">
-          {stepsData.map((step) => {
-            const isLeft = step.alignment === 'left';
-            const variant = isLeft ? 'fade-right' : 'fade-left';
+        {/* 7-Step Cards Grid */}
+        <div className="mt-14 grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 lg:grid-cols-7 gap-3 sm:gap-3.5 xl:gap-4 justify-items-center w-full mx-auto">
+          {stepsData.map((step, index) => {
+            const Icon = step.icon;
 
             return (
               <ScrollReveal
-                key={step.number}
-                variant={variant}
-                duration={700}
-                distance={32}
-                threshold={0.12}
-                className={`relative w-full bg-[#F8FAFF] rounded-[36px] sm:rounded-[44px] border border-[#F3F3F3] shadow-[0_2px_8px_rgba(0,0,0,0.02)] hover:shadow-[0_8px_24px_rgba(37,99,235,0.06)] hover:border-blue-200/60 transition-all duration-300 overflow-hidden min-h-[96px] sm:min-h-[116px] md:min-h-[126px] flex items-center group cursor-default ${
-                  isLeft ? 'justify-start' : 'justify-end'
-                }`}
+                key={step.id}
+                variant="fade-up"
+                delay={220 + index * 50}
+                duration={650}
+                distance={20}
+                className="bg-[#FFFFFF] w-full max-w-[205px] min-w-[145px] h-[320px] rounded-[26px] border border-slate-200 shadow-[0_4px_20px_rgba(0,0,0,0.02),0_1px_3px_rgba(0,0,0,0.01)] flex flex-col justify-between items-center text-center pt-[36px] pb-[32px] px-[16px]"
               >
-                {isLeft ? (
-                  /* Left Layout: 67x66 Badge on Left + 22px Gap */
-                  <div className="flex items-center gap-[22px] w-full text-left">
-                    {/* Exact 67x66 Blue Badge */}
-                    <div className="w-[67px] h-[66px] bg-[#2563EB] text-white font-bold text-2xl flex items-center justify-center rounded-r-[20px] shrink-0 select-none group-hover:scale-105 transition-transform duration-300 shadow-sm">
-                      {step.number}
-                    </div>
+                {/* Icon Slot */}
+                <div className="flex-1 flex items-center justify-center">
+                  <Icon
+                    className="w-7 h-7 text-[#2563EB]"
+                    strokeWidth={1.75}
+                  />
+                </div>
 
-                    {/* Text Content */}
-                    <div className="py-4 pr-6">
-                      <h3 className="text-lg sm:text-xl font-bold text-[#0F172A] tracking-tight group-hover:text-blue-600 transition-colors duration-200">
-                        {step.title}
-                      </h3>
-                      <p className="text-xs sm:text-sm md:text-base text-neutral-500 font-normal mt-1 leading-normal">
-                        {step.description}
-                      </p>
-                    </div>
-                  </div>
-                ) : (
-                  /* Right Layout: Text + 22px Gap + 67x66 Badge on Right */
-                  <div className="flex items-center justify-end gap-[22px] w-full text-right">
-                    {/* Text Content */}
-                    <div className="py-4 pl-6">
-                      <h3 className="text-lg sm:text-xl font-bold text-[#0F172A] tracking-tight group-hover:text-blue-600 transition-colors duration-200">
-                        {step.title}
-                      </h3>
-                      <p className="text-xs sm:text-sm md:text-base text-neutral-500 font-normal mt-1 leading-normal">
-                        {step.description}
-                      </p>
-                    </div>
-
-                    {/* Exact 67x66 Blue Badge */}
-                    <div className="w-[67px] h-[66px] bg-[#2563EB] text-white font-bold text-2xl flex items-center justify-center rounded-l-[20px] shrink-0 select-none group-hover:scale-105 transition-transform duration-300 shadow-sm">
-                      {step.number}
-                    </div>
-                  </div>
-                )}
+                {/* Uniform Text Information */}
+                <div className="w-full h-[88px] flex flex-col justify-start">
+                  <h4 className="text-[12.5px] font-bold text-[#0B0F19] tracking-wider uppercase mb-2 leading-tight">
+                    {step.title}
+                  </h4>
+                  <p className="text-[11px] sm:text-[11.5px] text-[#64748B] leading-[1.45] font-normal">
+                    {step.description}
+                  </p>
+                </div>
               </ScrollReveal>
             );
           })}

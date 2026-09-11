@@ -9,6 +9,7 @@ import {
   Users,
   Mail,
   TrendingUp,
+  ArrowRight,
 } from 'lucide-react';
 import { ScrollReveal } from '../../../components/ui/ScrollReveal';
 
@@ -205,7 +206,7 @@ export const AgentsSection: React.FC = () => {
             {/* Description */}
             <ScrollReveal variant="fade-up" delay={250} duration={750} distance={24}>
               <p className="mt-4 text-neutral-500 text-sm sm:text-base max-w-xl leading-relaxed">
-                Our AI GTM Strategist coordinates a team of expert agents to research, plan, execute and optimize your growth.
+                Each agent handles a specific part of your go-to-market journey — from researching markets and competitors to finding prospects, creating campaigns, and optimizing what works.
               </p>
             </ScrollReveal>
 
@@ -213,9 +214,10 @@ export const AgentsSection: React.FC = () => {
             <ScrollReveal variant="fade-up" delay={350} duration={700} distance={20} className="mt-8">
               <Link
                 to="/product"
-                className="inline-flex items-center justify-center bg-[#0F172A] hover:bg-neutral-800 text-white text-[14.5px] font-medium px-6 py-2.5 rounded-full shadow-sm hover:shadow-md hover:-translate-y-0.5 transition-all"
+                className="inline-flex items-center justify-center bg-[#0F172A] hover:bg-neutral-800 text-white text-[14.5px] font-medium px-6 py-2.5 rounded-full hover:-translate-y-0.5 transition-all gap-2"
               >
                 <span>Meet the agents</span>
+                <ArrowRight className="w-4 h-4" />
               </Link>
             </ScrollReveal>
           </div>
