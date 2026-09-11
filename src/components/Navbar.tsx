@@ -7,8 +7,8 @@ export const Navbar: React.FC = () => {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
 
   return (
-    <header className="w-full bg-white/95 backdrop-blur-md sticky top-0 z-50 transition-all">
-      <div className="  px-6 sm:px-8 h-20 flex items-center justify-between">
+    <header className="w-full bg-white/95 backdrop-blur-md sticky top-0 z-50 transition-all animate-navbar-slide-down ">
+      <div className="px-6 sm:px-8 h-20 flex items-center justify-between">
         {/* Logo */}
         <Link to="/" className="flex items-center group">
           <img
