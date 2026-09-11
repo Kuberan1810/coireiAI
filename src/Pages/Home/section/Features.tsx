@@ -8,6 +8,7 @@ import {
     Megaphone,
     Sparkles,
     BarChart3,
+    ArrowRight,
 } from 'lucide-react';
 import { ScrollReveal } from '../../../components/ui/ScrollReveal';
 
@@ -52,7 +53,7 @@ const featuresList: FeatureCard[] = [
         id: 'ad-campaigns',
         icon: <Megaphone className="w-5 h-5 text-[#9333EA]" />,
         iconBg: 'bg-[#FAF5FF]',
-        title: 'Ad Campaigns (B2C)',
+        title: 'Ad Campaigns',
         description: 'Create, launch and optimise.',
     },
     {
@@ -101,9 +102,10 @@ export const Features: React.FC = () => {
                         <ScrollReveal variant="fade-up" delay={250} duration={700} distance={20} className="mt-8">
                             <Link
                                 to="/product"
-                                className="inline-flex items-center justify-center bg-[#0F172A] hover:bg-neutral-800 text-white text-[14.5px] font-medium px-6 py-2.5 rounded-full shadow-sm hover:shadow-md hover:-translate-y-0.5 transition-all"
+                                className="inline-flex items-center justify-center bg-[#0F172A] hover:bg-neutral-800 text-white text-[14.5px] font-medium px-6 py-2.5 rounded-full hover:-translate-y-0.5 transition-all gap-2"
                             >
                                 <span>Explore all features</span>
+                                <ArrowRight className="w-4 h-4" />
                             </Link>
                         </ScrollReveal>
                     </div>
@@ -112,7 +114,7 @@ export const Features: React.FC = () => {
                     <div className="lg:col-span-5 text-left lg:pt-14">
                         <ScrollReveal variant="fade-up" delay={200} duration={750} distance={24}>
                             <p className="mt-4 text-neutral-500 text-sm sm:text-base max-w-xl leading-relaxed">
-                                Coirei brings together AI-powered research, strategy and execution — so you can reach the right audience, with the right message, at the right time.
+                                Coirei brings together AI-powered research, strategy, and execution into one intelligent growth platform. It researches your market, understands your business and competitors, identifies the customers you should target, and builds the strategies needed to reach them.
                             </p>
                         </ScrollReveal>
                     </div>

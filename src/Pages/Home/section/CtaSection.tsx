@@ -1,5 +1,5 @@
 import React from 'react';
-import { Play } from 'lucide-react';
+import { Play, ArrowRight } from 'lucide-react';
 import { ScrollReveal } from '../../../components/ui/ScrollReveal';
 
 export const CtaSection: React.FC = () => {
@@ -25,10 +25,8 @@ export const CtaSection: React.FC = () => {
 
         {/* Subtitle */}
         <ScrollReveal variant="fade-up" delay={250} duration={750} distance={24}>
-          <p className="mt-4 text-neutral-500 text-sm sm:text-base max-w-xl mx-auto leading-relaxed">
-            Smarter insights. Better leads. More revenue. All in one unified AI-powered{' '}
-            <br className="hidden sm:inline" />
-            strategic growth partner.
+          <p className="mt-4 text-neutral-500 text-sm sm:text-base max-w-2xl mx-auto leading-relaxed">
+            Smarter market insights, high-intent leads, and predictable revenue growth. Coirei unifies deep market research, audience targeting, and multi-channel execution into one intelligent AI platform that powers your entire go-to-market journey on autopilot.
           </p>
         </ScrollReveal>
 
@@ -37,9 +35,10 @@ export const CtaSection: React.FC = () => {
           <div className="mt-8 flex flex-wrap items-center justify-center gap-4">
             <a
               href="mailto:contact@coirei.com"
-              className="inline-flex items-center justify-center bg-[#0B0F19] hover:bg-neutral-800 text-white font-medium text-[14.5px] px-7 py-3 rounded-full shadow-sm hover:shadow-md hover:-translate-y-0.5 transition-all cursor-pointer select-none"
+              className="inline-flex items-center justify-center bg-[#0B0F19] hover:bg-neutral-800 text-white font-medium text-[14.5px] px-7 py-3 rounded-full hover:-translate-y-0.5 transition-all cursor-pointer select-none gap-2"
             >
               <span>Get Started</span>
+              <ArrowRight className="w-4 h-4" />
             </a>
 
             <button
@@ -47,7 +46,7 @@ export const CtaSection: React.FC = () => {
               onClick={() => {
                 window.scrollTo({ top: 0, behavior: 'smooth' });
               }}
-              className="inline-flex items-center justify-center gap-2.5 bg-white hover:bg-neutral-50 text-neutral-800 font-medium text-[14.5px] px-6 py-3 rounded-full border border-neutral-200 shadow-xs hover:border-neutral-300 hover:-translate-y-0.5 transition-all cursor-pointer select-none"
+              className="inline-flex items-center justify-center gap-2.5 bg-white hover:bg-neutral-50 text-neutral-800 font-medium text-[14.5px] px-6 py-3 rounded-full border border-neutral-200 hover:border-neutral-300 hover:-translate-y-0.5 transition-all cursor-pointer select-none"
             >
               <Play className="w-3.5 h-3.5 fill-neutral-800 text-neutral-800 ml-0.5" />
               <span>Watch demo</span>
