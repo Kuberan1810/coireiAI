@@ -3,8 +3,9 @@ import Hero from './section/Hero';
 import Features from './section/Features';
 import Steps from './section/Steps';
 import AgentsSection from './section/AgentsSection';
-import AudienceSection from './section/AudienceSection';
-import CtaSection from './section/CtaSection';
+import VisibilitySection from './section/VisibilitySection';
+import QuoteSection from './section/QuoteSection';
+import BusinessSection from './section/BusinessSection';
 
 export const Home: React.FC = () => {
   return (
@@ -13,8 +14,9 @@ export const Home: React.FC = () => {
       <Features />
       <Steps />
       <AgentsSection />
-      <AudienceSection />
-      <CtaSection />
+      <VisibilitySection />
+      <QuoteSection />
+      <BusinessSection />
     </main>
   );
 };

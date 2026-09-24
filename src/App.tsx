@@ -2,6 +2,7 @@ import { useEffect } from 'react';
 import type { FC } from 'react';
 import { BrowserRouter, Routes, Route, useLocation } from 'react-router-dom';
 import Navbar from './components/Navbar';
+import Footer from './components/Footer';
 import Home from './Pages/Home/Home';
 import Product from './Pages/Product/Product';
 
@@ -86,6 +87,7 @@ export const App: FC = () => {
             <Route path="*" element={<Home />} />
           </Routes>
         </main>
+        <Footer />
       </div>
     </BrowserRouter>
   );

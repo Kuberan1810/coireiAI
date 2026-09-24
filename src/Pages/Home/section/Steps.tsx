@@ -13,8 +13,6 @@ import {
   ChevronRight,
   Globe,
   ExternalLink,
-  ChevronDown,
-  MoreVertical,
   Sparkles,
 } from 'lucide-react';
 import { icpData } from './icpData';

@@ -1,13 +1,8 @@
 import React from 'react';
 import {
   X,
-  Building2,
-  Users,
-  MapPin,
-  Globe,
   Mail,
   CheckCircle2,
-  Briefcase,
   Target,
   Sparkles,
   ExternalLink,
@@ -33,13 +28,12 @@ const LinkedInIcon: React.FC<{ size?: number; className?: string }> = ({
 interface ICPDetailPanelProps {
   lead: ICPLead;
   onClose: () => void;
-  buttonStyle: React.CSSProperties;
+  buttonStyle?: React.CSSProperties;
 }
 
 export const ICPDetailPanel: React.FC<ICPDetailPanelProps> = ({
   lead,
   onClose,
-  buttonStyle,
 }) => {
   return (
     <div className="w-[340px] sm:w-[380px] border-l border-[#EAE6DF] bg-[#FAF9F6] flex flex-col h-full shrink-0 shadow-lg z-20 animate-in slide-in-from-right duration-200">
