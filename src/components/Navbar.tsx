@@ -20,63 +20,43 @@ export const Navbar: React.FC = () => {
 
         {/* Center Desktop Navigation */}
         <nav className="hidden md:flex items-center gap-8">
-          <div className="relative group cursor-pointer">
-            <button className="flex items-center gap-1.5 text-[14.5px] font-medium text-neutral-600 hover:text-neutral-900 transition-colors py-1">
-              <span>Product</span>
-              <ChevronDown className="w-3.5 h-3.5 text-neutral-400 group-hover:text-neutral-700 transition-transform group-hover:rotate-180" />
-            </button>
-          </div>
-
-          <div className="relative group cursor-pointer">
-            <button className="flex items-center gap-1.5 text-[14.5px] font-medium text-neutral-600 hover:text-neutral-900 transition-colors py-1">
-              <span>Solutions</span>
-              <ChevronDown className="w-3.5 h-3.5 text-neutral-400 group-hover:text-neutral-700 transition-transform group-hover:rotate-180" />
-            </button>
-          </div>
+          <Link
+            to="/docs"
+            className="text-[14.5px] font-medium text-neutral-700 hover:text-neutral-900 transition-colors py-1"
+          >
+            API Docs
+          </Link>
 
           <Link
-            to="/customers"
-            className="text-[14.5px] font-medium text-neutral-600 hover:text-neutral-900 transition-colors py-1"
+            to="/pricing"
+            className="text-[14.5px] font-medium text-neutral-700 hover:text-neutral-900 transition-colors py-1"
           >
-            Customers
+            Pricing
           </Link>
 
           <div className="relative group cursor-pointer">
-            <button className="flex items-center gap-1.5 text-[14.5px] font-medium text-neutral-600 hover:text-neutral-900 transition-colors py-1">
-              <span>Resources</span>
+            <button className="flex items-center gap-1 text-[14.5px] font-medium text-neutral-700 hover:text-neutral-900 transition-colors py-1">
+              <span>Case Studies</span>
               <ChevronDown className="w-3.5 h-3.5 text-neutral-400 group-hover:text-neutral-700 transition-transform group-hover:rotate-180" />
             </button>
           </div>
 
           <div className="relative group cursor-pointer">
-            <button className="flex items-center gap-1.5 text-[14.5px] font-medium text-neutral-600 hover:text-neutral-900 transition-colors py-1">
-              <span>Pricing</span>
+            <button className="flex items-center gap-1 text-[14.5px] font-medium text-neutral-700 hover:text-neutral-900 transition-colors py-1">
+              <span>Resources</span>
               <ChevronDown className="w-3.5 h-3.5 text-neutral-400 group-hover:text-neutral-700 transition-transform group-hover:rotate-180" />
             </button>
           </div>
         </nav>
 
         {/* Right CTA / Auth */}
-        <div className="hidden md:flex items-center gap-6">
+        <div className="hidden md:flex items-center">
           <Link
             to="/signin"
-            className="text-[14.5px] font-medium text-neutral-600 hover:text-neutral-900 transition-colors"
+            className="inline-flex items-center justify-center bg-black hover:bg-neutral-800 text-white text-[13.5px] font-medium px-5 py-2 rounded-full shadow-sm hover:shadow transition-all cursor-pointer"
           >
-            Sign in
+            Log in
           </Link>
-          <a
-            href="#get-started"
-            onClick={(e) => {
-              if (window.location.pathname === '/') {
-                e.preventDefault();
-                const elem = document.getElementById('get-started');
-                if (elem) elem.scrollIntoView({ behavior: 'smooth' });
-              }
-            }}
-            className="inline-flex items-center justify-center bg-[#0B0F19] hover:bg-neutral-800 text-white text-[14px] font-medium px-5 py-2.5 rounded-full shadow-sm hover:shadow-md transition-all cursor-pointer"
-          >
-            <span>Get Started</span>
-          </a>
         </div>
 
         {/* Mobile menu button */}
