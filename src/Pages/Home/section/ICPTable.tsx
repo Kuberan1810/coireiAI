@@ -99,7 +99,7 @@ export const ICPTable: React.FC<ICPTableProps> = ({
                 <td className="py-3 px-4 whitespace-nowrap select-text">
                   <div className="flex items-center gap-2.5">
                     <div
-                      className={`w-7 h-7 rounded-lg ${row.avatarBg} flex items-center justify-center text-[11px] font-bold shrink-0 shadow-2xs`}
+                      className={`w-7 h-7 rounded-lg ${row.avatarBg} flex items-center justify-center text-[11px] font-semibold shrink-0 shadow-2xs`}
                     >
                       {row.avatarText}
                     </div>
@@ -136,7 +136,7 @@ export const ICPTable: React.FC<ICPTableProps> = ({
                     <Mail className="w-3.5 h-3.5 text-gray-400 shrink-0" />
                     <span>{row.email}</span>
                     <span
-                      className="inline-flex items-center px-1.5 py-0.5 rounded text-[9.5px] font-bold bg-emerald-50 text-emerald-700 border border-emerald-200"
+                      className="inline-flex items-center px-1.5 py-0.5 rounded text-[9.5px] font-semibold bg-emerald-50 text-emerald-700 border border-emerald-200"
                       title="Deliverability verified"
                     >
                       Verified
@@ -147,7 +147,7 @@ export const ICPTable: React.FC<ICPTableProps> = ({
                 {/* 4. Lead Score */}
                 <td className="py-3 px-4 whitespace-nowrap">
                   <div className="flex items-center gap-1.5">
-                    <span className="inline-flex items-center px-2 py-0.5 rounded-[5px] text-[11.5px] font-bold bg-[#DCFCE7] text-[#15803D] border border-[#86EFAC]/60">
+                    <span className="inline-flex items-center px-2 py-0.5 rounded-[5px] text-[11.5px] font-semibold bg-[#DCFCE7] text-[#15803D] border border-[#86EFAC]/60">
                       {row.icpScore}% Match
                     </span>
                   </div>

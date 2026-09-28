@@ -10,13 +10,22 @@ import BusinessSection from './section/BusinessSection';
 export const Home: React.FC = () => {
   return (
     <main className="w-full">
-      <Hero />
-      <Features />
-      <Steps />
-      <AgentsSection />
-      <VisibilitySection />
+      {/* Top Sections Surface (z-20, slides up to reveal fixed black screen) */}
+      <div className="relative z-20 bg-white">
+        <Hero />
+        <Features />
+        <Steps />
+        <AgentsSection />
+        <VisibilitySection />
+      </div>
+
+      {/* Middle: Fixed Black Quote Section (z-10, does not move AT ALL) */}
       <QuoteSection />
-      <BusinessSection />
+
+      {/* Bottom Sections Surface (z-20, slides up to cover fixed black screen) */}
+      <div className="relative z-20">
+        <BusinessSection />
+      </div>
     </main>
   );
 };

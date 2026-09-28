@@ -3,7 +3,7 @@ import footerLogo from '../assets/footerLogo.svg';
 
 export const Footer: React.FC = () => {
   return (
-    <footer className="w-full bg-black relative overflow-hidden select-none">
+    <footer className="w-full bg-black relative z-20 overflow-hidden select-none">
       <div className="w-full flex justify-center items-center overflow-hidden">
         <img
           src={footerLogo}

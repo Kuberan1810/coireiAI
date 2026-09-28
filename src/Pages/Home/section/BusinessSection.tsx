@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { ArrowRight, CheckCircle2, Loader2 } from 'lucide-react';
 import image115 from '../../../assets/image115.svg';
 import { ScrollReveal } from '../../../components/ui/ScrollReveal';
@@ -6,6 +6,25 @@ import { ScrollReveal } from '../../../components/ui/ScrollReveal';
 export const BusinessSection: React.FC = () => {
   const [email, setEmail] = useState('');
   const [status, setStatus] = useState<'idle' | 'loading' | 'success'>('idle');
+  const [isImageInView, setIsImageInView] = useState(false);
+  const imageContainerRef = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    const el = imageContainerRef.current;
+    if (!el) return;
+
+    const observer = new IntersectionObserver(
+      ([entry]) => {
+        setIsImageInView(entry.isIntersecting);
+      },
+      {
+        threshold: 0.15,
+      }
+    );
+
+    observer.observe(el);
+    return () => observer.disconnect();
+  }, []);
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
@@ -18,29 +37,30 @@ export const BusinessSection: React.FC = () => {
   };
 
   return (
-    <section className="relative w-full bg-white overflow-hidden select-none">
-      <div className="w-full max-w-7xl mx-auto px-6 sm:px-8 lg:px-12">
-
-        {/* Top Header Eyebrow */}
-        <div className="pt-16 sm:pt-24 pb-10 sm:pb-14">
+    <>
+      {/* 1. We Work With Business Section (White, overlaps the fixed black screen) */}
+      <section className="relative z-20 w-full bg-white shadow-[0_-25px_60px_rgba(0,0,0,0.3)] pt-16 sm:pt-24 pb-8 sm:pb-10 overflow-hidden select-none">
+        <div className="w-full max-w-7xl mx-auto px-6 sm:px-8 lg:px-12">
           <ScrollReveal variant="fade-up" duration={700} distance={20}>
-            <h2 className="text-3xl sm:text-4xl md:text-[46px] lg:text-[50px] font-bold text-[#0B0F19] tracking-tight leading-[1.12]">
+            <h2 className="text-3xl sm:text-4xl md:text-[46px] lg:text-[50px] font-semibold text-[#0B0F19] tracking-tight leading-[1.12]">
               We work with business
             </h2>
-            <h3 className="text-3xl sm:text-4xl md:text-[46px] lg:text-[50px] font-bold text-[#9CA3AF] tracking-tight leading-[1.12] mt-1 sm:mt-1.5">
+            <h3 className="text-3xl sm:text-4xl md:text-[46px] lg:text-[50px] font-semibold text-[#9CA3AF] tracking-tight leading-[1.12] mt-1 sm:mt-1.5">
               Not for consumers
             </h3>
           </ScrollReveal>
         </div>
+      </section>
 
-        {/* Main Two-Column Row */}
-        <div className="pb-20 sm:pb-28">
+      {/* 2. All-in-One Tools Section (White) */}
+      <section className="relative z-20 w-full bg-white pt-6 sm:pt-10 pb-20 sm:pb-28 overflow-hidden select-none">
+        <div className="w-full max-w-7xl mx-auto px-6 sm:px-8 lg:px-12">
           <div className="grid grid-cols-1 lg:grid-cols-12 gap-10 lg:gap-14 items-center">
 
             {/* Left Column: Heading, Subtitle & Interactive Business Email Form */}
             <div className="lg:col-span-6 flex flex-col justify-center max-w-[580px]">
               <ScrollReveal variant="fade-up" delay={100} duration={750} distance={24}>
-                <h4 className="text-3xl sm:text-4xl md:text-[44px] font-bold text-[#0B0F19] tracking-tight leading-[1.16]">
+                <h4 className="text-3xl sm:text-4xl md:text-[44px] font-semibold text-[#0B0F19] tracking-tight leading-[1.16]">
                   Why switch between <br />
                   tools when one does it <br />
                   all?
@@ -96,22 +116,28 @@ export const BusinessSection: React.FC = () => {
 
             {/* Right Column: Embedded image 115.svg with 609x628 proportions */}
             <div className="lg:col-span-6 flex items-center justify-center lg:justify-end">
-              <ScrollReveal variant="fade-left" delay={150} duration={800} distance={30} className="w-full max-w-[609px]">
-                <div className="w-full max-w-[609px] rounded-[24px] overflow-hidden border border-neutral-100 shadow-[0_20px_60px_rgba(0,0,0,0.06)] bg-[#F8FAFC]">
-                  <img
-                    src={image115}
-                    alt="Why switch between tools when one does it all?"
-                    className="w-full h-auto object-cover object-center block"
-                  />
-                </div>
-              </ScrollReveal>
+              <div
+                ref={imageContainerRef}
+                className="w-full max-w-[609px] rounded-[24px] overflow-hidden border border-neutral-100 shadow-[0_20px_60px_rgba(0,0,0,0.06)] bg-[#F8FAFC]"
+              >
+                <img
+                  src={image115}
+                  alt="Why switch between tools when one does it all?"
+                  className="w-full h-auto object-cover object-center block"
+                  style={{
+                    transform: isImageInView ? 'scale(1)' : 'scale(1.18)',
+                    transformOrigin: 'center center',
+                    transition: 'transform 1000ms cubic-bezier(0.16, 1, 0.3, 1)',
+                    willChange: 'transform',
+                  }}
+                />
+              </div>
             </div>
 
           </div>
         </div>
-
-      </div>
-    </section>
+      </section>
+    </>
   );
 };
 

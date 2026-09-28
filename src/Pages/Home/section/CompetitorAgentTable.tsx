@@ -1,5 +1,5 @@
 import React from 'react';
-import { Globe, Search, Sparkles } from 'lucide-react';
+import { Globe, Sparkles } from 'lucide-react';
 
 interface CompanyRow {
   id: number;
@@ -11,8 +11,8 @@ interface CompanyRow {
   logoBg: string;
   logoText: string;
   logoTextColor: string;
-  ceoAvatar: string;
-  ceoLinkedin: string;
+  ceoAvatar?: string;
+  ceoLinkedin?: string;
 }
 
 const COMPANIES: CompanyRow[] = [
@@ -181,12 +181,12 @@ export const CompetitorAgentTable: React.FC = () => {
       <div className="flex items-center gap-2 px-3.5 py-2.5 bg-white border-b border-slate-100 shrink-0">
         <Sparkles className="w-3.5 h-3.5 text-purple-600 shrink-0" />
         <span className="text-[12px] font-semibold text-slate-800 tracking-tight">
-          scrape all the jobs
+          scrape all the competitors
         </span>
       </div>
 
       {/* Spreadsheet Table Container */}
-      <div className="flex-1 overflow-x-auto overflow-y-auto max-h-[340px] no-scrollbar">
+      <div className="flex-1 overflow-x-hidden overflow-y-auto max-h-[340px] no-scrollbar">
         <table className="w-full border-collapse text-left text-[11.5px] whitespace-nowrap">
           {/* Table Header */}
           <thead className="bg-[#FAFBFD] sticky top-0 z-10 border-b border-slate-100 text-slate-400 font-normal">
@@ -194,19 +194,13 @@ export const CompetitorAgentTable: React.FC = () => {
               <th className="w-7 pl-3 pr-1 py-2 text-center">
                 <div className="w-3 h-3 rounded-[3px] border border-slate-300 mx-auto" />
               </th>
-              <th className="w-6 px-1 py-2 text-slate-300 font-normal">#</th>
-              <th className="px-3 py-2 font-normal text-slate-500">name</th>
-              <th className="px-3 py-2 font-normal text-slate-500">website</th>
-              <th className="px-3 py-2 font-normal text-slate-500">
-                <span className="inline-flex items-center gap-1">
-                  <Globe className="w-3 h-3 text-slate-400" />
-                  <span>Company Industry</span>
-                </span>
-              </th>
+              <th className="w-5 px-1 py-2 text-slate-300 font-normal">#</th>
+              <th className="px-2.5 py-2 font-normal text-slate-500">name</th>
+              <th className="px-2.5 py-2 font-normal text-slate-500">website</th>
               <th className="px-3 py-2 font-normal text-slate-500 pr-4">
-                <span className="inline-flex items-center gap-1">
-                  <Search className="w-3 h-3 text-slate-400" />
-                  <span>CEO Linkedin</span>
+                <span className="inline-flex items-center gap-1.5">
+                  <Globe className="w-3.5 h-3.5 text-slate-400" />
+                  <span>Company Industry</span>
                 </span>
               </th>
             </tr>
@@ -251,45 +245,31 @@ export const CompetitorAgentTable: React.FC = () => {
                   </td>
 
                   {/* Company Name */}
-                  <td className="px-3 py-2 font-medium text-slate-900">
+                  <td className="px-2.5 py-2 font-medium text-slate-900">
                     {company.name}
                   </td>
 
                   {/* Website with Favicon */}
-                  <td className="px-3 py-2">
+                  <td className="px-2.5 py-2">
                     <div className="flex items-center gap-1.5 text-slate-600">
                       <div
-                        className={`w-3.5 h-3.5 rounded-[3px] flex items-center justify-center font-bold text-[8px] shrink-0 shadow-2xs ${company.logoBg} ${company.logoTextColor}`}
+                        className={`w-3.5 h-3.5 rounded-[3px] flex items-center justify-center font-semibold text-[8px] shrink-0 shadow-2xs ${company.logoBg} ${company.logoTextColor}`}
                       >
                         {company.logoText}
                       </div>
-                      <span className="text-slate-500 max-w-[140px] truncate">
+                      <span className="text-slate-500 max-w-[125px] truncate">
                         {company.website}
                       </span>
                     </div>
                   </td>
 
                   {/* Industry Badge Pill */}
-                  <td className="px-3 py-2">
+                  <td className="px-3 py-2 pr-4">
                     <span
-                      className={`inline-flex items-center px-2 py-0.5 rounded-full text-[10.5px] font-medium ${company.industryBg} ${company.industryColor}`}
+                      className={`inline-flex items-center px-2.5 py-0.5 rounded-full text-[10.5px] font-medium ${company.industryBg} ${company.industryColor}`}
                     >
                       {company.industry}
                     </span>
-                  </td>
-
-                  {/* CEO LinkedIn with Avatar */}
-                  <td className="px-3 py-2 pr-4">
-                    <div className="flex items-center gap-1.5">
-                      <img
-                        src={company.ceoAvatar}
-                        alt="CEO"
-                        className="w-4 h-4 rounded-full object-cover shrink-0 ring-1 ring-slate-200"
-                      />
-                      <span className="text-[10.5px] text-slate-400 truncate max-w-[110px]">
-                        {company.ceoLinkedin}
-                      </span>
-                    </div>
                   </td>
                 </tr>
               );

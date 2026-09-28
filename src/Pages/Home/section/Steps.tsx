@@ -158,10 +158,14 @@ export const Steps: React.FC = () => {
       if (totalScrollable <= 0) return;
 
       const progress = Math.min(Math.max(-sectionTop / totalScrollable, 0), 0.999);
-      const newIdx = Math.min(
-        Math.floor(progress * stepsList.length),
-        stepsList.length - 1
-      );
+      let newIdx = 0;
+      if (progress < 0.35) {
+        newIdx = 0;
+      } else if (progress < 0.70) {
+        newIdx = 1;
+      } else {
+        newIdx = 2;
+      }
       setActiveIdx(newIdx);
     };
 
@@ -171,26 +175,27 @@ export const Steps: React.FC = () => {
 
   return (
     <section 
+      id="steps-section"
       ref={sectionRef}
-      className="relative w-full bg-white border-t border-neutral-100/90"
-      style={{ height: `${stepsList.length * 80}vh` }}
+      className="relative w-full bg-white border-t border-[#E2E2E2]"
+      style={{ height: `${stepsList.length * 110}vh` }}
     >
       {/* Sticky Viewport Container */}
       <div className="sticky top-0 h-screen w-full flex flex-col justify-center overflow-hidden bg-white">
-        <div className="GlobalPadding max-w-7xl mx-auto w-full">
+        <div className="max-w-7xl mx-auto w-full px-6 sm:px-8 lg:px-12 py-0">
           {/* Clean 2-Column Layout */}
           <div className="grid grid-cols-1 lg:grid-cols-12 gap-10 lg:gap-14 items-center w-full">
-            {/* Left Column: Title and Description - Fades in/out in place (No stack) */}
+            {/* Left Column: Title and Description - Smooth in-place dissolve */}
             <div className="lg:col-span-5 flex items-center min-h-[200px] sm:min-h-[220px] relative">
               {stepsList.map((step, idx) => {
                 const isActive = activeIdx === idx;
                 return (
                   <div
                     key={step.id}
-                    className={`w-full max-w-lg transition-all duration-500 ease-in-out ${
+                    className={`w-full max-w-lg transition-opacity duration-350 ease-out ${
                       isActive
-                        ? 'opacity-100 translate-y-0 relative z-10'
-                        : 'opacity-0 translate-y-2 absolute inset-0 pointer-events-none z-0'
+                        ? 'opacity-100 relative z-10 pointer-events-auto'
+                        : 'opacity-0 absolute inset-0 pointer-events-none z-0'
                     }`}
                   >
                     <h3 className="text-3xl sm:text-4xl md:text-[44px] font-normal text-[#0F172A] tracking-tight leading-[1.15]">
@@ -218,8 +223,10 @@ export const Steps: React.FC = () => {
                 <div className="relative flex-1 w-full overflow-hidden bg-white">
                   {/* Step 0: Understand Card Interior */}
                   <div
-                    className={`absolute inset-0 w-full h-full p-5 sm:p-6 flex flex-col justify-start overflow-y-auto bg-white transition-opacity duration-500 ease-in-out ${
-                      activeIdx === 0 ? 'opacity-100 pointer-events-auto z-10' : 'opacity-0 pointer-events-none z-0'
+                    className={`absolute inset-0 w-full h-full p-5 sm:p-6 flex flex-col justify-start overflow-y-auto bg-white transition-opacity duration-350 ease-out ${
+                      activeIdx === 0
+                        ? 'opacity-100 pointer-events-auto z-10'
+                        : 'opacity-0 pointer-events-none z-0'
                     }`}
                     style={{ scrollbarWidth: 'thin', scrollbarColor: '#CBD5E1 transparent' }}
                   >
@@ -229,14 +236,14 @@ export const Steps: React.FC = () => {
                         {/* 1. Company Profile Header Box */}
                         <div className="flex items-center gap-4 pt-1 shrink-0">
                           <div className="w-14 h-14 rounded-2xl bg-[#EEF2F6] border border-[#E2E8F0] flex items-center justify-center shadow-xs shrink-0">
-                            <span className="font-bold text-[24px] text-[#0F172A]">
+                            <span className="font-semibold text-[24px] text-[#0F172A]">
                               {avatarLetter}
                             </span>
                           </div>
 
                           <div className="flex flex-col justify-center gap-0.5">
                             <div className="flex items-center gap-2">
-                              <h2 className="text-[21px] sm:text-[23px] font-bold text-[#0F172A] tracking-[-0.02em] leading-tight">
+                              <h2 className="text-[21px] sm:text-[23px] font-semibold text-[#0F172A] tracking-[-0.02em] leading-tight">
                                 {companyName}
                               </h2>
                               <a
@@ -272,7 +279,7 @@ export const Steps: React.FC = () => {
                                 onClick={() => setActiveTab(t.key as OverviewTab)}
                                 className={`pb-2.5 text-[13px] sm:text-[13.5px] cursor-pointer transition-colors relative whitespace-nowrap ${
                                   isCurrent
-                                    ? 'text-[#0F172A] font-bold'
+                                    ? 'text-[#0F172A] font-semibold'
                                     : 'text-[#64748B] hover:text-[#0F172A] font-medium'
                                 }`}
                               >
@@ -289,7 +296,7 @@ export const Steps: React.FC = () => {
                         {activeTab === 'overview' && (
                           <div className="flex flex-col gap-4 animate-in fade-in duration-150">
                             <div className="flex flex-col gap-1.5 pt-1">
-                              <h4 className="text-[15px] font-bold text-[#1F1E1D]">
+                              <h4 className="text-[15px] font-semibold text-[#1F1E1D]">
                                 Business overview
                               </h4>
                               <p className="text-[13px] sm:text-[13.5px] text-[#4A453F] leading-relaxed">
@@ -315,7 +322,7 @@ export const Steps: React.FC = () => {
                             </div>
 
                             <div className="flex flex-col gap-1.5 mt-1">
-                              <h4 className="text-[15px] font-bold text-[#1F1E1D]">
+                              <h4 className="text-[15px] font-semibold text-[#1F1E1D]">
                                 What they offer
                               </h4>
                               <p className="text-[12.5px] sm:text-[13px] text-[#7A736A]">
@@ -337,7 +344,7 @@ export const Steps: React.FC = () => {
                         {/* Tab 2: Social Handles */}
                         {activeTab === 'social' && (
                           <div className="flex flex-col gap-3 py-1.5 animate-in fade-in duration-150">
-                            <h4 className="text-[14px] font-bold text-[#1F1E1D]">Social Handles</h4>
+                            <h4 className="text-[14px] font-semibold text-[#1F1E1D]">Social Handles</h4>
                             <div className="p-3.5 rounded-xl border border-neutral-200/80 bg-neutral-50/60 flex flex-col gap-2.5 text-[12.5px]">
                               {[
                                 { platform: 'LinkedIn', handle: `linkedin.com/company/${cleanDomain.split('.')[0] || 'coirei'}` },
@@ -356,7 +363,7 @@ export const Steps: React.FC = () => {
                         {/* Tab 3: Email */}
                         {activeTab === 'email' && (
                           <div className="flex flex-col gap-3 py-1.5 animate-in fade-in duration-150">
-                            <h4 className="text-[14px] font-bold text-[#1F1E1D]">Email & Inquiries</h4>
+                            <h4 className="text-[14px] font-semibold text-[#1F1E1D]">Email & Inquiries</h4>
                             <div className="p-3.5 rounded-xl border border-neutral-200/80 bg-neutral-50/60 flex flex-col gap-2.5 text-[12.5px]">
                               <div className="flex items-center justify-between py-1 border-b border-neutral-200/50">
                                 <span className="text-[#7A736A] font-medium">General Inquiries</span>
@@ -377,7 +384,7 @@ export const Steps: React.FC = () => {
                         {/* Tab 4: Positioning & Features */}
                         {activeTab === 'positioning' && (
                           <div className="flex flex-col gap-3 py-1.5 animate-in fade-in duration-150">
-                            <h4 className="text-[14px] font-bold text-[#1F1E1D]">Positioning & Features</h4>
+                            <h4 className="text-[14px] font-semibold text-[#1F1E1D]">Positioning & Features</h4>
                             <div className="p-3.5 rounded-xl border border-neutral-200/80 bg-neutral-50/60 flex flex-col gap-2 text-[12.5px] text-[#334155] leading-relaxed">
                               <p>• <strong>Core Value Proposition:</strong> Autonomous B2B GTM copilot that turns real-time market signals into verified enterprise pipeline.</p>
                               <p>• <strong>Primary Audience:</strong> B2B Founders, Heads of Growth, and Revenue Operations leaders.</p>
@@ -389,7 +396,7 @@ export const Steps: React.FC = () => {
                         {/* Tab 5: Pages */}
                         {activeTab === 'pages' && (
                           <div className="flex flex-col gap-3 py-1.5 animate-in fade-in duration-150">
-                            <h4 className="text-[14px] font-bold text-[#1F1E1D]">Discovered Pages ({isCoirei ? '6' : '4'})</h4>
+                            <h4 className="text-[14px] font-semibold text-[#1F1E1D]">Discovered Pages ({isCoirei ? '6' : '4'})</h4>
                             <div className="p-3 rounded-xl border border-neutral-200/80 bg-neutral-50/60 flex flex-col gap-1.5 text-[12px] text-[#334155]">
                               {[
                                 '/platform',
@@ -540,15 +547,17 @@ export const Steps: React.FC = () => {
 
                   {/* Step 1: Whole Analyzes Card Interior - Ultra Minimal */}
                   <div
-                    className={`absolute inset-0 w-full h-full p-8 sm:p-10 flex flex-col justify-center text-left bg-white transition-opacity duration-500 ease-in-out ${
-                      activeIdx === 1 ? 'opacity-100 pointer-events-auto z-10' : 'opacity-0 pointer-events-none z-0'
+                    className={`absolute inset-0 w-full h-full p-8 sm:p-10 flex flex-col justify-center text-left bg-white transition-opacity duration-350 ease-out ${
+                      activeIdx === 1
+                        ? 'opacity-100 pointer-events-auto z-10'
+                        : 'opacity-0 pointer-events-none z-0'
                     }`}
                   >
                     <div className="flex flex-col gap-1 mb-7">
                       <span className="text-[11.5px] font-semibold uppercase tracking-wider text-[#8A8378]">
                         Market Intelligence
                       </span>
-                      <h3 className="text-2xl sm:text-[26px] font-bold text-[#1F1E1D] tracking-tight">
+                      <h3 className="text-2xl sm:text-[26px] font-semibold text-[#1F1E1D] tracking-tight">
                         Positioning & Gap Analysis
                       </h3>
                     </div>
@@ -575,8 +584,10 @@ export const Steps: React.FC = () => {
 
                   {/* Step 2: Find - Leads Table */}
                   <div
-                    className={`absolute inset-0 w-full h-full flex flex-col bg-white overflow-hidden transition-opacity duration-500 ease-in-out ${
-                      activeIdx === 2 ? 'opacity-100 pointer-events-auto z-10' : 'opacity-0 pointer-events-none z-0'
+                    className={`absolute inset-0 w-full h-full flex flex-col bg-white overflow-hidden transition-opacity duration-350 ease-out ${
+                      activeIdx === 2
+                        ? 'opacity-100 pointer-events-auto z-10'
+                        : 'opacity-0 pointer-events-none z-0'
                     }`}
                   >
                     {/* Top Header / Breadcrumbs: spans full width */}
@@ -592,7 +603,7 @@ export const Steps: React.FC = () => {
                     <div className="flex-1 w-full min-h-0 flex flex-col gap-2.5 px-3.5 pt-2.5 pb-3 overflow-hidden bg-white">
                       {/* Title Header: Clean with no subheading and no buttons */}
                       <div className="flex items-center justify-between shrink-0">
-                        <h1 className="text-base sm:text-lg font-bold text-[#1F1E1D] tracking-tight leading-none">
+                        <h1 className="text-base sm:text-lg font-semibold text-[#1F1E1D] tracking-tight leading-none">
                           Leads
                         </h1>
                       </div>

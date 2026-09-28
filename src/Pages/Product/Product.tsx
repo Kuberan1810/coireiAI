@@ -6,7 +6,7 @@ export const Product: FC = () => {
   return (
     <div className="min-h-screen py-16 px-4 text-center">
       <ScrollReveal variant="fade-up" delay={50} duration={650}>
-        <h1 className="text-4xl font-bold text-neutral-900">Product Overview</h1>
+        <h1 className="text-4xl font-semibold text-neutral-900">Product Overview</h1>
       </ScrollReveal>
 
       <ScrollReveal variant="fade-up" delay={150} duration={700}>

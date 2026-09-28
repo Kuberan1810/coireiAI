@@ -1,7 +1,7 @@
 import React, { useState, useEffect, useRef } from 'react';
 import {
   Search,
-  Plus,
+  Sparkles,
   ArrowRight,
   ArrowUp,
   Bookmark,
@@ -72,7 +72,7 @@ const AI_ENGINES: Record<AIEngine, EngineConfig> = {
   chatgpt: {
     name: 'ChatGPT',
     icon: ChatGPTIcon,
-    color: 'text-[#10A37F]',
+    color: 'text-black',
     response: (
       <>
         For small businesses, <strong className="text-slate-900 font-semibold">YourBrand</strong> is a great CRM choice. It offers easy lead management, automation for follow-ups, and helps you close more deals — all in one platform.
@@ -116,29 +116,20 @@ export const VisibilitySection: React.FC = () => {
   const [animStage, setAnimStage] = useState<AnimStage>('typing');
   const [typedGoogle, setTypedGoogle] = useState('');
   const [typedChat, setTypedChat] = useState('');
-  const [isPaused, setIsPaused] = useState(false);
   const [isVisible, setIsVisible] = useState(false);
   const sectionRef = useRef<HTMLElement>(null);
 
-  // Trigger animation only when the section reaches the viewport
+  // Trigger animation when the section enters the viewport
   useEffect(() => {
     const el = sectionRef.current;
     if (!el) return;
 
     const observer = new IntersectionObserver(
       ([entry]) => {
-        if (entry.isIntersecting) {
-          setIsVisible(true);
-        } else {
-          // Reset when scrolled out of view so it plays freshly when reached again
-          setIsVisible(false);
-          setAnimStage('typing');
-          setTypedGoogle('');
-          setTypedChat('');
-        }
+        setIsVisible(entry.isIntersecting);
       },
       {
-        threshold: 0.2,
+        threshold: 0.05,
       }
     );
 
@@ -147,74 +138,76 @@ export const VisibilitySection: React.FC = () => {
   }, []);
 
   // Synchronized typing and automated send cycle:
-  // Starts ONLY when section reaches the viewport (isVisible === true)
+  // Starts when section is in viewport and loops continuously without freezing
   useEffect(() => {
-    if (!isVisible || isPaused) return;
+    if (!isVisible) return;
 
     let isCancelled = false;
-    let timeoutId: ReturnType<typeof setTimeout>;
-    let intervalId: ReturnType<typeof setInterval>;
+    let timerId: ReturnType<typeof setTimeout>;
 
-    const startCycle = () => {
-      // 1. Reset to typing state
-      setAnimStage('typing');
-      setTypedGoogle('');
-      setTypedChat('');
+    const wait = (ms: number): Promise<void> =>
+      new Promise((resolve) => {
+        timerId = setTimeout(() => resolve(), ms);
+      });
 
-      let charIdx = 0;
-      const maxLen = Math.max(GOOGLE_QUERY.length, CHAT_QUERY.length);
+    const runCycle = async () => {
+      while (!isCancelled) {
+        // 1. Reset to typing state
+        setAnimStage('typing');
+        setTypedGoogle('');
+        setTypedChat('');
 
-      intervalId = setInterval(() => {
-        if (isCancelled) return;
-        charIdx++;
-        setTypedGoogle(GOOGLE_QUERY.slice(0, Math.min(charIdx, GOOGLE_QUERY.length)));
-        setTypedChat(CHAT_QUERY.slice(0, Math.min(charIdx, CHAT_QUERY.length)));
+        const totalSteps = 42;
+        const stepDelay = 32; // ~1.34s smooth typing duration
 
-        if (charIdx >= maxLen) {
-          clearInterval(intervalId);
+        // Synchronized typing: both queries finish typing at the exact same moment
+        for (let i = 1; i <= totalSteps; i++) {
+          if (isCancelled) return;
+          await wait(stepDelay);
+          if (isCancelled) return;
 
-          // 2. Pause briefly (180ms) then automatically send
-          timeoutId = setTimeout(() => {
-            if (isCancelled) return;
-            setAnimStage('sent');
+          const googleChars = Math.round((i / totalSteps) * GOOGLE_QUERY.length);
+          const chatChars = Math.round((i / totalSteps) * CHAT_QUERY.length);
 
-            // 3. Move to Thinking/Searching after 180ms
-            timeoutId = setTimeout(() => {
-              if (isCancelled) return;
-              setAnimStage('thinking');
-
-              // 4. Move to Results after 800ms thinking
-              timeoutId = setTimeout(() => {
-                if (isCancelled) return;
-                setAnimStage('result');
-
-                // 5. Stay on result for 3800ms then loop
-                timeoutId = setTimeout(() => {
-                  if (isCancelled) return;
-                  startCycle();
-                }, 3800);
-              }, 800);
-            }, 180);
-          }, 180);
+          setTypedGoogle(GOOGLE_QUERY.slice(0, googleChars));
+          setTypedChat(CHAT_QUERY.slice(0, chatChars));
         }
-      }, 22);
+
+        // 2. Sent / Trigger phase (250ms)
+        if (isCancelled) return;
+        setAnimStage('sent');
+        await wait(250);
+
+        // 3. Move to Thinking/Searching phase (850ms)
+        if (isCancelled) return;
+        setAnimStage('thinking');
+        await wait(850);
+
+        // 4. Move to Results phase (4500ms)
+        if (isCancelled) return;
+        setAnimStage('result');
+        await wait(4500);
+      }
     };
 
-    startCycle();
+    runCycle();
 
     return () => {
       isCancelled = true;
-      clearInterval(intervalId);
-      clearTimeout(timeoutId);
+      clearTimeout(timerId);
     };
-  }, [isVisible, isPaused]);
+  }, [isVisible]);
+
+  const handleEngineSelect = (engineKey: AIEngine) => {
+    setActiveEngine(engineKey);
+  };
 
   return (
-    <section ref={sectionRef} className="relative w-full py-16 sm:py-24 bg-white overflow-hidden select-none">
+    <section ref={sectionRef} className="relative z-20 w-full border-t border-[#E2E2E2] pt-10 sm:pt-14 pb-12 sm:pb-16 bg-white overflow-hidden select-none">
       <div className="w-full max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
 
         {/* Section Header */}
-        <div className="text-center max-w-3xl mx-auto">
+        <div className="text-center max-w-5xl mx-auto">
           {/* Eyebrow / Pill Badge */}
           <ScrollReveal variant="fade-up" duration={600} distance={18}>
             <div className="inline-block text-[11px] sm:text-[12px] font-semibold tracking-[0.14em] text-[#64748B] uppercase mb-3">
@@ -224,7 +217,7 @@ export const VisibilitySection: React.FC = () => {
 
           {/* Main Headline */}
           <ScrollReveal variant="fade-up" delay={80} duration={700} distance={24}>
-            <h2 className="text-3xl sm:text-4xl md:text-[44px] font-bold text-[#0F172A] tracking-tight leading-[1.18]">
+            <h2 className="text-2xl sm:text-3xl md:text-[40px] lg:text-[48px] font-semibold text-[#0F172A] tracking-[-1.25px] leading-[1.2] lg:leading-[56px] md:whitespace-nowrap">
               Be found. Be understood. Be recommended.
             </h2>
           </ScrollReveal>
@@ -249,25 +242,21 @@ export const VisibilitySection: React.FC = () => {
         </div>
 
         {/* Dual Cards Container: Google & AI Visibility (Simultaneously Animated) */}
-        <div
-          className="grid grid-cols-1 lg:grid-cols-2 gap-8 lg:gap-10 max-w-6xl mx-auto mt-12 sm:mt-16"
-          onMouseEnter={() => setIsPaused(true)}
-          onMouseLeave={() => setIsPaused(false)}
-        >
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 lg:gap-10 max-w-6xl mx-auto mt-12 sm:mt-16 items-stretch">
 
           {/* Left Column: Search Visibility (Google) */}
-          <div className="flex flex-col items-start w-full">
+          <div className="flex flex-col items-start w-full h-full">
             {/* Pill Header */}
-            <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-[#EFF6FF] text-[#2563EB] text-xs font-semibold mb-4 border border-blue-100/60 shadow-2xs">
-              <Search className="w-3.5 h-3.5 text-[#2563EB]" />
-              <span>Search Visibility</span>
+            <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-white text-slate-800 text-xs font-semibold mb-4 border border-slate-200/80 shadow-2xs shrink-0">
+              <Search className="w-3.5 h-3.5 text-slate-700" />
+              <span>SEO</span>
             </div>
 
             {/* Google Card */}
-            <div className="w-full bg-white rounded-[28px] border border-slate-200/90 shadow-[0_16px_48px_rgba(15,23,42,0.05),0_1px_3px_rgba(15,23,42,0.03)] p-6 sm:p-7 min-h-[420px] flex flex-col justify-start">
+            <div className="w-full h-full min-h-[340px] sm:min-h-[350px] bg-white rounded-[26px] border border-slate-200/90 shadow-[0_16px_48px_rgba(15,23,42,0.05),0_1px_3px_rgba(15,23,42,0.03)] p-5 sm:p-6 flex flex-col justify-start flex-1">
 
               {/* Google Search Bar */}
-              <div className="w-full rounded-full border border-slate-200 bg-white px-4 py-2.5 flex items-center justify-between shadow-2xs hover:shadow-xs transition-shadow">
+              <div className="w-full rounded-full border border-slate-200 bg-white px-4 py-2 flex items-center justify-between shadow-2xs hover:shadow-xs transition-shadow">
                 <div className="flex items-center gap-3 overflow-hidden">
                   <GoogleGIcon className="w-5 h-5 shrink-0" />
                   <span className="text-[13px] sm:text-[14px] text-slate-800 font-normal truncate">
@@ -300,13 +289,13 @@ export const VisibilitySection: React.FC = () => {
               </div>
 
               {/* Content Area: Typing State vs Searching State vs Top Ranked Result */}
-              <div className="flex-1 flex flex-col justify-center">
+              <div className="flex-1 flex flex-col justify-start">
                 {animStage === 'typing' ? (
-                  <div className="py-14 sm:py-16 flex items-center justify-center text-slate-400 text-xs sm:text-[13px] font-normal select-none">
+                  <div className="flex-1 flex items-center justify-center text-slate-400 text-xs sm:text-[13px] font-normal select-none">
                     <span className="opacity-60">Ready to search...</span>
                   </div>
                 ) : animStage === 'sent' || animStage === 'thinking' ? (
-                  <div className="py-14 sm:py-16 flex items-center justify-center gap-2 text-slate-500 text-[13.5px] font-normal select-none animate-in fade-in duration-200">
+                  <div className="flex-1 flex items-center justify-center gap-2 text-slate-500 text-[13.5px] font-normal select-none animate-in fade-in duration-200">
                     <span>Searching</span>
                     <span className="flex items-center gap-1.5 ml-0.5">
                       <span
@@ -324,7 +313,7 @@ export const VisibilitySection: React.FC = () => {
                     </span>
                   </div>
                 ) : (
-                  <div className="mt-5 border border-slate-200/80 rounded-2xl p-4 sm:p-5 bg-[#FCFCFC] transition-all duration-500 transform translate-y-0 opacity-100 shadow-2xs animate-in fade-in slide-in-from-bottom-2">
+                  <div className="mt-3.5 border border-slate-200/80 rounded-2xl p-3.5 sm:p-4 bg-[#FCFCFC] shadow-2xs animate-slide-down">
                     {/* Site Info */}
                     <div className="flex items-center gap-3">
                       <div className="w-8 h-8 rounded-lg bg-[#0F172A] flex items-center justify-center shrink-0 shadow-2xs">
@@ -357,15 +346,15 @@ export const VisibilitySection: React.FC = () => {
           </div>
 
           {/* Right Column: AI Visibility (ChatGPT / Perplexity / Gemini / Claude) */}
-          <div className="flex flex-col items-start w-full">
+          <div className="flex flex-col items-start w-full h-full">
             {/* Pill Header */}
-            <div className="inline-flex items-center gap-1.5 px-3.5 py-1.5 rounded-full bg-[#EFF6FF] text-[#2563EB] text-xs font-semibold mb-4 border border-blue-100/60 shadow-2xs">
-              <Plus className="w-3.5 h-3.5 text-[#2563EB]" />
-              <span>AI Visibility</span>
+            <div className="inline-flex items-center gap-1.5 px-3.5 py-1.5 rounded-full bg-white text-slate-800 text-xs font-semibold mb-4 border border-slate-200/80 shadow-2xs shrink-0">
+              <Sparkles className="w-3.5 h-3.5 text-slate-700" />
+              <span>AEO</span>
             </div>
 
             {/* AI Engine Card */}
-            <div className="w-full bg-white rounded-[28px] border border-slate-200/90 shadow-[0_16px_48px_rgba(15,23,42,0.05),0_1px_3px_rgba(15,23,42,0.03)] p-6 sm:p-7 min-h-[440px] flex flex-col justify-between">
+            <div className="w-full h-full min-h-[340px] sm:min-h-[350px] bg-white rounded-[26px] border border-slate-200/90 shadow-[0_16px_48px_rgba(15,23,42,0.05),0_1px_3px_rgba(15,23,42,0.03)] p-5 sm:p-6 flex flex-col justify-between flex-1">
 
               {/* Top: Engine Tabs & Middle Conversation Area */}
               <div>
@@ -380,7 +369,7 @@ export const VisibilitySection: React.FC = () => {
                       <button
                         key={engineKey}
                         type="button"
-                        onClick={() => setActiveEngine(engineKey)}
+                        onClick={() => handleEngineSelect(engineKey)}
                         className={`flex items-center gap-1.5 pb-2.5 -mb-[11px] font-medium transition-all whitespace-nowrap cursor-pointer ${isActive
                             ? 'text-slate-900 border-b-2 border-blue-600'
                             : 'text-slate-500 hover:text-slate-800 border-b-2 border-transparent'
@@ -394,14 +383,14 @@ export const VisibilitySection: React.FC = () => {
                 </div>
 
                 {/* Middle Conversation Area */}
-                <div className="mt-4 min-h-[220px] flex flex-col justify-start">
+                <div className="mt-3.5 min-h-[150px] sm:min-h-[160px] flex flex-col justify-start">
                   {animStage === 'typing' ? (
                     <div className="flex-1" />
                   ) : (
                     <>
                       {/* User Prompt Query Bubble */}
-                      <div className="w-full flex justify-end mb-3 animate-in fade-in duration-200">
-                        <div className="bg-[#F1F5F9] rounded-2xl rounded-tr-xs px-3.5 py-1.5 text-[11.5px] sm:text-xs text-slate-700 shadow-2xs">
+                      <div className="w-full flex justify-end mb-2.5 animate-in fade-in duration-200">
+                        <div className="bg-[#F1F5F9] rounded-2xl rounded-tr-xs px-3 py-1.5 text-[11px] sm:text-[11.5px] text-slate-700 shadow-2xs">
                           {CHAT_QUERY}
                         </div>
                       </div>
@@ -464,7 +453,7 @@ export const VisibilitySection: React.FC = () => {
 
               {/* Bottom: Permanent ChatGPT Search Bar */}
               <div className="pt-2">
-                <div className="w-full rounded-full border border-slate-200 bg-white px-4 py-2.5 flex items-center justify-between shadow-2xs">
+                <div className="w-full rounded-full border border-slate-200 bg-white px-4 py-2 flex items-center justify-between shadow-2xs">
                   <div className="flex items-center gap-2 overflow-hidden flex-1 mr-2">
                     <span className="text-[13px] sm:text-[14px] text-slate-800 font-normal truncate">
                       {animStage === 'typing' ? (

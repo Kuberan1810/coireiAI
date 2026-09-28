@@ -127,7 +127,7 @@ export const competitorsData: Competitor[] = [
     pricingStructure: "Subscription + Medication",
     employeeCount: "501-1,000",
     logoUrl: "https://www.google.com/s2/favicons?domain=ro.co&sz=128",
-    faviconBg: "bg-transparent text-black font-black",
+    faviconBg: "bg-transparent text-black font-semibold",
     faviconText: "ro",
     overview:
       "Ro is a direct-to-consumer digital healthcare technology company facilitating telehealth consultations, lab testing, and personalized treatment plans for weight loss and primary care.",
@@ -337,33 +337,5 @@ export const competitorsData: Competitor[] = [
       "Platform 2 precision urban package delivery",
     ],
   },
-  {
-    id: 13,
-    displayIndex: 12,
-    name: "Zipline",
-    website: "http://www.flyzipline.com/",
-    social: "https://www.linkedin.com/in",
-    industry: "Logistics & Supply Chain",
-    industryColor: "bg-[#FBF1E6] text-[#A25F2A]",
-    businessModel: "Autonomous Logistics / HaaS",
-    similarityScore: 78,
-    hqLocation: "South San Francisco, CA",
-    productType: "Autonomous Drone Logistics",
-    pricingStructure: "Enterprise Contract / Delivery",
-    employeeCount: "501-1,000",
-    logoUrl: "https://www.google.com/s2/favicons?domain=flyzipline.com&sz=128",
-    faviconBg: "bg-[#DC2626]",
-    faviconText: "Z",
-    overview:
-      "Zipline is an automated logistics and autonomous drone delivery system company delivering medical supplies, vaccines, and commercial packages on demand.",
-    industryDetail: "Robotics / Autonomous Logistics",
-    companySize: "501-1,000 employees (estimated)",
-    location: "South San Francisco, CA, United States",
-    founded: "2014 (estimated)",
-    offerings: [
-      "Autonomous aerial drone delivery networks",
-      "Instant medical supply & blood delivery logistics",
-      "Platform 2 precision urban package delivery",
-    ],
-  },
 ];
+

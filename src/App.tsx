@@ -23,7 +23,7 @@ const PagePlaceholder: FC<{ title: string; subtitle: string }> = ({ title, subti
     <div className="inline-flex items-center px-3.5 py-1.5 rounded-full bg-blue-50 text-blue-600 text-xs font-semibold mb-4">
       Coirei Intelligence
     </div>
-    <h1 className="text-4xl sm:text-5xl font-extrabold text-[#0B0F19] tracking-tight">{title}</h1>
+    <h1 className="text-4xl sm:text-5xl font-semibold text-[#0B0F19] tracking-tight">{title}</h1>
     <p className="mt-4 text-neutral-500 max-w-lg mx-auto text-base">{subtitle}</p>
   </div>
 );
