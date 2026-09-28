@@ -1,4 +1,5 @@
 import React from 'react';
+import { Link } from 'react-router-dom';
 import footerLogo from '../assets/footerLogo.svg';
 
 const InstagramIcon: React.FC = () => (
@@ -114,7 +115,7 @@ export const Footer: React.FC = () => {
           />
 
           {/* Right Navigation / Columns */}
-          <div className="w-full lg:flex-1 flex flex-wrap items-start justify-between gap-6 sm:gap-8 lg:gap-12 lg:pl-14 pt-2 lg:pt-3">
+          <div className="w-full lg:flex-1 flex flex-wrap items-start gap-12 sm:gap-16 lg:gap-24 lg:pl-14 pt-2 lg:pt-3">
             {/* Site Index Column */}
             <div className="flex flex-col space-y-3">
               <span className="text-neutral-400 text-[15px] sm:text-[16px] font-normal select-none">
@@ -142,18 +143,35 @@ export const Footer: React.FC = () => {
               </div>
             </div>
 
-            <span className="text-white hover:text-neutral-300 text-[15px] sm:text-[16px] md:text-[17px] font-normal transition-colors cursor-pointer">
-              Get in Touch
-            </span>
-            <span className="text-white hover:text-neutral-300 text-[15px] sm:text-[16px] md:text-[17px] font-normal transition-colors cursor-pointer">
-              Company
-            </span>
-            <span className="text-white hover:text-neutral-300 text-[15px] sm:text-[16px] md:text-[17px] font-normal transition-colors cursor-pointer">
-              Case study
-            </span>
-            <span className="text-white hover:text-neutral-300 text-[15px] sm:text-[16px] md:text-[17px] font-normal transition-colors cursor-pointer">
-              Pricing
-            </span>
+            {/* Quick Links Column */}
+            <div className="flex flex-col space-y-3">
+              <div className="flex flex-col space-y-2 text-[13px] sm:text-[13.5px] font-normal sm:pt-[33px]">
+                <a
+                  href="mailto:info@coirei.com"
+                  className="text-white hover:text-neutral-300 transition-colors cursor-pointer"
+                >
+                  Get in Touch
+                </a>
+                <Link
+                  to="/resources"
+                  className="text-white hover:text-neutral-300 transition-colors cursor-pointer"
+                >
+                  Company
+                </Link>
+                <Link
+                  to="/customers"
+                  className="text-white hover:text-neutral-300 transition-colors cursor-pointer"
+                >
+                  Case study
+                </Link>
+                <Link
+                  to="/pricing"
+                  className="text-white hover:text-neutral-300 transition-colors cursor-pointer"
+                >
+                  Pricing
+                </Link>
+              </div>
+            </div>
           </div>
         </div>
       </div>
