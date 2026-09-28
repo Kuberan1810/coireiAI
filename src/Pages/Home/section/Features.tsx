@@ -617,9 +617,8 @@ const MarketAnalysisCard: React.FC = () => {
         <div className="relative w-full h-full">
           <svg
             viewBox="0 0 415 170"
-            className={`w-full h-full overflow-visible transition-opacity duration-1000 ease-out ${
-              linesVisible ? 'opacity-100' : 'opacity-0'
-            }`}
+            className={`w-full h-full overflow-visible transition-opacity duration-1000 ease-out ${linesVisible ? 'opacity-100' : 'opacity-0'
+              }`}
             fill="none"
             xmlns="http://www.w3.org/2000/svg"
           >
@@ -734,9 +733,8 @@ const MarketAnalysisCard: React.FC = () => {
       {/* Bottom Container: Text typed below "analyzing competitors" */}
       <div className="relative z-10 w-full min-h-[32px] flex items-center justify-center select-none">
         <p
-          className={`text-[13px] text-slate-500 font-normal tracking-normal flex items-center transition-all duration-300 ease-out ${
-            showStatus ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-1 pointer-events-none'
-          }`}
+          className={`text-[13px] text-slate-500 font-normal tracking-normal flex items-center transition-all duration-300 ease-out ${showStatus ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-1 pointer-events-none'
+            }`}
         >
           <span>{displayText}</span>
           {isTyping && (
@@ -876,7 +874,7 @@ const AudienceIntelligenceCard: React.FC = () => {
   }, []);
 
   return (
-    <div className="p-6 sm:p-8 flex flex-col justify-between relative overflow-hidden min-h-[380px] sm:min-h-[420px] border-t lg:border-t-0 lg:border-l border-neutral-200/90 bg-white group select-none">
+    <div className="p-6 sm:p-8 flex flex-col justify-between relative overflow-hidden min-h-[380px] sm:min-h-[420px] border-t lg:border-t-0 lg:border-l border-neutral-200/90 bg-white group">
       {/* Title */}
       <div className="relative z-10">
         <h3 className="text-xl sm:text-[22px] font-normal leading-snug">
@@ -1067,6 +1065,7 @@ const TouchpointStockChart: React.FC = () => {
   const [totalLength, setTotalLength] = useState(300);
   const [dashOffset, setDashOffset] = useState(300);
   const [arrowPos, setArrowPos] = useState({ x: 44, y: 143, angle: -45, visible: false });
+  const [progress, setProgress] = useState(1);
 
   // Stock Market trajectory matching user sketch:
   // Starts on top of Bar 1 (Y=143) -> arc -> touches exactly on top of Bar 2 (Y=105) -> arc -> touches exactly on top of Bar 3 (Y=67) -> arc -> touches exactly on top of Bar 4 (Y=43) -> breakout rocket ray to top-right
@@ -1094,6 +1093,7 @@ const TouchpointStockChart: React.FC = () => {
       // 1. Reset to start
       setDashOffset(len);
       setArrowPos({ x: 44, y: 143, angle: -45, visible: false });
+      setProgress(0);
 
       // 2. Start climbing after brief pause
       timeoutId = setTimeout(() => {
@@ -1105,8 +1105,8 @@ const TouchpointStockChart: React.FC = () => {
         const animate = (currentTime: number) => {
           if (!active) return;
           const elapsed = currentTime - startTime;
-          const progress = Math.min(elapsed / duration, 1);
-          const eased = easeOutCubic(progress);
+          const currentProgress = Math.min(elapsed / duration, 1);
+          const eased = easeOutCubic(currentProgress);
           const currentDist = eased * len;
 
           const p = path.getPointAtLength(currentDist);
@@ -1115,6 +1115,7 @@ const TouchpointStockChart: React.FC = () => {
           const angle = Math.atan2(pForward.y - pBack.y, pForward.x - pBack.x) * (180 / Math.PI);
 
           setDashOffset(len - currentDist);
+          setProgress(eased);
           setArrowPos({
             x: p.x,
             y: p.y,
@@ -1122,10 +1123,11 @@ const TouchpointStockChart: React.FC = () => {
             visible: true,
           });
 
-          if (progress < 1) {
+          if (currentProgress < 1) {
             animId = requestAnimationFrame(animate);
           } else {
             // Reached summit together! Hold line and arrow at summit for 3.6s
+            setProgress(1);
             timeoutId = setTimeout(() => {
               if (!active) return;
               setArrowPos((prev) => ({ ...prev, visible: false }));
@@ -1152,6 +1154,9 @@ const TouchpointStockChart: React.FC = () => {
     };
   }, []);
 
+  // Live running number: 0.0 -> 217.6
+  const runningVal = (progress * 217.6).toFixed(1);
+
   return (
     <div className="relative z-10 flex-1 flex items-center justify-center w-full my-auto py-4 select-none">
       <svg
@@ -1171,6 +1176,23 @@ const TouchpointStockChart: React.FC = () => {
             <stop offset="100%" stopColor="#FFFFFF" stopOpacity="0.0" />
           </linearGradient>
         </defs>
+
+        {/* Dynamic Running Metric over top of chart as requested (+ 217.6 ↑) */}
+        <g className="select-none pointer-events-none">
+          <text
+            x="32"
+            y="26"
+            fill="#059669"
+            fontSize="24"
+            fontWeight="700"
+            fontFamily="'Plus Jakarta Sans', system-ui, sans-serif"
+            style={{ fontVariantNumeric: 'tabular-nums' }}
+            letterSpacing="-0.5px"
+          >
+            + {runningVal}
+            <tspan dx="6" fontSize="22" fontWeight="800">↑</tspan>
+          </text>
+        </g>
 
         {/* Chart Axes matching user's sketch */}
         <line x1="18" y1="-10" x2="18" y2="195" stroke="#CBD5E1" strokeWidth="1.25" strokeLinecap="round" />
@@ -1399,6 +1421,14 @@ const AutomateAdsCard: React.FC = () => {
   const [showGlobeLines, setShowGlobeLines] = useState(false);
   const [isPlatformsShifted, setIsPlatformsShifted] = useState(false);
 
+  // Typing animation & interactive state
+  const [typedText, setTypedText] = useState('');
+  const userInteractedRef = useRef(false);
+  const typingIntervalRef = useRef<ReturnType<typeof setInterval> | null>(null);
+  const idleResumeTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
+
+  const AD_PROMPT = 'Launch automated ad campaign';
+
   useEffect(() => {
     let active = true;
     let timeoutId: ReturnType<typeof setTimeout>;
@@ -1414,10 +1444,7 @@ const AutomateAdsCard: React.FC = () => {
       setShowGlobeLines(false);
       setIsPlatformsShifted(false);
 
-      // 2. Hold details view for 2.2s before cursor enters to click send
-      timeoutId = setTimeout(() => {
-        if (!active) return;
-
+      const triggerSendFlow = () => {
         // 3. Cursor glides directly to the send button (right knob in bottom pill)
         setCursorState('gliding-to-send');
 
@@ -1539,7 +1566,41 @@ const AutomateAdsCard: React.FC = () => {
             }, 250);
           }, 130);
         }, 420);
-      }, 2200);
+      };
+
+      if (!userInteractedRef.current) {
+        setTypedText('');
+        if (typingIntervalRef.current) clearInterval(typingIntervalRef.current);
+
+        // Start typing after 250ms
+        timeoutId = setTimeout(() => {
+          if (!active || userInteractedRef.current) return;
+
+          let charIdx = 0;
+          typingIntervalRef.current = setInterval(() => {
+            if (!active || userInteractedRef.current) {
+              if (typingIntervalRef.current) clearInterval(typingIntervalRef.current);
+              return;
+            }
+
+            charIdx++;
+            setTypedText(AD_PROMPT.slice(0, charIdx));
+
+            if (charIdx >= AD_PROMPT.length) {
+              if (typingIntervalRef.current) clearInterval(typingIntervalRef.current);
+              timeoutId = setTimeout(() => {
+                if (!active || userInteractedRef.current) return;
+                triggerSendFlow();
+              }, 450);
+            }
+          }, 30);
+        }, 250);
+      } else {
+        timeoutId = setTimeout(() => {
+          if (!active) return;
+          triggerSendFlow();
+        }, 2500);
+      }
     };
 
     runLoop();
@@ -1547,6 +1608,8 @@ const AutomateAdsCard: React.FC = () => {
     return () => {
       active = false;
       clearTimeout(timeoutId);
+      if (typingIntervalRef.current) clearInterval(typingIntervalRef.current);
+      if (idleResumeTimerRef.current) clearTimeout(idleResumeTimerRef.current);
     };
   }, []);
 
@@ -1572,22 +1635,12 @@ const AutomateAdsCard: React.FC = () => {
               : 'opacity-100 scale-100 translate-y-0'
               }`}
           >
-            {/* Custom Sidebar/App Icon matching screenshot */}
-            <svg
-              width="20"
-              height="20"
-              viewBox="0 0 24 24"
-              fill="none"
-              stroke="currentColor"
-              strokeWidth="1.8"
-              strokeLinecap="round"
-              strokeLinejoin="round"
-              className="w-5 h-5 text-neutral-900 shrink-0 mt-0.5"
-            >
-              <rect width="18" height="18" x="3" y="3" rx="2" />
-              <path d="M9 3v18" />
-              <rect width="4" height="4" x="14" y="14" fill="currentColor" stroke="none" />
-            </svg>
+            {/* Coirei Ci Logo */}
+            <img
+              src="/CiLogo.png"
+              alt="Coirei"
+              className="w-5 h-5 object-contain shrink-0 mt-0.5"
+            />
 
             <div className="space-y-4">
               <p className="text-[13px] sm:text-[13.5px] text-[#4E4E4E] leading-[1.65] font-normal max-w-xl">
@@ -2239,14 +2292,52 @@ const AutomateAdsCard: React.FC = () => {
         )}
       </div>
 
-      {/* Bottom Rounded Pill Bar with Black Send Button (Shown in View 1 & View 2) */}
+      {/* Bottom Rounded Pill Bar with Typing Input & Black Send Button (Shown in View 1 & View 2) */}
       {viewMode !== 'distribution' && (
-        <div className="relative z-10 w-full bg-white border border-neutral-200/90 rounded-2xl h-12 sm:h-14 px-4 flex items-center justify-end shadow-[0_2px_8px_rgba(0,0,0,0.03)] mt-6 select-none">
+        <div className="relative z-10 w-full bg-white border border-neutral-200/90 rounded-2xl h-12 sm:h-14 px-4 flex items-center justify-between shadow-[0_2px_8px_rgba(0,0,0,0.03)] mt-6">
+          {/* Typing Text Input Area */}
+          <div className="flex-1 flex items-center mr-3 overflow-hidden">
+            <input
+              type="text"
+              value={typedText}
+              onChange={(e) => {
+                userInteractedRef.current = true;
+                if (typingIntervalRef.current) clearInterval(typingIntervalRef.current);
+                setTypedText(e.target.value);
+
+                if (idleResumeTimerRef.current) clearTimeout(idleResumeTimerRef.current);
+                idleResumeTimerRef.current = setTimeout(() => {
+                  userInteractedRef.current = false;
+                }, 16000);
+              }}
+              onFocus={() => {
+                userInteractedRef.current = true;
+                if (typingIntervalRef.current) clearInterval(typingIntervalRef.current);
+              }}
+              placeholder="Describe your ad campaign or target audience..."
+              className="w-full bg-transparent outline-none text-[13px] sm:text-[13.5px] text-[#1F1E1D] placeholder-neutral-400 font-normal"
+            />
+          </div>
+
           {/* Default Black Send Button with Cursor Animation */}
           <div className="relative flex items-center justify-center shrink-0">
-            <div
-              className={`w-7 h-7 sm:w-8 sm:h-8 rounded-full bg-black shrink-0 transition-transform duration-150 relative flex items-center justify-center text-white ${isSendPressed ? 'scale-75' : 'scale-100'
+            <button
+              type="button"
+              onClick={() => {
+                userInteractedRef.current = true;
+                setIsSendPressed(true);
+                setTimeout(() => {
+                  setIsSendPressed(false);
+                  setIsFading(true);
+                  setTimeout(() => {
+                    setViewMode('dashboard');
+                    setIsFading(false);
+                  }, 250);
+                }, 150);
+              }}
+              className={`w-7 h-7 sm:w-8 sm:h-8 rounded-full bg-black shrink-0 transition-transform duration-150 relative flex items-center justify-center text-white cursor-pointer ${isSendPressed ? 'scale-75' : 'scale-100 hover:scale-105 active:scale-95'
                 }`}
+              title="Launch ad campaign"
             >
               {/* Ripple effect on click */}
               {isSendPressed && (
@@ -2266,19 +2357,19 @@ const AutomateAdsCard: React.FC = () => {
                 <line x1="5" y1="12" x2="19" y2="12" />
                 <polyline points="12 5 19 12 12 19" />
               </svg>
-            </div>
+            </button>
 
             {/* Animated Pointer Cursor: single fluid glide directly to send point, clicks on arrival */}
             <div
               className={`absolute pointer-events-none z-50 transition-all ease-out ${cursorState === 'hidden'
-                ? 'opacity-0 translate-x-12 translate-y-12 scale-90 duration-300'
-                : cursorState === 'gliding-to-send'
-                  ? 'opacity-100 translate-x-0 translate-y-1 scale-100 duration-400'
-                  : cursorState === 'clicking-send'
-                    ? 'opacity-100 translate-x-0 translate-y-1 scale-[0.82] duration-100 ease-in'
-                    : cursorState === 'clicked-send'
-                      ? 'opacity-100 translate-x-0 translate-y-1 scale-100 duration-150 ease-out'
-                      : 'opacity-0 translate-x-6 translate-y-6 scale-90 duration-300'
+                  ? 'opacity-0 translate-x-12 translate-y-12 scale-90 duration-300'
+                  : cursorState === 'gliding-to-send'
+                    ? 'opacity-100 translate-x-0 translate-y-1 scale-100 duration-400'
+                    : cursorState === 'clicking-send'
+                      ? 'opacity-100 translate-x-0 translate-y-1 scale-[0.82] duration-100 ease-in'
+                      : cursorState === 'clicked-send'
+                        ? 'opacity-100 translate-x-0 translate-y-1 scale-100 duration-150 ease-out'
+                        : 'opacity-0 translate-x-6 translate-y-6 scale-90 duration-300'
                 }`}
               style={{
                 top: '-4px',

@@ -39,7 +39,7 @@ export const BusinessSection: React.FC = () => {
   return (
     <>
       {/* 1. We Work With Business Section (White, overlaps the fixed black screen) */}
-      <section className="relative z-20 w-full bg-white shadow-[0_-25px_60px_rgba(0,0,0,0.3)] pt-16 sm:pt-24 pb-8 sm:pb-10 overflow-hidden select-none">
+      <section className="relative z-20 w-full bg-white shadow-[0_-25px_60px_rgba(0,0,0,0.3)] pt-16 sm:pt-24 pb-8 sm:pb-10 overflow-hidden">
         <div className="w-full max-w-7xl mx-auto px-6 sm:px-8 lg:px-12">
           <ScrollReveal variant="fade-up" duration={700} distance={20}>
             <h2 className="text-3xl sm:text-4xl md:text-[46px] lg:text-[50px] font-semibold text-[#0B0F19] tracking-tight leading-[1.12]">
@@ -53,7 +53,7 @@ export const BusinessSection: React.FC = () => {
       </section>
 
       {/* 2. All-in-One Tools Section (White) */}
-      <section className="relative z-20 w-full bg-white pt-6 sm:pt-10 pb-20 sm:pb-28 overflow-hidden select-none">
+      <section className="relative z-20 w-full bg-white pt-6 sm:pt-10 pb-20 sm:pb-28 overflow-hidden">
         <div className="w-full max-w-7xl mx-auto px-6 sm:px-8 lg:px-12">
           <div className="grid grid-cols-1 lg:grid-cols-12 gap-10 lg:gap-14 items-center">
 

@@ -221,8 +221,8 @@ export const EngageAgentVisual: React.FC = () => {
             boxShadow: '0 8px 24px -4px rgba(0, 0, 0, 0.08), 0 2px 6px -1px rgba(0, 0, 0, 0.03)',
           }}
         >
-          {/* Blue Circle Icon Badge */}
-          <div className="w-7 h-7 rounded-full bg-[#EFF6FF] flex items-center justify-center shrink-0 text-[#2563EB]">
+          {/* Icon Badge */}
+          <div className="w-7 h-7 rounded-full bg-[#EB6658]/10 flex items-center justify-center shrink-0 text-[#EB6658]">
             <Mail className="w-3.5 h-3.5" strokeWidth={2} />
           </div>
           {/* Label Text */}
@@ -248,22 +248,22 @@ export const EngageAgentVisual: React.FC = () => {
             boxShadow: '0 8px 24px -4px rgba(0, 0, 0, 0.08), 0 2px 6px -1px rgba(0, 0, 0, 0.03)',
           }}
         >
-          {/* Blue Circle Icon Badge with 3-Dot Chat Bubble */}
-          <div className="w-7 h-7 rounded-full bg-[#EFF6FF] flex items-center justify-center shrink-0 text-[#2563EB]">
+          {/* Icon Badge with 3-Dot Chat Bubble */}
+          <div className="w-7 h-7 rounded-full bg-[#EB6658]/10 flex items-center justify-center shrink-0 text-[#EB6658]">
             <svg
               width="15"
               height="15"
               viewBox="0 0 24 24"
               fill="none"
-              stroke="#2563EB"
+              stroke="#EB6658"
               strokeWidth="2"
               strokeLinecap="round"
               strokeLinejoin="round"
             >
               <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z" />
-              <circle cx="8" cy="10" r="0.9" fill="#2563EB" />
-              <circle cx="12" cy="10" r="0.9" fill="#2563EB" />
-              <circle cx="16" cy="10" r="0.9" fill="#2563EB" />
+              <circle cx="8" cy="10" r="0.9" fill="#EB6658" />
+              <circle cx="12" cy="10" r="0.9" fill="#EB6658" />
+              <circle cx="16" cy="10" r="0.9" fill="#EB6658" />
             </svg>
           </div>
           {/* Label Text */}
@@ -289,8 +289,8 @@ export const EngageAgentVisual: React.FC = () => {
             boxShadow: '0 8px 24px -4px rgba(0, 0, 0, 0.08), 0 2px 6px -1px rgba(0, 0, 0, 0.03)',
           }}
         >
-          {/* Blue Circle Icon Badge */}
-          <div className="w-7 h-7 rounded-full bg-[#EFF6FF] flex items-center justify-center shrink-0 text-[#2563EB]">
+          {/* Icon Badge */}
+          <div className="w-7 h-7 rounded-full bg-[#EB6658]/10 flex items-center justify-center shrink-0 text-[#EB6658]">
             <User className="w-3.5 h-3.5" strokeWidth={2} />
           </div>
           {/* Label Text */}

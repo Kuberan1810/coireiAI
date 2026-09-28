@@ -5,6 +5,7 @@ import Navbar from './components/Navbar';
 import Footer from './components/Footer';
 import Home from './Pages/Home/Home';
 import Product from './Pages/Product/Product';
+import MarketIntelligence from './Pages/MarketIntelligence/MarketIntelligence';
 
 // Simple Scroll to Top on route change
 function ScrollToTop() {
@@ -38,15 +39,10 @@ export const App: FC = () => {
           <Routes>
             <Route path="/" element={<Home />} />
             <Route path="/product" element={<Product />} />
-            <Route
-              path="/solutions"
-              element={
-                <PagePlaceholder
-                  title="Tailored GTM Solutions"
-                  subtitle="Discover automated go-to-market strategies tailored for B2B SaaS, enterprise sales, and high-growth startups."
-                />
-              }
-            />
+            <Route path="/market-intelligence" element={<MarketIntelligence />} />
+            <Route path="/intelligence" element={<MarketIntelligence />} />
+            <Route path="/seo-aeo" element={<MarketIntelligence />} />
+            <Route path="/solutions" element={<MarketIntelligence />} />
             <Route
               path="/customers"
               element={

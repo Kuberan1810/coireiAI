@@ -1,5 +1,5 @@
-import React, { useState, useEffect, useRef } from 'react';
-import { Megaphone, MoreHorizontal, Sparkles, ArrowUpRight, Check } from 'lucide-react';
+import React, { useState, useEffect } from 'react';
+import { Megaphone, MoreHorizontal, Sparkles } from 'lucide-react';
 
 interface MarketingAgentVisualProps {
   isActive?: boolean;
@@ -10,7 +10,6 @@ export const MarketingAgentVisual: React.FC<MarketingAgentVisualProps> = ({
   isActive = true,
   className = '',
 }) => {
-  const [isApplied, setIsApplied] = useState(false);
   const [progress, setProgress] = useState(0);
 
   useEffect(() => {
@@ -51,11 +50,6 @@ export const MarketingAgentVisual: React.FC<MarketingAgentVisualProps> = ({
     };
   }, [isActive]);
 
-  const handleApply = (e: React.MouseEvent) => {
-    e.stopPropagation();
-    setIsApplied(!isApplied);
-  };
-
   // Interpolated animated values
   const currentCompletion = Math.round(progress * 72);
   const currentBarWidth = progress * 72;
@@ -80,8 +74,8 @@ export const MarketingAgentVisual: React.FC<MarketingAgentVisualProps> = ({
       <div className="flex items-center justify-between px-0.5">
         <div className="flex items-center gap-3">
           {/* Megaphone Icon Badge */}
-          <div className="w-10 h-10 rounded-[12px] bg-[#EFF6FF] flex items-center justify-center shrink-0">
-            <Megaphone className="w-5 h-5 text-[#2563EB]" />
+          <div className="w-10 h-10 rounded-[12px] bg-[#EB6658]/10 flex items-center justify-center shrink-0">
+            <Megaphone className="w-5 h-5 text-[#EB6658]" />
           </div>
 
           {/* Titles */}
@@ -176,47 +170,22 @@ export const MarketingAgentVisual: React.FC<MarketingAgentVisualProps> = ({
         </div>
       </div>
 
-      {/* Card 2: AI Recommendation (Figma: Fill 362px, Hug 128.6px, Radius 14px, Border 1px #D8E8FC, Background: #F8FBFD, Padding: 10px 14px 10px 14px, Gap: 12px) */}
+      {/* Card 2: AI Recommendation */}
       <div
-        className="w-full rounded-[14px] bg-[#F8FBFD] border border-[#D8E8FC] pt-[10px] pr-[14px] pb-[10px] pl-[14px] flex flex-col gap-[12px] transition-all hover:border-[#BFDBFE]"
+        className="w-full rounded-[14px] bg-[#EB6658]/[0.04] border border-[#EB6658]/25 pt-[10px] pr-[14px] pb-[10px] pl-[14px] flex flex-col gap-[12px] transition-all hover:border-[#EB6658]/45"
       >
         {/* Recommendation Header */}
         <div className="flex items-center gap-1.5 leading-none">
-          <Sparkles className="w-3.5 h-3.5 text-[#2563EB]" />
-          <span className="text-[12.5px] font-semibold text-[#1D4ED8] tracking-tight">
+          <Sparkles className="w-3.5 h-3.5 text-[#EB6658]" />
+          <span className="text-[12.5px] font-semibold text-[#EB6658] tracking-tight">
             AI Recommendation
           </span>
         </div>
 
         {/* Recommendation Body */}
         <p className="text-[12.5px] text-[#334155] leading-[1.45] font-normal">
-          LinkedIn engagement is 23% higher for your target audience. Increase campaign focus on LinkedIn.
+          LinkedIn ment is 23% higher for your target audience. Increase campaign focus on LinkedIn.
         </p>
-
-        {/* Apply Action Button */}
-        <div className="flex justify-end">
-          <button
-            type="button"
-            onClick={handleApply}
-            className={`inline-flex items-center justify-center gap-1 px-3.5 py-1.5 rounded-[8px] text-[12px] font-medium transition-all duration-200 cursor-pointer shadow-sm active:scale-95 ${
-              isApplied
-                ? 'bg-[#10B981] text-white hover:bg-[#059669]'
-                : 'bg-[#0B0F19] text-white hover:bg-[#1E293B]'
-            }`}
-          >
-            {isApplied ? (
-              <>
-                <span>Applied</span>
-                <Check className="w-3 h-3 stroke-[2.5]" />
-              </>
-            ) : (
-              <>
-                <span>Apply</span>
-                <ArrowUpRight className="w-3 h-3 stroke-[2.5]" />
-              </>
-            )}
-          </button>
-        </div>
       </div>
     </div>
   );

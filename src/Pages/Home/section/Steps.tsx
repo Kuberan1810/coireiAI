@@ -14,6 +14,7 @@ import {
   Globe,
   ExternalLink,
   Sparkles,
+  RotateCcw,
 } from 'lucide-react';
 import { icpData } from './icpData';
 import { ICPTable } from './ICPTable';
@@ -37,7 +38,7 @@ const stepsList: StepData[] = [
     id: 'analyse',
     title: 'Analyse',
     description:
-      'Coirei analyzes your market, industry trends, competitors, positioning, and customer landscape to give you a clear view of where your business stands. It compares key players, identifies market gaps, uncovers emerging trends',
+      'Coirei GTM analyzes your market, industry trends, competitors, positioning, and customer landscape to give you a clear view of where your business stands. It compares key players, identifies market gaps, uncovers emerging trends',
     headerTitle: 'Whole analyzes',
   },
   {
@@ -54,6 +55,12 @@ type Step1Stage = 'input' | 'analyzing' | 'overview';
 
 export const Steps: React.FC = () => {
   const sectionRef = useRef<HTMLDivElement>(null);
+  const cardContainerRef = useRef<HTMLDivElement>(null);
+  const sendButtonRef = useRef<HTMLButtonElement>(null);
+  const autoTimeoutsRef = useRef<ReturnType<typeof setTimeout>[]>([]);
+  const idleTimeoutRef = useRef<ReturnType<typeof setTimeout> | null>(null);
+  const userInteractedRef = useRef<boolean>(false);
+
   const [activeIdx, setActiveIdx] = useState(0);
   const [activeTab, setActiveTab] = useState<OverviewTab>('overview');
   const [inputUrl, setInputUrl] = useState('coirei.com');
@@ -62,6 +69,43 @@ export const Steps: React.FC = () => {
   const [isSendPressed, setIsSendPressed] = useState(false);
   const [selectedIcpRows, setSelectedIcpRows] = useState<number[]>([]);
   const [icpSearchVal, setIcpSearchVal] = useState('');
+
+  // Auto demonstration state
+  const [isInView, setIsInView] = useState(false);
+  const [userInteracted, setUserInteracted] = useState(false);
+  const [showAutoCursor, setShowAutoCursor] = useState(false);
+  const [cursorPos, setCursorPos] = useState({ x: 0, y: 0 });
+  const [cursorOpacity, setCursorOpacity] = useState(0);
+  const [cursorClicked, setCursorClicked] = useState(false);
+
+  const clearAutoTimers = () => {
+    autoTimeoutsRef.current.forEach((t) => clearTimeout(t));
+    autoTimeoutsRef.current = [];
+  };
+
+  const handleUserInteraction = () => {
+    setUserInteracted(true);
+    userInteractedRef.current = true;
+    setShowAutoCursor(false);
+    clearAutoTimers();
+
+    if (idleTimeoutRef.current) clearTimeout(idleTimeoutRef.current);
+    idleTimeoutRef.current = setTimeout(() => {
+      setUserInteracted(false);
+      userInteractedRef.current = false;
+    }, 20000);
+  };
+
+  const getButtonPosition = () => {
+    if (!sendButtonRef.current || !cardContainerRef.current) return null;
+    const btnRect = sendButtonRef.current.getBoundingClientRect();
+    const containerRect = cardContainerRef.current.getBoundingClientRect();
+
+    return {
+      x: btnRect.left - containerRect.left + btnRect.width / 2,
+      y: btnRect.top - containerRect.top + btnRect.height / 2,
+    };
+  };
 
   const toggleSelectAllIcp = () => {
     if (selectedIcpRows.length === icpData.length) {
@@ -100,50 +144,176 @@ export const Steps: React.FC = () => {
 
   const metadataList = isCoirei
     ? [
-        { icon: Building2, label: 'Industry', value: 'B2B SaaS / GTM Intelligence' },
-        { icon: Users, label: 'Company size', value: '21-50 employees (estimated)' },
-        { icon: MapPin, label: 'Location', value: 'San Francisco, CA & Singapore' },
-        { icon: Calendar, label: 'Founded', value: '2024' },
-      ]
+      { icon: Building2, label: 'Industry', value: 'B2B SaaS / GTM Intelligence' },
+      { icon: Users, label: 'Company size', value: '21-50 employees (estimated)' },
+      { icon: MapPin, label: 'Location', value: 'San Francisco, CA & Singapore' },
+      { icon: Calendar, label: 'Founded', value: '2024' },
+    ]
     : [
-        { icon: Building2, label: 'Industry', value: 'Technology / Enterprise Software' },
-        { icon: Users, label: 'Company size', value: '11-100 employees (estimated)' },
-        { icon: MapPin, label: 'Location', value: 'Global Headquarters' },
-        { icon: Calendar, label: 'Founded', value: '2022 (estimated)' },
-      ];
+      { icon: Building2, label: 'Industry', value: 'Technology / Enterprise Software' },
+      { icon: Users, label: 'Company size', value: '11-100 employees (estimated)' },
+      { icon: MapPin, label: 'Location', value: 'Global Headquarters' },
+      { icon: Calendar, label: 'Founded', value: '2022 (estimated)' },
+    ];
 
   const offeringsList = isCoirei
     ? [
-        'Autonomous GTM Intelligence Engine',
-        'Real-time Competitor Battlecards & ICP Discovery',
-        'Automated Account Scoring & Signal Tracking',
-        'Enterprise Outbound Workflow Orchestration',
-        'Custom Business Logic & Data Enrichment Pipelines',
-      ]
+      'Autonomous GTM Intelligence Engine',
+      'Real-time Competitor Battlecards & ICP Discovery',
+      'Automated Account Scoring & Signal Tracking',
+      'Enterprise Outbound Workflow Orchestration',
+      'Custom Business Logic & Data Enrichment Pipelines',
+    ]
     : [
-        `${companyName} Core Platform`,
-        'API & Workflow Automation',
-        'Enterprise Intelligence & Analytics',
-        'Integration & Support Services',
-        'Custom Business Logic & Real-time Pipelines',
-      ];
+      `${companyName} Core Platform`,
+      'API & Workflow Automation',
+      'Enterprise Intelligence & Analytics',
+      'Integration & Support Services',
+      'Custom Business Logic & Real-time Pipelines',
+    ];
 
-  const handleSend = () => {
+  const handleSend = (overrideUrl?: string) => {
+    const urlToUse = overrideUrl !== undefined ? overrideUrl : inputUrl;
+    if (!urlToUse.trim()) return;
+
     setIsSendPressed(true);
     setTimeout(() => {
       setIsSendPressed(false);
       setStage('analyzing');
-      setAnimStep(1);
-
-      // Animation lifecycle matching coireiGtm Conversation.tsx
-      setTimeout(() => setAnimStep(2), 400);
-      setTimeout(() => setAnimStep(3), 850);
-      setTimeout(() => setAnimStep(4), 1250);
-      setTimeout(() => {
-        setStage('overview');
-      }, 3000);
-    }, 100);
+    }, 120);
   };
+
+  // Dedicated lifecycle for analyzing animation sequence: progresses through all 4 steps reliably
+  useEffect(() => {
+    if (stage !== 'analyzing') return;
+
+    setAnimStep(1);
+
+    const t2 = setTimeout(() => setAnimStep(2), 500);
+    const t3 = setTimeout(() => setAnimStep(3), 1050);
+    const t4 = setTimeout(() => setAnimStep(4), 1600);
+    const tEnd = setTimeout(() => {
+      setStage('overview');
+      setActiveTab('overview');
+    }, 3200);
+
+    return () => {
+      clearTimeout(t2);
+      clearTimeout(t3);
+      clearTimeout(t4);
+      clearTimeout(tEnd);
+    };
+  }, [stage]);
+
+  // IntersectionObserver: Only auto-play when Steps section is visible in viewport
+  useEffect(() => {
+    const observer = new IntersectionObserver(
+      ([entry]) => {
+        setIsInView(entry.isIntersecting);
+      },
+      { threshold: 0.2 }
+    );
+
+    if (sectionRef.current) {
+      observer.observe(sectionRef.current);
+    }
+
+    return () => observer.disconnect();
+  }, []);
+
+  // Auto-click sequence when in input stage
+  useEffect(() => {
+    if (stage !== 'input' || activeIdx !== 0 || !isInView || userInteracted) {
+      setShowAutoCursor(false);
+      return;
+    }
+
+    let isCancelled = false;
+    const timers: ReturnType<typeof setTimeout>[] = [];
+
+    const startDelay = setTimeout(() => {
+      if (isCancelled || userInteractedRef.current) return;
+
+      const pos = getButtonPosition();
+      if (pos) {
+        // Start cursor slightly offset
+        setCursorPos({ x: pos.x - 70, y: pos.y + 60 });
+        setShowAutoCursor(true);
+        setCursorOpacity(0);
+        setCursorClicked(false);
+
+        // Animate cursor moving to button
+        const moveTimer = setTimeout(() => {
+          if (isCancelled || userInteractedRef.current) return;
+          setCursorOpacity(1);
+          setCursorPos({ x: pos.x, y: pos.y });
+
+          // Click down on the button
+          const clickTimer = setTimeout(() => {
+            if (isCancelled || userInteractedRef.current) return;
+            setCursorClicked(true);
+            setIsSendPressed(true);
+
+            // Release click
+            const releaseTimer = setTimeout(() => {
+              if (isCancelled || userInteractedRef.current) return;
+              setCursorClicked(false);
+              setIsSendPressed(false);
+              setCursorOpacity(0);
+
+              // Run send and hide cursor
+              const runTimer = setTimeout(() => {
+                if (isCancelled || userInteractedRef.current) return;
+                setShowAutoCursor(false);
+                handleSend('coirei.com');
+              }, 180);
+
+              timers.push(runTimer);
+            }, 240);
+
+            timers.push(releaseTimer);
+          }, 850);
+
+          timers.push(clickTimer);
+        }, 100);
+
+        timers.push(moveTimer);
+      } else {
+        // Fallback if button ref not ready
+        const fallbackTimer = setTimeout(() => {
+          if (!isCancelled && !userInteractedRef.current) {
+            handleSend('coirei.com');
+          }
+        }, 1200);
+        timers.push(fallbackTimer);
+      }
+    }, 1200);
+
+    timers.push(startDelay);
+
+    return () => {
+      isCancelled = true;
+      timers.forEach((t) => clearTimeout(t));
+      setShowAutoCursor(false);
+      setCursorClicked(false);
+      setIsSendPressed(false);
+    };
+  }, [stage, activeIdx, isInView, userInteracted]);
+
+  // Overview loop: after displaying overview for 7s without user interaction, smoothly loop back to input
+  useEffect(() => {
+    if (stage === 'overview' && !userInteracted && isInView && activeIdx === 0) {
+      const loopTimeout = setTimeout(() => {
+        if (!userInteractedRef.current) {
+          setStage('input');
+          setInputUrl('coirei.com');
+          setAnimStep(1);
+        }
+      }, 7000);
+
+      return () => clearTimeout(loopTimeout);
+    }
+  }, [stage, userInteracted, isInView, activeIdx]);
 
   // Scroll listener: detects user scrolling through sticky container
   useEffect(() => {
@@ -174,7 +344,7 @@ export const Steps: React.FC = () => {
   }, []);
 
   return (
-    <section 
+    <section
       id="steps-section"
       ref={sectionRef}
       className="relative w-full bg-white border-t border-[#E2E2E2]"
@@ -192,11 +362,10 @@ export const Steps: React.FC = () => {
                 return (
                   <div
                     key={step.id}
-                    className={`w-full max-w-lg transition-opacity duration-350 ease-out ${
-                      isActive
+                    className={`w-full max-w-lg transition-opacity duration-350 ease-out ${isActive
                         ? 'opacity-100 relative z-10 pointer-events-auto'
                         : 'opacity-0 absolute inset-0 pointer-events-none z-0'
-                    }`}
+                      }`}
                   >
                     <h3 className="text-3xl sm:text-4xl md:text-[44px] font-normal text-[#0F172A] tracking-tight leading-[1.15]">
                       {step.title}
@@ -210,7 +379,7 @@ export const Steps: React.FC = () => {
             </div>
 
             {/* Right Column: Floating Mockup Window - In-place Cross Fade (No stack) */}
-            <div className="lg:col-span-7 flex items-center justify-center lg:justify-end select-none w-full">
+            <div className="lg:col-span-7 flex items-center justify-center lg:justify-end w-full">
               <div className="w-full max-w-[700px] lg:max-w-[760px] h-[400px] sm:h-[430px] bg-white rounded-2xl shadow-[0_16px_40px_rgba(0,0,0,0.07),0_2px_8px_rgba(0,0,0,0.03)] border border-neutral-200/80 overflow-hidden flex flex-col transition-all duration-300 relative">
                 {/* Header Top Bar - Same dark grey (#5C5C5C) for ALL steps, never changes color */}
                 <div className="bg-[#5C5C5C] text-white py-2.5 px-4 flex items-center justify-center text-center text-xs sm:text-[12.5px] tracking-normal select-none shrink-0">
@@ -223,43 +392,94 @@ export const Steps: React.FC = () => {
                 <div className="relative flex-1 w-full overflow-hidden bg-white">
                   {/* Step 0: Understand Card Interior */}
                   <div
-                    className={`absolute inset-0 w-full h-full p-5 sm:p-6 flex flex-col justify-start overflow-y-auto bg-white transition-opacity duration-350 ease-out ${
-                      activeIdx === 0
+                    ref={cardContainerRef}
+                    className={`absolute inset-0 w-full h-full p-5 sm:p-6 flex flex-col justify-start overflow-y-auto bg-white transition-opacity duration-350 ease-out relative ${activeIdx === 0
                         ? 'opacity-100 pointer-events-auto z-10'
                         : 'opacity-0 pointer-events-none z-0'
-                    }`}
+                      }`}
                     style={{ scrollbarWidth: 'thin', scrollbarColor: '#CBD5E1 transparent' }}
                   >
+                    {/* Simulated Mouse Cursor for Auto-Play Demonstration */}
+                    {showAutoCursor && (
+                      <div
+                        className="pointer-events-none absolute z-50 transition-all ease-out"
+                        style={{
+                          left: `${cursorPos.x}px`,
+                          top: `${cursorPos.y}px`,
+                          transform: `translate(-4px, -4px) scale(${cursorClicked ? 0.82 : 1})`,
+                          opacity: cursorOpacity,
+                          transitionDuration: cursorClicked ? '150ms' : '850ms',
+                        }}
+                      >
+                        <div className="relative">
+                          <svg
+                            width="22"
+                            height="22"
+                            viewBox="0 0 24 24"
+                            fill="none"
+                            className="drop-shadow-[0_3px_8px_rgba(0,0,0,0.35)]"
+                          >
+                            <path
+                              d="M3 3l7 18 3.5-6.5L20 11 3 3z"
+                              fill="#18181B"
+                              stroke="#FFFFFF"
+                              strokeWidth="1.5"
+                              strokeLinejoin="round"
+                            />
+                          </svg>
+                          {cursorClicked && (
+                            <span className="absolute -top-1.5 -left-1.5 w-7 h-7 rounded-full bg-neutral-900/25 animate-ping pointer-events-none" />
+                          )}
+                        </div>
+                      </div>
+                    )}
+
                     {stage === 'overview' ? (
                       /* STATE 3: Full Overview Card matching coireiGtm with Company Name & Avatar */
                       <div className="w-full flex flex-col gap-5 select-text animate-in fade-in duration-200">
                         {/* 1. Company Profile Header Box */}
-                        <div className="flex items-center gap-4 pt-1 shrink-0">
-                          <div className="w-14 h-14 rounded-2xl bg-[#EEF2F6] border border-[#E2E8F0] flex items-center justify-center shadow-xs shrink-0">
-                            <span className="font-semibold text-[24px] text-[#0F172A]">
-                              {avatarLetter}
-                            </span>
+                        <div className="flex items-center justify-between gap-4 pt-1 shrink-0">
+                          <div className="flex items-center gap-4">
+                            <div className="w-14 h-14 rounded-2xl bg-[#EEF2F6] border border-[#E2E8F0] flex items-center justify-center shadow-xs shrink-0">
+                              <span className="font-semibold text-[24px] text-[#0F172A]">
+                                {avatarLetter}
+                              </span>
+                            </div>
+
+                            <div className="flex flex-col justify-center gap-0.5">
+                              <div className="flex items-center gap-2">
+                                <h2 className="text-[21px] sm:text-[23px] font-semibold text-[#0F172A] tracking-[-0.02em] leading-tight">
+                                  {companyName}
+                                </h2>
+                                <a
+                                  href={`https://${cleanDomain}`}
+                                  target="_blank"
+                                  rel="noreferrer"
+                                  className="w-5 h-5 rounded-[6px] border border-[#E0E0E0] bg-white flex items-center justify-center text-[#64748B] hover:text-[#0F172A] transition-colors shrink-0 shadow-2xs"
+                                  title="Open website"
+                                >
+                                  <ExternalLink className="w-3 h-3 text-[#898781]" />
+                                </a>
+                              </div>
+                              <span className="text-[13px] sm:text-[13.5px] text-[#94A3B8] font-normal leading-normal">
+                                https://www.{cleanDomain}
+                              </span>
+                            </div>
                           </div>
 
-                          <div className="flex flex-col justify-center gap-0.5">
-                            <div className="flex items-center gap-2">
-                              <h2 className="text-[21px] sm:text-[23px] font-semibold text-[#0F172A] tracking-[-0.02em] leading-tight">
-                                {companyName}
-                              </h2>
-                              <a
-                                href={`https://${cleanDomain}`}
-                                target="_blank"
-                                rel="noreferrer"
-                                className="w-5 h-5 rounded-[6px] border border-[#E0E0E0] bg-white flex items-center justify-center text-[#64748B] hover:text-[#0F172A] transition-colors shrink-0 shadow-2xs"
-                                title="Open website"
-                              >
-                                <ExternalLink className="w-3 h-3 text-[#898781]" />
-                              </a>
-                            </div>
-                            <span className="text-[13px] sm:text-[13.5px] text-[#94A3B8] font-normal leading-normal">
-                              https://www.{cleanDomain}
-                            </span>
-                          </div>
+                          <button
+                            type="button"
+                            onClick={() => {
+                              handleUserInteraction();
+                              setStage('input');
+                              setInputUrl('coirei.com');
+                            }}
+                            className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg border border-[#E2E8F0] bg-white hover:bg-neutral-50 text-neutral-600 hover:text-neutral-900 text-[12px] font-medium transition-colors shadow-2xs cursor-pointer shrink-0"
+                            title="Analyze another website"
+                          >
+                            <RotateCcw className="w-3.5 h-3.5" />
+                            <span className="hidden sm:inline">Try another</span>
+                          </button>
                         </div>
 
                         {/* 2. Top Horizontal Tabs */}
@@ -276,12 +496,14 @@ export const Steps: React.FC = () => {
                               <button
                                 key={t.key}
                                 type="button"
-                                onClick={() => setActiveTab(t.key as OverviewTab)}
-                                className={`pb-2.5 text-[13px] sm:text-[13.5px] cursor-pointer transition-colors relative whitespace-nowrap ${
-                                  isCurrent
+                                onClick={() => {
+                                  handleUserInteraction();
+                                  setActiveTab(t.key as OverviewTab);
+                                }}
+                                className={`pb-2.5 text-[13px] sm:text-[13.5px] cursor-pointer transition-colors relative whitespace-nowrap ${isCurrent
                                     ? 'text-[#0F172A] font-semibold'
                                     : 'text-[#64748B] hover:text-[#0F172A] font-medium'
-                                }`}
+                                  }`}
                               >
                                 {t.label}
                                 {isCurrent && (
@@ -477,18 +699,27 @@ export const Steps: React.FC = () => {
                             <div className="flex items-center gap-2 flex-1 mr-2">
                               <button
                                 type="button"
+                                onClick={() => {
+                                  handleUserInteraction();
+                                  setInputUrl('');
+                                }}
                                 className="text-neutral-400 hover:text-neutral-600 transition-colors p-0.5 shrink-0 cursor-pointer"
-                                title="Add data"
+                                title="Clear / Add data"
                               >
                                 <Plus className="w-3.5 h-3.5 stroke-[2]" />
                               </button>
                               <input
                                 type="text"
                                 value={inputUrl}
-                                onChange={(e) => setInputUrl(e.target.value)}
+                                onFocus={() => handleUserInteraction()}
+                                onChange={(e) => {
+                                  handleUserInteraction();
+                                  setInputUrl(e.target.value);
+                                }}
                                 onKeyDown={(e) => {
                                   if (e.key === 'Enter') {
                                     e.preventDefault();
+                                    handleUserInteraction();
                                     handleSend();
                                   }
                                 }}
@@ -499,11 +730,14 @@ export const Steps: React.FC = () => {
 
                             {inputUrl.trim().length > 0 ? (
                               <button
+                                ref={sendButtonRef}
                                 type="button"
-                                onClick={handleSend}
-                                className={`w-7 h-7 rounded-full bg-black text-white flex items-center justify-center hover:bg-neutral-800 transition-all cursor-pointer shrink-0 shadow-xs active:scale-95 ${
-                                  isSendPressed ? 'scale-90 opacity-80' : 'scale-100'
-                                }`}
+                                onClick={() => {
+                                  handleUserInteraction();
+                                  handleSend();
+                                }}
+                                className={`w-7 h-7 rounded-full bg-black text-white flex items-center justify-center hover:bg-neutral-800 transition-all cursor-pointer shrink-0 shadow-xs active:scale-95 ${isSendPressed ? 'scale-90 opacity-80 ring-2 ring-neutral-400/60 shadow-inner' : 'scale-100'
+                                  }`}
                                 title="Send"
                               >
                                 <ArrowRight className="w-3.5 h-3.5 stroke-[2.2] text-white" />
@@ -511,6 +745,7 @@ export const Steps: React.FC = () => {
                             ) : (
                               <button
                                 type="button"
+                                onClick={() => handleUserInteraction()}
                                 className="w-7 h-7 rounded-full bg-[#FAF7F3] border border-[#ECE6DE] hover:bg-[#F2ECE3] text-neutral-700 flex items-center justify-center transition-colors shrink-0 cursor-pointer shadow-2xs"
                                 title="Voice input"
                               >
@@ -528,7 +763,10 @@ export const Steps: React.FC = () => {
                             <button
                               type="button"
                               onClick={() => {
-                                if (!inputUrl) setInputUrl('coirei.com');
+                                handleUserInteraction();
+                                const url = inputUrl.trim() || 'coirei.com';
+                                setInputUrl(url);
+                                handleSend(url);
                               }}
                               className="flex items-center gap-1.5 text-[12px] text-neutral-800 hover:text-black font-normal transition-colors cursor-pointer"
                             >
@@ -547,11 +785,10 @@ export const Steps: React.FC = () => {
 
                   {/* Step 1: Whole Analyzes Card Interior - Ultra Minimal */}
                   <div
-                    className={`absolute inset-0 w-full h-full p-8 sm:p-10 flex flex-col justify-center text-left bg-white transition-opacity duration-350 ease-out ${
-                      activeIdx === 1
+                    className={`absolute inset-0 w-full h-full p-8 sm:p-10 flex flex-col justify-center text-left bg-white transition-opacity duration-350 ease-out ${activeIdx === 1
                         ? 'opacity-100 pointer-events-auto z-10'
                         : 'opacity-0 pointer-events-none z-0'
-                    }`}
+                      }`}
                   >
                     <div className="flex flex-col gap-1 mb-7">
                       <span className="text-[11.5px] font-semibold uppercase tracking-wider text-[#8A8378]">
@@ -584,11 +821,10 @@ export const Steps: React.FC = () => {
 
                   {/* Step 2: Find - Leads Table */}
                   <div
-                    className={`absolute inset-0 w-full h-full flex flex-col bg-white overflow-hidden transition-opacity duration-350 ease-out ${
-                      activeIdx === 2
+                    className={`absolute inset-0 w-full h-full flex flex-col bg-white overflow-hidden transition-opacity duration-350 ease-out ${activeIdx === 2
                         ? 'opacity-100 pointer-events-auto z-10'
                         : 'opacity-0 pointer-events-none z-0'
-                    }`}
+                      }`}
                   >
                     {/* Top Header / Breadcrumbs: spans full width */}
                     <div className="w-full border-b border-[#F0ECE6] px-3.5 py-2 flex items-center shrink-0 bg-white">
@@ -648,6 +884,7 @@ export const Steps: React.FC = () => {
                           totalCount={icpData.length}
                           selectedRows={selectedIcpRows}
                           onToggleSelectAll={toggleSelectAllIcp}
+                          isActive={activeIdx === 2 && isInView}
                         />
                       </div>
                     </div>

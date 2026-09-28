@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useRef, useEffect } from 'react';
 import { Mail, ExternalLink } from 'lucide-react';
 import type { ICPLead } from './icpData';
 
@@ -23,6 +23,7 @@ export interface ICPTableProps {
   totalCount: number;
   selectedRows: number[];
   onToggleSelectAll: () => void;
+  isActive?: boolean;
 }
 
 export const ICPTable: React.FC<ICPTableProps> = ({
@@ -30,9 +31,97 @@ export const ICPTable: React.FC<ICPTableProps> = ({
   totalCount,
   selectedRows,
   onToggleSelectAll,
+  isActive = true,
 }) => {
+  const scrollRef = useRef<HTMLDivElement>(null);
+  const isUserInteractingRef = useRef(false);
+  const resumeTimeoutRef = useRef<ReturnType<typeof setTimeout> | null>(null);
+
+  const handleUserInteract = () => {
+    isUserInteractingRef.current = true;
+    if (resumeTimeoutRef.current) clearTimeout(resumeTimeoutRef.current);
+    resumeTimeoutRef.current = setTimeout(() => {
+      isUserInteractingRef.current = false;
+    }, 2500);
+  };
+
+  // Reset scroll to top when tab becomes active
+  useEffect(() => {
+    if (isActive && scrollRef.current) {
+      scrollRef.current.scrollTop = 0;
+    }
+  }, [isActive]);
+
+  // Auto-scroll loop
+  useEffect(() => {
+    if (!isActive) return;
+
+    const el = scrollRef.current;
+    if (!el) return;
+
+    let animId: number;
+    let lastTime = performance.now();
+    let isPaused = true;
+    let pauseTimer: ReturnType<typeof setTimeout> | null = null;
+
+    // Start with a brief 1.2s delay so user can read initial rows
+    pauseTimer = setTimeout(() => {
+      isPaused = false;
+      lastTime = performance.now();
+    }, 1200);
+
+    const speed = 30; // px per second for smooth, readable auto-scrolling
+
+    const step = (now: number) => {
+      const delta = (now - lastTime) / 1000;
+      lastTime = now;
+
+      if (!isUserInteractingRef.current && !isPaused && el) {
+        const maxScroll = el.scrollHeight - el.clientHeight;
+        if (maxScroll > 10) {
+          el.scrollTop += speed * delta;
+
+          if (el.scrollTop >= maxScroll - 2) {
+            isPaused = true;
+            pauseTimer = setTimeout(() => {
+              el.scrollTo({ top: 0, behavior: 'smooth' });
+              pauseTimer = setTimeout(() => {
+                isPaused = false;
+                lastTime = performance.now();
+              }, 1600);
+            }, 2000);
+          }
+        }
+      }
+
+      animId = requestAnimationFrame(step);
+    };
+
+    animId = requestAnimationFrame(step);
+
+    return () => {
+      cancelAnimationFrame(animId);
+      if (pauseTimer) clearTimeout(pauseTimer);
+    };
+  }, [isActive, data]);
+
   return (
-    <div className="flex-1 h-full overflow-y-auto overflow-x-auto no-scrollbar">
+    <div
+      ref={scrollRef}
+      onWheel={handleUserInteract}
+      onTouchStart={handleUserInteract}
+      onTouchMove={handleUserInteract}
+      onPointerDown={handleUserInteract}
+      onMouseEnter={handleUserInteract}
+      onMouseLeave={() => {
+        if (resumeTimeoutRef.current) clearTimeout(resumeTimeoutRef.current);
+        resumeTimeoutRef.current = setTimeout(() => {
+          isUserInteractingRef.current = false;
+        }, 1500);
+      }}
+      className="flex-1 h-full overflow-y-auto overflow-x-auto"
+      style={{ scrollbarWidth: 'thin', scrollbarColor: '#CBD5E1 transparent' }}
+    >
       <table className="w-full text-left border-collapse min-w-[1400px]">
         <thead className="sticky top-0 bg-[#FFFFFF] z-10">
           <tr className="border-b border-[#EAE6DF] divide-x divide-[#EAE6DF] text-[12px] font-semibold text-gray-500 h-[45px]">

@@ -113,11 +113,15 @@ const AI_ENGINES: Record<AIEngine, EngineConfig> = {
 
 export const VisibilitySection: React.FC = () => {
   const [activeEngine, setActiveEngine] = useState<AIEngine>('chatgpt');
+  const [activeGoogleTab, setActiveGoogleTab] = useState('All');
   const [animStage, setAnimStage] = useState<AnimStage>('typing');
   const [typedGoogle, setTypedGoogle] = useState('');
   const [typedChat, setTypedChat] = useState('');
-  const [isVisible, setIsVisible] = useState(false);
+  const [isVisible, setIsVisible] = useState(true);
+
   const sectionRef = useRef<HTMLElement>(null);
+  const userInteractedRef = useRef(false);
+  const idleTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
 
   // Trigger animation when the section enters the viewport
   useEffect(() => {
@@ -130,6 +134,7 @@ export const VisibilitySection: React.FC = () => {
       },
       {
         threshold: 0.05,
+        rootMargin: '100px 0px',
       }
     );
 
@@ -138,7 +143,7 @@ export const VisibilitySection: React.FC = () => {
   }, []);
 
   // Synchronized typing and automated send cycle:
-  // Starts when section is in viewport and loops continuously without freezing
+  // Starts when section is in viewport and loops continuously across all 4 AI engines
   useEffect(() => {
     if (!isVisible) return;
 
@@ -150,21 +155,30 @@ export const VisibilitySection: React.FC = () => {
         timerId = setTimeout(() => resolve(), ms);
       });
 
+    const engines: AIEngine[] = ['chatgpt', 'perplexity', 'gemini', 'claude'];
+    let engineIdx = 0;
+
     const runCycle = async () => {
       while (!isCancelled) {
+        if (userInteractedRef.current) {
+          await wait(12000);
+          if (isCancelled) return;
+          userInteractedRef.current = false;
+        }
+
         // 1. Reset to typing state
         setAnimStage('typing');
         setTypedGoogle('');
         setTypedChat('');
 
-        const totalSteps = 42;
-        const stepDelay = 32; // ~1.34s smooth typing duration
+        const totalSteps = 40;
+        const stepDelay = 32; // ~1.3s smooth typing duration
 
         // Synchronized typing: both queries finish typing at the exact same moment
         for (let i = 1; i <= totalSteps; i++) {
-          if (isCancelled) return;
+          if (isCancelled || userInteractedRef.current) break;
           await wait(stepDelay);
-          if (isCancelled) return;
+          if (isCancelled || userInteractedRef.current) break;
 
           const googleChars = Math.round((i / totalSteps) * GOOGLE_QUERY.length);
           const chatChars = Math.round((i / totalSteps) * CHAT_QUERY.length);
@@ -173,20 +187,26 @@ export const VisibilitySection: React.FC = () => {
           setTypedChat(CHAT_QUERY.slice(0, chatChars));
         }
 
+        if (isCancelled || userInteractedRef.current) continue;
+
         // 2. Sent / Trigger phase (250ms)
-        if (isCancelled) return;
         setAnimStage('sent');
         await wait(250);
+        if (isCancelled || userInteractedRef.current) continue;
 
-        // 3. Move to Thinking/Searching phase (850ms)
-        if (isCancelled) return;
+        // 3. Move to Thinking/Searching phase (800ms)
         setAnimStage('thinking');
-        await wait(850);
+        await wait(800);
+        if (isCancelled || userInteractedRef.current) continue;
 
-        // 4. Move to Results phase (4500ms)
-        if (isCancelled) return;
+        // 4. Move to Results phase (4200ms)
         setAnimStage('result');
-        await wait(4500);
+        await wait(4200);
+        if (isCancelled || userInteractedRef.current) continue;
+
+        // Cycle to next engine for the next demonstration
+        engineIdx = (engineIdx + 1) % engines.length;
+        setActiveEngine(engines[engineIdx]);
       }
     };
 
@@ -200,31 +220,59 @@ export const VisibilitySection: React.FC = () => {
 
   const handleEngineSelect = (engineKey: AIEngine) => {
     setActiveEngine(engineKey);
+    userInteractedRef.current = true;
+    setAnimStage('result');
+
+    if (idleTimerRef.current) clearTimeout(idleTimerRef.current);
+    idleTimerRef.current = setTimeout(() => {
+      userInteractedRef.current = false;
+    }, 12000);
+  };
+
+  const handleGoogleTabSelect = (tab: string) => {
+    setActiveGoogleTab(tab);
+    userInteractedRef.current = true;
+    setAnimStage('result');
+
+    if (idleTimerRef.current) clearTimeout(idleTimerRef.current);
+    idleTimerRef.current = setTimeout(() => {
+      userInteractedRef.current = false;
+    }, 12000);
+  };
+
+  const handleInstantSearch = () => {
+    userInteractedRef.current = true;
+    setAnimStage('result');
+
+    if (idleTimerRef.current) clearTimeout(idleTimerRef.current);
+    idleTimerRef.current = setTimeout(() => {
+      userInteractedRef.current = false;
+    }, 12000);
   };
 
   return (
-    <section ref={sectionRef} className="relative z-20 w-full border-t border-[#E2E2E2] pt-10 sm:pt-14 pb-12 sm:pb-16 bg-white overflow-hidden select-none">
+    <section ref={sectionRef} className="relative z-20 w-full border-t border-[#E2E2E2] pt-10 sm:pt-14 pb-12 sm:pb-16 bg-white overflow-hidden">
       <div className="w-full max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
 
         {/* Section Header */}
         <div className="text-center max-w-5xl mx-auto">
           {/* Eyebrow / Pill Badge */}
           <ScrollReveal variant="fade-up" duration={600} distance={18}>
-            <div className="inline-block text-[11px] sm:text-[12px] font-semibold tracking-[0.14em] text-[#64748B] uppercase mb-3">
+            <div className="inline-block text-[11px] sm:text-[12px] font-semibold tracking-[0.14em] text-[#64748B] uppercase mb-3 cursor-text select-text">
               TURN VISIBILITY INTO GROWTH
             </div>
           </ScrollReveal>
 
           {/* Main Headline */}
           <ScrollReveal variant="fade-up" delay={80} duration={700} distance={24}>
-            <h2 className="text-2xl sm:text-3xl md:text-[40px] lg:text-[48px] font-semibold text-[#0F172A] tracking-[-1.25px] leading-[1.2] lg:leading-[56px] md:whitespace-nowrap">
+            <h2 className="text-2xl sm:text-3xl md:text-[40px] lg:text-[48px] font-semibold text-[#0F172A] tracking-[-1.25px] leading-[1.2] lg:leading-[56px] md:whitespace-nowrap cursor-text select-text">
               Be found. Be understood. Be recommended.
             </h2>
           </ScrollReveal>
 
           {/* Subtitle */}
           <ScrollReveal variant="fade-up" delay={160} duration={700} distance={20}>
-            <p className="mt-3 sm:mt-4 text-slate-500 text-sm sm:text-base max-w-xl mx-auto leading-relaxed">
+            <p className="mt-3 sm:mt-4 text-slate-500 text-sm sm:text-base max-w-xl mx-auto leading-relaxed cursor-text select-text">
               AI-powered GTM that helps your business show up where buyers are looking.
             </p>
           </ScrollReveal>
@@ -256,10 +304,13 @@ export const VisibilitySection: React.FC = () => {
             <div className="w-full h-full min-h-[340px] sm:min-h-[350px] bg-white rounded-[26px] border border-slate-200/90 shadow-[0_16px_48px_rgba(15,23,42,0.05),0_1px_3px_rgba(15,23,42,0.03)] p-5 sm:p-6 flex flex-col justify-start flex-1">
 
               {/* Google Search Bar */}
-              <div className="w-full rounded-full border border-slate-200 bg-white px-4 py-2 flex items-center justify-between shadow-2xs hover:shadow-xs transition-shadow">
-                <div className="flex items-center gap-3 overflow-hidden">
+              <div
+                onClick={handleInstantSearch}
+                className="w-full rounded-full border border-slate-200 bg-white px-4 py-2 flex items-center justify-between shadow-2xs hover:shadow-xs transition-shadow cursor-pointer"
+              >
+                <div className="flex items-center gap-3 overflow-hidden flex-1">
                   <GoogleGIcon className="w-5 h-5 shrink-0" />
-                  <span className="text-[13px] sm:text-[14px] text-slate-800 font-normal truncate">
+                  <span className="text-[13px] sm:text-[14px] text-slate-800 font-normal truncate cursor-text select-text">
                     {animStage === 'typing' ? (
                       <>
                         {typedGoogle}
@@ -270,32 +321,47 @@ export const VisibilitySection: React.FC = () => {
                     )}
                   </span>
                 </div>
-                <Search
-                  className={`w-4 h-4 shrink-0 ml-2 transition-colors ${animStage === 'sent' || animStage === 'thinking' ? 'text-blue-600 animate-pulse' : 'text-slate-400'
-                    }`}
-                />
+                <button
+                  type="button"
+                  aria-label="Search Google"
+                  className="p-1 hover:bg-slate-50 rounded-full transition-colors cursor-pointer"
+                >
+                  <Search
+                    className={`w-4 h-4 shrink-0 transition-colors ${animStage === 'sent' || animStage === 'thinking' ? 'text-blue-600 animate-pulse' : 'text-slate-400'
+                      }`}
+                  />
+                </button>
               </div>
 
               {/* Google Category Tabs */}
-              <div className="flex items-center gap-4 sm:gap-5 text-xs sm:text-[13px] text-slate-500 mt-4 border-b border-slate-100 pb-2.5 overflow-x-auto">
-                <span className="text-blue-600 font-medium relative pb-2.5 border-b-2 border-blue-600 -mb-[11px] whitespace-nowrap cursor-pointer">
-                  All
-                </span>
-                <span className="hover:text-slate-700 cursor-pointer whitespace-nowrap">Images</span>
-                <span className="hover:text-slate-700 cursor-pointer whitespace-nowrap">Videos</span>
-                <span className="hover:text-slate-700 cursor-pointer whitespace-nowrap">News</span>
-                <span className="hover:text-slate-700 cursor-pointer whitespace-nowrap">Shopping</span>
-                <span className="hover:text-slate-700 cursor-pointer whitespace-nowrap">Web</span>
+              <div className="flex items-center gap-4 sm:gap-5 text-xs sm:text-[13px] text-slate-500 mt-4 border-b border-slate-100 pb-2.5 overflow-x-auto w-full">
+                {['All', 'Images', 'Videos', 'News', 'Shopping', 'Web'].map((tab) => {
+                  const isActive = activeGoogleTab === tab;
+                  return (
+                    <button
+                      key={tab}
+                      type="button"
+                      onClick={() => handleGoogleTabSelect(tab)}
+                      className={`font-medium relative pb-2.5 -mb-[11px] whitespace-nowrap cursor-pointer transition-colors ${
+                        isActive
+                          ? 'text-blue-600 border-b-2 border-blue-600'
+                          : 'text-slate-500 hover:text-slate-800 border-b-2 border-transparent'
+                      }`}
+                    >
+                      {tab}
+                    </button>
+                  );
+                })}
               </div>
 
-              {/* Content Area: Typing State vs Searching State vs Top Ranked Result */}
+              {/* Content Area: Typing State vs Searching State vs Results */}
               <div className="flex-1 flex flex-col justify-start">
                 {animStage === 'typing' ? (
-                  <div className="flex-1 flex items-center justify-center text-slate-400 text-xs sm:text-[13px] font-normal select-none">
+                  <div className="flex-1 flex items-center justify-center text-slate-400 text-xs sm:text-[13px] font-normal cursor-text select-text">
                     <span className="opacity-60">Ready to search...</span>
                   </div>
                 ) : animStage === 'sent' || animStage === 'thinking' ? (
-                  <div className="flex-1 flex items-center justify-center gap-2 text-slate-500 text-[13.5px] font-normal select-none animate-in fade-in duration-200">
+                  <div className="flex-1 flex items-center justify-center gap-2 text-slate-500 text-[13.5px] font-normal animate-in fade-in duration-200">
                     <span>Searching</span>
                     <span className="flex items-center gap-1.5 ml-0.5">
                       <span
@@ -312,6 +378,81 @@ export const VisibilitySection: React.FC = () => {
                       />
                     </span>
                   </div>
+                ) : activeGoogleTab === 'Images' ? (
+                  <div className="mt-3.5 grid grid-cols-3 gap-2.5 animate-slide-down">
+                    <div className="bg-slate-50 border border-slate-200 rounded-xl p-2.5 flex flex-col items-center justify-center text-center">
+                      <div className="w-8 h-8 rounded-lg bg-blue-100 flex items-center justify-center text-blue-600 font-bold text-xs mb-1.5">
+                        CRM
+                      </div>
+                      <span className="text-[11px] font-medium text-slate-800 truncate w-full cursor-text select-text">Pipeline Board</span>
+                      <span className="text-[9.5px] text-slate-400">yourbrand.com</span>
+                    </div>
+                    <div className="bg-slate-50 border border-slate-200 rounded-xl p-2.5 flex flex-col items-center justify-center text-center">
+                      <div className="w-8 h-8 rounded-lg bg-emerald-100 flex items-center justify-center text-emerald-600 font-bold text-xs mb-1.5">
+                        AI
+                      </div>
+                      <span className="text-[11px] font-medium text-slate-800 truncate w-full cursor-text select-text">Outreach Flows</span>
+                      <span className="text-[9.5px] text-slate-400">yourbrand.com</span>
+                    </div>
+                    <div className="bg-slate-50 border border-slate-200 rounded-xl p-2.5 flex flex-col items-center justify-center text-center">
+                      <div className="w-8 h-8 rounded-lg bg-purple-100 flex items-center justify-center text-purple-600 font-bold text-xs mb-1.5">
+                        ROI
+                      </div>
+                      <span className="text-[11px] font-medium text-slate-800 truncate w-full cursor-text select-text">Revenue Report</span>
+                      <span className="text-[9.5px] text-slate-400">yourbrand.com</span>
+                    </div>
+                  </div>
+                ) : activeGoogleTab === 'Videos' ? (
+                  <div className="mt-3.5 border border-slate-200/80 rounded-2xl p-3.5 bg-[#FCFCFC] shadow-2xs flex items-center gap-3.5 animate-slide-down">
+                    <div className="relative w-20 h-14 bg-slate-900 rounded-xl flex items-center justify-center shrink-0">
+                      <div className="w-6 h-6 rounded-full bg-white/20 flex items-center justify-center text-white text-xs">
+                        ▶
+                      </div>
+                      <span className="absolute bottom-1 right-1 text-[9px] bg-black/80 text-white px-1 rounded font-mono">
+                        5:42
+                      </span>
+                    </div>
+                    <div className="flex flex-col">
+                      <h4 className="text-[13px] font-medium text-[#1A0DAB] hover:underline cursor-pointer leading-snug">
+                        YourBrand CRM: The 5-Minute Tour for Growing Teams
+                      </h4>
+                      <span className="text-[11px] text-slate-400 mt-1 cursor-text select-text">
+                        YouTube · YourBrand Official · 42K views
+                      </span>
+                    </div>
+                  </div>
+                ) : activeGoogleTab === 'News' ? (
+                  <div className="mt-3.5 border border-slate-200/80 rounded-2xl p-3.5 bg-[#FCFCFC] shadow-2xs animate-slide-down">
+                    <div className="text-[11px] text-slate-400 flex items-center gap-1.5 mb-1 cursor-text select-text">
+                      <span className="font-semibold text-slate-600">TechRoundup</span>
+                      <span>·</span>
+                      <span>3 hours ago</span>
+                    </div>
+                    <h4 className="text-[14px] font-medium text-[#1A0DAB] hover:underline cursor-pointer leading-snug">
+                      How YourBrand is Modernizing Sales Execution for SMBs
+                    </h4>
+                    <p className="text-[12px] text-slate-500 leading-relaxed mt-1 cursor-text select-text">
+                      With intuitive automation and autonomous agent support, YourBrand rises as a market favorite for modern commercial operations.
+                    </p>
+                  </div>
+                ) : activeGoogleTab === 'Shopping' ? (
+                  <div className="mt-3.5 border border-slate-200/80 rounded-2xl p-3.5 bg-[#FCFCFC] shadow-2xs flex items-center justify-between animate-slide-down">
+                    <div>
+                      <h4 className="text-[13.5px] font-medium text-slate-900 cursor-text select-text">
+                        YourBrand Growth Plan (Annual)
+                      </h4>
+                      <div className="flex items-center gap-1.5 mt-1 text-[11.5px] text-slate-500">
+                        <span className="text-amber-500 font-semibold">★ 4.9</span>
+                        <span>(620+ reviews)</span>
+                        <span>·</span>
+                        <span className="text-emerald-600 font-medium">Free 14-day trial</span>
+                      </div>
+                    </div>
+                    <div className="text-right">
+                      <span className="text-[16px] font-bold text-slate-900 cursor-text select-text">$29</span>
+                      <span className="text-[11px] text-slate-500 block">/user/mo</span>
+                    </div>
+                  </div>
                 ) : (
                   <div className="mt-3.5 border border-slate-200/80 rounded-2xl p-3.5 sm:p-4 bg-[#FCFCFC] shadow-2xs animate-slide-down">
                     {/* Site Info */}
@@ -320,22 +461,22 @@ export const VisibilitySection: React.FC = () => {
                         <Bookmark className="w-4 h-4 text-white fill-white" />
                       </div>
                       <div className="flex flex-col">
-                        <span className="text-[13px] font-semibold text-slate-900 leading-tight">
+                        <span className="text-[13px] font-semibold text-slate-900 leading-tight cursor-text select-text">
                           yourbrand.com
                         </span>
-                        <span className="text-[11px] text-slate-400 leading-tight mt-0.5">
+                        <span className="text-[11px] text-slate-400 leading-tight mt-0.5 cursor-text select-text">
                           https://www.yourbrand.com
                         </span>
                       </div>
                     </div>
 
                     {/* Blue Title Link */}
-                    <h4 className="text-[14.5px] sm:text-[15.5px] font-medium text-[#1A0DAB] hover:underline cursor-pointer mt-3 leading-snug">
+                    <h4 className="text-[14.5px] sm:text-[15.5px] font-medium text-[#1A0DAB] hover:underline cursor-pointer mt-3 leading-snug cursor-text select-text">
                       The Best CRM for Small Business | YourBrand
                     </h4>
 
                     {/* Description Snippet */}
-                    <p className="text-[12.5px] sm:text-[13px] text-slate-500 leading-relaxed mt-1.5">
+                    <p className="text-[12.5px] sm:text-[13px] text-slate-500 leading-relaxed mt-1.5 cursor-text select-text">
                       Simple, powerful and built for growth. YourBrand helps small businesses manage leads, automate follow-ups and close more deals.
                     </p>
                   </div>
@@ -371,8 +512,8 @@ export const VisibilitySection: React.FC = () => {
                         type="button"
                         onClick={() => handleEngineSelect(engineKey)}
                         className={`flex items-center gap-1.5 pb-2.5 -mb-[11px] font-medium transition-all whitespace-nowrap cursor-pointer ${isActive
-                            ? 'text-slate-900 border-b-2 border-blue-600'
-                            : 'text-slate-500 hover:text-slate-800 border-b-2 border-transparent'
+                          ? 'text-slate-900 border-b-2 border-blue-600'
+                          : 'text-slate-500 hover:text-slate-800 border-b-2 border-transparent'
                           }`}
                       >
                         <Icon className={`w-3.5 h-3.5 sm:w-4 sm:h-4 ${engine.color}`} />
@@ -390,13 +531,13 @@ export const VisibilitySection: React.FC = () => {
                     <>
                       {/* User Prompt Query Bubble */}
                       <div className="w-full flex justify-end mb-2.5 animate-in fade-in duration-200">
-                        <div className="bg-[#F1F5F9] rounded-2xl rounded-tr-xs px-3 py-1.5 text-[11px] sm:text-[11.5px] text-slate-700 shadow-2xs">
+                        <div className="bg-[#F1F5F9] rounded-2xl rounded-tr-xs px-3 py-1.5 text-[11px] sm:text-[11.5px] text-slate-700 shadow-2xs cursor-text select-text">
                           {CHAT_QUERY}
                         </div>
                       </div>
 
                       {animStage === 'thinking' ? (
-                        <div className="flex items-center gap-2 text-slate-500 text-[13.5px] font-normal select-none py-6 animate-in fade-in duration-200">
+                        <div className="flex items-center gap-2 text-slate-500 text-[13.5px] font-normal py-6 animate-in fade-in duration-200">
                           <span>Thinking</span>
                           <span className="flex items-center gap-1.5 ml-0.5">
                             <span
@@ -422,7 +563,7 @@ export const VisibilitySection: React.FC = () => {
                                 className: `w-3.5 h-3.5 ${AI_ENGINES[activeEngine].color}`,
                               })}
                             </div>
-                            <p className="text-[12.5px] sm:text-[13px] text-slate-600 leading-relaxed">
+                            <p className="text-[12.5px] sm:text-[13px] text-slate-600 leading-relaxed cursor-text select-text">
                               {AI_ENGINES[activeEngine].response}
                             </p>
                           </div>
@@ -434,10 +575,10 @@ export const VisibilitySection: React.FC = () => {
                                 <Bookmark className="w-3.5 h-3.5 text-white fill-white" />
                               </div>
                               <div className="flex flex-col">
-                                <span className="text-[12px] sm:text-[12.5px] font-semibold text-slate-900 leading-tight">
+                                <span className="text-[12px] sm:text-[12.5px] font-semibold text-slate-900 leading-tight cursor-text select-text">
                                   YourBrand
                                 </span>
-                                <span className="text-[10.5px] text-slate-400 leading-tight mt-0.5">
+                                <span className="text-[10.5px] text-slate-400 leading-tight mt-0.5 cursor-text select-text">
                                   www.yourbrand.com
                                 </span>
                               </div>
@@ -453,9 +594,12 @@ export const VisibilitySection: React.FC = () => {
 
               {/* Bottom: Permanent ChatGPT Search Bar */}
               <div className="pt-2">
-                <div className="w-full rounded-full border border-slate-200 bg-white px-4 py-2 flex items-center justify-between shadow-2xs">
+                <div
+                  onClick={handleInstantSearch}
+                  className="w-full rounded-full border border-slate-200 bg-white px-4 py-2 flex items-center justify-between shadow-2xs hover:shadow-xs transition-shadow cursor-pointer"
+                >
                   <div className="flex items-center gap-2 overflow-hidden flex-1 mr-2">
-                    <span className="text-[13px] sm:text-[14px] text-slate-800 font-normal truncate">
+                    <span className="text-[13px] sm:text-[14px] text-slate-800 font-normal truncate cursor-text select-text">
                       {animStage === 'typing' ? (
                         <>
                           {typedChat}
@@ -466,14 +610,16 @@ export const VisibilitySection: React.FC = () => {
                       )}
                     </span>
                   </div>
-                  <div
-                    className={`w-7 h-7 rounded-full flex items-center justify-center shrink-0 transition-colors ${animStage === 'typing' && typedChat.length > 0
-                        ? 'bg-slate-900 text-white'
-                        : 'bg-slate-100 text-slate-400'
+                  <button
+                    type="button"
+                    aria-label="Send query"
+                    className={`w-7 h-7 rounded-full flex items-center justify-center shrink-0 transition-colors cursor-pointer ${animStage === 'typing' && typedChat.length > 0
+                      ? 'bg-slate-900 text-white'
+                      : 'bg-slate-100 text-slate-400 hover:bg-slate-200 hover:text-slate-700'
                       }`}
                   >
                     <ArrowUp className="w-3.5 h-3.5" />
-                  </div>
+                  </button>
                 </div>
               </div>
 

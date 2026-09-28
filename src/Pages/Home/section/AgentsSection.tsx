@@ -43,10 +43,10 @@ interface AgentData {
 const AGENTS: AgentData[] = [
   {
     id: 'engage',
-    name: 'Engage',
+    name: 'Engage Agent',
     coverageTitle: 'Engagement Coverage',
     description:
-      'An AI-powered research agent that analyzes companies, markets, competitors, and customer signals to uncover valuable insights and opportunities.',
+      'An AI-powered engagement engine that creates personalized outreach, nurtures prospects, and builds meaningful customer relationships across every stage of the sales journey.',
     link: '/product',
     metrics: [
       {
@@ -319,7 +319,7 @@ export const AgentsSection: React.FC = () => {
   };
 
   return (
-    <section ref={sectionRef} className="relative z-20 w-full -mt-14 sm:-mt-18 md:-mt-20 pt-8 sm:pt-10 pb-12 sm:pb-16 bg-white overflow-hidden select-none">
+    <section ref={sectionRef} className="relative z-20 w-full -mt-14 sm:-mt-18 md:-mt-20 pt-8 sm:pt-10 pb-12 sm:pb-16 bg-white overflow-hidden">
       <div className="w-full max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         {/* Section Header */}
         <div className="text-center max-w-4xl mx-auto">
@@ -332,8 +332,7 @@ export const AgentsSection: React.FC = () => {
 
           <ScrollReveal variant="fade-up" delay={120} duration={700} distance={20}>
             <p className="mt-3.5 sm:mt-4 text-slate-500 text-sm sm:text-base max-w-xl mx-auto leading-relaxed">
-              Our AI GTM Strategist coordinates a team of expert agents to research, plan, execute and optimize your growth.
-            </p>
+              Coirei GTM orchestrates a team of AI agents to turn market intelligence into strategy, execution, and measurable growth.            </p>
           </ScrollReveal>
         </div>
 
@@ -370,7 +369,7 @@ export const AgentsSection: React.FC = () => {
                     }}
                   >
                     <div className="grid grid-cols-1 md:grid-cols-12 gap-6 md:gap-8 lg:gap-10 items-stretch h-full">
-                      
+
                       {/* Left Column: Engage Celestial Orbit OR Competitor Agent Table OR Metric Progress Bars */}
                       <div className={`md:col-span-7 flex flex-col justify-center h-full ${agent.id === 'engage' ? 'overflow-visible' : 'overflow-hidden'}`}>
                         {agent.id === 'engage' ? (
@@ -497,11 +496,10 @@ export const AgentsSection: React.FC = () => {
                 type="button"
                 onClick={() => setCurrentIndex(idx)}
                 aria-label={`Go to slide ${idx + 1}`}
-                className={`h-1.5 rounded-full transition-all duration-300 cursor-pointer ${
-                  idx === currentIndex
+                className={`h-1.5 rounded-full transition-all duration-300 cursor-pointer ${idx === currentIndex
                     ? 'w-6 sm:w-7 bg-slate-400'
                     : 'w-1.5 bg-slate-200 hover:bg-slate-300'
-                }`}
+                  }`}
               />
             ))}
           </div>

@@ -1,0 +1,9 @@
+# https://www.robotstxt.org/robotstxt.html
+User-agent: *
+Allow: /
+
+# Disallow internal or auth endpoints
+Disallow: /signin
+
+# Sitemap location
+Sitemap: https://coirei.com/sitemap.xml
