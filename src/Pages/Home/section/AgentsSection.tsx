@@ -1,326 +1,508 @@
-import React, { useState, useEffect, useRef } from 'react';
+import React, { useState, useEffect, useRef, useCallback } from 'react';
 import { Link } from 'react-router-dom';
 import {
-  Search,
-  Swords,
-  Target,
-  Globe,
-  Megaphone,
+  ChevronLeft,
+  ChevronRight,
+  Building2,
+  PieChart,
   Users,
-  Mail,
+  User,
+  Lightbulb,
   TrendingUp,
-  ArrowRight,
+  CheckCircle2,
+  Sparkles,
+  FileText,
+  Share2,
+  Mail,
+  Send,
+  Calendar,
 } from 'lucide-react';
 import { ScrollReveal } from '../../../components/ui/ScrollReveal';
+import CompetitorAgentTable from './CompetitorAgentTable';
+import EngageAgentVisual from './EngageAgentVisual';
+import MarketingAgentVisual from './MarketingAgentVisual';
 
-interface AgentCard {
-  id: string;
-  name: string;
-  role: string;
+interface MetricItem {
+  label: string;
+  value: number;
+  barColor: string;
   icon: React.ComponentType<{ className?: string }>;
   iconBg: string;
   iconColor: string;
-  style: React.CSSProperties;
-  fromCenter: { x: number; y: number };
-  burstDelay: number;
 }
 
-// 287px outer dotted circle has radius 143.5px
-// Center circle is 218px (radius 109px)
-// Gap is exactly (287 - 218) / 2 = 34.5px on all sides
-const AGENTS: AgentCard[] = [
+interface AgentData {
+  id: string;
+  name: string;
+  coverageTitle: string;
+  description: string;
+  link: string;
+  metrics: MetricItem[];
+}
+
+const AGENTS: AgentData[] = [
+  {
+    id: 'engage',
+    name: 'Engage Agent',
+    coverageTitle: 'Engagement Coverage',
+    description:
+      'An AI-powered engagement engine that creates personalized outreach, nurtures prospects, and builds meaningful customer relationships across every stage of the sales journey.',
+    link: '/product',
+    metrics: [
+      {
+        label: 'Prospects Enriched',
+        value: 100,
+        barColor: 'bg-[#3B82F6]',
+        icon: Mail,
+        iconBg: 'bg-[#EFF6FF]',
+        iconColor: 'text-[#2563EB]',
+      },
+      {
+        label: 'Sequences Automated',
+        value: 86,
+        barColor: 'bg-[#8B5CF6]',
+        icon: Send,
+        iconBg: 'bg-[#F5F3FF]',
+        iconColor: 'text-[#7C3AED]',
+      },
+      {
+        label: 'Deliverability Verified',
+        value: 71,
+        barColor: 'bg-[#06B6D4]',
+        icon: CheckCircle2,
+        iconBg: 'bg-[#ECFEFF]',
+        iconColor: 'text-[#0891B2]',
+      },
+      {
+        label: 'Response Rate Boost',
+        value: 53,
+        barColor: 'bg-[#10B981]',
+        icon: TrendingUp,
+        iconBg: 'bg-[#ECFDF5]',
+        iconColor: 'text-[#059669]',
+      },
+      {
+        label: 'Meetings Booked',
+        value: 30,
+        barColor: 'bg-[#F59E0B]',
+        icon: Calendar,
+        iconBg: 'bg-[#FFFBEB]',
+        iconColor: 'text-[#D97706]',
+      },
+    ],
+  },
+  {
+    id: 'marketing',
+    name: 'Marketing Agent',
+    coverageTitle: 'Marketing Coverage',
+    description:
+      'Generates high-converting multi-channel ad copy, creatives, and targeted funnels tailored precisely to each buyer persona and their unique pain points.',
+    link: '/product',
+    metrics: [
+      {
+        label: 'Ad Creatives Generated',
+        value: 100,
+        barColor: 'bg-[#3B82F6]',
+        icon: Sparkles,
+        iconBg: 'bg-[#EFF6FF]',
+        iconColor: 'text-[#2563EB]',
+      },
+      {
+        label: 'Copy Variations Tested',
+        value: 82,
+        barColor: 'bg-[#8B5CF6]',
+        icon: FileText,
+        iconBg: 'bg-[#F5F3FF]',
+        iconColor: 'text-[#7C3AED]',
+      },
+      {
+        label: 'Channel Targeting Set',
+        value: 66,
+        barColor: 'bg-[#06B6D4]',
+        icon: Share2,
+        iconBg: 'bg-[#ECFEFF]',
+        iconColor: 'text-[#0891B2]',
+      },
+      {
+        label: 'Conversion Paths Active',
+        value: 49,
+        barColor: 'bg-[#10B981]',
+        icon: TrendingUp,
+        iconBg: 'bg-[#ECFDF5]',
+        iconColor: 'text-[#059669]',
+      },
+      {
+        label: 'Budget Efficiency Score',
+        value: 29,
+        barColor: 'bg-[#F59E0B]',
+        icon: Lightbulb,
+        iconBg: 'bg-[#FFFBEB]',
+        iconColor: 'text-[#D97706]',
+      },
+    ],
+  },
   {
     id: 'research',
     name: 'Research Agent',
-    role: 'Company, market, insights',
-    icon: Search,
-    iconBg: 'bg-[#EBF5FF]',
-    iconColor: 'text-[#2563EB]',
-    style: {
-      left: '50%',
-      top: 'calc(50% - 143.5px - 10px)',
-      transform: 'translate(-50%, -100%)',
-    },
-    fromCenter: { x: 0, y: 153.5 },
-    burstDelay: 0,
-  },
-  {
-    id: 'competitor',
-    name: 'Competitor Agent',
-    role: 'Track & analyse competitors',
-    icon: Swords,
-    iconBg: 'bg-[#EEF2FF]',
-    iconColor: 'text-[#6366F1]',
-    style: {
-      left: 'calc(50% + 118px)',
-      top: 'calc(50% - 114px)',
-      transform: 'translate(0, -50%)',
-    },
-    fromCenter: { x: -118, y: 114 },
-    burstDelay: 60,
-  },
-  {
-    id: 'icp',
-    name: 'ICP Agent',
-    role: 'Find your best customers',
-    icon: Target,
-    iconBg: 'bg-[#FEF3C7]',
-    iconColor: 'text-[#D97706]',
-    style: {
-      left: 'calc(50% + 143.5px + 8px)',
-      top: '50%',
-      transform: 'translate(0, -50%)',
-    },
-    fromCenter: { x: -151.5, y: 0 },
-    burstDelay: 120,
-  },
-  {
-    id: 'audience',
-    name: 'Audience Agent',
-    role: 'Where your customers are',
-    icon: Globe,
-    iconBg: 'bg-[#E0F7FA]',
-    iconColor: 'text-[#0D9488]',
-    style: {
-      left: 'calc(50% + 118px)',
-      top: 'calc(50% + 114px)',
-      transform: 'translate(0, -50%)',
-    },
-    fromCenter: { x: -118, y: -114 },
-    burstDelay: 180,
-  },
-  {
-    id: 'ads',
-    name: 'Ads Agent',
-    role: 'Create & run campaigns',
-    icon: Megaphone,
-    iconBg: 'bg-[#EFF6FF]',
-    iconColor: 'text-[#2563EB]',
-    style: {
-      left: '50%',
-      top: 'calc(50% + 143.5px + 10px)',
-      transform: 'translate(-50%, 0)',
-    },
-    fromCenter: { x: 0, y: -153.5 },
-    burstDelay: 240,
-  },
-  {
-    id: 'lead',
-    name: 'Lead Agent',
-    role: 'Find & qualify leads',
-    icon: Users,
-    iconBg: 'bg-[#E0F2FE]',
-    iconColor: 'text-[#0284C7]',
-    style: {
-      left: 'calc(50% - 118px)',
-      top: 'calc(50% + 114px)',
-      transform: 'translate(-100%, -50%)',
-    },
-    fromCenter: { x: 118, y: -114 },
-    burstDelay: 300,
-  },
-  {
-    id: 'outreach',
-    name: 'Outreach Agent',
-    role: 'Email & follow-ups',
-    icon: Mail,
-    iconBg: 'bg-[#F5EEFD]',
-    iconColor: 'text-[#9333EA]',
-    style: {
-      left: 'calc(50% - 143.5px - 8px)',
-      top: '50%',
-      transform: 'translate(-100%, -50%)',
-    },
-    fromCenter: { x: 151.5, y: 0 },
-    burstDelay: 360,
-  },
-  {
-    id: 'growth',
-    name: 'Growth Agent',
-    role: 'Measure & optimize',
-    icon: TrendingUp,
-    iconBg: 'bg-[#DCFCE7]',
-    iconColor: 'text-[#16A34A]',
-    style: {
-      left: 'calc(50% - 118px)',
-      top: 'calc(50% - 114px)',
-      transform: 'translate(-100%, -50%)',
-    },
-    fromCenter: { x: 118, y: 114 },
-    burstDelay: 420,
+    coverageTitle: 'Research Coverage',
+    description:
+      'An AI-powered research agent that analyzes companies, markets, competitors, and customer signals to uncover valuable insights and opportunities.',
+    link: '/product',
+    metrics: [
+      {
+        label: 'Companies Analyzed',
+        value: 100,
+        barColor: 'bg-[#3B82F6]',
+        icon: Building2,
+        iconBg: 'bg-[#EFF6FF]',
+        iconColor: 'text-[#2563EB]',
+      },
+      {
+        label: 'Market Mapped',
+        value: 78,
+        barColor: 'bg-[#8B5CF6]',
+        icon: PieChart,
+        iconBg: 'bg-[#F5F3FF]',
+        iconColor: 'text-[#7C3AED]',
+      },
+      {
+        label: 'Competitors Identified',
+        value: 62,
+        barColor: 'bg-[#06B6D4]',
+        icon: Users,
+        iconBg: 'bg-[#ECFEFF]',
+        iconColor: 'text-[#0891B2]',
+      },
+      {
+        label: 'Customer Segments',
+        value: 45,
+        barColor: 'bg-[#10B981]',
+        icon: User,
+        iconBg: 'bg-[#ECFDF5]',
+        iconColor: 'text-[#059669]',
+      },
+      {
+        label: 'Growth Opportunities',
+        value: 28,
+        barColor: 'bg-[#F59E0B]',
+        icon: Lightbulb,
+        iconBg: 'bg-[#FFFBEB]',
+        iconColor: 'text-[#D97706]',
+      },
+    ],
   },
 ];
 
 export const AgentsSection: React.FC = () => {
+  const [currentIndex, setCurrentIndex] = useState(0);
+  const [isPaused, setIsPaused] = useState(false);
   const [isVisible, setIsVisible] = useState(false);
+  const [animateProgress, setAnimateProgress] = useState(false);
+  const touchStartXRef = useRef<number | null>(null);
   const sectionRef = useRef<HTMLElement>(null);
 
+  // Trigger animation only when section reaches the viewport
   useEffect(() => {
-    const element = sectionRef.current;
-    if (!element) return;
+    const el = sectionRef.current;
+    if (!el) return;
 
     const observer = new IntersectionObserver(
       ([entry]) => {
         if (entry.isIntersecting) {
           setIsVisible(true);
-        } else if (entry.boundingClientRect.top > 0) {
-          // Reset when scrolled back above section so it animates again on scroll down
+        } else {
           setIsVisible(false);
         }
       },
-      {
-        threshold: 0.15,
-      }
+      { threshold: 0.2 }
     );
 
-    observer.observe(element);
-
-    return () => {
-      observer.disconnect();
-    };
+    observer.observe(el);
+    return () => observer.disconnect();
   }, []);
 
+  // Auto-advance carousel smoothly every 4.2 seconds only when section is in view
+  useEffect(() => {
+    if (!isVisible || isPaused) return;
+
+    const timer = setInterval(() => {
+      setCurrentIndex((prev) => (prev + 1) % AGENTS.length);
+    }, 4200);
+
+    return () => clearInterval(timer);
+  }, [isVisible, isPaused]);
+
+  // Trigger fluid progress bar animation whenever index changes or section becomes visible
+  useEffect(() => {
+    if (!isVisible) {
+      setAnimateProgress(false);
+      return;
+    }
+
+    setAnimateProgress(false);
+    const animTimer = setTimeout(() => {
+      setAnimateProgress(true);
+    }, 60);
+
+    return () => clearTimeout(animTimer);
+  }, [currentIndex, isVisible]);
+
+  const handlePrev = useCallback(() => {
+    setCurrentIndex((prev) => (prev - 1 + AGENTS.length) % AGENTS.length);
+  }, []);
+
+  const handleNext = useCallback(() => {
+    setCurrentIndex((prev) => (prev + 1) % AGENTS.length);
+  }, []);
+
+  // Touch handlers for mobile swipe
+  const handleTouchStart = (e: React.TouchEvent) => {
+    touchStartXRef.current = e.touches[0].clientX;
+  };
+
+  const handleTouchEnd = (e: React.TouchEvent) => {
+    if (touchStartXRef.current === null) return;
+    const touchEndX = e.changedTouches[0].clientX;
+    const diff = touchStartXRef.current - touchEndX;
+
+    if (Math.abs(diff) > 40) {
+      if (diff > 0) {
+        handleNext();
+      } else {
+        handlePrev();
+      }
+    }
+    touchStartXRef.current = null;
+  };
+
+  // Helper to compute card transform, scale, opacity, and positioning
+  // Front card: 889px x 446px, radius 40px
+  // Back cards: 456px x 230px, radius 20px (scale: 456/889 = 0.513, center offset: 423px / 889px = 47.6%)
+  const getCardStyle = (index: number) => {
+    const total = AGENTS.length;
+    let diff = (index - currentIndex) % total;
+    if (diff < -Math.floor(total / 2)) diff += total;
+    if (diff > Math.floor(total / 2)) diff -= total;
+
+    if (diff === 0) {
+      return {
+        transform: 'translate3d(0, 0, 0) scale(1)',
+        opacity: 1,
+        zIndex: 20,
+        pointerEvents: 'auto' as const,
+        cursor: 'default',
+      };
+    } else if (diff === -1) {
+      return {
+        transform: 'translate3d(-47.6%, 0, 0) scale(0.513)',
+        opacity: 0.7,
+        zIndex: 10,
+        pointerEvents: 'auto' as const,
+        cursor: 'pointer',
+      };
+    } else if (diff === 1) {
+      return {
+        transform: 'translate3d(47.6%, 0, 0) scale(0.513)',
+        opacity: 0.7,
+        zIndex: 10,
+        pointerEvents: 'auto' as const,
+        cursor: 'pointer',
+      };
+    } else {
+      return {
+        transform: `translate3d(${diff > 0 ? 100 : -100}%, 0, 0) scale(0.38)`,
+        opacity: 0,
+        zIndex: 0,
+        pointerEvents: 'none' as const,
+      };
+    }
+  };
+
   return (
-    <section ref={sectionRef} className="relative w-full flex items-center justify-center overflow-hidden bg-white GlobalPadding">
-      <div className="w-full">
-        <div className="grid grid-cols-1 lg:grid-cols-12 gap-10 lg:gap-8 items-center justify-between">
+    <section ref={sectionRef} className="relative z-20 w-full -mt-14 sm:-mt-18 md:-mt-20 pt-8 sm:pt-10 pb-12 sm:pb-16 bg-white overflow-hidden">
+      <div className="w-full max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        {/* Section Header */}
+        <div className="text-center max-w-4xl mx-auto">
+          <ScrollReveal variant="fade-up" duration={700} distance={24}>
+            <h2 className="text-3xl sm:text-4xl md:text-[48px] lg:text-[58px] font-semibold text-[#0D0D0D] tracking-[-0.45px] leading-[1.15] lg:leading-[62px]">
+              A team of specialized agents, <br className="hidden sm:inline" />
+              working for you
+            </h2>
+          </ScrollReveal>
 
-          {/* Left Column: Headline & Call to Action */}
-          <div className="lg:col-span-5 text-left z-10 max-w-xl mx-auto lg:mx-0">
-            {/* Pill Badge */}
-            <ScrollReveal variant="fade-up" delay={50} duration={600} distance={20} className="mb-5">
-              <div className="toggle">
-                AI AGENTS AT WORK
-              </div>
-            </ScrollReveal>
+          <ScrollReveal variant="fade-up" delay={120} duration={700} distance={20}>
+            <p className="mt-3.5 sm:mt-4 text-slate-500 text-sm sm:text-base max-w-xl mx-auto leading-relaxed">
+              Coirei GTM orchestrates a team of AI agents to turn market intelligence into strategy, execution, and measurable growth.            </p>
+          </ScrollReveal>
+        </div>
 
-            {/* Main Headline */}
-            <ScrollReveal variant="fade-up" delay={150} duration={750} distance={26}>
-              <h2 className="text-2xl sm:text-3xl md:text-[44px] font-semibold text-[#0F172A] tracking-tight leading-[1.18]">
-                A team of specialized <br />
-                agents, working for <br />
-                you.
-              </h2>
-            </ScrollReveal>
+        {/* Carousel Container */}
+        <div
+          className="relative mt-12 sm:mt-16 w-full flex flex-col items-center justify-center"
+          onMouseEnter={() => setIsPaused(true)}
+          onMouseLeave={() => setIsPaused(false)}
+          onTouchStart={handleTouchStart}
+          onTouchEnd={handleTouchEnd}
+        >
+          {/* Slider Stage (889px x 446px exact Figma spec) */}
+          <div className="relative w-full max-w-[889px] mx-auto min-h-[500px] sm:min-h-[460px] md:h-[446px] flex items-center justify-center">
+            {AGENTS.map((agent, index) => {
+              const isCenter = index === currentIndex;
+              const cardStyle = getCardStyle(index);
 
-            {/* Description */}
-            <ScrollReveal variant="fade-up" delay={250} duration={750} distance={24}>
-              <p className="mt-4 text-neutral-500 text-sm sm:text-base max-w-xl leading-relaxed">
-                Each agent handles a specific part of your go-to-market journey — from researching markets and competitors to finding prospects, creating campaigns, and optimizing what works.
-              </p>
-            </ScrollReveal>
-
-            {/* Explore Button */}
-            <ScrollReveal variant="fade-up" delay={350} duration={700} distance={20} className="mt-8">
-              <Link
-                to="/product"
-                className="inline-flex items-center justify-center bg-[#0F172A] hover:bg-neutral-800 text-white text-[14.5px] font-medium px-6 py-2.5 rounded-full hover:-translate-y-0.5 transition-all gap-2"
-              >
-                <span>Meet the agents</span>
-                <ArrowRight className="w-4 h-4" />
-              </Link>
-            </ScrollReveal>
-          </div>
-
-          {/* Right Column: Interactive Orbital Hub Ecosystem */}
-          <div className="lg:col-span-7 flex items-center justify-center relative w-full select-none">
-            {/* Scaled container for responsive sizing without horizontal overflow */}
-            <div className="w-full flex items-center justify-center overflow-visible h-[280px] min-[375px]:h-[310px] min-[400px]:h-[340px] min-[460px]:h-[390px] sm:h-[440px] lg:h-[500px]">
-              <div className="relative shrink-0 w-[630px] h-[480px] flex items-center justify-center transform origin-center scale-[0.50] min-[375px]:scale-[0.55] min-[400px]:scale-[0.60] min-[460px]:scale-[0.70] sm:scale-[0.80] md:scale-[0.90] lg:scale-100 transition-transform duration-200">
-
-                {/* 287x287 Outer Dotted Circle */}
-                <svg
-                  className="absolute inset-0 m-auto pointer-events-none z-0 transition-opacity duration-700"
-                  style={{ opacity: isVisible ? 1 : 0.2 }}
-                  width="287"
-                  height="287"
-                  viewBox="0 0 287 287"
-                  fill="none"
-                >
-                  <circle
-                    cx="143.5"
-                    cy="143.5"
-                    r="142.5"
-                    stroke="#94A3B8"
-                    strokeWidth="1.5"
-                    strokeDasharray="4 4"
-                  />
-                </svg>
-
-                {/* Central Core Node with Smooth Pop & Glow */}
+              return (
                 <div
-                  className="relative z-10 flex flex-col items-center justify-center text-center select-none cursor-pointer transition-transform duration-500 hover:scale-105"
-                  style={{
-                    width: '218px',
-                    height: '218px',
-                    borderRadius: '9999px',
-                    backgroundColor: '#020617',
-                    border: '4px solid #FFFFFF',
-                    padding: '12px',
-                    gap: '6px',
-                    boxShadow: isVisible
-                      ? '0px 4px 24px 0px rgba(37, 99, 235, 0.35), 0px 1px 16px 0px rgba(0, 0, 0, 0.25)'
-                      : '0px 1px 16px 0px rgba(0, 0, 0, 0.25)',
-                    transform: isVisible ? 'scale(1)' : 'scale(0.85)',
-                    opacity: isVisible ? 1 : 0,
-                    transition: 'transform 600ms cubic-bezier(0.34, 1.56, 0.64, 1), opacity 400ms ease, box-shadow 800ms ease',
+                  key={agent.id}
+                  style={cardStyle}
+                  onClick={() => {
+                    if (!isCenter) setCurrentIndex(index);
                   }}
+                  className="absolute inset-x-0 mx-auto w-full max-w-[94%] sm:max-w-[780px] md:max-w-[840px] lg:w-[889px] transition-all duration-700 ease-[cubic-bezier(0.16,1,0.3,1)] will-change-transform"
                 >
-                  <h3 className="text-[22px] font-bold text-white tracking-tight leading-snug">
-                    GTM Strategist
-                  </h3>
-                  <p className="text-[12.5px] text-[#94A3B8] font-normal tracking-wide">
-                    Thinks • Analyses • Acts
-                  </p>
-                </div>
+                  {/* Card Container: 889x446, Radius: 40px, Background: #FCFCFC, Border: 1px #F0F0F0 */}
+                  <div
+                    className="w-full md:h-[446px] bg-[#FCFCFC] rounded-[28px] sm:rounded-[36px] lg:rounded-[40px] border border-[#F0F0F0] p-6 sm:p-8 lg:p-10 flex flex-col justify-center"
+                    style={{
+                      boxShadow: isCenter
+                        ? '0px 1px 150px 0px rgba(70, 70, 70, 0.25)'
+                        : '0px 4px 20px 0px rgba(0, 0, 0, 0.05)',
+                    }}
+                  >
+                    <div className="grid grid-cols-1 md:grid-cols-12 gap-6 md:gap-8 lg:gap-10 items-stretch h-full">
 
-                {/* 8 Specialized Agent Cards (Cascading organic pop from center circle) */}
-                {AGENTS.map((agent) => {
-                  const IconComponent = agent.icon;
+                      {/* Left Column: Engage Celestial Orbit OR Competitor Agent Table OR Metric Progress Bars */}
+                      <div className={`md:col-span-7 flex flex-col justify-center h-full ${agent.id === 'engage' ? 'overflow-visible' : 'overflow-hidden'}`}>
+                        {agent.id === 'engage' ? (
+                          <div className="w-full h-full max-h-[365px] flex items-center justify-center">
+                            <EngageAgentVisual />
+                          </div>
+                        ) : agent.id === 'research' ? (
+                          <div className="w-full h-full max-h-[365px] flex items-center justify-center">
+                            <CompetitorAgentTable />
+                          </div>
+                        ) : agent.id === 'marketing' ? (
+                          <div className="w-full h-full max-h-[365px] flex items-center justify-center">
+                            <MarketingAgentVisual isActive={isCenter} />
+                          </div>
+                        ) : (
+                          <>
+                            <h3 className="text-[17px] sm:text-[19px] font-semibold text-[#0F172A] tracking-tight mb-5 sm:mb-6">
+                              {agent.coverageTitle}
+                            </h3>
 
-                  return (
-                    <div
-                      key={agent.id}
-                      style={agent.style}
-                      className="absolute z-20 select-none pointer-events-none"
-                    >
-                      <div
-                        style={{
-                          transform: isVisible
-                            ? 'translate3d(0px, 0px, 0px) scale(1)'
-                            : `translate3d(${agent.fromCenter.x}px, ${agent.fromCenter.y}px, 0px) scale(0)`,
-                          opacity: isVisible ? 1 : 0,
-                          transition: `transform 750ms cubic-bezier(0.34, 1.56, 0.64, 1) ${agent.burstDelay}ms, opacity 320ms ease-out ${agent.burstDelay}ms`,
-                          transformOrigin: 'center center',
-                          willChange: 'transform, opacity',
-                        }}
-                        className="pointer-events-auto"
-                      >
-                        <div className="bg-white rounded-[12px] px-3.5 py-2.5 flex items-center gap-2.5 shadow-[0_2px_8px_rgba(0,0,0,0.04),0_1px_2px_rgba(0,0,0,0.02)] hover:shadow-[0_6px_20px_rgba(37,99,235,0.12)] hover:-translate-y-1 border border-neutral-100 whitespace-nowrap transition-all duration-200 cursor-pointer group">
-                          {/* Agent Pastel Icon Container */}
-                          <div className={`w-8 h-8 rounded-[8px] flex items-center justify-center shrink-0 ${agent.iconBg} ${agent.iconColor} group-hover:scale-110 transition-transform duration-200`}>
-                            <IconComponent className="w-4 h-4" />
+                            <div className="space-y-4 sm:space-y-4.5">
+                              {agent.metrics.map((metric, mIdx) => {
+                                const IconComponent = metric.icon;
+                                return (
+                                  <div key={mIdx} className="flex items-center gap-3 sm:gap-3.5">
+                                    {/* Icon Badge */}
+                                    <div
+                                      className={`w-8 h-8 rounded-lg flex items-center justify-center shrink-0 ${metric.iconBg} ${metric.iconColor}`}
+                                    >
+                                      <IconComponent className="w-4 h-4" />
+                                    </div>
+
+                                    {/* Label */}
+                                    <span className="text-[13px] sm:text-[14px] font-medium text-[#1E293B] shrink-0 w-[130px] sm:w-[155px] truncate">
+                                      {metric.label}
+                                    </span>
+
+                                    {/* Percentage Value */}
+                                    <span className="text-[12.5px] sm:text-[13px] font-medium text-[#64748B] shrink-0 w-8 sm:w-10 text-right tabular-nums">
+                                      {metric.value}%
+                                    </span>
+
+                                    {/* Chunky Progress Bar Track */}
+                                    <div className="flex-1 h-3.5 sm:h-4 bg-[#F1F5F9] rounded-md sm:rounded-[7px] overflow-hidden min-w-[70px] sm:min-w-[120px]">
+                                      <div
+                                        className={`h-full rounded-md sm:rounded-[7px] transition-all duration-1000 ease-out ${metric.barColor}`}
+                                        style={{
+                                          width: isCenter && animateProgress ? `${metric.value}%` : isCenter ? '0%' : `${metric.value}%`,
+                                        }}
+                                      />
+                                    </div>
+                                  </div>
+                                );
+                              })}
+                            </div>
+                          </>
+                        )}
+                      </div>
+
+                      {/* Right Column: Inner Framed Box Bracket (Figma: 300px × 369px, radius: top-right 10px, bottom-right 10px, border: 1px 1px 1px 0px, pt: 33px, pr: 53px, pb: 82px, pl: 20px, gap: 10px) */}
+                      <div className="md:col-span-5 flex flex-col items-center md:items-end justify-center">
+                        <div
+                          className="w-full md:w-[300px] md:h-[369px] rounded-tr-[10px] rounded-br-[10px] rounded-l-none bg-[#FCFCFC] pt-[33px] pr-[30px] sm:pr-[40px] md:pr-[53px] pb-[40px] md:pb-[82px] pl-[20px] flex flex-col justify-between"
+                          style={{
+                            borderTop: '1px solid #EDEDED',
+                            borderRight: '1px solid #DCDCDC',
+                            borderBottom: '1px solid #D4D4D4',
+                            borderLeft: 'none',
+                          }}
+                        >
+                          <div className="flex flex-col gap-[10px]">
+                            <h4 className="text-[20px] sm:text-[22px] font-semibold text-[#0F172A] tracking-tight leading-snug">
+                              {agent.name}
+                            </h4>
+                            <p className="text-[#64748B] text-[13px] sm:text-[13.5px] leading-relaxed font-normal">
+                              {agent.description}
+                            </p>
                           </div>
 
-                          {/* Agent Name & Description */}
-                          <div className="flex flex-col text-left">
-                            <span className="text-[13px] font-bold text-[#0B0F19] tracking-tight leading-tight group-hover:text-blue-600 transition-colors">
-                              {agent.name}
-                            </span>
-                            <span className="text-[11px] text-[#64748B] font-normal leading-tight mt-0.5">
-                              {agent.role}
-                            </span>
+                          <div>
+                            <Link
+                              to={agent.link}
+                              className="inline-flex items-center gap-1.5 text-[13px] sm:text-[14px] font-medium text-[#475569] hover:text-blue-600 transition-colors group/link"
+                            >
+                              <span>Learn more</span>
+                              <ChevronRight className="w-3.5 h-3.5 text-slate-400 group-hover/link:text-blue-600 group-hover/link:translate-x-0.5 transition-all" />
+                            </Link>
                           </div>
                         </div>
                       </div>
-                    </div>
-                  );
-                })}
 
-              </div>
-            </div>
+                    </div>
+                  </div>
+                </div>
+              );
+            })}
+
+            {/* Left Chevron Button: positioned in the left peek area */}
+            <button
+              onClick={handlePrev}
+              type="button"
+              aria-label="Previous agent"
+              className="absolute left-1 sm:left-4 md:-left-6 lg:-left-12 top-1/2 -translate-y-1/2 w-9 h-9 sm:w-10 sm:h-10 rounded-full bg-[#E2E8F0]/90 hover:bg-[#CBD5E1] active:scale-95 text-slate-700 flex items-center justify-center border border-slate-300/60 transition-all z-30 cursor-pointer"
+            >
+              <ChevronLeft className="w-4 h-4 sm:w-5 sm:h-5" />
+            </button>
+
+            {/* Right Chevron Button: positioned in the right peek area */}
+            <button
+              onClick={handleNext}
+              type="button"
+              aria-label="Next agent"
+              className="absolute right-1 sm:right-4 md:-right-6 lg:-right-12 top-1/2 -translate-y-1/2 w-9 h-9 sm:w-10 sm:h-10 rounded-full bg-[#E2E8F0]/90 hover:bg-[#CBD5E1] active:scale-95 text-slate-700 flex items-center justify-center border border-slate-300/60 transition-all z-30 cursor-pointer"
+            >
+              <ChevronRight className="w-4 h-4 sm:w-5 sm:h-5" />
+            </button>
           </div>
 
+          {/* Pagination Indicators (pill & dots) */}
+          <div className="flex items-center justify-center gap-2 mt-7 sm:mt-9">
+            {AGENTS.map((_, idx) => (
+              <button
+                key={idx}
+                type="button"
+                onClick={() => setCurrentIndex(idx)}
+                aria-label={`Go to slide ${idx + 1}`}
+                className={`h-1.5 rounded-full transition-all duration-300 cursor-pointer ${idx === currentIndex
+                    ? 'w-6 sm:w-7 bg-slate-400'
+                    : 'w-1.5 bg-slate-200 hover:bg-slate-300'
+                  }`}
+              />
+            ))}
+          </div>
         </div>
       </div>
     </section>

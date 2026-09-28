@@ -1,13 +1,8 @@
 import React from 'react';
 import {
   X,
-  Building2,
-  Users,
-  MapPin,
-  Globe,
   Mail,
   CheckCircle2,
-  Briefcase,
   Target,
   Sparkles,
   ExternalLink,
@@ -33,13 +28,12 @@ const LinkedInIcon: React.FC<{ size?: number; className?: string }> = ({
 interface ICPDetailPanelProps {
   lead: ICPLead;
   onClose: () => void;
-  buttonStyle: React.CSSProperties;
+  buttonStyle?: React.CSSProperties;
 }
 
 export const ICPDetailPanel: React.FC<ICPDetailPanelProps> = ({
   lead,
   onClose,
-  buttonStyle,
 }) => {
   return (
     <div className="w-[340px] sm:w-[380px] border-l border-[#EAE6DF] bg-[#FAF9F6] flex flex-col h-full shrink-0 shadow-lg z-20 animate-in slide-in-from-right duration-200">
@@ -69,12 +63,12 @@ export const ICPDetailPanel: React.FC<ICPDetailPanelProps> = ({
         <div className="p-3.5 bg-white rounded-xl border border-[#EAE6DF] shadow-2xs flex flex-col gap-3">
           <div className="flex items-center gap-3">
             <div
-              className={`w-11 h-11 rounded-xl ${lead.avatarBg} flex items-center justify-center font-bold text-sm shrink-0 shadow-xs`}
+              className={`w-11 h-11 rounded-xl ${lead.avatarBg} flex items-center justify-center font-semibold text-sm shrink-0 shadow-xs`}
             >
               {lead.avatarText}
             </div>
             <div className="min-w-0 flex-1">
-              <h3 className="text-base font-bold text-gray-900 leading-tight truncate">
+              <h3 className="text-base font-semibold text-gray-900 leading-tight truncate">
                 {lead.name}
               </h3>
               <p className="text-[12px] text-gray-600 font-medium leading-tight truncate mt-0.5">
@@ -121,10 +115,10 @@ export const ICPDetailPanel: React.FC<ICPDetailPanelProps> = ({
               Lead Score
             </span>
             <div className="flex items-baseline gap-1 mt-1">
-              <span className="text-2xl font-black text-gray-900 tracking-tight">
+              <span className="text-2xl font-semibold text-gray-900 tracking-tight">
                 {lead.icpScore}%
               </span>
-              <span className="text-[11px] font-bold text-emerald-600">Exceptional</span>
+              <span className="text-[11px] font-semibold text-emerald-600">Exceptional</span>
             </div>
           </div>
 
@@ -132,7 +126,7 @@ export const ICPDetailPanel: React.FC<ICPDetailPanelProps> = ({
             <span className="text-[11px] font-medium text-gray-500 uppercase tracking-wider">
               Persona Tier
             </span>
-            <span className="text-[12px] font-bold text-gray-900 mt-1 leading-tight">
+            <span className="text-[12px] font-semibold text-gray-900 mt-1 leading-tight">
               {lead.persona}
             </span>
           </div>
@@ -140,7 +134,7 @@ export const ICPDetailPanel: React.FC<ICPDetailPanelProps> = ({
 
         {/* Live Buying Intent Signal */}
         <div className="p-3.5 bg-white rounded-xl border border-[#EAE6DF] shadow-2xs flex flex-col gap-1.5">
-          <div className="flex items-center gap-1.5 text-[11px] font-bold text-emerald-700 uppercase tracking-wider">
+          <div className="flex items-center gap-1.5 text-[11px] font-semibold text-emerald-700 uppercase tracking-wider">
             <Sparkles className="w-3.5 h-3.5 text-emerald-600" />
             <span>Detected Buying Signal</span>
           </div>
@@ -154,7 +148,7 @@ export const ICPDetailPanel: React.FC<ICPDetailPanelProps> = ({
 
         {/* Recommended Outreach Pitch */}
         <div className="p-3.5 bg-[#F0FDF4] rounded-xl border border-[#BBF7D0] flex flex-col gap-1.5">
-          <div className="flex items-center gap-1.5 text-[11px] font-bold text-emerald-800 uppercase tracking-wider">
+          <div className="flex items-center gap-1.5 text-[11px] font-semibold text-emerald-800 uppercase tracking-wider">
             <Target className="w-3.5 h-3.5 text-emerald-700" />
             <span>Recommended GTM Pitch</span>
           </div>
@@ -165,7 +159,7 @@ export const ICPDetailPanel: React.FC<ICPDetailPanelProps> = ({
 
         {/* Key Decision Maker Pain Points */}
         <div className="p-3.5 bg-white rounded-xl border border-[#EAE6DF] shadow-2xs flex flex-col gap-2">
-          <span className="text-[11px] font-bold text-gray-500 uppercase tracking-wider">
+          <span className="text-[11px] font-semibold text-gray-500 uppercase tracking-wider">
             Key Operational Pain Points
           </span>
           <ul className="flex flex-col gap-2 text-[12px] text-gray-700">
@@ -180,7 +174,7 @@ export const ICPDetailPanel: React.FC<ICPDetailPanelProps> = ({
 
         {/* Company Context */}
         <div className="p-3.5 bg-white rounded-xl border border-[#EAE6DF] shadow-2xs flex flex-col gap-2 text-[12px]">
-          <span className="text-[11px] font-bold text-gray-500 uppercase tracking-wider">
+          <span className="text-[11px] font-semibold text-gray-500 uppercase tracking-wider">
             Target Account Overview
           </span>
           <div className="flex items-center justify-between text-gray-600 border-b border-[#F0ECE6] pb-1.5">

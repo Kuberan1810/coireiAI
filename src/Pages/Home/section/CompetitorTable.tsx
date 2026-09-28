@@ -150,8 +150,8 @@ export const CompetitorTable: React.FC<CompetitorTableProps> = ({
                 <td className="py-3.5 px-6 whitespace-nowrap">
                   <div className="flex items-center gap-2">
                     <div
-                      className={`w-5 h-5 rounded-md ${row.faviconBg} flex items-center justify-center text-[10px] font-bold uppercase shrink-0 ${
-                        row.name === "ro" ? "text-black text-[12px] font-extrabold lowercase" : "text-white"
+                      className={`w-5 h-5 rounded-md ${row.faviconBg} flex items-center justify-center text-[10px] font-semibold uppercase shrink-0 ${
+                        row.name === "ro" ? "text-black text-[12px] font-semibold lowercase" : "text-white"
                       }`}
                     >
                       {row.faviconText}

@@ -11,8 +11,48 @@
     background-color: #FFFFFF;
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
-    overflow-x: hidden;
+    overflow-x: clip;
+    cursor: default;
   }
+
+  /* Make text across all sections selectable with text I-beam cursor */
+  p, h1, h2, h3, h4, h5, h6, li, blockquote, dt, dd, label, input, textarea {
+    cursor: text;
+    user-select: text;
+    -webkit-user-select: text;
+  }
+
+  p span, h1 span, h2 span, h3 span, h4 span, h5 span, h6 span, li span, blockquote span {
+    cursor: text;
+    user-select: text;
+    -webkit-user-select: text;
+  }
+
+  /* Interactive clickable elements keep pointer cursor */
+  a, button, [role="button"], input[type="submit"], input[type="button"], input[type="checkbox"], input[type="radio"], select, .cursor-pointer {
+    cursor: pointer !important;
+    user-select: none;
+    -webkit-user-select: none;
+  }
+
+  /* Elements inside buttons and links inherit pointer cursor */
+  a *, button *, [role="button"] *, .cursor-pointer * {
+    cursor: pointer !important;
+  }
+
+  b, strong {
+    font-weight: 600 !important;
+  }
+}
+
+/* Explicit text utility classes with top cascade priority */
+.cursor-text, [data-cursor="text"] {
+  cursor: text !important;
+}
+
+.select-text, [data-select="text"] {
+  user-select: text !important;
+  -webkit-user-select: text !important;
 }
 
 @keyframes marquee {
@@ -158,6 +198,21 @@
 
 .animate-slide-left {
   animation: slideLeft 0.28s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+}
+
+@keyframes slideDown {
+  0% {
+    transform: translateY(-24px);
+    opacity: 0;
+  }
+  100% {
+    transform: translateY(0);
+    opacity: 1;
+  }
+}
+
+.animate-slide-down {
+  animation: slideDown 0.5s cubic-bezier(0.16, 1, 0.3, 1) forwards;
 }
 
 /* Custom sleek scrollbar for table */

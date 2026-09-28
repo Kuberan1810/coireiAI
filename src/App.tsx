@@ -2,8 +2,10 @@ import { useEffect } from 'react';
 import type { FC } from 'react';
 import { BrowserRouter, Routes, Route, useLocation } from 'react-router-dom';
 import Navbar from './components/Navbar';
+import Footer from './components/Footer';
 import Home from './Pages/Home/Home';
 import Product from './Pages/Product/Product';
+import MarketIntelligence from './Pages/MarketIntelligence/MarketIntelligence';
 
 // Simple Scroll to Top on route change
 function ScrollToTop() {
@@ -22,7 +24,7 @@ const PagePlaceholder: FC<{ title: string; subtitle: string }> = ({ title, subti
     <div className="inline-flex items-center px-3.5 py-1.5 rounded-full bg-blue-50 text-blue-600 text-xs font-semibold mb-4">
       Coirei Intelligence
     </div>
-    <h1 className="text-4xl sm:text-5xl font-extrabold text-[#0B0F19] tracking-tight">{title}</h1>
+    <h1 className="text-4xl sm:text-5xl font-semibold text-[#0B0F19] tracking-tight">{title}</h1>
     <p className="mt-4 text-neutral-500 max-w-lg mx-auto text-base">{subtitle}</p>
   </div>
 );
@@ -37,15 +39,10 @@ export const App: FC = () => {
           <Routes>
             <Route path="/" element={<Home />} />
             <Route path="/product" element={<Product />} />
-            <Route
-              path="/solutions"
-              element={
-                <PagePlaceholder
-                  title="Tailored GTM Solutions"
-                  subtitle="Discover automated go-to-market strategies tailored for B2B SaaS, enterprise sales, and high-growth startups."
-                />
-              }
-            />
+            <Route path="/market-intelligence" element={<MarketIntelligence />} />
+            <Route path="/intelligence" element={<MarketIntelligence />} />
+            <Route path="/seo-aeo" element={<MarketIntelligence />} />
+            <Route path="/solutions" element={<MarketIntelligence />} />
             <Route
               path="/customers"
               element={
@@ -86,6 +83,7 @@ export const App: FC = () => {
             <Route path="*" element={<Home />} />
           </Routes>
         </main>
+        <Footer />
       </div>
     </BrowserRouter>
   );

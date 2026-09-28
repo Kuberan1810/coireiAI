@@ -180,74 +180,88 @@ const LeadGenCard: React.FC = () => {
       <div className="relative z-10">
         <h3 className="text-xl sm:text-[22px] font-normal text-[#4E4E4E] leading-snug">
           Find the right<br />
-          leads, <span className="font-bold text-[#0F172A]">faster</span>
+          leads, <span className="font-semibold text-[#0F172A]">faster</span>
         </h3>
       </div>
 
-      {/* Center Visual: Staggered Floating Company Pills with Pop-up Animation */}
-      <div className="relative z-10 my-auto py-2 flex flex-col items-start pl-1 sm:pl-3 min-h-[150px] justify-center gap-2">
-        {/* Pill 1: versel.com */}
-        <div
-          className={`inline-flex items-center gap-2.5 bg-[#9333EA] hover:bg-[#8B5CF6] text-white px-3 py-1.5 rounded-full shadow-[0_4px_14px_rgba(147,51,234,0.28)] text-[12px] font-medium transition-all duration-500 select-none cursor-default ${showProfile1
+      {/* Center Visual: Staggered Floating Company Pills Split Across Two Sides */}
+      <div className="relative z-10 my-auto py-2 grid grid-cols-2 gap-3 sm:gap-4 min-h-[155px] items-center">
+        {/* Left Side: 2 capsules */}
+        <div className="flex flex-col items-start gap-3.5 pl-0.5 sm:pl-1">
+          {/* Pill 1: vercel.com */}
+          <div
+            className={`inline-flex items-center gap-2 bg-[#9333EA] hover:bg-[#8B5CF6] text-white px-3 py-1.5 rounded-full shadow-[0_4px_14px_rgba(147,51,234,0.28)] text-[12px] font-medium transition-all duration-500 select-none cursor-default ${showProfile1
               ? 'opacity-100 scale-100 translate-y-0'
               : 'opacity-0 scale-50 translate-y-3 pointer-events-none'
-            }`}
-          style={{
-            transitionTimingFunction: 'cubic-bezier(0.34, 1.56, 0.64, 1)',
-          }}
-        >
-          <span className="w-4 h-4 rounded-full bg-white/20 flex items-center justify-center text-[9px] font-bold">
-            ▲
-          </span>
-          <span>versel.com</span>
+              }`}
+            style={{
+              transitionTimingFunction: 'cubic-bezier(0.34, 1.56, 0.64, 1)',
+            }}
+          >
+            <span className="w-4 h-4 rounded-full bg-white/20 flex items-center justify-center">
+              <svg className="w-2.5 h-2.5 fill-white" viewBox="0 0 24 24">
+                <path d="M12 1L24 22H0L12 1Z" />
+              </svg>
+            </span>
+            <span>vercel.com</span>
+          </div>
+
+          {/* Pill 2: urbacvc.com */}
+          <div
+            className={`inline-flex items-center gap-2 bg-[#EF4444] hover:bg-[#F43F5E] text-white px-3 py-1.5 rounded-full shadow-[0_4px_14px_rgba(239,68,68,0.28)] text-[12px] font-medium ml-3 sm:ml-5 transition-all duration-500 select-none cursor-default ${showProfile2
+              ? 'opacity-100 scale-100 translate-y-0'
+              : 'opacity-0 scale-50 translate-y-3 pointer-events-none'
+              }`}
+            style={{
+              transitionTimingFunction: 'cubic-bezier(0.34, 1.56, 0.64, 1)',
+            }}
+          >
+            <span className="w-4 h-4 rounded-full bg-white/20 flex items-center justify-center">
+              <svg className="w-2.5 h-2.5 fill-white" viewBox="0 0 24 24">
+                <path d="M12 12c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm0 2c-2.67 0-8 1.34-8 4v2h16v-2c0-2.66-5.33-4-8-4z" />
+              </svg>
+            </span>
+            <span>urbacvc.com</span>
+          </div>
         </div>
 
-        {/* Pill 2: urbacvc.com */}
-        <div
-          className={`inline-flex items-center gap-2.5 bg-[#EF4444] hover:bg-[#F43F5E] text-white px-3 py-1.5 rounded-full shadow-[0_4px_14px_rgba(239,68,68,0.28)] text-[12px] font-medium ml-5 sm:ml-7 transition-all duration-500 select-none cursor-default ${showProfile2
+        {/* Right Side: 2 capsules */}
+        <div className="flex flex-col items-end gap-3.5 pr-0.5 sm:pr-1">
+          {/* Pill 3: stripe.com */}
+          <div
+            className={`inline-flex items-center gap-2 bg-[#2563EB] hover:bg-[#3B82F6] text-white px-3 py-1.5 rounded-full shadow-[0_4px_14px_rgba(37,99,235,0.28)] text-[12px] font-medium mr-3 sm:mr-5 transition-all duration-500 select-none cursor-default ${showProfile3
               ? 'opacity-100 scale-100 translate-y-0'
               : 'opacity-0 scale-50 translate-y-3 pointer-events-none'
-            }`}
-          style={{
-            transitionTimingFunction: 'cubic-bezier(0.34, 1.56, 0.64, 1)',
-          }}
-        >
-          <span className="w-4 h-4 rounded-full bg-white/20 flex items-center justify-center text-[9px] font-bold">
-            👤
-          </span>
-          <span>urbacvc.com</span>
-        </div>
+              }`}
+            style={{
+              transitionTimingFunction: 'cubic-bezier(0.34, 1.56, 0.64, 1)',
+            }}
+          >
+            <span className="w-4 h-4 rounded-full bg-white/20 flex items-center justify-center">
+              <svg className="w-2.5 h-2.5 fill-white" viewBox="0 0 24 24">
+                <path d="M13.976 9.15c-2.172-.806-3.356-1.426-3.356-2.409 0-.831.683-1.305 1.901-1.305 2.227 0 4.515.858 6.09 1.631l.89-5.494C18.252 1.054 15.688.5 12.392.5 6.425.5 2.5 3.655 2.5 8.788c0 5.494 4.568 6.643 8.358 8.046 2.511.927 3.526 1.644 3.526 2.671 0 1.026-.957 1.545-2.457 1.545-2.227 0-5.186-.967-7.248-2.215L3.81 24.5c2.321 1.096 5.568 1.5 8.647 1.5 6.273 0 10.457-3.155 10.457-8.358 0-5.592-4.57-6.79-8.938-8.492z" />
+              </svg>
+            </span>
+            <span>stripe.com</span>
+          </div>
 
-        {/* Pill 3: stripe.com */}
-        <div
-          className={`inline-flex items-center gap-2.5 bg-[#2563EB] hover:bg-[#3B82F6] text-white px-3 py-1.5 rounded-full shadow-[0_4px_14px_rgba(37,99,235,0.28)] text-[12px] font-medium ml-2 sm:ml-3 transition-all duration-500 select-none cursor-default ${showProfile3
+          {/* Pill 4: supabase.com */}
+          <div
+            className={`inline-flex items-center gap-2 bg-[#059669] hover:bg-[#10B981] text-white px-3 py-1.5 rounded-full shadow-[0_4px_14px_rgba(5,150,105,0.28)] text-[12px] font-medium transition-all duration-500 select-none cursor-default ${showProfile4
               ? 'opacity-100 scale-100 translate-y-0'
               : 'opacity-0 scale-50 translate-y-3 pointer-events-none'
-            }`}
-          style={{
-            transitionTimingFunction: 'cubic-bezier(0.34, 1.56, 0.64, 1)',
-          }}
-        >
-          <span className="w-4 h-4 rounded-full bg-white/20 flex items-center justify-center text-[9px] font-bold">
-            ⚡
-          </span>
-          <span>stripe.com</span>
-        </div>
-
-        {/* Pill 4: supabase.com */}
-        <div
-          className={`inline-flex items-center gap-2.5 bg-[#059669] hover:bg-[#10B981] text-white px-3 py-1.5 rounded-full shadow-[0_4px_14px_rgba(5,150,105,0.28)] text-[12px] font-medium ml-6 sm:ml-8 transition-all duration-500 select-none cursor-default ${showProfile4
-              ? 'opacity-100 scale-100 translate-y-0'
-              : 'opacity-0 scale-50 translate-y-3 pointer-events-none'
-            }`}
-          style={{
-            transitionTimingFunction: 'cubic-bezier(0.34, 1.56, 0.64, 1)',
-          }}
-        >
-          <span className="w-4 h-4 rounded-full bg-white/20 flex items-center justify-center text-[9px] font-bold">
-            ◈
-          </span>
-          <span>supabase.com</span>
+              }`}
+            style={{
+              transitionTimingFunction: 'cubic-bezier(0.34, 1.56, 0.64, 1)',
+            }}
+          >
+            <span className="w-4 h-4 rounded-full bg-white/20 flex items-center justify-center">
+              <svg className="w-2.5 h-2.5 fill-white" viewBox="0 0 24 24">
+                <path d="M21.362 9.354H12V.396a.396.396 0 0 0-.716-.233L.12 14.282a.396.396 0 0 0 .307.638h9.362v8.958a.396.396 0 0 0 .716.233l11.164-14.119a.396.396 0 0 0-.307-.638z" />
+              </svg>
+            </span>
+            <span>supabase.com</span>
+          </div>
         </div>
       </div>
 
@@ -257,8 +271,8 @@ const LeadGenCard: React.FC = () => {
         <div className="h-5 mb-1.5 flex items-center overflow-visible">
           <p
             className={`text-[11px] text-neutral-400 font-normal flex items-center gap-1.5 select-none transition-all duration-400 ease-out ${showStatus
-                ? 'opacity-100 scale-100 translate-y-0'
-                : 'opacity-0 scale-75 translate-y-2 pointer-events-none'
+              ? 'opacity-100 scale-100 translate-y-0'
+              : 'opacity-0 scale-75 translate-y-2 pointer-events-none'
               }`}
             style={{
               transitionTimingFunction: 'cubic-bezier(0.34, 1.56, 0.64, 1)',
@@ -305,14 +319,14 @@ const LeadGenCard: React.FC = () => {
             {/* Animated Pointer Cursor: single fluid glide directly to send point, clicks on arrival */}
             <div
               className={`absolute pointer-events-none z-50 transition-all ease-out ${cursorState === 'hidden'
-                  ? 'opacity-0 translate-x-10 translate-y-10 scale-90 duration-300'
-                  : cursorState === 'gliding'
-                    ? 'opacity-100 translate-x-0 translate-y-1 scale-100 duration-400'
-                    : cursorState === 'clicking'
-                      ? 'opacity-100 translate-x-0 translate-y-1 scale-[0.82] duration-100 ease-in'
-                      : cursorState === 'clicked'
-                        ? 'opacity-100 translate-x-0 translate-y-1 scale-100 duration-120'
-                        : 'opacity-0 translate-x-6 translate-y-8 scale-90 duration-350 ease-in'
+                ? 'opacity-0 translate-x-10 translate-y-10 scale-90 duration-300'
+                : cursorState === 'gliding'
+                  ? 'opacity-100 translate-x-0 translate-y-1 scale-100 duration-400'
+                  : cursorState === 'clicking'
+                    ? 'opacity-100 translate-x-0 translate-y-1 scale-[0.82] duration-100 ease-in'
+                    : cursorState === 'clicked'
+                      ? 'opacity-100 translate-x-0 translate-y-1 scale-100 duration-120'
+                      : 'opacity-0 translate-x-6 translate-y-8 scale-90 duration-350 ease-in'
                 }`}
               style={{
                 top: '-2px',
@@ -347,8 +361,31 @@ const MarketAnalysisCard: React.FC = () => {
   const purplePathRef = useRef<SVGPathElement | null>(null);
   const orangePathRef = useRef<SVGPathElement | null>(null);
 
-  const [revealed, setRevealed] = useState([false, false, false, false]);
+  const fullText = 'analyzing competitors';
+  const [displayText, setDisplayText] = useState('');
+  const [linesVisible, setLinesVisible] = useState(false);
+  const [showStatus, setShowStatus] = useState(false);
+  const [isTyping, setIsTyping] = useState(false);
+  const [revealed, setRevealed] = useState([false, false, false]);
   const [failedImgs, setFailedImgs] = useState<Record<number, boolean>>({});
+
+  const timersRef = useRef<number[]>([]);
+  const intervalRef = useRef<number | null>(null);
+
+  const clearAllTimers = () => {
+    timersRef.current.forEach((t) => clearTimeout(t));
+    timersRef.current = [];
+    if (intervalRef.current) {
+      clearInterval(intervalRef.current);
+      intervalRef.current = null;
+    }
+  };
+
+  const addTimeout = (fn: () => void, ms: number) => {
+    const t = window.setTimeout(fn, ms);
+    timersRef.current.push(t);
+    return t;
+  };
 
   // Exact vector geometry from Figma downloads: Vector 51 & Vector 52
   const v51Segments = [
@@ -366,7 +403,7 @@ const MarketAnalysisCard: React.FC = () => {
   ];
 
   // Fixed coordinates matching Screenshot 1 exactly relative to viewBox (415 x 170):
-  // PFPs remain strictly stationary and do not move with the wave
+  // 3 stationary PFPs along the curve
   const pfpData = [
     {
       name: 'Alex',
@@ -392,56 +429,76 @@ const MarketAnalysisCard: React.FC = () => {
       x: `${(215.7 / 415) * 100}%`,
       y: `${(57.7 / 170) * 100}%`,
     },
-    {
-      name: 'Marcus',
-      src: 'https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=96&auto=format&fit=crop&q=80',
-      initial: 'M',
-      // Valley between purple & orange sweep on right
-      x: `${(312.0 / 415) * 100}%`,
-      y: `${(90.0 / 170) * 100}%`,
-    },
   ];
 
-  // Pop-up Sequence: Staggered spring bounce pop-up in fixed positions
+  // Sequenced Animation Loop:
+  // 1. Lines appear from faded state
+  // 2. Later, a text types below "analyzing competitors"
+  // 3. And then these pfps popup
+  const triggerSequence = () => {
+    clearAllTimers();
+
+    // Reset state
+    setLinesVisible(false);
+    setShowStatus(false);
+    setDisplayText('');
+    setIsTyping(false);
+    setRevealed([false, false, false]);
+
+    // 1. First only these two lines appear from faded state
+    addTimeout(() => {
+      setLinesVisible(true);
+
+      // 2. Later, text types below "analyzing competitors"
+      addTimeout(() => {
+        setShowStatus(true);
+        setIsTyping(true);
+
+        let charIdx = 0;
+        intervalRef.current = window.setInterval(() => {
+          charIdx++;
+          setDisplayText(fullText.slice(0, charIdx));
+
+          if (charIdx >= fullText.length) {
+            if (intervalRef.current) {
+              clearInterval(intervalRef.current);
+              intervalRef.current = null;
+            }
+            setIsTyping(false);
+
+            // 3. And then these pfps popup (text disappears right when the first pfp pops up)
+            addTimeout(() => {
+              setShowStatus(false);
+              setRevealed([true, false, false]);
+
+              addTimeout(() => {
+                setRevealed([true, true, false]);
+
+                addTimeout(() => {
+                  setRevealed([true, true, true]);
+
+                  // Hold visible state for ~5.2s, then gracefully reset and loop
+                  addTimeout(() => {
+                    setRevealed([false, false, false]);
+                    setShowStatus(false);
+                    setLinesVisible(false);
+
+                    addTimeout(() => {
+                      triggerSequence();
+                    }, 650);
+                  }, 5200);
+                }, 300);
+              }, 300);
+            }, 350);
+          }
+        }, 45);
+      }, 1200);
+    }, 250);
+  };
+
   useEffect(() => {
-    let active = true;
-    let timeoutIds: ReturnType<typeof setTimeout>[] = [];
-
-    const runPopupLoop = () => {
-      setRevealed([false, false, false, false]);
-
-      const t1 = setTimeout(() => {
-        if (active) setRevealed([true, false, false, false]);
-      }, 400);
-
-      const t2 = setTimeout(() => {
-        if (active) setRevealed([true, true, false, false]);
-      }, 850);
-
-      const t3 = setTimeout(() => {
-        if (active) setRevealed([true, true, true, false]);
-      }, 1300);
-
-      const t4 = setTimeout(() => {
-        if (active) setRevealed([true, true, true, true]);
-      }, 1750);
-
-      // Keep all 4 visible in their spots, then gracefully loop
-      const tLoop = setTimeout(() => {
-        if (active) {
-          runPopupLoop();
-        }
-      }, 9000);
-
-      timeoutIds = [t1, t2, t3, t4, tLoop];
-    };
-
-    runPopupLoop();
-
-    return () => {
-      active = false;
-      timeoutIds.forEach(clearTimeout);
-    };
+    triggerSequence();
+    return () => clearAllTimers();
   }, []);
 
   // Multi-harmonic pattern-changing wave animation
@@ -550,8 +607,8 @@ const MarketAnalysisCard: React.FC = () => {
       <div className="relative z-10">
         <h3 className="text-xl sm:text-[22px] font-normal text-[#4E4E4E] leading-snug">
           Analyze markets,<br />
-          competitors, <span className="font-bold text-[#0F172A]">and</span><br />
-          <span className="font-bold text-[#0F172A]">opportunities.</span>
+          competitors, <span className="font-semibold text-[#0F172A]">and</span><br />
+          <span className="font-semibold text-[#0F172A]">opportunities.</span>
         </h3>
       </div>
 
@@ -560,7 +617,8 @@ const MarketAnalysisCard: React.FC = () => {
         <div className="relative w-full h-full">
           <svg
             viewBox="0 0 415 170"
-            className="w-full h-full overflow-visible"
+            className={`w-full h-full overflow-visible transition-opacity duration-1000 ease-out ${linesVisible ? 'opacity-100' : 'opacity-0'
+              }`}
             fill="none"
             xmlns="http://www.w3.org/2000/svg"
           >
@@ -630,7 +688,7 @@ const MarketAnalysisCard: React.FC = () => {
             />
           </svg>
 
-          {/* 4 Stationary PFPs that pop up into their design spots with purple border rings */}
+          {/* 3 Stationary PFPs that pop up into their design spots with purple border rings */}
           {pfpData.map((pfp, idx) => {
             const isRevealed = revealed[idx];
             const isFailed = failedImgs[idx];
@@ -646,15 +704,15 @@ const MarketAnalysisCard: React.FC = () => {
               >
                 <div
                   className={`transition-all duration-500 ease-out ${isRevealed
-                      ? 'opacity-100 scale-100'
-                      : 'opacity-0 scale-0 pointer-events-none'
+                    ? 'opacity-100 scale-100'
+                    : 'opacity-0 scale-0 pointer-events-none'
                     }`}
                   style={{
                     transitionTimingFunction: 'cubic-bezier(0.34, 1.56, 0.64, 1)',
                   }}
                 >
                   {isFailed ? (
-                    <div className="w-8 h-8 rounded-full bg-gradient-to-tr from-purple-600 to-indigo-500 text-white font-bold text-[11px] flex items-center justify-center ring-[2.5px] ring-[#9644F9] shadow-[0_4px_12px_rgba(150,68,249,0.25)]">
+                    <div className="w-8 h-8 rounded-full bg-gradient-to-tr from-purple-600 to-indigo-500 text-white font-semibold text-[11px] flex items-center justify-center ring-[2.5px] ring-[#9644F9] shadow-[0_4px_12px_rgba(150,68,249,0.25)]">
                       {pfp.initial}
                     </div>
                   ) : (
@@ -672,8 +730,18 @@ const MarketAnalysisCard: React.FC = () => {
         </div>
       </div>
 
-      {/* Bottom Spacer */}
-      <div className="h-6" />
+      {/* Bottom Container: Text typed below "analyzing competitors" */}
+      <div className="relative z-10 w-full min-h-[32px] flex items-center justify-center select-none">
+        <p
+          className={`text-[13px] text-slate-500 font-normal tracking-normal flex items-center transition-all duration-300 ease-out ${showStatus ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-1 pointer-events-none'
+            }`}
+        >
+          <span>{displayText}</span>
+          {isTyping && (
+            <span className="inline-block w-0.5 h-3.5 bg-slate-500 ml-0.5 animate-pulse" />
+          )}
+        </p>
+      </div>
     </div>
   );
 };
@@ -806,11 +874,11 @@ const AudienceIntelligenceCard: React.FC = () => {
   }, []);
 
   return (
-    <div className="p-6 sm:p-8 flex flex-col justify-between relative overflow-hidden min-h-[380px] sm:min-h-[420px] border-t lg:border-t-0 lg:border-l border-neutral-200/90 bg-white group select-none">
+    <div className="p-6 sm:p-8 flex flex-col justify-between relative overflow-hidden min-h-[380px] sm:min-h-[420px] border-t lg:border-t-0 lg:border-l border-neutral-200/90 bg-white group">
       {/* Title */}
       <div className="relative z-10">
         <h3 className="text-xl sm:text-[22px] font-normal leading-snug">
-          <span className="font-bold text-[#0F172A] block">Audience Intelligence.</span>
+          <span className="font-semibold text-[#0F172A] block">Audience Intelligence.</span>
           <span className="text-[#6B7280]">Find ideal customers.</span>
         </h3>
       </div>
@@ -820,8 +888,8 @@ const AudienceIntelligenceCard: React.FC = () => {
         {/* Profile 1: Sarah Connor */}
         <div
           className={`inline-flex items-center gap-2.5 bg-white border border-[#0A66C2]/25 text-[#0F172A] px-3.5 py-1.5 rounded-full shadow-[0_4px_16px_rgba(10,102,194,0.12)] text-[12px] font-medium mr-auto transition-all duration-500 select-none ${showProfile1
-              ? 'opacity-100 scale-100 translate-y-0'
-              : 'opacity-0 scale-50 translate-y-3 pointer-events-none'
+            ? 'opacity-100 scale-100 translate-y-0'
+            : 'opacity-0 scale-50 translate-y-3 pointer-events-none'
             }`}
           style={{ transitionTimingFunction: 'cubic-bezier(0.34, 1.56, 0.64, 1)' }}
         >
@@ -830,7 +898,7 @@ const AudienceIntelligenceCard: React.FC = () => {
             alt="Sarah"
             className="w-5 h-5 rounded-full object-cover ring-1 ring-white"
           />
-          <span className="w-4 h-4 rounded bg-[#0A66C2] text-white flex items-center justify-center text-[10px] font-bold leading-none">
+          <span className="w-4 h-4 rounded bg-[#0A66C2] text-white flex items-center justify-center text-[10px] font-semibold leading-none">
             in
           </span>
           <span className="font-semibold text-neutral-800">linkedin.com/in/sarah-vp</span>
@@ -840,8 +908,8 @@ const AudienceIntelligenceCard: React.FC = () => {
         {/* Profile 2: David Chen */}
         <div
           className={`inline-flex items-center gap-2.5 bg-[#0A66C2] text-white px-3.5 py-1.5 rounded-full shadow-[0_4px_16px_rgba(10,102,194,0.28)] text-[12px] font-medium ml-auto transition-all duration-500 select-none ${showProfile2
-              ? 'opacity-100 scale-100 translate-y-0'
-              : 'opacity-0 scale-50 translate-y-3 pointer-events-none'
+            ? 'opacity-100 scale-100 translate-y-0'
+            : 'opacity-0 scale-50 translate-y-3 pointer-events-none'
             }`}
           style={{ transitionTimingFunction: 'cubic-bezier(0.34, 1.56, 0.64, 1)' }}
         >
@@ -850,7 +918,7 @@ const AudienceIntelligenceCard: React.FC = () => {
             alt="David"
             className="w-5 h-5 rounded-full object-cover ring-1 ring-white/50"
           />
-          <span className="w-4 h-4 rounded bg-white text-[#0A66C2] flex items-center justify-center text-[10px] font-bold leading-none">
+          <span className="w-4 h-4 rounded bg-white text-[#0A66C2] flex items-center justify-center text-[10px] font-semibold leading-none">
             in
           </span>
           <span className="font-medium">linkedin.com/in/david-chen</span>
@@ -860,8 +928,8 @@ const AudienceIntelligenceCard: React.FC = () => {
         {/* Profile 3: Alex Rivera */}
         <div
           className={`inline-flex items-center gap-2.5 bg-white border border-[#0A66C2]/25 text-[#0F172A] px-3.5 py-1.5 rounded-full shadow-[0_4px_16px_rgba(10,102,194,0.12)] text-[12px] font-medium ml-4 sm:ml-6 mr-auto transition-all duration-500 select-none ${showProfile3
-              ? 'opacity-100 scale-100 translate-y-0'
-              : 'opacity-0 scale-50 translate-y-3 pointer-events-none'
+            ? 'opacity-100 scale-100 translate-y-0'
+            : 'opacity-0 scale-50 translate-y-3 pointer-events-none'
             }`}
           style={{ transitionTimingFunction: 'cubic-bezier(0.34, 1.56, 0.64, 1)' }}
         >
@@ -870,7 +938,7 @@ const AudienceIntelligenceCard: React.FC = () => {
             alt="Alex"
             className="w-5 h-5 rounded-full object-cover ring-1 ring-white"
           />
-          <span className="w-4 h-4 rounded bg-[#0A66C2] text-white flex items-center justify-center text-[10px] font-bold leading-none">
+          <span className="w-4 h-4 rounded bg-[#0A66C2] text-white flex items-center justify-center text-[10px] font-semibold leading-none">
             in
           </span>
           <span className="font-semibold text-neutral-800">linkedin.com/in/alex-rivera</span>
@@ -880,8 +948,8 @@ const AudienceIntelligenceCard: React.FC = () => {
         {/* Profile 4: Marcus Vance */}
         <div
           className={`inline-flex items-center gap-2.5 bg-[#004182] text-white px-3.5 py-1.5 rounded-full shadow-[0_4px_16px_rgba(0,65,130,0.28)] text-[12px] font-medium ml-auto mr-4 transition-all duration-500 select-none ${showProfile4
-              ? 'opacity-100 scale-100 translate-y-0'
-              : 'opacity-0 scale-50 translate-y-3 pointer-events-none'
+            ? 'opacity-100 scale-100 translate-y-0'
+            : 'opacity-0 scale-50 translate-y-3 pointer-events-none'
             }`}
           style={{ transitionTimingFunction: 'cubic-bezier(0.34, 1.56, 0.64, 1)' }}
         >
@@ -890,7 +958,7 @@ const AudienceIntelligenceCard: React.FC = () => {
             alt="Marcus"
             className="w-5 h-5 rounded-full object-cover ring-1 ring-white/50"
           />
-          <span className="w-4 h-4 rounded bg-white text-[#004182] flex items-center justify-center text-[10px] font-bold leading-none">
+          <span className="w-4 h-4 rounded bg-white text-[#004182] flex items-center justify-center text-[10px] font-semibold leading-none">
             in
           </span>
           <span className="font-medium">linkedin.com/in/marcus-gtm</span>
@@ -955,16 +1023,16 @@ const AudienceIntelligenceCard: React.FC = () => {
             {/* Animated Pointer Cursor */}
             <div
               className={`absolute pointer-events-none z-50 transition-all ease-out ${cursorState === 'hidden'
-                  ? 'opacity-0 translate-x-10 translate-y-10 scale-90 duration-300'
-                  : cursorState === 'entering'
-                    ? 'opacity-100 translate-x-6 translate-y-6 scale-100 duration-500'
-                    : cursorState === 'on-target'
-                      ? 'opacity-100 translate-x-0 translate-y-1 scale-100 duration-400'
-                      : cursorState === 'clicking'
-                        ? 'opacity-100 translate-x-0 translate-y-1 scale-[0.82] duration-100'
-                        : cursorState === 'clicked'
-                          ? 'opacity-100 translate-x-0 translate-y-1 scale-100 duration-150'
-                          : 'opacity-0 translate-x-6 translate-y-8 scale-90 duration-500'
+                ? 'opacity-0 translate-x-10 translate-y-10 scale-90 duration-300'
+                : cursorState === 'entering'
+                  ? 'opacity-100 translate-x-6 translate-y-6 scale-100 duration-500'
+                  : cursorState === 'on-target'
+                    ? 'opacity-100 translate-x-0 translate-y-1 scale-100 duration-400'
+                    : cursorState === 'clicking'
+                      ? 'opacity-100 translate-x-0 translate-y-1 scale-[0.82] duration-100'
+                      : cursorState === 'clicked'
+                        ? 'opacity-100 translate-x-0 translate-y-1 scale-100 duration-150'
+                        : 'opacity-0 translate-x-6 translate-y-8 scale-90 duration-500'
                 }`}
               style={{ top: '-2px', left: '-2px' }}
             >
@@ -997,6 +1065,7 @@ const TouchpointStockChart: React.FC = () => {
   const [totalLength, setTotalLength] = useState(300);
   const [dashOffset, setDashOffset] = useState(300);
   const [arrowPos, setArrowPos] = useState({ x: 44, y: 143, angle: -45, visible: false });
+  const [progress, setProgress] = useState(1);
 
   // Stock Market trajectory matching user sketch:
   // Starts on top of Bar 1 (Y=143) -> arc -> touches exactly on top of Bar 2 (Y=105) -> arc -> touches exactly on top of Bar 3 (Y=67) -> arc -> touches exactly on top of Bar 4 (Y=43) -> breakout rocket ray to top-right
@@ -1024,6 +1093,7 @@ const TouchpointStockChart: React.FC = () => {
       // 1. Reset to start
       setDashOffset(len);
       setArrowPos({ x: 44, y: 143, angle: -45, visible: false });
+      setProgress(0);
 
       // 2. Start climbing after brief pause
       timeoutId = setTimeout(() => {
@@ -1035,8 +1105,8 @@ const TouchpointStockChart: React.FC = () => {
         const animate = (currentTime: number) => {
           if (!active) return;
           const elapsed = currentTime - startTime;
-          const progress = Math.min(elapsed / duration, 1);
-          const eased = easeOutCubic(progress);
+          const currentProgress = Math.min(elapsed / duration, 1);
+          const eased = easeOutCubic(currentProgress);
           const currentDist = eased * len;
 
           const p = path.getPointAtLength(currentDist);
@@ -1045,6 +1115,7 @@ const TouchpointStockChart: React.FC = () => {
           const angle = Math.atan2(pForward.y - pBack.y, pForward.x - pBack.x) * (180 / Math.PI);
 
           setDashOffset(len - currentDist);
+          setProgress(eased);
           setArrowPos({
             x: p.x,
             y: p.y,
@@ -1052,10 +1123,11 @@ const TouchpointStockChart: React.FC = () => {
             visible: true,
           });
 
-          if (progress < 1) {
+          if (currentProgress < 1) {
             animId = requestAnimationFrame(animate);
           } else {
             // Reached summit together! Hold line and arrow at summit for 3.6s
+            setProgress(1);
             timeoutId = setTimeout(() => {
               if (!active) return;
               setArrowPos((prev) => ({ ...prev, visible: false }));
@@ -1082,6 +1154,9 @@ const TouchpointStockChart: React.FC = () => {
     };
   }, []);
 
+  // Live running number: 0.0 -> 217.6
+  const runningVal = (progress * 217.6).toFixed(1);
+
   return (
     <div className="relative z-10 flex-1 flex items-center justify-center w-full my-auto py-4 select-none">
       <svg
@@ -1101,6 +1176,23 @@ const TouchpointStockChart: React.FC = () => {
             <stop offset="100%" stopColor="#FFFFFF" stopOpacity="0.0" />
           </linearGradient>
         </defs>
+
+        {/* Dynamic Running Metric over top of chart as requested (+ 217.6 ↑) */}
+        <g className="select-none pointer-events-none">
+          <text
+            x="32"
+            y="26"
+            fill="#059669"
+            fontSize="24"
+            fontWeight="700"
+            fontFamily="'Plus Jakarta Sans', system-ui, sans-serif"
+            style={{ fontVariantNumeric: 'tabular-nums' }}
+            letterSpacing="-0.5px"
+          >
+            + {runningVal}
+            <tspan dx="6" fontSize="22" fontWeight="800">↑</tspan>
+          </text>
+        </g>
 
         {/* Chart Axes matching user's sketch */}
         <line x1="18" y1="-10" x2="18" y2="195" stroke="#CBD5E1" strokeWidth="1.25" strokeLinecap="round" />
@@ -1329,6 +1421,14 @@ const AutomateAdsCard: React.FC = () => {
   const [showGlobeLines, setShowGlobeLines] = useState(false);
   const [isPlatformsShifted, setIsPlatformsShifted] = useState(false);
 
+  // Typing animation & interactive state
+  const [typedText, setTypedText] = useState('');
+  const userInteractedRef = useRef(false);
+  const typingIntervalRef = useRef<ReturnType<typeof setInterval> | null>(null);
+  const idleResumeTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
+
+  const AD_PROMPT = 'Launch automated ad campaign';
+
   useEffect(() => {
     let active = true;
     let timeoutId: ReturnType<typeof setTimeout>;
@@ -1344,10 +1444,7 @@ const AutomateAdsCard: React.FC = () => {
       setShowGlobeLines(false);
       setIsPlatformsShifted(false);
 
-      // 2. Hold details view for 2.2s before cursor enters to click send
-      timeoutId = setTimeout(() => {
-        if (!active) return;
-
+      const triggerSendFlow = () => {
         // 3. Cursor glides directly to the send button (right knob in bottom pill)
         setCursorState('gliding-to-send');
 
@@ -1469,7 +1566,41 @@ const AutomateAdsCard: React.FC = () => {
             }, 250);
           }, 130);
         }, 420);
-      }, 2200);
+      };
+
+      if (!userInteractedRef.current) {
+        setTypedText('');
+        if (typingIntervalRef.current) clearInterval(typingIntervalRef.current);
+
+        // Start typing after 250ms
+        timeoutId = setTimeout(() => {
+          if (!active || userInteractedRef.current) return;
+
+          let charIdx = 0;
+          typingIntervalRef.current = setInterval(() => {
+            if (!active || userInteractedRef.current) {
+              if (typingIntervalRef.current) clearInterval(typingIntervalRef.current);
+              return;
+            }
+
+            charIdx++;
+            setTypedText(AD_PROMPT.slice(0, charIdx));
+
+            if (charIdx >= AD_PROMPT.length) {
+              if (typingIntervalRef.current) clearInterval(typingIntervalRef.current);
+              timeoutId = setTimeout(() => {
+                if (!active || userInteractedRef.current) return;
+                triggerSendFlow();
+              }, 450);
+            }
+          }, 30);
+        }, 250);
+      } else {
+        timeoutId = setTimeout(() => {
+          if (!active) return;
+          triggerSendFlow();
+        }, 2500);
+      }
     };
 
     runLoop();
@@ -1477,6 +1608,8 @@ const AutomateAdsCard: React.FC = () => {
     return () => {
       active = false;
       clearTimeout(timeoutId);
+      if (typingIntervalRef.current) clearInterval(typingIntervalRef.current);
+      if (idleResumeTimerRef.current) clearTimeout(idleResumeTimerRef.current);
     };
   }, []);
 
@@ -1488,7 +1621,7 @@ const AutomateAdsCard: React.FC = () => {
       {/* Title */}
       <div className="relative z-10 mb-3 sm:mb-4">
         <h3 className="text-xl sm:text-[22px] font-normal text-[#4E4E4E] leading-snug">
-          <span className="font-bold text-[#0F172A]">Automate ads</span>, amplify your reach.
+          <span className="font-semibold text-[#0F172A]">Automate ads</span>, amplify your reach.
         </h3>
       </div>
 
@@ -1498,26 +1631,16 @@ const AutomateAdsCard: React.FC = () => {
         {viewMode === 'details' && (
           <div
             className={`transition-all duration-400 ease-out flex items-start gap-3 sm:gap-3.5 ${isFading
-                ? 'opacity-0 scale-[0.98] -translate-y-2 pointer-events-none'
-                : 'opacity-100 scale-100 translate-y-0'
+              ? 'opacity-0 scale-[0.98] -translate-y-2 pointer-events-none'
+              : 'opacity-100 scale-100 translate-y-0'
               }`}
           >
-            {/* Custom Sidebar/App Icon matching screenshot */}
-            <svg
-              width="20"
-              height="20"
-              viewBox="0 0 24 24"
-              fill="none"
-              stroke="currentColor"
-              strokeWidth="1.8"
-              strokeLinecap="round"
-              strokeLinejoin="round"
-              className="w-5 h-5 text-neutral-900 shrink-0 mt-0.5"
-            >
-              <rect width="18" height="18" x="3" y="3" rx="2" />
-              <path d="M9 3v18" />
-              <rect width="4" height="4" x="14" y="14" fill="currentColor" stroke="none" />
-            </svg>
+            {/* Coirei Ci Logo */}
+            <img
+              src="/CiLogo.png"
+              alt="Coirei"
+              className="w-5 h-5 object-contain shrink-0 mt-0.5"
+            />
 
             <div className="space-y-4">
               <p className="text-[13px] sm:text-[13.5px] text-[#4E4E4E] leading-[1.65] font-normal max-w-xl">
@@ -1561,8 +1684,8 @@ const AutomateAdsCard: React.FC = () => {
         {viewMode === 'dashboard' && (
           <div
             className={`transition-all duration-400 ease-out w-full ${isFading
-                ? 'opacity-0 scale-[0.98] translate-y-2 pointer-events-none'
-                : 'opacity-100 scale-100 translate-y-0'
+              ? 'opacity-0 scale-[0.98] translate-y-2 pointer-events-none'
+              : 'opacity-100 scale-100 translate-y-0'
               }`}
           >
             {/* Soft Light Container matching user reference */}
@@ -1578,7 +1701,7 @@ const AutomateAdsCard: React.FC = () => {
                     {/* Header: Coirei brand + amber mark */}
                     <div className="flex items-center gap-1 mb-2">
                       <span className="w-2 h-2 rounded-full bg-[#F59E0B]" />
-                      <span className="text-[11px] font-bold text-[#F59E0B] tracking-tight">Coirei</span>
+                      <span className="text-[11px] font-semibold text-[#F59E0B] tracking-tight">Coirei</span>
                     </div>
 
                     {/* Title & Subtitle */}
@@ -1606,11 +1729,11 @@ const AutomateAdsCard: React.FC = () => {
                       <div className="grid grid-cols-2 gap-1">
                         <div className="bg-[#1A202F] p-1 rounded-xs">
                           <div className="w-5 h-1 bg-neutral-600 rounded-xs mb-0.5" />
-                          <div className="text-[7px] font-bold text-white">8,420</div>
+                          <div className="text-[7px] font-semibold text-white">8,420</div>
                         </div>
                         <div className="bg-[#1A202F] p-1 rounded-xs">
                           <div className="w-5 h-1 bg-neutral-600 rounded-xs mb-0.5" />
-                          <div className="text-[7px] font-bold text-emerald-400">+24.6%</div>
+                          <div className="text-[7px] font-semibold text-emerald-400">+24.6%</div>
                         </div>
                       </div>
 
@@ -1621,10 +1744,10 @@ const AutomateAdsCard: React.FC = () => {
                             <div
                               key={i}
                               className={`h-1 rounded-xs ${i % 4 === 0
-                                  ? 'bg-purple-500/80'
-                                  : i % 3 === 0
-                                    ? 'bg-amber-500/70'
-                                    : 'bg-neutral-700/50'
+                                ? 'bg-purple-500/80'
+                                : i % 3 === 0
+                                  ? 'bg-amber-500/70'
+                                  : 'bg-neutral-700/50'
                                 }`}
                             />
                           ))}
@@ -1680,12 +1803,12 @@ const AutomateAdsCard: React.FC = () => {
                 {/* Animated Pointer Cursor Gliding Directly to Upload Post Button */}
                 <div
                   className={`absolute pointer-events-none z-50 transition-all ease-out ${cursorState === 'gliding-to-upload'
-                      ? 'opacity-100 translate-x-4 translate-y-1 scale-100 duration-200'
-                      : cursorState === 'clicking-upload'
-                        ? 'opacity-100 translate-x-4 translate-y-1 scale-[0.82] duration-75 ease-in'
-                        : cursorState === 'clicked-upload'
-                          ? 'opacity-100 translate-x-4 translate-y-1 scale-100 duration-90 ease-out'
-                          : 'opacity-0 translate-x-12 translate-y-12 scale-90 duration-150'
+                    ? 'opacity-100 translate-x-4 translate-y-1 scale-100 duration-200'
+                    : cursorState === 'clicking-upload'
+                      ? 'opacity-100 translate-x-4 translate-y-1 scale-[0.82] duration-75 ease-in'
+                      : cursorState === 'clicked-upload'
+                        ? 'opacity-100 translate-x-4 translate-y-1 scale-100 duration-90 ease-out'
+                        : 'opacity-0 translate-x-12 translate-y-12 scale-90 duration-150'
                     }`}
                   style={{
                     top: '4px',
@@ -1717,8 +1840,8 @@ const AutomateAdsCard: React.FC = () => {
         {viewMode === 'distribution' && (
           <div
             className={`transition-all duration-500 ease-out w-full flex flex-col justify-between h-full ${isFading
-                ? 'opacity-0 scale-[0.98] translate-y-2 pointer-events-none'
-                : 'opacity-100 scale-100 translate-y-0'
+              ? 'opacity-0 scale-[0.98] translate-y-2 pointer-events-none'
+              : 'opacity-100 scale-100 translate-y-0'
               }`}
           >
             {/* Top Interactive Diagram Area */}
@@ -1732,8 +1855,8 @@ const AutomateAdsCard: React.FC = () => {
               {/* Left: Step 2 - Coirei Dark Card with CiLogo.png (Slides left & disappears) */}
               <div
                 className={`relative shrink-0 select-none overflow-hidden transition-all duration-700 ease-in-out ${isPlatformsShifted
-                    ? '-translate-x-28 opacity-0 max-w-0 mr-0 pl-0 pr-0 pointer-events-none'
-                    : 'translate-x-0 opacity-100 max-w-[130px] pl-1 sm:pl-2'
+                  ? '-translate-x-28 opacity-0 max-w-0 mr-0 pl-0 pr-0 pointer-events-none'
+                  : 'translate-x-0 opacity-100 max-w-[130px] pl-1 sm:pl-2'
                   }`}
               >
                 <div className="relative w-20 h-20 sm:w-24 sm:h-24 md:w-28 md:h-28 rounded-2xl bg-[#0F172A] border border-neutral-800 shadow-[0_4px_16px_rgba(0,0,0,0.2)] flex flex-col items-center justify-center p-2">
@@ -1805,15 +1928,15 @@ const AutomateAdsCard: React.FC = () => {
               {/* Middle/Left: Step 3 - Vertical Stack of Platform Icons (Slides left to take Ci's place and increases size) */}
               <div
                 className={`flex flex-col items-center justify-center shrink-0 select-none z-10 transition-all duration-700 ease-in-out ${isPlatformsShifted
-                    ? 'pl-2 sm:pl-3 gap-1 sm:gap-1.5'
-                    : 'pl-0 gap-1.5 sm:gap-2'
+                  ? 'pl-2 sm:pl-3 gap-1 sm:gap-1.5'
+                  : 'pl-0 gap-1.5 sm:gap-2'
                   }`}
               >
                 {/* 1. LinkedIn */}
                 <div
                   className={`bg-[#0A66C2] flex items-center justify-center text-white transition-all duration-700 ease-in-out ${isPlatformsShifted
-                      ? 'w-7.5 h-7.5 sm:w-8.5 sm:h-8.5 md:w-9.5 md:h-9.5 rounded-xl shadow-md'
-                      : 'w-6 h-6 sm:w-7 sm:h-7 rounded-lg shadow-xs'
+                    ? 'w-7.5 h-7.5 sm:w-8.5 sm:h-8.5 md:w-9.5 md:h-9.5 rounded-xl shadow-md'
+                    : 'w-6 h-6 sm:w-7 sm:h-7 rounded-lg shadow-xs'
                     }`}
                   title="LinkedIn"
                 >
@@ -1832,8 +1955,8 @@ const AutomateAdsCard: React.FC = () => {
                 {/* 2. Meta */}
                 <div
                   className={`bg-white border border-neutral-200/90 flex items-center justify-center transition-all duration-700 ease-in-out ${isPlatformsShifted
-                      ? 'w-7.5 h-7.5 sm:w-8.5 sm:h-8.5 md:w-9.5 md:h-9.5 rounded-xl shadow-md'
-                      : 'w-6 h-6 sm:w-7 sm:h-7 rounded-lg shadow-xs'
+                    ? 'w-7.5 h-7.5 sm:w-8.5 sm:h-8.5 md:w-9.5 md:h-9.5 rounded-xl shadow-md'
+                    : 'w-6 h-6 sm:w-7 sm:h-7 rounded-lg shadow-xs'
                     }`}
                   title="Meta"
                 >
@@ -1855,8 +1978,8 @@ const AutomateAdsCard: React.FC = () => {
                 {/* 3. Google */}
                 <div
                   className={`bg-white border border-neutral-200/90 flex items-center justify-center transition-all duration-700 ease-in-out ${isPlatformsShifted
-                      ? 'w-7.5 h-7.5 sm:w-8.5 sm:h-8.5 md:w-9.5 md:h-9.5 rounded-xl shadow-md'
-                      : 'w-6 h-6 sm:w-7 sm:h-7 rounded-lg shadow-xs'
+                    ? 'w-7.5 h-7.5 sm:w-8.5 sm:h-8.5 md:w-9.5 md:h-9.5 rounded-xl shadow-md'
+                    : 'w-6 h-6 sm:w-7 sm:h-7 rounded-lg shadow-xs'
                     }`}
                   title="Google"
                 >
@@ -1889,8 +2012,8 @@ const AutomateAdsCard: React.FC = () => {
                 {/* 4. YouTube */}
                 <div
                   className={`bg-white border border-neutral-200/90 flex items-center justify-center transition-all duration-700 ease-in-out ${isPlatformsShifted
-                      ? 'w-7.5 h-7.5 sm:w-8.5 sm:h-8.5 md:w-9.5 md:h-9.5 rounded-xl shadow-md'
-                      : 'w-6 h-6 sm:w-7 sm:h-7 rounded-lg shadow-xs'
+                    ? 'w-7.5 h-7.5 sm:w-8.5 sm:h-8.5 md:w-9.5 md:h-9.5 rounded-xl shadow-md'
+                    : 'w-6 h-6 sm:w-7 sm:h-7 rounded-lg shadow-xs'
                     }`}
                   title="YouTube"
                 >
@@ -1909,8 +2032,8 @@ const AutomateAdsCard: React.FC = () => {
                 {/* 5. Instagram */}
                 <div
                   className={`bg-gradient-to-tr from-[#F58529] via-[#DD2A7B] to-[#8134AF] flex items-center justify-center text-white transition-all duration-700 ease-in-out ${isPlatformsShifted
-                      ? 'w-7.5 h-7.5 sm:w-8.5 sm:h-8.5 md:w-9.5 md:h-9.5 rounded-xl shadow-md'
-                      : 'w-6 h-6 sm:w-7 sm:h-7 rounded-lg shadow-xs'
+                    ? 'w-7.5 h-7.5 sm:w-8.5 sm:h-8.5 md:w-9.5 md:h-9.5 rounded-xl shadow-md'
+                    : 'w-6 h-6 sm:w-7 sm:h-7 rounded-lg shadow-xs'
                     }`}
                   title="Instagram"
                 >
@@ -1935,8 +2058,8 @@ const AutomateAdsCard: React.FC = () => {
                 {/* 6. TikTok */}
                 <div
                   className={`bg-black flex items-center justify-center text-white transition-all duration-700 ease-in-out ${isPlatformsShifted
-                      ? 'w-7.5 h-7.5 sm:w-8.5 sm:h-8.5 md:w-9.5 md:h-9.5 rounded-xl shadow-md'
-                      : 'w-6 h-6 sm:w-7 sm:h-7 rounded-lg shadow-xs'
+                    ? 'w-7.5 h-7.5 sm:w-8.5 sm:h-8.5 md:w-9.5 md:h-9.5 rounded-xl shadow-md'
+                    : 'w-6 h-6 sm:w-7 sm:h-7 rounded-lg shadow-xs'
                     }`}
                   title="TikTok"
                 >
@@ -1955,8 +2078,8 @@ const AutomateAdsCard: React.FC = () => {
                 {/* 7. More (...) */}
                 <div
                   className={`bg-[#EEF2F6] border border-neutral-200/60 flex items-center justify-center text-[#64748B] transition-all duration-700 ease-in-out ${isPlatformsShifted
-                      ? 'w-7.5 h-7.5 sm:w-8.5 sm:h-8.5 md:w-9.5 md:h-9.5 rounded-xl shadow-md'
-                      : 'w-6 h-6 sm:w-7 sm:h-7 rounded-lg shadow-xs'
+                    ? 'w-7.5 h-7.5 sm:w-8.5 sm:h-8.5 md:w-9.5 md:h-9.5 rounded-xl shadow-md'
+                    : 'w-6 h-6 sm:w-7 sm:h-7 rounded-lg shadow-xs'
                     }`}
                   title="More Platforms"
                 >
@@ -1978,8 +2101,8 @@ const AutomateAdsCard: React.FC = () => {
               {/* SVG Connecting Dashed Lines: Platforms -> Globe with Animated Flow (Revealed only after platforms shift) */}
               <div
                 className={`h-56 sm:h-64 flex items-center overflow-visible pointer-events-none transition-all duration-700 ease-in-out ${isPlatformsShifted
-                    ? 'flex-1 mx-1 sm:mx-2 min-w-[32px] ' + (showGlobeLines ? 'opacity-100 scale-100' : 'opacity-0 scale-95')
-                    : 'w-0 max-w-0 flex-none opacity-0 scale-95 overflow-hidden'
+                  ? 'flex-1 mx-1 sm:mx-2 min-w-[32px] ' + (showGlobeLines ? 'opacity-100 scale-100' : 'opacity-0 scale-95')
+                  : 'w-0 max-w-0 flex-none opacity-0 scale-95 overflow-hidden'
                   }`}
               >
                 <svg
@@ -2029,8 +2152,8 @@ const AutomateAdsCard: React.FC = () => {
               {/* Right: Step 4 - Globe with Popping Profiles and Greetings (Hidden at first, expands when platforms shift) */}
               <div
                 className={`relative h-56 sm:h-72 md:h-80 shrink-0 flex items-center justify-center select-none pr-1 transition-all duration-700 ease-out ${isPlatformsShifted
-                    ? 'w-56 sm:w-72 md:w-80 opacity-100 scale-100 translate-x-0'
-                    : 'w-0 max-w-0 opacity-0 scale-90 translate-x-6 pointer-events-none overflow-hidden'
+                  ? 'w-56 sm:w-72 md:w-80 opacity-100 scale-100 translate-x-0'
+                  : 'w-0 max-w-0 opacity-0 scale-90 translate-x-6 pointer-events-none overflow-hidden'
                   }`}
               >
                 {/* Dotted Globe Graphic from downloads: public/globe.svg */}
@@ -2045,8 +2168,8 @@ const AutomateAdsCard: React.FC = () => {
                   <div
                     key={p.id}
                     className={`absolute transition-all duration-500 ease-out select-none ${showProfiles
-                        ? 'opacity-100 scale-100 translate-y-0'
-                        : 'opacity-0 scale-0 translate-y-2 pointer-events-none'
+                      ? 'opacity-100 scale-100 translate-y-0'
+                      : 'opacity-0 scale-0 translate-y-2 pointer-events-none'
                       }`}
                     style={{
                       top: p.top,
@@ -2111,8 +2234,8 @@ const AutomateAdsCard: React.FC = () => {
               {/* Step 2 (Coirei) - Slides left and disappears with CiLogo */}
               <div
                 className={`flex flex-col items-center text-center transition-all duration-700 ease-in-out shrink-0 ${isPlatformsShifted
-                    ? '-translate-x-16 opacity-0 max-w-0 overflow-hidden pointer-events-none'
-                    : 'translate-x-0 opacity-100 max-w-[160px] flex-1'
+                  ? '-translate-x-16 opacity-0 max-w-0 overflow-hidden pointer-events-none'
+                  : 'translate-x-0 opacity-100 max-w-[160px] flex-1'
                   }`}
               >
                 <div className="w-5 h-5 sm:w-6 sm:h-6 rounded-full bg-blue-50 text-blue-600 flex items-center justify-center text-[10px] sm:text-xs font-semibold mb-1 border border-blue-100">
@@ -2132,8 +2255,8 @@ const AutomateAdsCard: React.FC = () => {
               {/* Step 3 (Platforms) - Smoothly moves towards left under platform icons */}
               <div
                 className={`flex flex-col text-center transition-all duration-700 ease-in-out shrink-0 ${isPlatformsShifted
-                    ? 'flex-1 pl-2 sm:pl-4 items-start text-left'
-                    : 'items-center max-w-[170px] flex-1'
+                  ? 'flex-1 pl-2 sm:pl-4 items-start text-left'
+                  : 'items-center max-w-[170px] flex-1'
                   }`}
               >
                 <div className="w-5 h-5 sm:w-6 sm:h-6 rounded-full bg-blue-50 text-blue-600 flex items-center justify-center text-[10px] sm:text-xs font-semibold mb-1 border border-blue-100">
@@ -2147,8 +2270,8 @@ const AutomateAdsCard: React.FC = () => {
               {/* Step 4 (Worldwide Reach - Appears with the globe) */}
               <div
                 className={`flex flex-col items-center text-center transition-all duration-700 ease-in-out shrink-0 ${isPlatformsShifted
-                    ? (showGlobeLines ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-2 pointer-events-none') + ' flex-1 max-w-[180px]'
-                    : 'w-0 max-w-0 opacity-0 translate-y-2 pointer-events-none overflow-hidden'
+                  ? (showGlobeLines ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-2 pointer-events-none') + ' flex-1 max-w-[180px]'
+                  : 'w-0 max-w-0 opacity-0 translate-y-2 pointer-events-none overflow-hidden'
                   }`}
               >
                 <div className="w-5 h-5 sm:w-6 sm:h-6 rounded-full bg-blue-50 text-blue-600 flex items-center justify-center text-[10px] sm:text-xs font-semibold mb-1 border border-blue-100">
@@ -2169,14 +2292,52 @@ const AutomateAdsCard: React.FC = () => {
         )}
       </div>
 
-      {/* Bottom Rounded Pill Bar with Black Send Button (Shown in View 1 & View 2) */}
+      {/* Bottom Rounded Pill Bar with Typing Input & Black Send Button (Shown in View 1 & View 2) */}
       {viewMode !== 'distribution' && (
-        <div className="relative z-10 w-full bg-white border border-neutral-200/90 rounded-2xl h-12 sm:h-14 px-4 flex items-center justify-end shadow-[0_2px_8px_rgba(0,0,0,0.03)] mt-6 select-none">
+        <div className="relative z-10 w-full bg-white border border-neutral-200/90 rounded-2xl h-12 sm:h-14 px-4 flex items-center justify-between shadow-[0_2px_8px_rgba(0,0,0,0.03)] mt-6">
+          {/* Typing Text Input Area */}
+          <div className="flex-1 flex items-center mr-3 overflow-hidden">
+            <input
+              type="text"
+              value={typedText}
+              onChange={(e) => {
+                userInteractedRef.current = true;
+                if (typingIntervalRef.current) clearInterval(typingIntervalRef.current);
+                setTypedText(e.target.value);
+
+                if (idleResumeTimerRef.current) clearTimeout(idleResumeTimerRef.current);
+                idleResumeTimerRef.current = setTimeout(() => {
+                  userInteractedRef.current = false;
+                }, 16000);
+              }}
+              onFocus={() => {
+                userInteractedRef.current = true;
+                if (typingIntervalRef.current) clearInterval(typingIntervalRef.current);
+              }}
+              placeholder="Describe your ad campaign or target audience..."
+              className="w-full bg-transparent outline-none text-[13px] sm:text-[13.5px] text-[#1F1E1D] placeholder-neutral-400 font-normal"
+            />
+          </div>
+
           {/* Default Black Send Button with Cursor Animation */}
           <div className="relative flex items-center justify-center shrink-0">
-            <div
-              className={`w-7 h-7 sm:w-8 sm:h-8 rounded-full bg-black shrink-0 transition-transform duration-150 relative flex items-center justify-center text-white ${isSendPressed ? 'scale-75' : 'scale-100'
+            <button
+              type="button"
+              onClick={() => {
+                userInteractedRef.current = true;
+                setIsSendPressed(true);
+                setTimeout(() => {
+                  setIsSendPressed(false);
+                  setIsFading(true);
+                  setTimeout(() => {
+                    setViewMode('dashboard');
+                    setIsFading(false);
+                  }, 250);
+                }, 150);
+              }}
+              className={`w-7 h-7 sm:w-8 sm:h-8 rounded-full bg-black shrink-0 transition-transform duration-150 relative flex items-center justify-center text-white cursor-pointer ${isSendPressed ? 'scale-75' : 'scale-100 hover:scale-105 active:scale-95'
                 }`}
+              title="Launch ad campaign"
             >
               {/* Ripple effect on click */}
               {isSendPressed && (
@@ -2196,7 +2357,7 @@ const AutomateAdsCard: React.FC = () => {
                 <line x1="5" y1="12" x2="19" y2="12" />
                 <polyline points="12 5 19 12 12 19" />
               </svg>
-            </div>
+            </button>
 
             {/* Animated Pointer Cursor: single fluid glide directly to send point, clicks on arrival */}
             <div
@@ -2240,13 +2401,13 @@ const AutomateAdsCard: React.FC = () => {
 
 export const Features: React.FC = () => {
   return (
-    <section className="GlobalPading w-full bg-white py-16 sm:py-24">
+    <section className="w-full bg-white border-t border-[#E2E2E2] px-6 sm:px-8 lg:px-12 pt-14 sm:pt-[80px] pb-10 sm:pb-14">
       <div className="max-w-7xl mx-auto">
         {/* Section Headline exactly matching Figma */}
         <ScrollReveal variant="fade-up" delay={50} duration={650} distance={20} className="mb-10 sm:mb-14">
           <h2 className="text-3xl sm:text-4xl md:text-[48px] lg:text-[54px] font-normal tracking-tight text-[#4E4E4E] leading-[1.14]">
             Everything you need to go<br />
-            from <span className="font-bold text-[#0F172A]">strategy to revenue</span>
+            from <span className="font-semibold text-[#0F172A]">strategy to revenue</span>
           </h2>
         </ScrollReveal>
 
@@ -2284,8 +2445,8 @@ export const Features: React.FC = () => {
               <div className="relative z-10">
                 <h3 className="text-xl sm:text-[22px] font-normal text-[#4E4E4E] leading-snug">
                   Track Every<br />
-                  Touchpoint. <span className="font-bold text-[#0F172A]">Measure</span><br />
-                  <span className="font-bold text-[#0F172A]">Revenue Impact.</span>
+                  Touchpoint. <span className="font-semibold text-[#0F172A]">Measure</span><br />
+                  <span className="font-semibold text-[#0F172A]">Revenue Impact.</span>
                 </h3>
               </div>
 

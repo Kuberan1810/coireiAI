@@ -60,13 +60,13 @@ export const CompetitorDetailPanel: React.FC<CompetitorDetailPanelProps> = ({
                 : selectedCompany.faviconBg || "bg-[#E0F2FE] text-gray-900"
             } flex items-center justify-center shadow-2xs shrink-0`}
           >
-            <span className="text-[18px] font-bold uppercase">
+            <span className="text-[18px] font-semibold uppercase">
               {selectedCompany.faviconText || selectedCompany.name.charAt(0)}
             </span>
           </div>
           <div className="flex flex-col">
             <div className="flex items-center gap-1.5">
-              <h3 className="text-[17px] font-bold text-gray-900 tracking-tight capitalize">
+              <h3 className="text-[17px] font-semibold text-gray-900 tracking-tight capitalize">
                 {selectedCompany.name}
               </h3>
               <a
@@ -152,7 +152,7 @@ export const CompetitorDetailPanel: React.FC<CompetitorDetailPanelProps> = ({
           <>
             {/* Business Overview */}
             <div className="mb-5">
-              <h4 className="text-[14px] font-bold text-gray-900 mb-1.5">
+              <h4 className="text-[14px] font-semibold text-gray-900 mb-1.5">
                 Business overview
               </h4>
               <p className="text-[13px] text-gray-600 leading-relaxed font-normal">
@@ -245,7 +245,7 @@ export const CompetitorDetailPanel: React.FC<CompetitorDetailPanelProps> = ({
 
             {/* What They Offer */}
             <div className="mt-5">
-              <h4 className="text-[14px] font-bold text-gray-900 mb-0.5">
+              <h4 className="text-[14px] font-semibold text-gray-900 mb-0.5">
                 What they offer
               </h4>
               <p className="text-[12px] text-gray-400 mb-2.5">
@@ -286,7 +286,7 @@ export const CompetitorDetailPanel: React.FC<CompetitorDetailPanelProps> = ({
             </div>
 
             <div>
-              <h4 className="text-[14px] font-bold text-gray-900 mb-2">
+              <h4 className="text-[14px] font-semibold text-gray-900 mb-2">
                 Key Product Offerings & Monetization
               </h4>
               <ul className="space-y-2 text-[13px]">
@@ -310,7 +310,7 @@ export const CompetitorDetailPanel: React.FC<CompetitorDetailPanelProps> = ({
                 <span className="text-[11px] font-semibold text-gray-400 uppercase tracking-wider block">
                   Total Workforce
                 </span>
-                <span className="text-[16px] font-bold text-gray-900">
+                <span className="text-[16px] font-semibold text-gray-900">
                   {selectedCompany.employeeCount} employees
                 </span>
               </div>
