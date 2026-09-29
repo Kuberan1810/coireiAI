@@ -122,9 +122,12 @@ export const Footer: React.FC = () => {
                 Site Index
               </span>
               <div className="flex flex-col space-y-2 text-[13px] sm:text-[13.5px] font-normal">
-                <span className="text-white hover:text-neutral-300 transition-colors cursor-pointer">
+                <Link
+                  to="/competitor-analysis"
+                  className="text-white hover:text-neutral-300 transition-colors cursor-pointer"
+                >
                   Competitor analysis
-                </span>
+                </Link>
                 <span className="text-white hover:text-neutral-300 transition-colors cursor-pointer">
                   Market analysis
                 </span>
@@ -146,14 +149,14 @@ export const Footer: React.FC = () => {
             {/* Quick Links Column */}
             <div className="flex flex-col space-y-3">
               <div className="flex flex-col space-y-2 text-[13px] sm:text-[13.5px] font-normal sm:pt-[33px]">
-                <a
-                  href="mailto:info@coirei.com"
+                <Link
+                  to="/contact"
                   className="text-white hover:text-neutral-300 transition-colors cursor-pointer"
                 >
                   Get in Touch
-                </a>
+                </Link>
                 <Link
-                  to="/resources"
+                  to="/about"
                   className="text-white hover:text-neutral-300 transition-colors cursor-pointer"
                 >
                   Company
