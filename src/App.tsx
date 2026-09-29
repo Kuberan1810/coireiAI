@@ -6,6 +6,10 @@ import Footer from './components/Footer';
 import Home from './Pages/Home/Home';
 import Product from './Pages/Product/Product';
 import MarketIntelligence from './Pages/MarketIntelligence/MarketIntelligence';
+import Pricing from './Pages/Pricing/Pricing';
+import Contact from './Pages/Contact/Contact';
+import About from './Pages/About/About';
+import CompetitorAnalysis from './Pages/CompetitorAnalysis/CompetitorAnalysis';
 
 // Simple Scroll to Top on route change
 function ScrollToTop() {
@@ -41,6 +45,9 @@ export const App: FC = () => {
             <Route path="/product" element={<Product />} />
             <Route path="/market-intelligence" element={<MarketIntelligence />} />
             <Route path="/intelligence" element={<MarketIntelligence />} />
+            <Route path="/competitor-analysis" element={<CompetitorAnalysis />} />
+            <Route path="/competitors" element={<CompetitorAnalysis />} />
+            <Route path="/competitor" element={<CompetitorAnalysis />} />
             <Route path="/seo-aeo" element={<MarketIntelligence />} />
             <Route path="/solutions" element={<MarketIntelligence />} />
             <Route
@@ -61,15 +68,12 @@ export const App: FC = () => {
                 />
               }
             />
-            <Route
-              path="/pricing"
-              element={
-                <PagePlaceholder
-                  title="Simple, Transparent Pricing"
-                  subtitle="Pick the plan that fits your growth stage. No hidden fees, cancel anytime."
-                />
-              }
-            />
+            <Route path="/pricing" element={<Pricing />} />
+            <Route path="/contact" element={<Contact />} />
+            <Route path="/contact-us" element={<Contact />} />
+            <Route path="/about" element={<About />} />
+            <Route path="/about-us" element={<About />} />
+            <Route path="/company" element={<About />} />
             <Route
               path="/signin"
               element={
