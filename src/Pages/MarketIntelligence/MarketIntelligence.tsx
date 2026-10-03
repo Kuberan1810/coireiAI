@@ -1,7 +1,11 @@
 import React, { useState } from 'react';
+import { Link } from 'react-router-dom';
 import { ArrowRight, Check } from 'lucide-react';
 import SeoAnimation from './components/SeoAnimation';
 import AeoAnimation from './components/AeoAnimation';
+import BlogAutomationShowcase from './components/BlogAutomationShowcase';
+import AdPerformanceParallax from './components/AdPerformanceParallax';
+import AskMarketingDataSection from './components/AskMarketingDataSection';
 
 export const MarketIntelligence: React.FC = () => {
   const [clickedButton, setClickedButton] = useState<'seo' | 'aeo' | null>(null);
@@ -14,19 +18,21 @@ export const MarketIntelligence: React.FC = () => {
   };
 
   return (
-    <div className="w-full min-h-screen bg-white pt-10 sm:pt-14 pb-20 sm:pb-28 px-4 sm:px-6 lg:px-8">
+    <div className="w-full min-h-screen bg-white">
+      {/* Top Sections Surface (z-20, slides up to reveal fixed black parallax screen) */}
+      <div className="relative z-20 bg-white pt-10 sm:pt-14 pb-20 sm:pb-28 px-4 sm:px-6 lg:px-8">
       {/* Top Header Section */}
       <div className="max-w-4xl mx-auto text-center">
         {/* Main Headline */}
         <h1 className="font-['Plus_Jakarta_Sans',sans-serif] font-semibold text-3xl sm:text-4xl md:text-[48px] leading-[1.25] sm:leading-[56px] md:leading-[65px] tracking-[-1.1px] text-center max-w-4xl mx-auto">
           <span className="text-[#0B0F19]">Turn Market Intelligence Into </span>
           <span
-            className="inline-flex items-center justify-center w-7 h-7 sm:w-9 sm:h-9 md:w-[38px] md:h-[38px] rounded-lg sm:rounded-xl text-black mx-1 sm:mx-1.5 align-middle shadow-xs shrink-0"
-            style={{ backgroundColor: '#F0BC35' }}
+            className="inline-flex items-center justify-center w-7 h-7 sm:w-9 sm:h-9 md:w-[38px] md:h-[38px] rounded-lg sm:rounded-xl text-white mx-1 sm:mx-1.5 align-middle shadow-xs shrink-0"
+            style={{ backgroundColor: '#EB6658' }}
           >
             {/* Custom Curved Right Arrow Matching Image */}
             <svg
-              className="w-4 h-4 sm:w-5 sm:h-5 text-black"
+              className="w-4 h-4 sm:w-5 sm:h-5 text-white"
               viewBox="0 0 20 20"
               fill="currentColor"
             >
@@ -316,6 +322,71 @@ export const MarketIntelligence: React.FC = () => {
               ))}
           </div>
         </div>
+      </div>
+
+      {/* Divider */}
+      <div className="w-full max-w-[1240px] mx-auto border-t border-neutral-100 my-16 sm:my-20" />
+
+      {/* Blog Automation Section: Create, Optimize & Publish Blogs Automatically */}
+      <div className="max-w-[1240px] mx-auto">
+        <div className="grid grid-cols-1 lg:grid-cols-12 gap-10 lg:gap-14 items-center">
+          
+          {/* Left Column: Heading and Large Paragraph */}
+          <div className="lg:col-span-5 text-left flex flex-col justify-center">
+            <h3 className="font-['Plus_Jakarta_Sans',sans-serif] font-medium text-[22px] sm:text-[26px] lg:text-[32px] leading-[32px] sm:leading-[38px] lg:leading-[46.8px] tracking-[-1.56px] text-[#2F2F2F] mb-4 sm:mb-6">
+              Create, Optimize &amp; Publish Blogs<br />
+              Automatically
+            </h3>
+            <p className="font-['Plus_Jakarta_Sans',sans-serif] font-medium text-[24px] sm:text-[32px] lg:text-[40px] leading-[36px] sm:leading-[50px] lg:leading-[66.8px] tracking-[-1.56px] text-[#818181]">
+              Coirei creates and publishes SEO optimized blogs directly to your website, keeping your content fresh, relevant, and ready to attract the right audience.
+            </p>
+          </div>
+
+          {/* Right Column: 4x2 Blog Grid with Centered Floating Prompt Card (Auto typing & live generation) */}
+          <div className="lg:col-span-7 flex justify-start lg:justify-end w-full">
+            <BlogAutomationShowcase />
+          </div>
+
+        </div>
+      </div>
+      </div>
+
+      {/* Middle: Fixed Black Ad Performance Parallax Section (z-10, does not move, revealed as top surface slides up) */}
+      <AdPerformanceParallax />
+
+      {/* Bottom Surface (z-20, slides up to cover the fixed black screen) */}
+      <div className="relative z-20 bg-white px-4 sm:px-6 lg:px-8">
+        <AskMarketingDataSection />
+
+        {/* Closing CTA Section (clean white background, no gradient) */}
+        <section className="w-full max-w-4xl mx-auto text-center py-20 sm:py-28 md:py-32">
+          {/* Headline */}
+          <h2 className="font-['Plus_Jakarta_Sans',sans-serif] text-3xl sm:text-5xl lg:text-[54px] font-semibold text-[#0D0D0D] tracking-[-1.5px] leading-[1.14] mb-4 sm:mb-5">
+            Make your next campaign <br className="hidden sm:inline" />
+            evidence-led.
+          </h2>
+
+          {/* Subtitle */}
+          <p className="font-['Plus_Jakarta_Sans',sans-serif] font-normal text-[15px] sm:text-[16px] text-[#64748B] leading-[26px] max-w-xl mx-auto mb-8 sm:mb-9">
+            Let AI continuously monitor your market and turn meaningful signals into marketing opportunities.
+          </p>
+
+          {/* Action Buttons */}
+          <div className="flex flex-wrap items-center justify-center gap-3 sm:gap-3.5">
+            <Link
+              to="/contact"
+              className="px-6 py-3.5 rounded-[10px] bg-[#111827] hover:bg-black text-white text-[13.5px] sm:text-[14px] font-medium transition-colors shadow-xs active:scale-[0.99] cursor-pointer"
+            >
+              Start with Coirei
+            </Link>
+            <Link
+              to="/product"
+              className="px-6 py-3.5 rounded-[10px] bg-white hover:bg-neutral-50 border border-[#E2E8F0] text-[#0F172A] text-[13.5px] sm:text-[14px] font-medium transition-colors shadow-2xs active:scale-[0.99] cursor-pointer"
+            >
+              Explore the Platform
+            </Link>
+          </div>
+        </section>
       </div>
     </div>
   );

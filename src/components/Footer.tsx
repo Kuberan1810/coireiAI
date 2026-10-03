@@ -37,7 +37,7 @@ export const Footer: React.FC = () => {
       {/* Top Header Section */}
       <div className="max-w-[1440px] mx-auto px-6 sm:px-10 lg:px-14 relative z-10">
         <div className="flex flex-col lg:flex-row items-start justify-between gap-8 lg:gap-0 relative">
-          
+
           {/* Left Block: Socials + Address + Contact Info */}
           <div className="w-full lg:w-[320px] shrink-0 pb-6 lg:pb-0 lg:pr-12">
             {/* Social Icons (Circles) */}

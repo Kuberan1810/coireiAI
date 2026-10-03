@@ -10,6 +10,10 @@ import Pricing from './Pages/Pricing/Pricing';
 import Contact from './Pages/Contact/Contact';
 import About from './Pages/About/About';
 import CompetitorAnalysis from './Pages/CompetitorAnalysis/CompetitorAnalysis';
+import AEO from './Pages/AEO/AEO';
+import SEO from './Pages/SEO/SEO';
+import Engage from './Pages/Engage/Engage';
+
 
 // Simple Scroll to Top on route change
 function ScrollToTop() {
@@ -48,7 +52,12 @@ export const App: FC = () => {
             <Route path="/competitor-analysis" element={<CompetitorAnalysis />} />
             <Route path="/competitors" element={<CompetitorAnalysis />} />
             <Route path="/competitor" element={<CompetitorAnalysis />} />
-            <Route path="/seo-aeo" element={<MarketIntelligence />} />
+            <Route path="/seo" element={<SEO />} />
+            <Route path="/search-engine-optimization" element={<SEO />} />
+            <Route path="/aeo" element={<AEO />} />
+            <Route path="/seo-aeo" element={<AEO />} />
+            <Route path="/ai-search" element={<AEO />} />
+            <Route path="/engage" element={<Engage />} />
             <Route path="/solutions" element={<MarketIntelligence />} />
             <Route
               path="/customers"

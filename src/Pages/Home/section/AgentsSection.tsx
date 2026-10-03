@@ -497,8 +497,8 @@ export const AgentsSection: React.FC = () => {
                 onClick={() => setCurrentIndex(idx)}
                 aria-label={`Go to slide ${idx + 1}`}
                 className={`h-1.5 rounded-full transition-all duration-300 cursor-pointer ${idx === currentIndex
-                    ? 'w-6 sm:w-7 bg-slate-400'
-                    : 'w-1.5 bg-slate-200 hover:bg-slate-300'
+                  ? 'w-6 sm:w-7 bg-slate-400'
+                  : 'w-1.5 bg-slate-200 hover:bg-slate-300'
                   }`}
               />
             ))}
