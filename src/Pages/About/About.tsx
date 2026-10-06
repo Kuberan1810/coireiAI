@@ -1,17 +1,67 @@
-import React from 'react';
+
+import React, { useState, useEffect, useRef } from 'react';
 import { Link } from 'react-router-dom';
-import { ArrowRight } from 'lucide-react';
+import { ArrowUpRight } from 'lucide-react';
 import blueWaveSvg from '../../assets/bluewave.svg';
 import HowWeWork from './section/HowWeWork';
 import BuildSection from './section/BuildSection';
 import TeamSection from './section/TeamSection';
 import Partnersection from './section/Partnersection';
+import IdeasToImpact from './section/IdeasToImpact';
+import ciLogoSvg from '../../assets/CiLogoforaboutus.svg';
+import { ScrollReveal } from '../../components/ui/ScrollReveal';
+
+
+
+const INTELLIGENCE_ITEMS = [
+  {
+    title: 'Market Intelligence',
+    description: 'Understand your market, trends, and opportunities.',
+    link: '/market-intelligence',
+  },
+  {
+    title: 'Competitor Intelligence',
+    description: 'Know who you compete with and where you stand.',
+    link: '/competitor-analysis',
+  },
+  {
+    title: 'Audience Intelligence',
+    description: 'Discover who your ideal customers really are.',
+    link: '/market-intelligence',
+  },
+  {
+    title: 'Lead Intelligence',
+    description: 'Find high-intent prospects built for your business.',
+    link: '/engage',
+  },
+];
 
 export const About: React.FC = () => {
+  const [isLogoInView, setIsLogoInView] = useState(false);
+  const logoContainerRef = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    const el = logoContainerRef.current;
+    if (!el) return;
+
+    const observer = new IntersectionObserver(
+      ([entry]) => {
+        setIsLogoInView(entry.isIntersecting);
+      },
+      {
+        threshold: 0.15,
+      }
+    );
+
+    observer.observe(el);
+    return () => observer.disconnect();
+  }, []);
+
+  
   return (
     <div className="w-full min-h-screen bg-white text-[#0B0F19] font-['Plus_Jakarta_Sans',sans-serif]">
       {/* 1. HERO SECTION WITH BLUE WAVE BACKGROUND */}
-      <section className="relative w-full overflow-hidden bg-white pt-14 sm:pt-16 md:pt-20 pb-14 sm:pb-16 px-4 sm:px-6 lg:px-8">
+      <section className="relative w-full overflow-hidden bg-white pt-16 sm:pt-20 md:pt-24 pb-14 sm:pb-18 px-4 sm:px-6 lg:px-8">
         {/* Subtle Wave SVG Background */}
         <div className="absolute inset-0 flex items-center justify-center pointer-events-none select-none overflow-hidden">
           <img
@@ -27,123 +77,131 @@ export const About: React.FC = () => {
         {/* Foreground Content */}
         <div className="relative z-10 max-w-5xl mx-auto text-center">
           {/* Eyebrow */}
-          <p className="text-[11px] sm:text-[12px] font-semibold uppercase tracking-[0.14em] text-[#8592A6] mb-3">
-            About Coirei
+          <p className="text-[11px] sm:text-[12px] font-medium uppercase tracking-[0.16em] text-[#64748B] mb-4 sm:mb-5">
+            ABOUT COIREI
           </p>
 
           {/* Main Headline */}
-          <h1 className="text-4xl sm:text-5xl md:text-[54px] lg:text-[58px] font-semibold tracking-[-1.5px] leading-[1.14] text-[#0B0F19] max-w-5xl mx-auto">
-            <span className="block sm:inline sm:whitespace-nowrap">Technology, built around how your</span>{' '}
-            <span className="block sm:inline sm:whitespace-nowrap">business works.</span>
+          <h1 className="font-['Plus_Jakarta_Sans',sans-serif] text-3xl sm:text-4xl md:text-[52px] font-semibold tracking-[-1.3px] leading-[1.15] md:leading-[52px] text-[#0D0D0D] max-w-[970px] mx-auto text-center">
+            <span className="block sm:whitespace-nowrap">Technology, built around how your</span>
+            <span className="block">business works.</span>
           </h1>
 
           {/* Subtitle */}
-          <p className="mt-4 text-[14.5px] sm:text-[15.5px] text-[#475569] font-normal leading-relaxed max-w-xl mx-auto">
+          <p className="mt-4 font-['Plus_Jakarta_Sans',sans-serif] font-semibold italic text-[14px] leading-[20px] tracking-[0px] text-[#192339]">
             Less complexity. More possibilities.
           </p>
+        </div>
+      </section>
 
-          {/* Action Button */}
-          <div className="mt-6 sm:mt-7">
-            <Link
-              to="/contact"
-              className="inline-flex items-center gap-2 px-6 py-2.5 rounded-[10px] bg-[#0B0F19] hover:bg-neutral-800 text-white text-[13.5px] font-semibold transition-all duration-200 shadow-xs cursor-pointer active:scale-[0.99]"
+      {/* 2. OUR MISSION & INTELLIGENCE SUITE SECTION */}
+      <section className="w-full bg-white pt-4 sm:pt-8 pb-12 sm:pb-16 px-6 sm:px-8 lg:px-12">
+        <div className="max-w-[1180px] mx-auto grid grid-cols-1 lg:grid-cols-12 gap-12 lg:gap-16 items-start">
+          {/* Left Column: Mission, Headline, Description, Buttons */}
+          <div className="lg:col-span-6 text-left">
+            {/* Mission Tag */}
+            <span className="inline-block px-2.5 py-0.5 rounded-[4px] border border-[#E2E8F0] text-[12px] text-[#64748B] font-normal mb-5 sm:mb-6">
+              Our mission
+            </span>
+
+
+            
+            {/* Headline */}
+            <h2 className="text-4xl sm:text-5xl lg:text-[52px] font-semibold tracking-[-1.5px] leading-[1.12] text-[#0B0F19] mb-5 sm:mb-6">
+              Intelligence That<br />
+              Drives Growth
+            </h2>
+
+            {/* Description */}
+            <p className="text-[15px] sm:text-[16px] text-[#475569] leading-[1.68] max-w-md font-normal mb-8 sm:mb-9">
+              We build AI to turn market intelligence into growth — understanding your business, competitors, and customers to uncover the opportunities that matter most.
+            </p>
+
+            {/* Action Buttons: Join us & Contact (Figma: h-[44px], radius 9999px, px-[20px] py-[12px], gap-[12px]) */}
+            <div className="flex items-center gap-[12px]">
+              <Link
+                to="/contact"
+                className="inline-flex items-center justify-center h-[44px] px-[20px] py-[12px] rounded-full bg-[#0A0A0A] hover:bg-neutral-800 text-white text-[14px] font-medium leading-[20px] transition-colors shadow-xs active:scale-[0.99] cursor-pointer"
+              >
+                Join us
+              </Link>
+              <Link
+                to="/contact"
+                className="inline-flex items-center justify-center h-[44px] px-[20px] py-[12px] rounded-full text-[#0A0A0A] hover:bg-neutral-100/80 text-[14px] font-medium leading-[20px] transition-colors active:scale-[0.99] cursor-pointer"
+              >
+                Contact
+              </Link>
+            </div>
+          </div>
+
+          {/* Right Column: 4 Intelligence Items with Dividers & Arrows (Figma: title 16px/24px 500 #0A0A0A, desc 14px/20px 400 #0A0A0A 60%) */}
+          <div className="lg:col-span-6 w-full divide-y divide-[#F1F5F9]">
+            {INTELLIGENCE_ITEMS.map((item, idx) => (
+              <Link
+                key={item.title}
+                to={item.link}
+                className={`group block py-5 sm:py-6 transition-colors ${
+                  idx === 0 ? 'pt-0 lg:pt-1' : ''
+                }`}
+              >
+                <div className="flex items-center justify-between">
+                  <h3 className="text-[16px] font-medium leading-[24px] tracking-[0px] text-[#0A0A0A] group-hover:text-black">
+                    {item.title}
+                  </h3>
+                  <ArrowUpRight className="w-4 h-4 text-[#0A0A0A]/40 group-hover:text-[#0A0A0A] group-hover:translate-x-0.5 group-hover:-translate-y-0.5 transition-all" />
+                </div>
+                <p className="text-[14px] font-normal leading-[20px] tracking-[0px] text-[#0A0A0A]/60 mt-1">
+                  {item.description}
+                </p>
+              </Link>
+            ))}
+
+            
+          </div>
+        </div>
+      </section>
+
+
+      {/* 3. QUOTE & 3D LOGO SHOWCASE SECTION (with homepage scale reveal animation) */}
+      <section className="w-full bg-white pt-6 sm:pt-10 pb-16 sm:pb-20 px-6 sm:px-8 lg:px-12">
+        <div className="max-w-[1180px] mx-auto grid grid-cols-1 lg:grid-cols-12 gap-10 lg:gap-14 items-center">
+          {/* Left Column: 3D Ci Logo Card with scale animation */}
+          <div className="lg:col-span-5 flex justify-center lg:justify-start">
+            <div
+              ref={logoContainerRef}
+              className="w-full max-w-[378px] overflow-hidden rounded-[20px] sm:rounded-[24px] border border-neutral-100 shadow-[0_20px_60px_rgba(0,0,0,0.06)] bg-[#F8FAFC]"
             >
-              <span>Start a conversation</span>
-              <ArrowRight className="w-4 h-4" />
-            </Link>
+              <img
+                src={ciLogoSvg}
+                alt="Coirei 3D Logo"
+                className="w-full h-auto object-cover block"
+                style={{
+                  transform: isLogoInView ? 'scale(1)' : 'scale(0.88)',
+                  transformOrigin: 'center center',
+                  transition: 'transform 1000ms cubic-bezier(0.16, 1, 0.3, 1)',
+                  willChange: 'transform',
+                }}
+              />
+            </div>
+          </div>
+
+          {/* Right Column: Cormorant Garamond Quote with ScrollReveal */}
+          <div className="lg:col-span-7 text-left">
+            <ScrollReveal variant="fade-up" duration={750} distance={20}>
+              <blockquote className="font-['Cormorant_Garamond',Georgia,serif] font-cormorant italic font-semibold text-3xl sm:text-4xl lg:text-[48px] leading-[1.22] lg:leading-[60px] tracking-[-0.6px] text-[#0A0A0A]">
+                “Coirei transforms complex business <br className="hidden sm:inline" />
+                data into intelligent insights, <br className="hidden sm:inline" />
+                opportunities, and decisive growth”
+              </blockquote>
+            </ScrollReveal>
+
           </div>
         </div>
       </section>
 
-      {/* 2. WHO WE ARE SECTION (Left-aligned, seamless fade from hero) */}
-      <section className="w-full bg-white pt-6 sm:pt-10 pb-16 sm:py-24 px-6 sm:px-8 lg:px-12">
-        <div className="max-w-[1216px] mx-auto text-left">
-          {/* Eyebrow */}
-          <p className="text-[11px] sm:text-[12px] font-semibold uppercase tracking-[0.14em] text-[#8592A6] mb-4">
-            Who We Are
-          </p>
 
-          {/* Section Heading */}
-          <h2 className="text-3xl sm:text-4xl md:text-[44px] font-semibold tracking-tight text-[#0B0F19] leading-[1.18] mb-8">
-            AI that works
-            <br />
-            beyond the screen.
-          </h2>
-
-          {/* Paragraphs */}
-          <div className="space-y-6 text-[15.5px] sm:text-[16.5px] text-[#64748B] leading-[1.75] max-w-3xl font-normal">
-            <p>
-              We combine AI, software engineering, and deep problem-solving to create
-              technology that fits the way businesses actually work.
-            </p>
-            <p>
-              From intelligent search and automation to voice, analytics, and decision systems,
-              we turn complex challenges into simple, scalable experiences.
-            </p>
-          </div>
-        </div>
-      </section>
-
-      {/* 3. WHAT WE BUILD SECTION (Exact Figma: 1152 × 243 Hug, 1px Border #EEF3FA) */}
-      <section className="w-full bg-[#FFFFFF] py-16 sm:py-24 px-6 sm:px-8 lg:px-12 border-t border-[#F1F5F9]">
-        <div className="max-w-[1152px] mx-auto text-left">
-          {/* Eyebrow */}
-          <p className="text-[11px] sm:text-[12px] font-semibold uppercase tracking-[0.14em] text-[#8592A6] mb-3">
-            What We Build
-          </p>
-
-          {/* Section Heading */}
-          <h2 className="text-3xl sm:text-4xl md:text-[44px] font-semibold tracking-tight text-[#0B0F19] leading-[1.18] mb-12 sm:mb-14">
-            Intelligence,
-            <br />
-            built for impact.
-          </h2>
-
-          {/* 2x2 Grid with Outer Border 1px All Sides #EEF3FA and Inner Dividers */}
-          <div className="w-full max-w-[1152px] border border-[#EEF3FA] rounded-[12px] bg-white grid grid-cols-1 md:grid-cols-2 divide-y md:divide-y-0 divide-[#EEF3FA] overflow-hidden">
-            {/* Top Left: AI Systems */}
-            <div className="p-6 sm:py-[26px] sm:px-[32px] md:border-r md:border-b border-[#EEF3FA]">
-              <h3 className="text-[16px] sm:text-[17px] font-semibold text-[#0B0F19] mb-1.5">
-                AI Systems
-              </h3>
-              <p className="text-[13px] sm:text-[13.5px] text-[#8592A6] leading-relaxed max-w-md font-normal">
-                Context-aware AI designed to understand information and deliver meaningful outcomes.
-              </p>
-            </div>
-
-            {/* Top Right: Intelligent Automation */}
-            <div className="p-6 sm:py-[26px] sm:px-[32px] md:border-b border-[#EEF3FA]">
-              <h3 className="text-[16px] sm:text-[17px] font-semibold text-[#0B0F19] mb-1.5">
-                Intelligent Automation
-              </h3>
-              <p className="text-[13px] sm:text-[13.5px] text-[#8592A6] leading-relaxed max-w-md font-normal">
-                Reduce repetitive work and let AI handle processes that slow your teams down.
-              </p>
-            </div>
-
-            {/* Bottom Left: AI-Powered Products */}
-            <div className="p-6 sm:py-[26px] sm:px-[32px] md:border-r border-[#EEF3FA]">
-              <h3 className="text-[16px] sm:text-[17px] font-semibold text-[#0B0F19] mb-1.5">
-                AI-Powered Products
-              </h3>
-              <p className="text-[13px] sm:text-[13.5px] text-[#8592A6] leading-relaxed max-w-md font-normal">
-                Build products where intelligence is part of the experience — not an add-on.
-              </p>
-            </div>
-
-            {/* Bottom Right: Data & Analytics */}
-            <div className="p-6 sm:py-[26px] sm:px-[32px]">
-              <h3 className="text-[16px] sm:text-[17px] font-semibold text-[#0B0F19] mb-1.5">
-                Data & Analytics
-              </h3>
-              <p className="text-[13px] sm:text-[13.5px] text-[#8592A6] leading-relaxed max-w-md font-normal">
-                Turn scattered information into insights that help teams make faster, better-informed decisions.
-              </p>
-            </div>
-          </div>
-        </div>
-      </section>
-
+      {/* 4. FROM IDEAS TO IMPACT SECTION */}
+      <IdeasToImpact />
 
       {/* 5. PARTNERS / COLLABORATION SECTION */}
       <Partnersection />
@@ -159,6 +217,8 @@ export const About: React.FC = () => {
 
       {/* 7. HOW WE WORK (Modular & Fully Responsive across all screens) */}
       <HowWeWork />
+
+
 
     </div>
   );

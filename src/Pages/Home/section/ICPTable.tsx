@@ -52,7 +52,7 @@ export const ICPTable: React.FC<ICPTableProps> = ({
     }
   }, [isActive]);
 
-  // Auto-scroll loop
+  // Gentle auto-scroll loop (stops cleanly at the bottom without jumping back to top)
   useEffect(() => {
     if (!isActive) return;
 
@@ -64,13 +64,12 @@ export const ICPTable: React.FC<ICPTableProps> = ({
     let isPaused = true;
     let pauseTimer: ReturnType<typeof setTimeout> | null = null;
 
-    // Start with a brief 1.2s delay so user can read initial rows
     pauseTimer = setTimeout(() => {
       isPaused = false;
       lastTime = performance.now();
     }, 1200);
 
-    const speed = 30; // px per second for smooth, readable auto-scrolling
+    const speed = 25; // px per second
 
     const step = (now: number) => {
       const delta = (now - lastTime) / 1000;
@@ -82,14 +81,7 @@ export const ICPTable: React.FC<ICPTableProps> = ({
           el.scrollTop += speed * delta;
 
           if (el.scrollTop >= maxScroll - 2) {
-            isPaused = true;
-            pauseTimer = setTimeout(() => {
-              el.scrollTo({ top: 0, behavior: 'smooth' });
-              pauseTimer = setTimeout(() => {
-                isPaused = false;
-                lastTime = performance.now();
-              }, 1600);
-            }, 2000);
+            isPaused = true; // Stop at the end - do not snap back to top!
           }
         }
       }
@@ -105,12 +97,44 @@ export const ICPTable: React.FC<ICPTableProps> = ({
     };
   }, [isActive, data]);
 
+  const handleWheel = (e: React.WheelEvent<HTMLDivElement>) => {
+    handleUserInteract();
+    const el = scrollRef.current;
+    if (!el) return;
+
+    const { scrollTop, scrollHeight, clientHeight } = el;
+    const maxScroll = scrollHeight - clientHeight;
+
+    if (maxScroll <= 0) {
+      window.scrollBy({ top: e.deltaY, behavior: 'auto' });
+      return;
+    }
+
+    if (e.deltaY > 0) {
+      const remaining = maxScroll - scrollTop;
+      if (remaining <= 2) {
+        // Table has ended: immediately scroll page down!
+        window.scrollBy({ top: e.deltaY, behavior: 'auto' });
+      } else if (e.deltaY > remaining) {
+        el.scrollTop = maxScroll;
+        window.scrollBy({ top: e.deltaY - remaining, behavior: 'auto' });
+      }
+    } else if (e.deltaY < 0) {
+      if (scrollTop <= 2) {
+        // Table is at top: immediately scroll page up!
+        window.scrollBy({ top: e.deltaY, behavior: 'auto' });
+      } else if (-e.deltaY > scrollTop) {
+        const excess = -e.deltaY - scrollTop;
+        el.scrollTop = 0;
+        window.scrollBy({ top: -excess, behavior: 'auto' });
+      }
+    }
+  };
+
   return (
     <div
       ref={scrollRef}
-      onWheel={handleUserInteract}
-      onTouchStart={handleUserInteract}
-      onTouchMove={handleUserInteract}
+      onWheel={handleWheel}
       onPointerDown={handleUserInteract}
       onMouseEnter={handleUserInteract}
       onMouseLeave={() => {
@@ -120,7 +144,7 @@ export const ICPTable: React.FC<ICPTableProps> = ({
         }, 1500);
       }}
       className="flex-1 h-full overflow-y-auto overflow-x-auto"
-      style={{ scrollbarWidth: 'thin', scrollbarColor: '#CBD5E1 transparent' }}
+      style={{ scrollbarWidth: 'thin', scrollbarColor: '#CBD5E1 transparent', overscrollBehaviorY: 'auto' }}
     >
       <table className="w-full text-left border-collapse min-w-[1400px]">
         <thead className="sticky top-0 bg-[#FFFFFF] z-10">

@@ -62,6 +62,11 @@ export const Steps: React.FC = () => {
   const userInteractedRef = useRef<boolean>(false);
 
   const [activeIdx, setActiveIdx] = useState(0);
+  const activeIdxRef = useRef(activeIdx);
+  activeIdxRef.current = activeIdx;
+  const isWheelingRef = useRef(false);
+  const wheelCooldownTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
+
   const [activeTab, setActiveTab] = useState<OverviewTab>('overview');
   const [inputUrl, setInputUrl] = useState('coirei.com');
   const [stage, setStage] = useState<Step1Stage>('input');
@@ -315,28 +320,172 @@ export const Steps: React.FC = () => {
     }
   }, [stage, userInteracted, isInView, activeIdx]);
 
-  // Scroll listener: detects user scrolling through sticky container
+  // 1 scroll = 1 card controller: intercepts wheel in capture phase so cursor inside table never traps scrolling
   useEffect(() => {
-    const handleScroll = () => {
+    let lastWheelTime = 0;
+    const WHEEL_COOLDOWN = 420; // ms
+
+    const handleCaptureWheel = (e: WheelEvent) => {
       if (!sectionRef.current) return;
       const rect = sectionRef.current.getBoundingClientRect();
-      const sectionTop = rect.top;
-      const sectionHeight = rect.height;
       const windowHeight = window.innerHeight;
 
-      const totalScrollable = sectionHeight - windowHeight;
-      if (totalScrollable <= 0) return;
+      // Check if Steps section is currently covering/pinned in the viewport
+      const isSectionInView = rect.top <= 20 && rect.bottom >= windowHeight - 20;
+      if (!isSectionInView) return;
 
-      const progress = Math.min(Math.max(-sectionTop / totalScrollable, 0), 0.999);
-      let newIdx = 0;
-      if (progress < 0.35) {
-        newIdx = 0;
-      } else if (progress < 0.70) {
-        newIdx = 1;
-      } else {
-        newIdx = 2;
+      // Filter out micro accidental trackpad twitches
+      if (Math.abs(e.deltaY) < 15) return;
+
+      const now = performance.now();
+      if (now - lastWheelTime < WHEEL_COOLDOWN) {
+        // Cooldown period: intercept event to prevent jumping multiple cards in a single wheel flick
+        e.preventDefault();
+        e.stopPropagation();
+        return;
       }
-      setActiveIdx(newIdx);
+
+      const currentIdx = activeIdxRef.current;
+
+      if (e.deltaY > 0) {
+        // ONE SCROLL DOWN:
+        if (currentIdx < stepsList.length - 1) {
+          // Exactly 1 scroll = next card! (0 -> 1, or 1 -> 2)
+          e.preventDefault();
+          e.stopPropagation();
+          lastWheelTime = now;
+          isWheelingRef.current = true;
+          const nextIdx = currentIdx + 1;
+          setActiveIdx(nextIdx);
+
+          if (wheelCooldownTimerRef.current) clearTimeout(wheelCooldownTimerRef.current);
+          wheelCooldownTimerRef.current = setTimeout(() => {
+            isWheelingRef.current = false;
+          }, WHEEL_COOLDOWN + 100);
+        } else {
+          // On last card (Card 2: "Find" / table):
+          // ONE scroll down smoothly scrolls past the table to the next section!
+          e.preventDefault();
+          e.stopPropagation();
+          lastWheelTime = now;
+
+          const nextSection = sectionRef.current.nextElementSibling;
+          if (nextSection) {
+            nextSection.scrollIntoView({ behavior: 'smooth' });
+          } else {
+            window.scrollBy({ top: windowHeight, behavior: 'smooth' });
+          }
+        }
+      } else if (e.deltaY < 0) {
+        // ONE SCROLL UP:
+        if (currentIdx > 0) {
+          // Exactly 1 scroll = previous card! (2 -> 1, or 1 -> 0)
+          e.preventDefault();
+          e.stopPropagation();
+          lastWheelTime = now;
+          isWheelingRef.current = true;
+          const prevIdx = currentIdx - 1;
+          setActiveIdx(prevIdx);
+
+          if (wheelCooldownTimerRef.current) clearTimeout(wheelCooldownTimerRef.current);
+          wheelCooldownTimerRef.current = setTimeout(() => {
+            isWheelingRef.current = false;
+          }, WHEEL_COOLDOWN + 100);
+        } else {
+          // On first card (Card 0: "Understand"):
+          // ONE scroll up smoothly scrolls to the previous section (Features)!
+          e.preventDefault();
+          e.stopPropagation();
+          lastWheelTime = now;
+
+          const prevSection = sectionRef.current.previousElementSibling;
+          if (prevSection) {
+            prevSection.scrollIntoView({ behavior: 'smooth' });
+          } else {
+            window.scrollBy({ top: -windowHeight, behavior: 'smooth' });
+          }
+        }
+      }
+    };
+
+    window.addEventListener('wheel', handleCaptureWheel, { capture: true, passive: false });
+    return () => {
+      window.removeEventListener('wheel', handleCaptureWheel, { capture: true });
+      if (wheelCooldownTimerRef.current) clearTimeout(wheelCooldownTimerRef.current);
+    };
+  }, []);
+
+  // Touch gesture support: 1 swipe = 1 card
+  useEffect(() => {
+    let touchStartY = 0;
+    let lastTouchTime = 0;
+    const TOUCH_COOLDOWN = 450;
+
+    const handleTouchStart = (e: TouchEvent) => {
+      if (e.touches.length > 0) {
+        touchStartY = e.touches[0].clientY;
+      }
+    };
+
+    const handleTouchEnd = (e: TouchEvent) => {
+      if (!sectionRef.current) return;
+      const rect = sectionRef.current.getBoundingClientRect();
+      const windowHeight = window.innerHeight;
+      const isSectionInView = rect.top <= 20 && rect.bottom >= windowHeight - 20;
+      if (!isSectionInView) return;
+
+      const now = performance.now();
+      if (now - lastTouchTime < TOUCH_COOLDOWN) return;
+
+      if (e.changedTouches.length > 0) {
+        const deltaY = touchStartY - e.changedTouches[0].clientY;
+        if (Math.abs(deltaY) < 35) return;
+
+        const currentIdx = activeIdxRef.current;
+        lastTouchTime = now;
+
+        if (deltaY > 0) {
+          if (currentIdx < stepsList.length - 1) {
+            setActiveIdx(currentIdx + 1);
+          } else {
+            sectionRef.current.nextElementSibling?.scrollIntoView({ behavior: 'smooth' });
+          }
+        } else {
+          if (currentIdx > 0) {
+            setActiveIdx(currentIdx - 1);
+          } else {
+            sectionRef.current.previousElementSibling?.scrollIntoView({ behavior: 'smooth' });
+          }
+        }
+      }
+    };
+
+    window.addEventListener('touchstart', handleTouchStart, { passive: true });
+    window.addEventListener('touchend', handleTouchEnd, { passive: true });
+    return () => {
+      window.removeEventListener('touchstart', handleTouchStart);
+      window.removeEventListener('touchend', handleTouchEnd);
+    };
+  }, []);
+
+  // Window scroll sync for entrance / exit states
+  useEffect(() => {
+    const handleScroll = () => {
+      if (isWheelingRef.current) return;
+      if (!sectionRef.current) return;
+      const rect = sectionRef.current.getBoundingClientRect();
+      const windowHeight = window.innerHeight;
+
+      // If user is above steps section, ensure first card is active
+      if (rect.top > 50) {
+        if (activeIdxRef.current !== 0) setActiveIdx(0);
+        return;
+      }
+      // If user is below steps section, ensure last card is active
+      if (rect.bottom < windowHeight - 50) {
+        if (activeIdxRef.current !== 2) setActiveIdx(2);
+        return;
+      }
     };
 
     window.addEventListener('scroll', handleScroll, { passive: true });
@@ -347,6 +496,7 @@ export const Steps: React.FC = () => {
     <section
       id="steps-section"
       ref={sectionRef}
+      data-custom-padding="true"
       className="relative w-full bg-white border-t border-[#E2E2E2]"
       style={{ height: `${stepsList.length * 110}vh` }}
     >
@@ -363,8 +513,8 @@ export const Steps: React.FC = () => {
                   <div
                     key={step.id}
                     className={`w-full max-w-lg transition-opacity duration-350 ease-out ${isActive
-                        ? 'opacity-100 relative z-10 pointer-events-auto'
-                        : 'opacity-0 absolute inset-0 pointer-events-none z-0'
+                      ? 'opacity-100 relative z-10 pointer-events-auto'
+                      : 'opacity-0 absolute inset-0 pointer-events-none z-0'
                       }`}
                   >
                     <h3 className="text-3xl sm:text-4xl md:text-[44px] font-normal text-[#0F172A] tracking-tight leading-[1.15]">
@@ -394,8 +544,8 @@ export const Steps: React.FC = () => {
                   <div
                     ref={cardContainerRef}
                     className={`absolute inset-0 w-full h-full p-5 sm:p-6 flex flex-col justify-start overflow-y-auto bg-white transition-opacity duration-350 ease-out relative ${activeIdx === 0
-                        ? 'opacity-100 pointer-events-auto z-10'
-                        : 'opacity-0 pointer-events-none z-0'
+                      ? 'opacity-100 pointer-events-auto z-10'
+                      : 'opacity-0 pointer-events-none z-0'
                       }`}
                     style={{ scrollbarWidth: 'thin', scrollbarColor: '#CBD5E1 transparent' }}
                   >
@@ -501,8 +651,8 @@ export const Steps: React.FC = () => {
                                   setActiveTab(t.key as OverviewTab);
                                 }}
                                 className={`pb-2.5 text-[13px] sm:text-[13.5px] cursor-pointer transition-colors relative whitespace-nowrap ${isCurrent
-                                    ? 'text-[#0F172A] font-semibold'
-                                    : 'text-[#64748B] hover:text-[#0F172A] font-medium'
+                                  ? 'text-[#0F172A] font-semibold'
+                                  : 'text-[#64748B] hover:text-[#0F172A] font-medium'
                                   }`}
                               >
                                 {t.label}
@@ -786,8 +936,8 @@ export const Steps: React.FC = () => {
                   {/* Step 1: Whole Analyzes Card Interior - Ultra Minimal */}
                   <div
                     className={`absolute inset-0 w-full h-full p-8 sm:p-10 flex flex-col justify-center text-left bg-white transition-opacity duration-350 ease-out ${activeIdx === 1
-                        ? 'opacity-100 pointer-events-auto z-10'
-                        : 'opacity-0 pointer-events-none z-0'
+                      ? 'opacity-100 pointer-events-auto z-10'
+                      : 'opacity-0 pointer-events-none z-0'
                       }`}
                   >
                     <div className="flex flex-col gap-1 mb-7">
@@ -822,8 +972,8 @@ export const Steps: React.FC = () => {
                   {/* Step 2: Find - Leads Table */}
                   <div
                     className={`absolute inset-0 w-full h-full flex flex-col bg-white overflow-hidden transition-opacity duration-350 ease-out ${activeIdx === 2
-                        ? 'opacity-100 pointer-events-auto z-10'
-                        : 'opacity-0 pointer-events-none z-0'
+                      ? 'opacity-100 pointer-events-auto z-10'
+                      : 'opacity-0 pointer-events-none z-0'
                       }`}
                   >
                     {/* Top Header / Breadcrumbs: spans full width */}
