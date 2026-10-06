@@ -206,7 +206,7 @@ export const Navbar: React.FC = () => {
             />
           </Link>
 
-          {/* Center Desktop Navigation: Positioned absolute in center so fading out never shifts Logo or Log in */}
+          {/* Center Desktop Navigation: Positioned absolute in center so fading out never shifts Logo or Contact Us */}
           <nav 
             className={`hidden md:flex items-center gap-8 absolute left-1/2 -translate-x-1/2 transition-opacity duration-300 ease-out whitespace-nowrap ${
               isScrolled 
@@ -246,14 +246,14 @@ export const Navbar: React.FC = () => {
           {/* Right Action Buttons */}
           <div className="flex items-center gap-2 shrink-0">
             <Link
-              to="/signin"
+              to="/contact"
               className={`inline-flex items-center justify-center bg-black hover:bg-neutral-800 text-white font-medium rounded-full shadow-xs hover:shadow transition-all duration-500 ease-[cubic-bezier(0.16,1,0.3,1)] cursor-pointer shrink-0 ${
                 isScrolled 
-                  ? 'text-[12.5px] sm:text-[13px] px-4 py-1.5 sm:py-2' 
+                  ? 'text-[12.5px] sm:text-[13px] px-3.5 sm:px-4 py-1.5 sm:py-2' 
                   : 'text-[13.5px] px-5 py-2'
               }`}
             >
-              Log in
+              Contact Us
             </Link>
 
             {/* Mobile menu toggle (visible only when not scrolled) */}
@@ -313,26 +313,12 @@ export const Navbar: React.FC = () => {
             </Link>
             <div className="pt-4 border-t border-neutral-100 flex flex-col gap-3">
               <Link
-                to="/signin"
+                to="/contact"
                 onClick={() => setMobileMenuOpen(false)}
-                className="w-full text-center py-2.5 text-neutral-800 font-medium border border-neutral-200 rounded-full"
+                className="w-full text-center py-2.5 bg-[#0B0F19] hover:bg-neutral-800 text-white font-medium rounded-full cursor-pointer shadow-xs transition-colors"
               >
-                Sign in
+                Contact Us
               </Link>
-              <a
-                href="#get-started"
-                onClick={(e) => {
-                  setMobileMenuOpen(false);
-                  if (window.location.pathname === '/') {
-                    e.preventDefault();
-                    const elem = document.getElementById('get-started');
-                    if (elem) elem.scrollIntoView({ behavior: 'smooth' });
-                  }
-                }}
-                className="w-full text-center py-2.5 bg-[#0B0F19] text-white font-medium rounded-full cursor-pointer"
-              >
-                Get Started
-              </a>
             </div>
           </div>
         )}
