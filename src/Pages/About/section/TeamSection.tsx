@@ -3,7 +3,8 @@ import naveenImg from '../../../assets/about/naveen.png';
 import lalithaImg from '../../../assets/about/lalitha.svg';
 import kuberanImg from '../../../assets/about/kuberan.jpg';
 import niranjanImg from '../../../assets/about/niranjan.jpg';
-import aravindImg from '../../../assets/about/aravind.svg';
+// import aravindImg from '../../../assets/about/aravind.svg';
+import vijiImg from '../../../assets/about/viji.svg';
 import rajdeepImg from '../../../assets/about/rajdeep.svg';
 import pradeepImg from '../../../assets/about/pradeep.png';
 
@@ -72,7 +73,7 @@ export const TeamSection: React.FC = () => {
             {/* Row 3, Col 1: Aravind (Bottom-Left rounded) */}
             <div className="relative w-full aspect-[413/300] overflow-hidden bg-[#9CA3AF]">
               <img
-                src={aravindImg}
+                src={vijiImg}
                 alt="Team member"
                 className="w-full h-full object-cover object-center block select-none pointer-events-none"
                 loading="lazy"
@@ -128,7 +129,7 @@ export const TeamSection: React.FC = () => {
                 <img src={niranjanImg} alt="Team member" className="w-full h-full object-cover" loading="lazy" />
               </div>
               <div className="relative w-full aspect-[413/300] overflow-hidden bg-[#9CA3AF]">
-                <img src={aravindImg} alt="Team member" className="w-full h-full object-cover" loading="lazy" />
+                <img src={vijiImg} alt="Team member" className="w-full h-full object-cover" loading="lazy" />
               </div>
               <div className="relative w-full aspect-[413/300] overflow-hidden bg-[#9CA3AF]">
                 <img src={rajdeepImg} alt="Team member" className="w-full h-full object-cover" loading="lazy" />

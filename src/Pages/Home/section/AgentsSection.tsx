@@ -319,7 +319,7 @@ export const AgentsSection: React.FC = () => {
   };
 
   return (
-    <section ref={sectionRef} className="relative z-20 w-full -mt-14 sm:-mt-18 md:-mt-20 pt-8 sm:pt-10 pb-12 sm:pb-16 bg-white overflow-hidden">
+    <section ref={sectionRef} data-custom-padding className="relative z-20 w-full pt-16 sm:pt-20 md:pt-24 pb-14 sm:pb-18 bg-white overflow-hidden border-t border-[#F1F5F9]">
       <div className="w-full max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         {/* Section Header */}
         <div className="text-center max-w-4xl mx-auto">

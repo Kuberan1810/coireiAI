@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
-import { Send, ArrowRight, Zap, Shield, ArrowLeftRight, MessageSquare, Clock, PenLine, User, Calendar, ChevronRight } from 'lucide-react';
+import { Send, ArrowRight, Zap, Shield, ArrowLeftRight, MessageSquare, Clock, PenLine, User, Calendar } from 'lucide-react';
 import EngageAgentVisual from '../Home/section/EngageAgentVisual';
 
 interface ConversationItem {

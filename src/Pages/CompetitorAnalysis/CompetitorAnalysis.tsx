@@ -190,7 +190,7 @@ export const CompetitorAnalysis: React.FC = () => {
       <section className="relative w-full pt-16 sm:pt-20 md:pt-24 pb-16 sm:pb-20 px-4 sm:px-6 lg:px-8">
         <div className="max-w-5xl mx-auto text-center">
           {/* Main Headline */}
-          <h1 className="text-4xl sm:text-6xl md:text-[68px] lg:text-[76px] font-semibold tracking-tight leading-[1.08] text-[#0B0F19]">
+          <h1 className="text-4xl sm:text-6xl md:text-[68px] lg:text-[76px] font-medium tracking-tight leading-[1.08] text-[#0B0F19]">
             <span>Know your competitors</span>
             <br />
             <span className="text-[#94A3B8]">before they move.</span>
@@ -252,66 +252,66 @@ export const CompetitorAnalysis: React.FC = () => {
             {/* Inner Dashboard Content */}
             <div className="p-5 sm:p-6 md:p-7 bg-[#FAFBFD]/50">
               <div className="grid grid-cols-1 lg:grid-cols-12 gap-5 sm:gap-6">
-              {/* Left Card: Target Cluster (Exact Figma: 4x1, 303.33 Fill x 203 Hug, bg #F9FAFB 40%, border #111827 8%) */}
-              <div className="lg:col-span-4 bg-[#F9FAFB]/40 rounded-[14px] border border-[#111827]/[0.08] p-5 sm:p-[20px] flex flex-col justify-between text-left">
-                <div>
-                  <p className="text-[11px] font-semibold uppercase tracking-[0.14em] text-[#94A3B8] mb-2">
-                    TARGET CLUSTER
-                  </p>
-                  <h3 className="text-[17px] sm:text-[18px] font-semibold text-[#0B0F19] tracking-tight mb-2">
-                    {activeCluster.name}
-                  </h3>
-                  <p className="text-[12.5px] sm:text-[13px] text-[#64748B] leading-relaxed font-normal mb-5">
-                    Analyzed {activeCluster.stats.positioningUpdates} positioning updates,{' '}
-                    {activeCluster.stats.pricingOverhauls} pricing overhauls, and{' '}
-                    {activeCluster.stats.changelogs} product changelogs over the past 30 days.
-                  </p>
-                </div>
-
-                <div className="pt-4 border-t border-[#111827]/[0.06] flex items-center justify-between text-[12.5px] sm:text-[13px]">
-                  <span className="font-semibold text-[#0B0F19]">Market Saturation</span>
-                  <span className="text-[#64748B] font-medium">{activeCluster.stats.saturation}</span>
-                </div>
-              </div>
-
-              {/* Right Card: Primary Market Gap Detected (Exact Figma: 8x1, 630.67 Fill x 183 Hug, padding 20px, bg #EEF2FF 20%, border #E0E7FF) */}
-              <div className="lg:col-span-8 bg-[#EEF2FF]/20 rounded-[14px] border border-[#E0E7FF] p-5 sm:p-[20px] flex flex-col justify-between text-left">
-                <div>
-                  <div className="flex items-center justify-between gap-2 mb-2.5">
-                    <span className="inline-block px-2.5 py-0.5 rounded-[5px] bg-[#F1F5F9] text-[#475569] text-[10.5px] font-semibold tracking-wider uppercase">
-                      {activeCluster.gap.badge}
-                    </span>
-                    <span className="text-[12px] font-medium text-[#94A3B8]">
-                      Confidence: {activeCluster.gap.confidence}
-                    </span>
+                {/* Left Card: Target Cluster (Exact Figma: 4x1, 303.33 Fill x 203 Hug, bg #F9FAFB 40%, border #111827 8%) */}
+                <div className="lg:col-span-4 bg-[#F9FAFB]/40 rounded-[14px] border border-[#111827]/[0.08] p-5 sm:p-[20px] flex flex-col justify-between text-left">
+                  <div>
+                    <p className="text-[11px] font-semibold uppercase tracking-[0.14em] text-[#94A3B8] mb-2">
+                      TARGET CLUSTER
+                    </p>
+                    <h3 className="text-[17px] sm:text-[18px] font-semibold text-[#0B0F19] tracking-tight mb-2">
+                      {activeCluster.name}
+                    </h3>
+                    <p className="text-[12.5px] sm:text-[13px] text-[#64748B] leading-relaxed font-normal mb-5">
+                      Analyzed {activeCluster.stats.positioningUpdates} positioning updates,{' '}
+                      {activeCluster.stats.pricingOverhauls} pricing overhauls, and{' '}
+                      {activeCluster.stats.changelogs} product changelogs over the past 30 days.
+                    </p>
                   </div>
 
-                  <h3 className="text-[15.5px] sm:text-[16px] font-semibold text-[#0B0F19] leading-snug mt-2 mb-1.5">
-                    {activeCluster.gap.headline}
-                  </h3>
-
-                  <p className="text-[12.5px] sm:text-[13px] text-[#64748B] leading-relaxed font-normal mb-5">
-                    {activeCluster.gap.description}
-                  </p>
+                  <div className="pt-4 border-t border-[#111827]/[0.06] flex items-center justify-between text-[12.5px] sm:text-[13px]">
+                    <span className="font-semibold text-[#0B0F19]">Market Saturation</span>
+                    <span className="text-[#64748B] font-medium">{activeCluster.stats.saturation}</span>
+                  </div>
                 </div>
 
-                {/* Pill Tags */}
-                <div className="flex flex-wrap items-center gap-2 pt-1">
-                  {activeCluster.gap.tags.map((tag) => (
-                    <span
-                      key={tag}
-                      className="px-3 py-1.5 rounded-[8px] border border-[#E2E8F0] bg-white text-[11.5px] font-medium text-[#334155] shadow-2xs"
-                    >
-                      {tag}
-                    </span>
-                  ))}
+                {/* Right Card: Primary Market Gap Detected (Exact Figma: 8x1, 630.67 Fill x 183 Hug, padding 20px, bg #EEF2FF 20%, border #E0E7FF) */}
+                <div className="lg:col-span-8 bg-[#EEF2FF]/20 rounded-[14px] border border-[#E0E7FF] p-5 sm:p-[20px] flex flex-col justify-between text-left">
+                  <div>
+                    <div className="flex items-center justify-between gap-2 mb-2.5">
+                      <span className="inline-block px-2.5 py-0.5 rounded-[5px] bg-[#F1F5F9] text-[#475569] text-[10.5px] font-semibold tracking-wider uppercase">
+                        {activeCluster.gap.badge}
+                      </span>
+                      <span className="text-[12px] font-medium text-[#94A3B8]">
+                        Confidence: {activeCluster.gap.confidence}
+                      </span>
+                    </div>
+
+                    <h3 className="text-[15.5px] sm:text-[16px] font-semibold text-[#0B0F19] leading-snug mt-2 mb-1.5">
+                      {activeCluster.gap.headline}
+                    </h3>
+
+                    <p className="text-[12.5px] sm:text-[13px] text-[#64748B] leading-relaxed font-normal mb-5">
+                      {activeCluster.gap.description}
+                    </p>
+                  </div>
+
+                  {/* Pill Tags */}
+                  <div className="flex flex-wrap items-center gap-2 pt-1">
+                    {activeCluster.gap.tags.map((tag) => (
+                      <span
+                        key={tag}
+                        className="px-3 py-1.5 rounded-[8px] border border-[#E2E8F0] bg-white text-[11.5px] font-medium text-[#334155] shadow-2xs"
+                      >
+                        {tag}
+                      </span>
+                    ))}
+                  </div>
                 </div>
               </div>
             </div>
           </div>
         </div>
-      </div>
-    </section>
+      </section>
 
       {/* 3. DEEP RESEARCH SECTION */}
       <section className="w-full bg-[#FFFFFF] py-12 sm:py-16 px-4 sm:px-6 lg:px-8 border-t border-[#F1F5F9]">
@@ -460,11 +460,10 @@ export const CompetitorAnalysis: React.FC = () => {
                   key={tab.id}
                   type="button"
                   onClick={() => setActiveTab(tab.id as any)}
-                  className={`pb-3 font-medium transition-all cursor-pointer relative ${
-                    activeTab === tab.id
-                      ? 'text-gray-900 font-semibold'
-                      : 'text-gray-500 hover:text-gray-800'
-                  }`}
+                  className={`pb-3 font-medium transition-all cursor-pointer relative ${activeTab === tab.id
+                    ? 'text-gray-900 font-semibold'
+                    : 'text-gray-500 hover:text-gray-800'
+                    }`}
                 >
                   {tab.label}
                   {activeTab === tab.id && (
@@ -798,9 +797,7 @@ export const CompetitorAnalysis: React.FC = () => {
 
             {/* Main Insight Quote (Exact Figma: Plus Jakarta Sans, 500 Medium, 24px/32px, 0px tracking, #111827) */}
             <p className="font-['Plus_Jakarta_Sans',sans-serif] font-[500] text-[20px] sm:text-[24px] leading-[28px] sm:leading-[32px] tracking-[0px] text-[#111827] mb-8">
-              “Most competitors position around automation. However, few emphasize ease of
-              implementation for small teams. This may represent an opportunity to differentiate
-              around simplicity and faster adoption.”
+              “While competitors heavily push complex automation, We address friction-free onboarding for small teams. This creates a prime opportunity to win on simplicity, rapid setup, and immediate time-to-value.”
             </p>
 
             {/* Opportunity Tag Capsules */}
@@ -1096,7 +1093,7 @@ export const CompetitorAnalysis: React.FC = () => {
               <span className="text-[14px]">→</span>
             </Link>
 
-        
+
           </div>
         </div>
       </section>

@@ -14,7 +14,7 @@ export const AdPerformanceParallax: React.FC = () => {
 
       // Active when the parallax spacer is near or in the viewport
       // Starts as the top surface begins scrolling off, stays active until bottom surface covers it
-      const active = rect.top <= window.innerHeight && rect.bottom >= 0;
+      const active = rect.top <= windowHeight && rect.bottom >= 0;
       setIsActive(active);
     };
 

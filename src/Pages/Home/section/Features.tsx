@@ -1059,93 +1059,152 @@ const AudienceIntelligenceCard: React.FC = () => {
   );
 };
 
-// Card 5: Track Every Touchpoint (Stock Market White Line Climbing Grey Bars)
+// Card 5: Track Every Touchpoint. Measure Revenue Impact. (Parallel Animation: 0 to current height bar growth + stroke-dashoffset line drawing + live counter + exact Figma specs)
 const TouchpointStockChart: React.FC = () => {
-  const pathRef = useRef<SVGPathElement | null>(null);
-  const [totalLength, setTotalLength] = useState(300);
-  const [dashOffset, setDashOffset] = useState(300);
-  const [arrowPos, setArrowPos] = useState({ x: 44, y: 143, angle: -45, visible: false });
-  const [progress, setProgress] = useState(1);
+  const linePathRef = useRef<SVGPathElement | null>(null);
+  const waypointRef = useRef<SVGGElement | null>(null);
+  const metricTextRef = useRef<HTMLDivElement | null>(null);
+  const barRefs = useRef<(SVGRectElement | null)[]>([]);
+  const containerRef = useRef<HTMLDivElement | null>(null);
 
-  // Stock Market trajectory matching user sketch:
-  // Starts on top of Bar 1 (Y=143) -> arc -> touches exactly on top of Bar 2 (Y=105) -> arc -> touches exactly on top of Bar 3 (Y=67) -> arc -> touches exactly on top of Bar 4 (Y=43) -> breakout rocket ray to top-right
-  const linePath =
-    'M 44,143 C 54,124 74,104 84,100 L 94,105 C 106,85 126,65 136,62 L 146,67 C 158,47 178,38 188,38 L 198,43 L 258,2';
+  // Exact Figma Bar Specs (Rectangles 321-325 in 375x261 coordinate space):
+  const barTargets = [
+    { x: 22, w: 46, targetH: 65, rx: 10 },   // Rectangle 321 (Bar 1: low, y=196)
+    { x: 92, w: 46, targetH: 115, rx: 10 },  // Rectangle 322 (Bar 2: medium, y=146, peak at x=98)
+    { x: 162, w: 48, targetH: 155, rx: 10 }, // Rectangle 323 (Bar 3: tall, y=106)
+    { x: 232, w: 46, targetH: 85, rx: 10 },  // Rectangle 324 (Bar 4: low-medium, y=176, waypoint at x=245)
+    { x: 300, w: 46, targetH: 140, rx: 10 }, // Rectangle 325 (Bar 5: tall right, y=121)
+  ];
 
-  // Area under the stock curve closed to base (Y=195)
-  const areaPath = `${linePath} L 258,195 L 44,195 Z`;
+  // Exact Vector 54 trajectory matching Figma:
+  const linePath = 'M 2,259 L 98,142 L 162,160 L 208,160 L 245,128 L 282,128 L 373,46';
+  const PATH_LEN = 1000;
 
   useEffect(() => {
     let active = true;
     let animId: number;
     let timeoutId: ReturnType<typeof setTimeout>;
 
-    const path = pathRef.current;
-    if (!path) return;
+    // Ultra-smooth Cubic-Quartic Ease Out for line drawing and bar growth
+    const easeOutQuart = (t: number) => 1 - Math.pow(1 - t, 3.5);
 
-    const len = path.getTotalLength();
-    setTotalLength(len);
-    setDashOffset(len);
+    const runParallelGrowth = () => {
+      if (!active) return;
 
-    const easeOutCubic = (t: number) => 1 - Math.pow(1 - t, 3);
+      // 1. Reset all elements to 0
+      if (containerRef.current) {
+        containerRef.current.style.opacity = '1';
+      }
+      if (linePathRef.current) {
+        linePathRef.current.setAttribute('stroke-dasharray', `${PATH_LEN}`);
+        linePathRef.current.setAttribute('stroke-dashoffset', `${PATH_LEN}`);
+        linePathRef.current.style.strokeDashoffset = `${PATH_LEN}`;
+      }
+      if (metricTextRef.current) {
+        metricTextRef.current.textContent = '+0.00%';
+      }
+      if (waypointRef.current) {
+        waypointRef.current.style.opacity = '0';
+        waypointRef.current.style.transform = 'translate(245px, 128px) scale(0)';
+      }
+      barTargets.forEach((_, i) => {
+        const barElem = barRefs.current[i];
+        if (barElem) {
+          barElem.setAttribute('y', '261');
+          barElem.setAttribute('height', '0');
+        }
+      });
 
-    const runLoop = () => {
-      // 1. Reset to start
-      setDashOffset(len);
-      setArrowPos({ x: 44, y: 143, angle: -45, visible: false });
-      setProgress(0);
-
-      // 2. Start climbing after brief pause
+      // 2. Start parallel growth & line draw animation
       timeoutId = setTimeout(() => {
         if (!active) return;
 
-        const duration = 2100; // 2.1s duration for the climb
+        const duration = 2300; // 2.3s for smooth line drawing & parallel bar growth
         const startTime = performance.now();
 
-        const animate = (currentTime: number) => {
+        const animateFrame = (now: number) => {
           if (!active) return;
-          const elapsed = currentTime - startTime;
-          const currentProgress = Math.min(elapsed / duration, 1);
-          const eased = easeOutCubic(currentProgress);
-          const currentDist = eased * len;
+          const elapsed = now - startTime;
+          const rawProgress = Math.min(elapsed / duration, 1);
+          const eased = easeOutQuart(rawProgress);
 
-          const p = path.getPointAtLength(currentDist);
-          const pForward = path.getPointAtLength(Math.min(currentDist + 1.5, len));
-          const pBack = path.getPointAtLength(Math.max(currentDist - 1.5, 0));
-          const angle = Math.atan2(pForward.y - pBack.y, pForward.x - pBack.x) * (180 / Math.PI);
+          // A. Parallel Line Drawing Animation (smooth strokeDashoffset sweep from left to right)
+          const currentOffset = PATH_LEN * (1 - eased);
+          if (linePathRef.current) {
+            linePathRef.current.setAttribute('stroke-dashoffset', currentOffset.toFixed(2));
+            linePathRef.current.style.strokeDashoffset = `${currentOffset.toFixed(2)}`;
+          }
 
-          setDashOffset(len - currentDist);
-          setProgress(eased);
-          setArrowPos({
-            x: p.x,
-            y: p.y,
-            angle,
-            visible: true,
+          // B. Parallel 0 to Target Height Bar Growth
+          barTargets.forEach((bar, i) => {
+            const barElem = barRefs.current[i];
+            if (barElem) {
+              const currentH = eased * bar.targetH;
+              const currentY = 261 - currentH;
+              barElem.setAttribute('y', currentY.toFixed(2));
+              barElem.setAttribute('height', currentH.toFixed(2));
+            }
           });
 
-          if (currentProgress < 1) {
-            animId = requestAnimationFrame(animate);
+          // C. Parallel Metric Count (+0.00% to +38.65%)
+          if (metricTextRef.current) {
+            const currentVal = (eased * 38.65).toFixed(2);
+            metricTextRef.current.textContent = `+${currentVal}%`;
+          }
+
+          // D. Synchronized Waypoint Pop-in when line arrives at waypoint (245, 128) ~ 58% of line length
+          if (waypointRef.current) {
+            if (eased < 0.56) {
+              waypointRef.current.style.opacity = '0';
+              waypointRef.current.style.transform = 'translate(245px, 128px) scale(0)';
+            } else {
+              const dotT = Math.min((eased - 0.56) / 0.22, 1);
+              const dotScale = dotT === 1 ? 1 : Math.sin(dotT * Math.PI * 0.5) * 1.12;
+              waypointRef.current.style.opacity = `${Math.min(dotT * 1.5, 1)}`;
+              waypointRef.current.style.transform = `translate(245px, 128px) scale(${dotScale.toFixed(2)})`;
+            }
+          }
+
+          if (rawProgress < 1) {
+            animId = requestAnimationFrame(animateFrame);
           } else {
-            // Reached summit together! Hold line and arrow at summit for 3.6s
-            setProgress(1);
+            // Reached 100%! Hold state for 4.0s
+            if (linePathRef.current) {
+              linePathRef.current.setAttribute('stroke-dashoffset', '0');
+              linePathRef.current.style.strokeDashoffset = '0';
+            }
+            if (metricTextRef.current) {
+              metricTextRef.current.textContent = '+38.65%';
+            }
+            if (waypointRef.current) {
+              waypointRef.current.style.opacity = '1';
+              waypointRef.current.style.transform = 'translate(245px, 128px) scale(1)';
+            }
+
             timeoutId = setTimeout(() => {
               if (!active) return;
-              setArrowPos((prev) => ({ ...prev, visible: false }));
-              setDashOffset(len);
+              // Smooth fade-out before next loop
+              if (containerRef.current) {
+                containerRef.current.style.transition = 'opacity 0.45s ease-out';
+                containerRef.current.style.opacity = '0';
+              }
 
               timeoutId = setTimeout(() => {
                 if (!active) return;
-                runLoop();
-              }, 500);
-            }, 3600);
+                if (containerRef.current) {
+                  containerRef.current.style.transition = 'none';
+                }
+                runParallelGrowth();
+              }, 480);
+            }, 4000);
           }
         };
 
-        animId = requestAnimationFrame(animate);
-      }, 400);
+        animId = requestAnimationFrame(animateFrame);
+      }, 250);
     };
 
-    runLoop();
+    runParallelGrowth();
 
     return () => {
       active = false;
@@ -1154,137 +1213,129 @@ const TouchpointStockChart: React.FC = () => {
     };
   }, []);
 
-  // Live running number: 0.0 -> 217.6
-  const runningVal = (progress * 217.6).toFixed(1);
-
   return (
-    <div className="relative z-10 flex-1 flex items-center justify-center w-full my-auto py-4 select-none">
-      <svg
-        viewBox="0 0 270 215"
-        className="w-[280px] sm:w-[330px] md:w-[370px] lg:w-[390px] h-[220px] sm:h-[260px] md:h-[290px] lg:h-[305px] overflow-visible max-w-full"
-      >
-        <defs>
-          {/* Drop shadow to make the white stock line stand out vividly */}
-          <filter id="stockShadow" x="-20%" y="-20%" width="140%" height="140%">
-            <feDropShadow dx="0" dy="1.5" stdDeviation="2" floodColor="#0F172A" floodOpacity="0.32" />
-          </filter>
+    <div className="relative z-10 w-full flex items-center justify-center select-none pt-2 pb-1">
+      {/* Inner Card Box (Exact Figma Specs: 16px corner radius, 1px border #D9D9D9, clean static design) */}
+      <div className="relative w-full aspect-[375/320]  rounded-[16px] border border-[#D9D9D9] bg-white/95 backdrop-blur-xs overflow-hidden flex flex-col justify-between p-4 sm:p-5 shadow-[0_1px_6px_rgba(0,0,0,0.02)]">
+        {/* Parallel Dot Grid Background inside Card */}
+        <div
+          className="absolute inset-0 bg-[radial-gradient(#94A3B8_1.2px,transparent_1.2px)] [background-size:18px_18px] pointer-events-none opacity-45"
+          style={{ backgroundPosition: '4px 4px' }}
+        />
 
-          {/* Soft white gradient for stock market area under the curve */}
-          <linearGradient id="stockAreaGrad" x1="0" y1="0" x2="0" y2="1">
-            <stop offset="0%" stopColor="#FFFFFF" stopOpacity="0.32" />
-            <stop offset="60%" stopColor="#FFFFFF" stopOpacity="0.08" />
-            <stop offset="100%" stopColor="#FFFFFF" stopOpacity="0.0" />
-          </linearGradient>
-        </defs>
-
-        {/* Dynamic Running Metric over top of chart as requested (+ 217.6 ↑) */}
-        <g className="select-none pointer-events-none">
-          <text
-            x="32"
-            y="26"
-            fill="#059669"
-            fontSize="24"
-            fontWeight="700"
-            fontFamily="'Plus Jakarta Sans', system-ui, sans-serif"
-            style={{ fontVariantNumeric: 'tabular-nums' }}
-            letterSpacing="-0.5px"
+        {/* Top Content: "2025" tag and "+38.65%" stat in Plus Jakarta Sans */}
+        <div className="relative z-20 flex flex-col pointer-events-none">
+          <span
+            className="text-[13px] sm:text-[14px] font-bold text-[#1E293B] tracking-tight leading-none"
+            style={{ fontFamily: "'Plus Jakarta Sans', system-ui, sans-serif" }}
           >
-            + {runningVal}
-            <tspan dx="6" fontSize="22" fontWeight="800">↑</tspan>
-          </text>
-        </g>
-
-        {/* Chart Axes matching user's sketch */}
-        <line x1="18" y1="-10" x2="18" y2="195" stroke="#CBD5E1" strokeWidth="1.25" strokeLinecap="round" />
-        <line x1="18" y1="195" x2="252" y2="195" stroke="#CBD5E1" strokeWidth="1.25" strokeLinecap="round" />
-
-        {/* 4 Ascending Flat-Topped Grey Bars */}
-        {/* Bar 1 */}
-        <rect
-          x="34"
-          y="143"
-          width="36"
-          height="52"
-          rx="1.5"
-          fill="#D4D4D8"
-          className="pointer-events-none"
-        />
-        {/* Bar 2 */}
-        <rect
-          x="86"
-          y="105"
-          width="36"
-          height="90"
-          rx="1.5"
-          fill="#D4D4D8"
-          className="pointer-events-none"
-        />
-        {/* Bar 3 */}
-        <rect
-          x="138"
-          y="67"
-          width="36"
-          height="128"
-          rx="1.5"
-          fill="#D4D4D8"
-          className="pointer-events-none"
-        />
-        {/* Bar 4 */}
-        <rect
-          x="190"
-          y="43"
-          width="36"
-          height="152"
-          rx="1.5"
-          fill="#D4D4D8"
-          className="pointer-events-none"
-        />
-
-        {/* Area fill under the climbing line */}
-        <path
-          d={areaPath}
-          fill="url(#stockAreaGrad)"
-          className="transition-opacity duration-700 pointer-events-none"
-          style={{
-            opacity: arrowPos.visible ? 0.9 : 0.05,
-          }}
-        />
-
-        {/* The White Stock Market Line climbing through the grey bars */}
-        <path
-          ref={pathRef}
-          d={linePath}
-          fill="none"
-          stroke="#FFFFFF"
-          strokeWidth="3.2"
-          strokeLinecap="round"
-          strokeLinejoin="round"
-          filter="url(#stockShadow)"
-          strokeDasharray={totalLength}
-          strokeDashoffset={dashOffset}
-          className="transition-opacity duration-300"
-          style={{
-            opacity: arrowPos.visible ? 1 : 0,
-          }}
-        />
-
-        {/* Arrow sticking directly to the moving tip of the line */}
-        {arrowPos.visible && (
-          <g
-            transform={`translate(${arrowPos.x}, ${arrowPos.y}) rotate(${arrowPos.angle})`}
-            filter="url(#stockShadow)"
+            2025
+          </span>
+          <div
+            ref={metricTextRef}
+            className="text-[34px] sm:text-[38px] md:text-[50px] font-bold text-[#FF6550] tracking-tight leading-none mt-2 sm:mt-2.5"
+            style={{
+              fontFamily: "'Plus Jakarta Sans', system-ui, sans-serif",
+              fontVariantNumeric: 'tabular-nums',
+            }}
           >
-            <polyline
-              points="-11,-7 0,0 -11,7"
+            +0.00%
+          </div>
+        </div>
+
+        {/* Chart SVG spanning bottom of the inner box */}
+        <div
+          ref={containerRef}
+          className="absolute inset-0 pointer-events-none overflow-hidden"
+        >
+          <svg
+            viewBox="0 0 375 261"
+            preserveAspectRatio="none"
+            className="absolute inset-0 w-full h-full overflow-hidden"
+          >
+            <defs>
+              {/* Figma Vector 54 Stroke Linear Gradient: #707070 to #818181 */}
+              <linearGradient id="vector54Gradient" x1="0" y1="1" x2="1" y2="0">
+                <stop offset="0%" stopColor="#707070" />
+                <stop offset="100%" stopColor="#818181" />
+              </linearGradient>
+
+              {/* Figma Light Opacity Bar Linear Gradient */}
+              <linearGradient id="figmaBarGrad" x1="0" y1="0" x2="0" y2="1">
+                <stop offset="0%" stopColor="#E6ECF5" stopOpacity="0.75" />
+                <stop offset="100%" stopColor="#F1F5F9" stopOpacity="0.4" />
+              </linearGradient>
+
+              {/* Soft glow filter for waypoint dot */}
+              <filter id="figmaWaypointGlow" x="-50%" y="-50%" width="200%" height="200%">
+                <feDropShadow dx="0" dy="1.5" stdDeviation="2.5" floodColor="#FF6550" floodOpacity="0.35" />
+              </filter>
+            </defs>
+
+            {/* 5 Background Light Opacity Bars (Figma Rectangles 321-325) growing from 0 to target height */}
+            {barTargets.map((bar, i) => (
+              <rect
+                key={i}
+                ref={(el) => { barRefs.current[i] = el; }}
+                x={bar.x}
+                y="261"
+                width={bar.w}
+                height="0"
+                rx={bar.rx}
+                fill="url(#figmaBarGrad)"
+              />
+            ))}
+
+            {/* Figma Vector 54 Graph Line (Exact 11px border with #707070-#818181 linear gradient) with line draw animation */}
+            <path
+              ref={linePathRef}
+              d={linePath}
+              pathLength={PATH_LEN}
+              strokeDasharray={PATH_LEN}
+              strokeDashoffset={PATH_LEN}
               fill="none"
-              stroke="#FFFFFF"
-              strokeWidth="3.2"
+              stroke="url(#vector54Gradient)"
+              strokeWidth="11"
               strokeLinecap="round"
               strokeLinejoin="round"
             />
-          </g>
-        )}
-      </svg>
+
+            {/* Waypoint Coral Ring Dot riding directly on top of Bar 4 at (245, 128) */}
+            <g
+              ref={waypointRef}
+              transform="translate(245, 128) scale(0)"
+              className="transition-all duration-150 origin-center"
+              style={{
+                transformOrigin: '245px 128px',
+                opacity: 0,
+                transform: 'translate(245px, 128px) scale(0)',
+              }}
+            >
+              {/* Outer Subtle Pulsing Wave */}
+              <circle
+                cx="0"
+                cy="0"
+                r="15"
+                fill="none"
+                stroke="#FF6550"
+                strokeWidth="2"
+                opacity={0.35}
+                className="animate-ping"
+              />
+              {/* Solid White Center with Coral Border */}
+              <circle
+                cx="0"
+                cy="0"
+                r="9.5"
+                fill="#FFFFFF"
+                stroke="#FF6550"
+                strokeWidth="5"
+                filter="url(#figmaWaypointGlow)"
+              />
+            </g>
+          </svg>
+        </div>
+      </div>
     </div>
   );
 };
@@ -2443,10 +2494,13 @@ export const Features: React.FC = () => {
 
               {/* Title */}
               <div className="relative z-10">
-                <h3 className="text-xl sm:text-[22px] font-normal text-[#4E4E4E] leading-snug">
-                  Track Every<br />
-                  Touchpoint. <span className="font-semibold text-[#0F172A]">Measure</span><br />
-                  <span className="font-semibold text-[#0F172A]">Revenue Impact.</span>
+                <h3
+                  className="text-xl sm:text-[24px] lg:text-[28px] font-medium text-[#4E4E4E] leading-[1.15] tracking-tight mb-5"
+                  style={{ fontFamily: "'Plus Jakarta Sans', system-ui, sans-serif" }}
+                >
+                  Track Every 
+                  Touchpoint. <span className="font-medium text-[#0F172A]">Measure</span><br />
+                  <span className="font-medium text-[#0F172A]">Revenue Impact.</span>
                 </h3>
               </div>
 

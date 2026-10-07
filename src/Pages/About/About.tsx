@@ -2,7 +2,7 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { Link } from 'react-router-dom';
 import { ArrowUpRight } from 'lucide-react';
-import blueWaveSvg from '../../assets/bluewave.svg';
+import { FlowingWaveBackground } from './components/FlowingWaveBackground';
 import HowWeWork from './section/HowWeWork';
 import BuildSection from './section/BuildSection';
 import TeamSection from './section/TeamSection';
@@ -60,35 +60,39 @@ export const About: React.FC = () => {
   
   return (
     <div className="w-full min-h-screen bg-white text-[#0B0F19] font-['Plus_Jakarta_Sans',sans-serif]">
-      {/* 1. HERO SECTION WITH BLUE WAVE BACKGROUND */}
-      <section className="relative w-full overflow-hidden bg-white pt-16 sm:pt-20 md:pt-24 pb-14 sm:pb-18 px-4 sm:px-6 lg:px-8">
-        {/* Subtle Wave SVG Background */}
+      {/* 1. HERO SECTION WITH BLUE WAVE BACKGROUND - FULL SCREEN HEIGHT */}
+      <section
+        data-custom-padding
+        className="relative w-full min-h-[calc(100vh-80px)] min-h-[calc(100dvh-80px)] flex flex-col justify-center items-center overflow-hidden bg-white px-4 sm:px-6 lg:px-8 py-12"
+      >
+        {/* Animated Flowing Wave Lines Background */}
         <div className="absolute inset-0 flex items-center justify-center pointer-events-none select-none overflow-hidden">
-          <img
-            src={blueWaveSvg}
-            alt=""
-            className="w-full min-w-[1100px] max-w-[1700px] h-auto object-cover opacity-90 translate-y-2 sm:translate-y-4"
+          <FlowingWaveBackground
+            className="w-full h-full opacity-95"
+            lineCount={44}
+            speed={0.8}
+            spreadScale={1.0}
           />
         </div>
 
         {/* Soft Bottom Fade Effect */}
-        <div className="absolute inset-x-0 bottom-0 h-32 sm:h-44 bg-gradient-to-t from-white via-white/80 to-transparent pointer-events-none z-[5]" />
+        <div className="absolute inset-x-0 bottom-0 h-40 sm:h-56 bg-gradient-to-t from-white via-white/80 to-transparent pointer-events-none z-[5]" />
 
         {/* Foreground Content */}
-        <div className="relative z-10 max-w-5xl mx-auto text-center">
+        <div className="relative z-10 max-w-5xl mx-auto text-center my-auto">
           {/* Eyebrow */}
-          <p className="text-[11px] sm:text-[12px] font-medium uppercase tracking-[0.16em] text-[#64748B] mb-4 sm:mb-5">
+          <p className="text-[11px] sm:text-[12px] font-medium uppercase tracking-[0.16em] text-[#64748B] mb-4 sm:mb-6">
             ABOUT COIREI
           </p>
 
           {/* Main Headline */}
-          <h1 className="font-['Plus_Jakarta_Sans',sans-serif] text-3xl sm:text-4xl md:text-[52px] font-semibold tracking-[-1.3px] leading-[1.15] md:leading-[52px] text-[#0D0D0D] max-w-[970px] mx-auto text-center">
+          <h1 className="font-['Plus_Jakarta_Sans',sans-serif] text-3xl sm:text-5xl md:text-[56px] lg:text-[62px] font-semibold tracking-[-1.5px] leading-[1.12] text-[#0D0D0D] max-w-[1000px] mx-auto text-center">
             <span className="block sm:whitespace-nowrap">Technology, built around how your</span>
             <span className="block">business works.</span>
           </h1>
 
           {/* Subtitle */}
-          <p className="mt-4 font-['Plus_Jakarta_Sans',sans-serif] font-semibold italic text-[14px] leading-[20px] tracking-[0px] text-[#192339]">
+          <p className="mt-5 font-['Plus_Jakarta_Sans',sans-serif] font-semibold italic text-[15px] sm:text-[16px] leading-[22px] tracking-[0px] text-[#192339]">
             Less complexity. More possibilities.
           </p>
         </div>

@@ -5,6 +5,7 @@ interface QueryItem {
   id: string;
   question: string;
   response: string;
+  metrics: string[];
   sourcesCount: number;
 }
 
@@ -13,28 +14,32 @@ const QUERIES: QueryItem[] = [
     id: 'traction',
     question: '“What campaigns are gaining traction?”',
     response:
-      '“Operations leaders are showing the strongest emerging interest. Competitor messaging is heavily focused on automation, creating an opportunity around measurable productivity gains.”',
+      'Competitor acquisition campaigns targeting dissatisfied legacy users show 34% higher traction. For your brand, speed-to-value ad creative delivers 2.4x higher conversion rate than feature-centric ads.',
+    metrics: ['34% higher search visibility', '2.4x CVR', '48 ad sets analyzed'],
     sourcesCount: 83,
   },
   {
     id: 'audience',
     question: '“Which audience should we target next?”',
     response:
-      '“Mid-market VP Operations and IT Leaders showed a 42% spike in intent signals over the past 30 days, with low competitive saturation in comparison workflows.”',
+      'High-growth teams with <15 seats. 82% of market alternatives prioritize enterprise accounts, creating an unaddressed segment with a 94.2% opportunity confidence score.',
+    metrics: ['<15 seats target', '82% competitor exclusion rate', '94.2% opportunity confidence'],
     sourcesCount: 114,
   },
   {
     id: 'messaging',
     question: '“What messaging are competitors using?”',
     response:
-      '“Top 3 rivals are primarily anchoring on generic automation. Zero competitors are actively bidding on measurable time savings or audit compliance.”',
+      '70%+ of tracked alternatives push enterprise AI automation and complex customizations. Under 15% emphasize rapid setup, leaving a clear gap for zero-configuration messaging.',
+    metrics: ['70%+ enterprise automation push', '<15% setup messaging', '5-minute migration gap'],
     sourcesCount: 96,
   },
   {
     id: 'content-gap',
     question: '“Where is the biggest content gap?”',
     response:
-      '“Buyer searches around implementation timelines and ROI comparison models have surged by 68%, with no direct competitor guide currently ranking in the top 5.”',
+      'Generative search engines show a major void in direct speed-to-value comparison guides. Content targeting sub-10-minute setup times holds an 94% opportunity score across AI search tools.',
+    metrics: ['94% AI Answers opportunity score', '<10m time-to-value benchmark'],
     sourcesCount: 72,
   },
 ];
@@ -45,7 +50,7 @@ export const AskMarketingDataSection: React.FC = () => {
   const activeQuery = QUERIES.find((q) => q.id === activeId) || QUERIES[0];
 
   return (
-    <section className="w-full max-w-[1240px] mx-auto py-12 sm:py-16 md:py-20">
+    <section className="w-full max-w-[1240px] mx-auto py-12 sm:py-16 md:py-20 px-4 sm:px-6 lg:px-8">
       <div className="grid grid-cols-1 lg:grid-cols-12 gap-10 lg:gap-14 items-center">
         
         {/* Left Column: Heading and Question Selector Buttons */}
@@ -80,19 +85,31 @@ export const AskMarketingDataSection: React.FC = () => {
 
         {/* Right Column: Elevated AI Response Card */}
         <div className="lg:col-span-6 flex justify-start lg:justify-end w-full">
-          <div className="w-full max-w-[485px] min-h-[300px] sm:min-h-[320px] bg-white rounded-[24px] border border-[#E5E7EB] p-7 sm:p-9 shadow-xs flex flex-col justify-between font-['Inter',sans-serif]">
+          <div className="w-full max-w-[520px] min-h-[340px] sm:min-h-[360px] bg-white rounded-[24px] border border-[#E5E7EB] p-7 sm:p-9 shadow-xs flex flex-col justify-between font-['Inter',sans-serif]">
             
             {/* Top Tag & Response Content */}
             <div>
               {/* Tag */}
-              <div className="font-medium text-[11px] sm:text-[11.5px] uppercase tracking-[0.08em] text-[#9CA3AF] mb-5">
+              <div className="font-medium text-[11px] sm:text-[11.5px] uppercase tracking-[0.08em] text-[#9CA3AF] mb-4">
                 AI RESPONSE
               </div>
 
               {/* Dynamic Answer Quote */}
-              <p className="font-['Plus_Jakarta_Sans',sans-serif] font-normal text-[15.5px] sm:text-[16.5px] leading-[26px] sm:leading-[28px] text-[#374151] transition-opacity duration-300">
-                {activeQuery.response}
+              <p className="font-['Plus_Jakarta_Sans',sans-serif] font-normal text-[15px] sm:text-[16px] leading-[25px] sm:leading-[27px] text-[#374151] transition-opacity duration-300">
+                “{activeQuery.response}”
               </p>
+
+              {/* Metrics Pill Badges */}
+              <div className="flex flex-wrap items-center gap-2 mt-5">
+                {activeQuery.metrics.map((metric) => (
+                  <span
+                    key={metric}
+                    className="inline-flex items-center px-2.5 py-1 rounded-[6px] bg-[#F1F5F9] text-[#334155] border border-[#E2E8F0] text-[11.5px] sm:text-[12px] font-medium"
+                  >
+                    {metric}
+                  </span>
+                ))}
+              </div>
             </div>
 
             {/* Bottom Footer: Data Sources & Link */}

@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { Link } from 'react-router-dom';
 import { ArrowRight, Check } from 'lucide-react';
 import SeoAnimation from './components/SeoAnimation';
@@ -6,9 +6,152 @@ import AeoAnimation from './components/AeoAnimation';
 import BlogAutomationShowcase from './components/BlogAutomationShowcase';
 import AdPerformanceParallax from './components/AdPerformanceParallax';
 import AskMarketingDataSection from './components/AskMarketingDataSection';
+import {
+  GOOGLE_QUERY,
+  CHAT_QUERY,
+  type AIEngine,
+  type AnimStage,
+} from './components/visibilityData';
 
 export const MarketIntelligence: React.FC = () => {
   const [clickedButton, setClickedButton] = useState<'seo' | 'aeo' | null>(null);
+
+  // Synchronized animation state across SEO and AEO cards
+  const [activeEngine, setActiveEngine] = useState<AIEngine>('chatgpt');
+  const [activeGoogleTab, setActiveGoogleTab] = useState('All');
+  const [animStage, setAnimStage] = useState<AnimStage>('typing');
+  const [typedGoogle, setTypedGoogle] = useState('');
+  const [typedChat, setTypedChat] = useState('');
+  const [isVisible, setIsVisible] = useState(true);
+
+  const cardsContainerRef = useRef<HTMLDivElement>(null);
+  const userInteractedRef = useRef(false);
+  const idleTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
+
+  // Intersection observer to start/pause animation when visible in viewport
+  useEffect(() => {
+    const el = cardsContainerRef.current;
+    if (!el) return;
+
+    const observer = new IntersectionObserver(
+      ([entry]) => {
+        setIsVisible(entry.isIntersecting);
+      },
+      {
+        threshold: 0.05,
+        rootMargin: '100px 0px',
+      }
+    );
+
+    observer.observe(el);
+    return () => observer.disconnect();
+  }, []);
+
+  // Synchronized typing and automated send cycle matching Home page
+  useEffect(() => {
+    if (!isVisible) return;
+
+    let isCancelled = false;
+    let timerId: ReturnType<typeof setTimeout>;
+
+    const wait = (ms: number): Promise<void> =>
+      new Promise((resolve) => {
+        timerId = setTimeout(() => resolve(), ms);
+      });
+
+    const engines: AIEngine[] = ['chatgpt', 'perplexity', 'gemini', 'claude'];
+    let engineIdx = 0;
+
+    const runCycle = async () => {
+      while (!isCancelled) {
+        if (userInteractedRef.current) {
+          await wait(12000);
+          if (isCancelled) return;
+          userInteractedRef.current = false;
+        }
+
+        // 1. Reset to typing state
+        setAnimStage('typing');
+        setTypedGoogle('');
+        setTypedChat('');
+
+        const totalSteps = 40;
+        const stepDelay = 32; // ~1.3s smooth typing duration
+
+        for (let i = 1; i <= totalSteps; i++) {
+          if (isCancelled || userInteractedRef.current) break;
+          await wait(stepDelay);
+          if (isCancelled || userInteractedRef.current) break;
+
+          const googleChars = Math.round((i / totalSteps) * GOOGLE_QUERY.length);
+          const chatChars = Math.round((i / totalSteps) * CHAT_QUERY.length);
+
+          setTypedGoogle(GOOGLE_QUERY.slice(0, googleChars));
+          setTypedChat(CHAT_QUERY.slice(0, chatChars));
+        }
+
+        if (isCancelled || userInteractedRef.current) continue;
+
+        // 2. Sent / Trigger phase (250ms)
+        setAnimStage('sent');
+        await wait(250);
+        if (isCancelled || userInteractedRef.current) continue;
+
+        // 3. Move to Thinking/Searching phase (800ms)
+        setAnimStage('thinking');
+        await wait(800);
+        if (isCancelled || userInteractedRef.current) continue;
+
+        // 4. Move to Results phase (4200ms)
+        setAnimStage('result');
+        await wait(4200);
+        if (isCancelled || userInteractedRef.current) continue;
+
+        // Cycle to next engine for the next demonstration
+        engineIdx = (engineIdx + 1) % engines.length;
+        setActiveEngine(engines[engineIdx]);
+      }
+    };
+
+    runCycle();
+
+    return () => {
+      isCancelled = true;
+      clearTimeout(timerId);
+    };
+  }, [isVisible]);
+
+  const handleEngineSelect = (engineKey: AIEngine) => {
+    setActiveEngine(engineKey);
+    userInteractedRef.current = true;
+    setAnimStage('result');
+
+    if (idleTimerRef.current) clearTimeout(idleTimerRef.current);
+    idleTimerRef.current = setTimeout(() => {
+      userInteractedRef.current = false;
+    }, 12000);
+  };
+
+  const handleGoogleTabSelect = (tab: string) => {
+    setActiveGoogleTab(tab);
+    userInteractedRef.current = true;
+    setAnimStage('result');
+
+    if (idleTimerRef.current) clearTimeout(idleTimerRef.current);
+    idleTimerRef.current = setTimeout(() => {
+      userInteractedRef.current = false;
+    }, 12000);
+  };
+
+  const handleInstantSearch = () => {
+    userInteractedRef.current = true;
+    setAnimStage('result');
+
+    if (idleTimerRef.current) clearTimeout(idleTimerRef.current);
+    idleTimerRef.current = setTimeout(() => {
+      userInteractedRef.current = false;
+    }, 12000);
+  };
 
   const handleButtonClick = (type: 'seo' | 'aeo') => {
     setClickedButton(type);
@@ -63,10 +206,13 @@ export const MarketIntelligence: React.FC = () => {
       </div>
 
       {/* Two Comparison Cards Side-by-Side */}
-      <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 lg:gap-8 max-w-[1240px] mx-auto mt-8 sm:mt-10">
+      <div
+        ref={cardsContainerRef}
+        className="grid grid-cols-1 lg:grid-cols-2 gap-6 lg:gap-8 max-w-[1240px] mx-auto mt-8 sm:mt-10"
+      >
         
         {/* Card 1: SEO Card */}
-        <div className="bg-[#F8F9FA] rounded-[28px] sm:rounded-[32px] border border-neutral-200/70 p-6 sm:p-8 md:p-12 flex flex-col justify-between transition-all duration-300 hover:shadow-lg hover:border-neutral-300/80">
+        <div className="bg-[#F8F9FA] rounded-[28px] sm:rounded-[32px] border border-neutral-200/70 p-6 sm:p-8 md:p-10 flex flex-col justify-between transition-all duration-300 hover:shadow-lg hover:border-neutral-300/80">
           <div>
             {/* Title */}
             <h2 className="text-2xl sm:text-[32px] md:text-[36px] font-bold text-[#0B0F19] text-center tracking-tight leading-snug">
@@ -80,8 +226,14 @@ export const MarketIntelligence: React.FC = () => {
           </div>
 
           {/* Animated Interactive SEO Box Field */}
-          <div className="flex-1 flex items-center justify-center my-4">
-            <SeoAnimation />
+          <div className="flex-1 flex items-center justify-center my-6 w-full">
+            <SeoAnimation
+              animStage={animStage}
+              typedGoogle={typedGoogle}
+              activeGoogleTab={activeGoogleTab}
+              onTabSelect={handleGoogleTabSelect}
+              onInstantSearch={handleInstantSearch}
+            />
           </div>
 
           {/* Bottom Action Button (Doesn't link anywhere, routes kept clean) */}
@@ -107,7 +259,7 @@ export const MarketIntelligence: React.FC = () => {
         </div>
 
         {/* Card 2: AEO Card */}
-        <div className="bg-[#F8F9FA] rounded-[28px] sm:rounded-[32px] border border-neutral-200/70 p-6 sm:p-8 md:p-12 flex flex-col justify-between transition-all duration-300 hover:shadow-lg hover:border-neutral-300/80">
+        <div className="bg-[#F8F9FA] rounded-[28px] sm:rounded-[32px] border border-neutral-200/70 p-6 sm:p-8 md:p-10 flex flex-col justify-between transition-all duration-300 hover:shadow-lg hover:border-neutral-300/80">
           <div>
             {/* Title */}
             <h2 className="text-2xl sm:text-[32px] md:text-[36px] font-bold text-[#0B0F19] text-center tracking-tight leading-snug">
@@ -121,8 +273,14 @@ export const MarketIntelligence: React.FC = () => {
           </div>
 
           {/* Animated Interactive AEO Box Field */}
-          <div className="flex-1 flex items-center justify-center my-4">
-            <AeoAnimation />
+          <div className="flex-1 flex items-center justify-center my-6 w-full">
+            <AeoAnimation
+              animStage={animStage}
+              typedChat={typedChat}
+              activeEngine={activeEngine}
+              onEngineSelect={handleEngineSelect}
+              onInstantSearch={handleInstantSearch}
+            />
           </div>
 
           {/* Bottom Action Button (Doesn't link anywhere, routes kept clean) */}

@@ -4,6 +4,7 @@ import networkSvg from '../../../assets/about/collab/network.svg';
 import jeppiaarSvg from '../../../assets/about/collab/jeppiaar.svg';
 import prodocSvg from '../../../assets/about/collab/prodoc.svg';
 import techpanda from '../../../assets/about/collab/techpanda.webp';
+import { ScrollReveal } from '../../../components/ui/ScrollReveal';
 
 const PARTNER_LOGOS = [
   {
@@ -42,10 +43,15 @@ export const Partnersection: React.FC = () => {
   return (
     <section className="w-full bg-[#FFFFFF] pt-6 sm:pt-8 lg:pt-10 pb-10 sm:pb-14 px-6 sm:px-8 lg:px-12 border-t border-[#F1F5F9]">
       <div className="max-w-[1216px] mx-auto">
-        {/* Main Section Headline */}
-        <h2 className="text-3xl sm:text-4xl md:text-[44px] lg:text-[46px] font-semibold tracking-[-0.8px] text-[#0B0F19] leading-[1.18] text-center max-w-[860px] mx-auto mb-6 sm:mb-8 md:mb-14">
-          Partnering with innovators to turn intelligence into meaningful growth.
-        </h2>
+        {/* Main Section Headline & Subtitle */}
+        <ScrollReveal variant="fade-up" duration={700} distance={20} className="text-center mb-12 sm:mb-16">
+          <h2 className="text-3xl sm:text-4xl md:text-[44px] lg:text-[48px] font-bold text-[#0B0F19] tracking-[-1.2px] leading-[1.18] mb-3 sm:mb-4">
+            Collaboration That Creates Impact
+          </h2>
+          <p className="text-[14px] sm:text-[15px] md:text-[15.5px] text-[#64748B] font-normal leading-relaxed max-w-2xl mx-auto">
+            We collaborate with institutions, innovators, and industry leaders to turn ideas into meaningful opportunities, knowledge, and real-world impact.
+          </p>
+        </ScrollReveal>
 
         {/* 2-Column Exact Alignment Grid */}
         <div className="grid grid-cols-1 md:grid-cols-2 gap-10 lg:gap-16 items-center">

@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { Link, useLocation } from 'react-router-dom';
-import { ChevronDown, Menu, X } from 'lucide-react';
+import { Menu, X } from 'lucide-react';
 import coireiLogo from '../assets/logo/coireiLogo.png';
 
 export const Navbar: React.FC = () => {
@@ -215,32 +215,25 @@ export const Navbar: React.FC = () => {
             }`}
           >
             <Link
-              to="/docs"
+              to="/competitor-analysis"
               className="text-[14.5px] font-medium text-neutral-700 hover:text-neutral-900 transition-colors py-1"
             >
-              API Docs
+              Features
             </Link>
 
             <Link
+              to="/about"
+              className="text-[14.5px] font-medium text-neutral-700 hover:text-neutral-900 transition-colors py-1"
+            >
+              About
+            </Link>
+
+            {/* <Link
               to="/pricing"
               className="text-[14.5px] font-medium text-neutral-700 hover:text-neutral-900 transition-colors py-1"
             >
               Pricing
-            </Link>
-
-            <div className="relative group cursor-pointer">
-              <button className="flex items-center gap-1 text-[14.5px] font-medium text-neutral-700 hover:text-neutral-900 transition-colors py-1 cursor-pointer">
-                <span>Case Studies</span>
-                <ChevronDown className="w-3.5 h-3.5 text-neutral-400 group-hover:text-neutral-700 transition-transform group-hover:rotate-180" />
-              </button>
-            </div>
-
-            <div className="relative group cursor-pointer">
-              <button className="flex items-center gap-1 text-[14.5px] font-medium text-neutral-700 hover:text-neutral-900 transition-colors py-1 cursor-pointer">
-                <span>Resources</span>
-                <ChevronDown className="w-3.5 h-3.5 text-neutral-400 group-hover:text-neutral-700 transition-transform group-hover:rotate-180" />
-              </button>
-            </div>
+            </Link> */}
           </nav>
 
           {/* Right Action Buttons */}
@@ -276,6 +269,20 @@ export const Navbar: React.FC = () => {
         {/* Mobile dropdown menu (only when not scrolled) */}
         {!isScrolled && mobileMenuOpen && (
           <div className="md:hidden border-b border-neutral-100 bg-white/95 backdrop-blur-md px-6 pt-2 pb-6 space-y-3 shadow-lg">
+            <Link
+              to="/competitor-analysis"
+              onClick={() => setMobileMenuOpen(false)}
+              className="block py-2 text-neutral-700 font-medium text-base"
+            >
+              Features
+            </Link>
+            <Link
+              to="/about"
+              onClick={() => setMobileMenuOpen(false)}
+              className="block py-2 text-neutral-700 font-medium text-base"
+            >
+              About
+            </Link>
             <Link
               to="/product"
               onClick={() => setMobileMenuOpen(false)}

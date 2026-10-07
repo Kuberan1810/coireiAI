@@ -406,7 +406,7 @@ export const Contact: React.FC = () => {
             </div>
             <div>
               <a
-                href="mailto:sales@coirei.com"
+                href="mailto:info@coirei.com"
                 className="inline-flex items-center gap-1.5 text-[13px] font-semibold text-[#0B0F19] hover:text-blue-600 transition-colors cursor-pointer group"
               >
                 <span>Talk to Sales</span>
@@ -427,7 +427,7 @@ export const Contact: React.FC = () => {
             </div>
             <div>
               <a
-                href="mailto:support@coirei.com"
+                href="mailto:info@coirei.com"
                 className="inline-flex items-center gap-1.5 text-[13px] font-semibold text-[#0B0F19] hover:text-blue-600 transition-colors cursor-pointer group"
               >
                 <span>Contact Support</span>
@@ -448,7 +448,7 @@ export const Contact: React.FC = () => {
             </div>
             <div>
               <a
-                href="mailto:partnerships@coirei.com"
+                href="mailto:info@coirei.com"
                 className="inline-flex items-center gap-1.5 text-[13px] font-semibold text-[#0B0F19] hover:text-blue-600 transition-colors cursor-pointer group"
               >
                 <span>Contact Partnerships</span>
