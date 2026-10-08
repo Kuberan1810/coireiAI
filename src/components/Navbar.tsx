@@ -118,38 +118,10 @@ export const Navbar: React.FC = () => {
         setIsAtTop(atTop);
       }
 
-      if (!isHomePage) {
-        let nextScrolled = isScrolledRef.current;
-        if (scrollY <= 30 || scrollDelta < -6) {
-          nextScrolled = false;
-        } else if (scrollDelta > 6 && scrollY > 40) {
-          nextScrolled = true;
-        }
-        if (nextScrolled !== isScrolledRef.current) {
-          isScrolledRef.current = nextScrolled;
-          setIsScrolled(nextScrolled);
-        }
-        if (isStepsActiveRef.current) {
-          isStepsActiveRef.current = false;
-          setIsStepsActive(false);
-        }
-        if (hideNavbarRef.current) {
-          hideNavbarRef.current = false;
-          setHideNavbar(false);
-        }
-        lastScrollY = scrollY;
-        return;
-      }
-
-      let nextScrolled = isScrolledRef.current;
-      if (scrollY <= 30) {
-        nextScrolled = false;
-      } else if (scrollDelta < -6) {
-        nextScrolled = false;
-      } else if (scrollDelta > 6 && scrollY > 60) {
-        nextScrolled = true;
-      }
-
+      // Track floating pill state on scroll:
+      // At the very top (scrollY <= 25) -> full width
+      // Scrolled down (scrollY > 40) -> floating pill
+      let nextScrolled = scrollY > 40;
       if (nextScrolled !== isScrolledRef.current) {
         isScrolledRef.current = nextScrolled;
         setIsScrolled(nextScrolled);
@@ -157,40 +129,64 @@ export const Navbar: React.FC = () => {
 
       lastScrollY = scrollY;
 
-      // Steps section scroll progress tracking
-      const stepsSection = document.getElementById('steps-section');
-      if (stepsSection) {
-        const rect = stepsSection.getBoundingClientRect();
-        const windowHeight = window.innerHeight;
-        const totalScrollable = rect.height - windowHeight;
+      // Steps section scroll progress tracking (Home page only)
+      if (isHomePage) {
+        const stepsSection = document.getElementById('steps-section');
+        if (stepsSection) {
+          const rect = stepsSection.getBoundingClientRect();
+          const windowHeight = window.innerHeight;
+          const totalScrollable = rect.height - windowHeight;
 
-        const inSteps = rect.top <= 80 && rect.bottom > 80;
-        if (inSteps !== isStepsActiveRef.current) {
-          isStepsActiveRef.current = inSteps;
-          setIsStepsActive(inSteps);
-        }
+          const inSteps = rect.top <= 80 && rect.bottom > 80;
+          if (inSteps !== isStepsActiveRef.current) {
+            isStepsActiveRef.current = inSteps;
+            setIsStepsActive(inSteps);
+          }
 
-        if (inSteps && progressBarFillRef.current && totalScrollable > 0) {
-          const progress = Math.min(Math.max(-rect.top / totalScrollable, 0), 1);
-          progressBarFillRef.current.style.transform = `scaleX(${progress})`;
+          if (inSteps && progressBarFillRef.current && totalScrollable > 0) {
+            const progress = Math.min(Math.max(-rect.top / totalScrollable, 0), 1);
+            progressBarFillRef.current.style.transform = `scaleX(${progress})`;
+          }
+        } else if (isStepsActiveRef.current) {
+          isStepsActiveRef.current = false;
+          setIsStepsActive(false);
         }
       } else if (isStepsActiveRef.current) {
         isStepsActiveRef.current = false;
         setIsStepsActive(false);
       }
 
-      // Hide navbar when scrolling into fixed black Quote section
-      const topSurface = document.querySelector('.relative.z-20.bg-white');
-      if (topSurface) {
-        const bottom = topSurface.getBoundingClientRect().bottom;
-        const nextHide = bottom <= 90;
-        if (nextHide !== hideNavbarRef.current) {
-          hideNavbarRef.current = nextHide;
-          setHideNavbar(nextHide);
+      // Hide navbar ONLY when the user is viewing a fixed black parallax section
+      let nextHide = false;
+
+      const awardSpacer = document.getElementById('award-parallax-spacer');
+      const buildSpacer = document.getElementById('build-parallax-spacer');
+      const quoteSpacer = document.getElementById('quote-parallax-spacer');
+
+      if (awardSpacer) {
+        const rect = awardSpacer.getBoundingClientRect();
+        if (rect.top <= 80 && rect.bottom >= 80) {
+          nextHide = true;
         }
-      } else if (hideNavbarRef.current) {
-        hideNavbarRef.current = false;
-        setHideNavbar(false);
+      }
+
+      if (buildSpacer && !nextHide) {
+        const rect = buildSpacer.getBoundingClientRect();
+        if (rect.top <= 80 && rect.bottom >= 80) {
+          nextHide = true;
+        }
+      }
+
+      if (quoteSpacer && !nextHide) {
+        const rect = quoteSpacer.getBoundingClientRect();
+        if (rect.top <= 80 && rect.bottom >= 80) {
+          nextHide = true;
+        }
+      }
+
+      if (nextHide !== hideNavbarRef.current) {
+        hideNavbarRef.current = nextHide;
+        setHideNavbar(nextHide);
       }
     };
 
@@ -211,7 +207,7 @@ export const Navbar: React.FC = () => {
       window.removeEventListener('scroll', handleScroll);
       window.removeEventListener('resize', handleScroll);
     };
-  }, [isHomePage]);
+  }, [isHomePage, location.pathname]);
 
   return (
     <>

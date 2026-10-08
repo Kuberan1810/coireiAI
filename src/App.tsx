@@ -12,6 +12,7 @@ import CompetitorAnalysis from './Pages/CompetitorAnalysis/CompetitorAnalysis';
 import AEO from './Pages/AEO/AEO';
 import SEO from './Pages/SEO/SEO';
 import Engage from './Pages/Engage/Engage';
+import AboutCEO from './Pages/About/AboutCeo/AboutCEO';
 
 
 // Simple Scroll to Top on route change
@@ -42,6 +43,7 @@ export const App: FC = () => {
             <Route path="/pricing" element={<Pricing />} />
             <Route path="/contact" element={<Contact />} />
             <Route path="/about" element={<About />} />
+            <Route path="/about/ceo" element={<AboutCEO />} />
           </Routes>
         </main>
         <Footer />

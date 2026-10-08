@@ -1,9 +1,9 @@
 import React, { useState, useEffect } from 'react';
 import companyIcon from '../../../assets/home/animation/company.png';
-import peopleIcon from '../../../assets/home/animation/people.png';
-import cartIcon from '../../../assets/home/animation/cart.png';
 import arrowIcon from '../../../assets/home/animation/arrow.png';
+import peopleIcon from '../../../assets/home/animation/people.png';
 import graphIcon from '../../../assets/home/animation/graph.png';
+import cartIcon from '../../../assets/home/animation/cart.png';
 import starIcon from '../../../assets/home/animation/star.png';
 import zoomIcon from '../../../assets/home/animation/zoom.png';
 
@@ -12,805 +12,582 @@ interface AnalyseAnimationProps {
 }
 
 export const AnalyseAnimation: React.FC<AnalyseAnimationProps> = ({ className = '' }) => {
-  // Stage controller for sequential line formation & card reveal:
-  // Stage 0: Reset / Idle
-  // Stage 1: Line 1 draws -> Stage 2: Company card reveals
-  // Stage 3: Line 2 draws -> Stage 4: Target card reveals
-  // Stage 5: Line 3 draws -> Stage 6: People card reveals
-  // Stage 7: Line 4 draws -> Stage 8: Graph card reveals
-  // Stage 9: Line 5 draws -> Stage 10: Cart card reveals
-  // Stage 11: Line 6 draws -> Stage 12: Star card reveals (All visible)
-  // Hold full showcase, then smooth reset and loop.
-  const [stage, setStage] = useState<number>(0);
+  // Step sequence:
+  // Step 0: 0ms   -> Start / reset (hidden)
+  // Step 1: 200ms -> 1st: CENTER BROWSER reveals (spring pops up from center)
+  // Step 2: 400ms -> 3D Magnifying Glass reveals & lands on dashboard
+  // Step 3: 600ms -> Small Card 0 (Company - Purple) connects & spring pops up
+  // Step 4: 800ms -> Small Card 1 (Target - Red) connects & spring pops up
+  // Step 5: 1000ms -> Small Card 2 (People - Blue) connects & spring pops up
+  // Step 6: 1200ms -> Small Card 3 (Graph - Green) connects & spring pops up
+  // Step 7: 1400ms -> Small Card 4 (Cart - Amber) connects & spring pops up
+  // Step 8: 1600ms -> Small Card 5 (Star - Pink) connects & spring pops up
+  // Steps 9..26: All cards remain open, streaming data & live shimmers for ~3.6s before looping
+  const [activeStep, setActiveStep] = useState(0);
 
   useEffect(() => {
-    let timeoutId: ReturnType<typeof setTimeout>;
-    let isMounted = true;
+    const timer = setInterval(() => {
+      setActiveStep((prev) => {
+        if (prev >= 26) return 0;
+        return prev + 1;
+      });
+    }, 200);
 
-    // Timeline sequence: [targetStage, durationMsToNextStage]
-    const timeline: [number, number][] = [
-      [1, 460],   // Line 1 draws from browser top-left to Company card
-      [2, 420],   // Company card pops & reveals
-      [3, 460],   // Line 2 draws from browser top-right to Target card
-      [4, 420],   // Target card pops & reveals
-      [5, 460],   // Line 3 draws from browser left to People card
-      [6, 420],   // People card pops & reveals
-      [7, 460],   // Line 4 draws from browser right to Graph card
-      [8, 420],   // Graph card pops & reveals
-      [9, 460],   // Line 5 draws from browser bottom-left to Cart card
-      [10, 420],  // Cart card pops & reveals
-      [11, 460],  // Line 6 draws from browser bottom-right to Star card
-      [12, 3800], // Star card pops & reveals -> Hold all cards visible
-      [0, 500],   // Clean reset transition -> loop
-    ];
-
-    let currentIndex = 0;
-
-    const tick = () => {
-      if (!isMounted) return;
-      const [nextStage, delay] = timeline[currentIndex];
-      setStage(nextStage);
-      currentIndex = (currentIndex + 1) % timeline.length;
-      timeoutId = setTimeout(tick, delay);
-    };
-
-    // Initial start delay
-    timeoutId = setTimeout(tick, 300);
-
-    return () => {
-      isMounted = false;
-      clearTimeout(timeoutId);
-    };
+    return () => clearInterval(timer);
   }, []);
 
-  // Helper flags:
-  const isLineActive = (itemIndex: number) => stage >= 2 * itemIndex - 1;
-  const isCardActive = (itemIndex: number) => stage >= 2 * itemIndex;
+  const isBrowserPopped = activeStep >= 1;
+  const isZoomPopped = activeStep >= 2;
+
+  // 6 Floating Intelligence Category Cards in 450 x 300 SVG Coordinate Grid
+  const cards = [
+    {
+      id: 0,
+      title: 'Company',
+      icon: companyIcon,
+      color: '#8B5CF6',
+      iconBg: '#F3E8FF',
+      x: 42,
+      y: 28,
+      width: 58,
+      height: 52,
+      origin: 'right center',
+      dotX: 100,
+      dotY: 54,
+      path: 'M 152 98 C 138 72, 118 56, 100 54',
+      popStep: 3,
+    },
+    {
+      id: 1,
+      title: 'Target',
+      icon: arrowIcon,
+      color: '#EF4444',
+      iconBg: '#FEE2E2',
+      x: 350,
+      y: 28,
+      width: 58,
+      height: 52,
+      origin: 'left center',
+      dotX: 350,
+      dotY: 54,
+      path: 'M 298 98 C 312 72, 332 56, 350 54',
+      popStep: 4,
+    },
+    {
+      id: 2,
+      title: 'People',
+      icon: peopleIcon,
+      color: '#3B82F6',
+      iconBg: '#DBEAFE',
+      x: 24,
+      y: 124,
+      width: 58,
+      height: 52,
+      origin: 'right center',
+      dotX: 82,
+      dotY: 150,
+      path: 'M 133 150 C 114 150, 98 150, 82 150',
+      popStep: 5,
+    },
+    {
+      id: 3,
+      title: 'Graph',
+      icon: graphIcon,
+      color: '#10B981',
+      iconBg: '#D1FAE5',
+      x: 368,
+      y: 124,
+      width: 58,
+      height: 52,
+      origin: 'left center',
+      dotX: 368,
+      dotY: 150,
+      path: 'M 317 150 C 336 150, 352 150, 368 150',
+      popStep: 6,
+    },
+    {
+      id: 4,
+      title: 'Cart',
+      icon: cartIcon,
+      color: '#F59E0B',
+      iconBg: '#FEF3C7',
+      x: 46,
+      y: 220,
+      width: 58,
+      height: 52,
+      origin: 'right center',
+      dotX: 104,
+      dotY: 246,
+      path: 'M 152 202 C 138 228, 120 244, 104 246',
+      popStep: 7,
+    },
+    {
+      id: 5,
+      title: 'Star',
+      icon: starIcon,
+      color: '#EC4899',
+      iconBg: '#FCE7F3',
+      x: 346,
+      y: 220,
+      width: 58,
+      height: 52,
+      origin: 'left center',
+      dotX: 346,
+      dotY: 246,
+      path: 'M 298 202 C 312 228, 330 244, 346 246',
+      popStep: 8,
+    },
+  ];
 
   return (
     <div
-      className={`relative w-full h-full select-none flex items-center justify-center overflow-hidden pointer-events-none p-2 ${className}`}
+      className={`relative w-full h-full flex items-center justify-center bg-white overflow-hidden select-none p-1 sm:p-2 ${className}`}
     >
-      {/* Ambient background soft glow */}
-      <div className="absolute inset-0 pointer-events-none flex items-center justify-center">
-        <div className="w-[85%] h-[85%] rounded-full bg-gradient-to-tr from-indigo-100/20 via-purple-50/15 to-blue-100/20 blur-2xl opacity-60" />
-      </div>
-
-      {/* Main Coordinate Stage: 400 x 360 coordinate grid with balanced whitespace */}
-      <div className="relative w-full aspect-[400/360] max-w-[350px] flex items-center justify-center">
-        
-        {/* ========================================================================= */}
-        {/* SVG CONNECTOR LINES & OUTWARD FORMING MASKS                               */}
-        {/* ========================================================================= */}
-        <svg
-          viewBox="0 0 400 360"
-          className="absolute inset-0 w-full h-full pointer-events-none overflow-visible z-0"
-        >
-          <defs>
-            {/* Outward Mask Animations: Stroke drawn from browser edge to card bead */}
-            <mask id="lineMask1">
-              <path
-                d="M 165 120 C 165 85, 135 52, 105 50"
-                fill="none"
-                stroke="#FFFFFF"
-                strokeWidth="8"
-                pathLength="100"
-                strokeDasharray="100"
-                strokeDashoffset={isLineActive(1) ? 0 : 100}
-                style={{
-                  transition: 'stroke-dashoffset 460ms cubic-bezier(0.25, 1, 0.5, 1)',
-                }}
-              />
-            </mask>
-
-            <mask id="lineMask2">
-              <path
-                d="M 238 120 C 245 85, 280 72, 310 77"
-                fill="none"
-                stroke="#FFFFFF"
-                strokeWidth="8"
-                pathLength="100"
-                strokeDasharray="100"
-                strokeDashoffset={isLineActive(2) ? 0 : 100}
-                style={{
-                  transition: 'stroke-dashoffset 460ms cubic-bezier(0.25, 1, 0.5, 1)',
-                }}
-              />
-            </mask>
-
-            <mask id="lineMask3">
-              <path
-                d="M 138 168 C 124 168, 112 165, 104 165"
-                fill="none"
-                stroke="#FFFFFF"
-                strokeWidth="8"
-                pathLength="100"
-                strokeDasharray="100"
-                strokeDashoffset={isLineActive(3) ? 0 : 100}
-                style={{
-                  transition: 'stroke-dashoffset 460ms cubic-bezier(0.25, 1, 0.5, 1)',
-                }}
-              />
-            </mask>
-
-            <mask id="lineMask4">
-              <path
-                d="M 268 168 C 295 168, 325 162, 348 162"
-                fill="none"
-                stroke="#FFFFFF"
-                strokeWidth="8"
-                pathLength="100"
-                strokeDasharray="100"
-                strokeDashoffset={isLineActive(4) ? 0 : 100}
-                style={{
-                  transition: 'stroke-dashoffset 460ms cubic-bezier(0.25, 1, 0.5, 1)',
-                }}
-              />
-            </mask>
-
-            <mask id="lineMask5">
-              <path
-                d="M 155 218 C 148 245, 138 265, 132 280"
-                fill="none"
-                stroke="#FFFFFF"
-                strokeWidth="8"
-                pathLength="100"
-                strokeDasharray="100"
-                strokeDashoffset={isLineActive(5) ? 0 : 100}
-                style={{
-                  transition: 'stroke-dashoffset 460ms cubic-bezier(0.25, 1, 0.5, 1)',
-                }}
-              />
-            </mask>
-
-            <mask id="lineMask6">
-              <path
-                d="M 252 218 C 280 240, 315 265, 348 281"
-                fill="none"
-                stroke="#FFFFFF"
-                strokeWidth="8"
-                pathLength="100"
-                strokeDasharray="100"
-                strokeDashoffset={isLineActive(6) ? 0 : 100}
-                style={{
-                  transition: 'stroke-dashoffset 460ms cubic-bezier(0.25, 1, 0.5, 1)',
-                }}
-              />
-            </mask>
-          </defs>
-
-          {/* 1. TOP-LEFT: Company Line */}
-          <g>
-            <path
-              d="M 165 120 C 165 85, 135 52, 105 50"
-              fill="none"
-              stroke="#CBD5E1"
-              strokeWidth="1.3"
-              strokeDasharray="3 2.5"
-              mask="url(#lineMask1)"
-              style={{
-                opacity: isLineActive(1) ? 1 : 0,
-                transition: 'opacity 250ms ease-out',
-              }}
-            />
-            {isCardActive(1) && (
-              <circle r="1.5" fill="#8B5CF6" opacity="0.9">
-                <animateMotion
-                  path="M 105 50 C 135 52, 165 85, 165 120"
-                  dur="3.2s"
-                  repeatCount="indefinite"
-                />
-              </circle>
-            )}
-          </g>
-
-          {/* 2. TOP-RIGHT: Target Line */}
-          <g>
-            <path
-              d="M 238 120 C 245 85, 280 72, 310 77"
-              fill="none"
-              stroke="#CBD5E1"
-              strokeWidth="1.3"
-              strokeDasharray="3 2.5"
-              mask="url(#lineMask2)"
-              style={{
-                opacity: isLineActive(2) ? 1 : 0,
-                transition: 'opacity 250ms ease-out',
-              }}
-            />
-            {isCardActive(2) && (
-              <circle r="1.5" fill="#EF4444" opacity="0.9">
-                <animateMotion
-                  path="M 310 77 C 280 72, 245 85, 238 120"
-                  dur="3.4s"
-                  repeatCount="indefinite"
-                />
-              </circle>
-            )}
-          </g>
-
-          {/* 3. MIDDLE-LEFT: People Line */}
-          <g>
-            <path
-              d="M 138 168 C 124 168, 112 165, 104 165"
-              fill="none"
-              stroke="#CBD5E1"
-              strokeWidth="1.3"
-              strokeDasharray="3 2.5"
-              mask="url(#lineMask3)"
-              style={{
-                opacity: isLineActive(3) ? 1 : 0,
-                transition: 'opacity 250ms ease-out',
-              }}
-            />
-            {isCardActive(3) && (
-              <circle r="1.5" fill="#3B82F6" opacity="0.9">
-                <animateMotion
-                  path="M 104 165 C 112 165, 124 168, 138 168"
-                  dur="3.6s"
-                  repeatCount="indefinite"
-                />
-              </circle>
-            )}
-          </g>
-
-          {/* 4. MIDDLE-RIGHT: Graph Line */}
-          <g>
-            <path
-              d="M 268 168 C 295 168, 325 162, 348 162"
-              fill="none"
-              stroke="#CBD5E1"
-              strokeWidth="1.3"
-              strokeDasharray="3 2.5"
-              mask="url(#lineMask4)"
-              style={{
-                opacity: isLineActive(4) ? 1 : 0,
-                transition: 'opacity 250ms ease-out',
-              }}
-            />
-            {isCardActive(4) && (
-              <circle r="1.5" fill="#2563EB" opacity="0.9">
-                <animateMotion
-                  path="M 348 162 C 325 162, 295 168, 268 168"
-                  dur="3.5s"
-                  repeatCount="indefinite"
-                />
-              </circle>
-            )}
-          </g>
-
-          {/* 5. BOTTOM-LEFT: Cart Line */}
-          <g>
-            <path
-              d="M 155 218 C 148 245, 138 265, 132 280"
-              fill="none"
-              stroke="#CBD5E1"
-              strokeWidth="1.3"
-              strokeDasharray="3 2.5"
-              mask="url(#lineMask5)"
-              style={{
-                opacity: isLineActive(5) ? 1 : 0,
-                transition: 'opacity 250ms ease-out',
-              }}
-            />
-            {isCardActive(5) && (
-              <circle r="1.5" fill="#10B981" opacity="0.9">
-                <animateMotion
-                  path="M 132 280 C 138 265, 148 245, 155 218"
-                  dur="3.8s"
-                  repeatCount="indefinite"
-                />
-              </circle>
-            )}
-          </g>
-
-          {/* 6. BOTTOM-RIGHT: Star Line */}
-          <g>
-            <path
-              d="M 252 218 C 280 240, 315 265, 348 281"
-              fill="none"
-              stroke="#CBD5E1"
-              strokeWidth="1.3"
-              strokeDasharray="3 2.5"
-              mask="url(#lineMask6)"
-              style={{
-                opacity: isLineActive(6) ? 1 : 0,
-                transition: 'opacity 250ms ease-out',
-              }}
-            />
-            {isCardActive(6) && (
-              <circle r="1.5" fill="#F59E0B" opacity="0.9">
-                <animateMotion
-                  path="M 348 281 C 315 265, 280 240, 252 218"
-                  dur="3.7s"
-                  repeatCount="indefinite"
-                />
-              </circle>
-            )}
-          </g>
-        </svg>
-
-        {/* ========================================================================= */}
-        {/* 6 3D SATELLITE CARDS WITH EXACT JOINING BEAD PLACEMENTS                   */}
-        {/* ========================================================================= */}
-
-        {/* 1. TOP-LEFT: Company */}
-        <div
-          className="absolute z-10 -translate-x-1/2 -translate-y-1/2"
-          style={{
-            left: '30%',
-            top: '20%',
-            opacity: isCardActive(1) ? 1 : 0,
-            transform: isCardActive(1)
-              ? 'translate(-50%, -50%) scale(1)'
-              : 'translate(-50%, -50%) scale(0.85)',
-            transition: 'all 400ms cubic-bezier(0.16, 1, 0.3, 1)',
-          }}
-        >
-          <div
-            className="relative w-[44px] sm:w-[48px] h-[40px] sm:h-[44px] rounded-[13px] bg-gradient-to-b from-[#FFFFFF] via-[#FDFDFE] to-[#F7F9FC] p-1.5 flex flex-col items-center justify-between border border-white/95 shadow-[1px_1px_0_#E2E8F0,2px_2px_0_#DCE5EE,0_10px_20px_-3px_rgba(100,116,160,0.14),inset_0_1.5px_2px_rgba(255,255,255,0.95)]"
-            style={{
-              transform: 'perspective(600px) rotateX(10deg) rotateY(12deg) rotateZ(-2deg)',
-              transformStyle: 'preserve-3d',
-            }}
-          >
-            {/* Attached 3D Purple Bead on Right Edge */}
-            <div className="absolute -right-1.5 top-[60%] -translate-y-1/2 w-2.5 h-2.5 rounded-full bg-gradient-to-br from-[#FFFFFF] via-[#A855F7] to-[#6B21A8] shadow-[0_1.5px_3px_rgba(0,0,0,0.22),inset_0_1px_1px_rgba(255,255,255,0.9)] z-20" />
-            
-            <div className="w-4.5 h-4.5 flex items-center justify-center">
-              <img
-                src={companyIcon}
-                alt="Company"
-                className="w-full h-full object-contain drop-shadow-[0_2px_3px_rgba(0,0,0,0.1)]"
-                loading="lazy"
-              />
-            </div>
-            {/* Shimmering Skeleton Bars */}
-            <div className="w-full flex flex-col items-center gap-[3px] pb-0.5">
-              <div className="relative w-[75%] h-[3px] sm:h-[3.5px] bg-[#CBD5E1] rounded-full overflow-hidden shadow-[inset_0_0.8px_1px_rgba(0,0,0,0.06)]">
-                <div className="absolute inset-0 -translate-x-full bg-gradient-to-r from-transparent via-white/90 to-transparent animate-[skeleton-shimmer_1.8s_ease-in-out_infinite]" />
-              </div>
-              <div className="relative w-[50%] h-[2.2px] sm:h-[2.6px] bg-[#E2E8F0] rounded-full overflow-hidden shadow-[inset_0_0.8px_1px_rgba(0,0,0,0.04)]">
-                <div 
-                  className="absolute inset-0 -translate-x-full bg-gradient-to-r from-transparent via-white/90 to-transparent animate-[skeleton-shimmer_1.8s_ease-in-out_infinite]"
-                  style={{ animationDelay: '180ms' }}
-                />
-              </div>
-            </div>
-          </div>
-        </div>
-
-        {/* 2. TOP-RIGHT: Target */}
-        <div
-          className="absolute z-10 -translate-x-1/2 -translate-y-1/2"
-          style={{
-            left: '84.5%',
-            top: '18.6%',
-            opacity: isCardActive(2) ? 1 : 0,
-            transform: isCardActive(2)
-              ? 'translate(-50%, -50%) scale(1)'
-              : 'translate(-50%, -50%) scale(0.85)',
-            transition: 'all 400ms cubic-bezier(0.16, 1, 0.3, 1)',
-          }}
-        >
-          <div
-            className="relative w-[44px] sm:w-[48px] h-[40px] sm:h-[44px] rounded-[13px] bg-gradient-to-b from-[#FFFFFF] via-[#FDFDFE] to-[#F7F9FC] p-1.5 flex flex-col items-center justify-between border border-white/95 shadow-[1px_1px_0_#E2E8F0,2px_2px_0_#DCE5EE,0_10px_20px_-3px_rgba(100,116,160,0.14),inset_0_1.5px_2px_rgba(255,255,255,0.95)]"
-            style={{
-              transform: 'perspective(600px) rotateX(10deg) rotateY(-12deg) rotateZ(2deg)',
-              transformStyle: 'preserve-3d',
-            }}
-          >
-            {/* Attached 3D Red Bead on Left Edge */}
-            <div className="absolute -left-1.5 top-[72%] -translate-y-1/2 w-2.5 h-2.5 rounded-full bg-gradient-to-br from-[#FFFFFF] via-[#F87171] to-[#991B1B] shadow-[0_1.5px_3px_rgba(0,0,0,0.22),inset_0_1px_1px_rgba(255,255,255,0.9)] z-20" />
-
-            <div className="w-4.5 h-4.5 flex items-center justify-center">
-              <img
-                src={arrowIcon}
-                alt="Target"
-                className="w-full h-full object-contain drop-shadow-[0_2px_3px_rgba(0,0,0,0.1)]"
-                loading="lazy"
-              />
-            </div>
-            {/* Shimmering Skeleton Bars */}
-            <div className="w-full flex flex-col items-center gap-[3px] pb-0.5">
-              <div className="relative w-[75%] h-[3px] sm:h-[3.5px] bg-[#CBD5E1] rounded-full overflow-hidden shadow-[inset_0_0.8px_1px_rgba(0,0,0,0.06)]">
-                <div 
-                  className="absolute inset-0 -translate-x-full bg-gradient-to-r from-transparent via-white/90 to-transparent animate-[skeleton-shimmer_1.8s_ease-in-out_infinite]"
-                  style={{ animationDelay: '120ms' }}
-                />
-              </div>
-              <div className="relative w-[50%] h-[2.2px] sm:h-[2.6px] bg-[#E2E8F0] rounded-full overflow-hidden shadow-[inset_0_0.8px_1px_rgba(0,0,0,0.04)]">
-                <div 
-                  className="absolute inset-0 -translate-x-full bg-gradient-to-r from-transparent via-white/90 to-transparent animate-[skeleton-shimmer_1.8s_ease-in-out_infinite]"
-                  style={{ animationDelay: '300ms' }}
-                />
-              </div>
-            </div>
-          </div>
-        </div>
-
-        {/* 3. MIDDLE-LEFT: People */}
-        <div
-          className="absolute z-10 -translate-x-1/2 -translate-y-1/2"
-          style={{
-            left: '19%',
-            top: '45.8%',
-            opacity: isCardActive(3) ? 1 : 0,
-            transform: isCardActive(3)
-              ? 'translate(-50%, -50%) scale(1)'
-              : 'translate(-50%, -50%) scale(0.85)',
-            transition: 'all 400ms cubic-bezier(0.16, 1, 0.3, 1)',
-          }}
-        >
-          <div
-            className="relative w-[44px] sm:w-[48px] h-[40px] sm:h-[44px] rounded-[13px] bg-gradient-to-b from-[#FFFFFF] via-[#FDFDFE] to-[#F7F9FC] p-1.5 flex flex-col items-center justify-between border border-white/95 shadow-[1px_1px_0_#E2E8F0,2px_2px_0_#DCE5EE,0_10px_20px_-3px_rgba(100,116,160,0.14),inset_0_1.5px_2px_rgba(255,255,255,0.95)]"
-            style={{
-              transform: 'perspective(600px) rotateX(4deg) rotateY(14deg) rotateZ(-1deg)',
-              transformStyle: 'preserve-3d',
-            }}
-          >
-            {/* Attached 3D Blue Bead on Right Edge */}
-            <div className="absolute -right-1.5 top-1/2 -translate-y-1/2 w-2.5 h-2.5 rounded-full bg-gradient-to-br from-[#FFFFFF] via-[#60A5FA] to-[#1E40AF] shadow-[0_1.5px_3px_rgba(0,0,0,0.22),inset_0_1px_1px_rgba(255,255,255,0.9)] z-20" />
-
-            <div className="w-4.5 h-4.5 flex items-center justify-center">
-              <img
-                src={peopleIcon}
-                alt="People"
-                className="w-full h-full object-contain drop-shadow-[0_2px_3px_rgba(0,0,0,0.1)]"
-                loading="lazy"
-              />
-            </div>
-            {/* Shimmering Skeleton Bars */}
-            <div className="w-full flex flex-col items-center gap-[3px] pb-0.5">
-              <div className="relative w-[75%] h-[3px] sm:h-[3.5px] bg-[#CBD5E1] rounded-full overflow-hidden shadow-[inset_0_0.8px_1px_rgba(0,0,0,0.06)]">
-                <div 
-                  className="absolute inset-0 -translate-x-full bg-gradient-to-r from-transparent via-white/90 to-transparent animate-[skeleton-shimmer_1.8s_ease-in-out_infinite]"
-                  style={{ animationDelay: '240ms' }}
-                />
-              </div>
-              <div className="relative w-[50%] h-[2.2px] sm:h-[2.6px] bg-[#E2E8F0] rounded-full overflow-hidden shadow-[inset_0_0.8px_1px_rgba(0,0,0,0.04)]">
-                <div 
-                  className="absolute inset-0 -translate-x-full bg-gradient-to-r from-transparent via-white/90 to-transparent animate-[skeleton-shimmer_1.8s_ease-in-out_infinite]"
-                  style={{ animationDelay: '420ms' }}
-                />
-              </div>
-            </div>
-          </div>
-        </div>
-
-        {/* 4. MIDDLE-RIGHT: Bar Graph */}
-        <div
-          className="absolute z-10 -translate-x-1/2 -translate-y-1/2"
-          style={{
-            left: '94%',
-            top: '45%',
-            opacity: isCardActive(4) ? 1 : 0,
-            transform: isCardActive(4)
-              ? 'translate(-50%, -50%) scale(1)'
-              : 'translate(-50%, -50%) scale(0.85)',
-            transition: 'all 400ms cubic-bezier(0.16, 1, 0.3, 1)',
-          }}
-        >
-          <div
-            className="relative w-[44px] sm:w-[48px] h-[40px] sm:h-[44px] rounded-[13px] bg-gradient-to-b from-[#FFFFFF] via-[#FDFDFE] to-[#F7F9FC] p-1.5 flex flex-col items-center justify-between border border-white/95 shadow-[1px_1px_0_#E2E8F0,2px_2px_0_#DCE5EE,0_10px_20px_-3px_rgba(100,116,160,0.14),inset_0_1.5px_2px_rgba(255,255,255,0.95)]"
-            style={{
-              transform: 'perspective(600px) rotateX(4deg) rotateY(-14deg) rotateZ(1deg)',
-              transformStyle: 'preserve-3d',
-            }}
-          >
-            {/* Attached 3D Blue Bead on Left Edge */}
-            <div className="absolute -left-1.5 top-1/2 -translate-y-1/2 w-2.5 h-2.5 rounded-full bg-gradient-to-br from-[#FFFFFF] via-[#3B82F6] to-[#1D4ED8] shadow-[0_1.5px_3px_rgba(0,0,0,0.22),inset_0_1px_1px_rgba(255,255,255,0.9)] z-20" />
-
-            <div className="w-4.5 h-4.5 flex items-center justify-center">
-              <img
-                src={graphIcon}
-                alt="Bar Graph"
-                className="w-full h-full object-contain drop-shadow-[0_2px_3px_rgba(0,0,0,0.1)]"
-                loading="lazy"
-              />
-            </div>
-            {/* Shimmering Skeleton Bars */}
-            <div className="w-full flex flex-col items-center gap-[3px] pb-0.5">
-              <div className="relative w-[75%] h-[3px] sm:h-[3.5px] bg-[#CBD5E1] rounded-full overflow-hidden shadow-[inset_0_0.8px_1px_rgba(0,0,0,0.06)]">
-                <div 
-                  className="absolute inset-0 -translate-x-full bg-gradient-to-r from-transparent via-white/90 to-transparent animate-[skeleton-shimmer_1.8s_ease-in-out_infinite]"
-                  style={{ animationDelay: '360ms' }}
-                />
-              </div>
-              <div className="relative w-[50%] h-[2.2px] sm:h-[2.6px] bg-[#E2E8F0] rounded-full overflow-hidden shadow-[inset_0_0.8px_1px_rgba(0,0,0,0.04)]">
-                <div 
-                  className="absolute inset-0 -translate-x-full bg-gradient-to-r from-transparent via-white/90 to-transparent animate-[skeleton-shimmer_1.8s_ease-in-out_infinite]"
-                  style={{ animationDelay: '540ms' }}
-                />
-              </div>
-            </div>
-          </div>
-        </div>
-
-        {/* 5. BOTTOM-LEFT: Cart */}
-        <div
-          className="absolute z-10 -translate-x-1/2 -translate-y-1/2"
-          style={{
-            left: '26%',
-            top: '80%',
-            opacity: isCardActive(5) ? 1 : 0,
-            transform: isCardActive(5)
-              ? 'translate(-50%, -50%) scale(1)'
-              : 'translate(-50%, -50%) scale(0.85)',
-            transition: 'all 400ms cubic-bezier(0.16, 1, 0.3, 1)',
-          }}
-        >
-          <div
-            className="relative w-[44px] sm:w-[48px] h-[40px] sm:h-[44px] rounded-[13px] bg-gradient-to-b from-[#FFFFFF] via-[#FDFDFE] to-[#F7F9FC] p-1.5 flex flex-col items-center justify-between border border-white/95 shadow-[1px_1px_0_#E2E8F0,2px_2px_0_#DCE5EE,0_10px_20px_-3px_rgba(100,116,160,0.14),inset_0_1.5px_2px_rgba(255,255,255,0.95)]"
-            style={{
-              transform: 'perspective(600px) rotateX(-8deg) rotateY(12deg) rotateZ(2deg)',
-              transformStyle: 'preserve-3d',
-            }}
-          >
-            {/* Attached 3D Teal Bead on Right Edge */}
-            <div className="absolute -right-1.5 top-[32%] -translate-y-1/2 w-2.5 h-2.5 rounded-full bg-gradient-to-br from-[#FFFFFF] via-[#34D399] to-[#047857] shadow-[0_1.5px_3px_rgba(0,0,0,0.22),inset_0_1px_1px_rgba(255,255,255,0.9)] z-20" />
-
-            <div className="w-4.5 h-4.5 flex items-center justify-center">
-              <img
-                src={cartIcon}
-                alt="Shopping Cart"
-                className="w-full h-full object-contain drop-shadow-[0_2px_3px_rgba(0,0,0,0.1)]"
-                loading="lazy"
-              />
-            </div>
-            {/* Shimmering Skeleton Bars */}
-            <div className="w-full flex flex-col items-center gap-[3px] pb-0.5">
-              <div className="relative w-[75%] h-[3px] sm:h-[3.5px] bg-[#CBD5E1] rounded-full overflow-hidden shadow-[inset_0_0.8px_1px_rgba(0,0,0,0.06)]">
-                <div 
-                  className="absolute inset-0 -translate-x-full bg-gradient-to-r from-transparent via-white/90 to-transparent animate-[skeleton-shimmer_1.8s_ease-in-out_infinite]"
-                  style={{ animationDelay: '480ms' }}
-                />
-              </div>
-              <div className="relative w-[50%] h-[2.2px] sm:h-[2.6px] bg-[#E2E8F0] rounded-full overflow-hidden shadow-[inset_0_0.8px_1px_rgba(0,0,0,0.04)]">
-                <div 
-                  className="absolute inset-0 -translate-x-full bg-gradient-to-r from-transparent via-white/90 to-transparent animate-[skeleton-shimmer_1.8s_ease-in-out_infinite]"
-                  style={{ animationDelay: '660ms' }}
-                />
-              </div>
-            </div>
-          </div>
-        </div>
-
-        {/* 6. BOTTOM-RIGHT: Star */}
-        <div
-          className="absolute z-10 -translate-x-1/2 -translate-y-1/2"
-          style={{
-            left: '94%',
-            top: '80.4%',
-            opacity: isCardActive(6) ? 1 : 0,
-            transform: isCardActive(6)
-              ? 'translate(-50%, -50%) scale(1)'
-              : 'translate(-50%, -50%) scale(0.85)',
-            transition: 'all 400ms cubic-bezier(0.16, 1, 0.3, 1)',
-          }}
-        >
-          <div
-            className="relative w-[44px] sm:w-[48px] h-[40px] sm:h-[44px] rounded-[13px] bg-gradient-to-b from-[#FFFFFF] via-[#FDFDFE] to-[#F7F9FC] p-1.5 flex flex-col items-center justify-between border border-white/95 shadow-[1px_1px_0_#E2E8F0,2px_2px_0_#DCE5EE,0_10px_20px_-3px_rgba(100,116,160,0.14),inset_0_1.5px_2px_rgba(255,255,255,0.95)]"
-            style={{
-              transform: 'perspective(600px) rotateX(-8deg) rotateY(-12deg) rotateZ(-2deg)',
-              transformStyle: 'preserve-3d',
-            }}
-          >
-            {/* Attached 3D Gold Bead on Left Edge */}
-            <div className="absolute -left-1.5 top-[32%] -translate-y-1/2 w-2.5 h-2.5 rounded-full bg-gradient-to-br from-[#FFFFFF] via-[#FBBF24] to-[#B45309] shadow-[0_1.5px_3px_rgba(0,0,0,0.22),inset_0_1px_1px_rgba(255,255,255,0.9)] z-20" />
-
-            <div className="w-4.5 h-4.5 flex items-center justify-center">
-              <img
-                src={starIcon}
-                alt="Star"
-                className="w-full h-full object-contain drop-shadow-[0_2px_3px_rgba(0,0,0,0.1)]"
-                loading="lazy"
-              />
-            </div>
-            {/* Shimmering Skeleton Bars */}
-            <div className="w-full flex flex-col items-center gap-[3px] pb-0.5">
-              <div className="relative w-[75%] h-[3px] sm:h-[3.5px] bg-[#CBD5E1] rounded-full overflow-hidden shadow-[inset_0_0.8px_1px_rgba(0,0,0,0.06)]">
-                <div 
-                  className="absolute inset-0 -translate-x-full bg-gradient-to-r from-transparent via-white/90 to-transparent animate-[skeleton-shimmer_1.8s_ease-in-out_infinite]"
-                  style={{ animationDelay: '600ms' }}
-                />
-              </div>
-              <div className="relative w-[50%] h-[2.2px] sm:h-[2.6px] bg-[#E2E8F0] rounded-full overflow-hidden shadow-[inset_0_0.8px_1px_rgba(0,0,0,0.04)]">
-                <div 
-                  className="absolute inset-0 -translate-x-full bg-gradient-to-r from-transparent via-white/90 to-transparent animate-[skeleton-shimmer_1.8s_ease-in-out_infinite]"
-                  style={{ animationDelay: '780ms' }}
-                />
-              </div>
-            </div>
-          </div>
-        </div>
-
-        {/* ========================================================================= */}
-        {/* CENTRAL 3D BROWSER WINDOW DASHBOARD                                       */}
-        {/* ========================================================================= */}
-        <div
-          className="absolute z-20 left-1/2 top-[46.6%] -translate-x-1/2 -translate-y-1/2 w-[42.5%] aspect-[1.44/1]"
-        >
-          {/* 3D Browser Window Frame with Cross Tilt & Extruded Slab Edge */}
-          <div
-            className="w-full h-full rounded-2xl bg-gradient-to-b from-[#FFFFFF] via-[#FBFDFF] to-[#F1F5F9] border border-white/95 p-1.5 sm:p-2 flex flex-col relative"
-            style={{
-              transform: 'perspective(700px) rotateX(10deg) rotateY(-13deg) rotateZ(1.5deg)',
-              transformStyle: 'preserve-3d',
-              boxShadow:
-                '1px 1px 0px #E5EDF5, 2px 2px 0px #DEE8F2, 3px 3px 0px #D6E1EC, 4px 4px 0px #CDDBE7, 0 16px 32px -6px rgba(100, 116, 170, 0.16), inset 0 2px 3px rgba(255, 255, 255, 0.95), inset 0 -2px 3px rgba(203, 213, 225, 0.35)',
-            }}
-          >
-            {/* Top Bar: 3D Glossy Traffic Light Dots (Red, Yellow, Green) */}
-            <div className="w-full flex items-center gap-1 pb-1 border-b border-slate-100/90">
-              <div className="w-1.5 h-1.5 rounded-full bg-gradient-to-br from-[#FF7B72] via-[#FF5F56] to-[#D93829] shadow-[0_1px_2px_rgba(0,0,0,0.12),inset_0_1px_1px_rgba(255,255,255,0.6)]" />
-              <div className="w-1.5 h-1.5 rounded-full bg-gradient-to-br from-[#FFD269] via-[#FFBD2E] to-[#D99B16] shadow-[0_1px_2px_rgba(0,0,0,0.12),inset_0_1px_1px_rgba(255,255,255,0.6)]" />
-              <div className="w-1.5 h-1.5 rounded-full bg-gradient-to-br from-[#52E36D] via-[#27C93F] to-[#1BA12E] shadow-[0_1px_2px_rgba(0,0,0,0.12),inset_0_1px_1px_rgba(255,255,255,0.6)]" />
-            </div>
-
-            {/* Browser Content Area */}
-            <div className="flex-1 flex flex-col justify-between pt-1">
-              {/* Top Split: Image placeholder (left) + Text lines (right) */}
-              <div className="grid grid-cols-12 gap-1 items-center">
-                {/* Left: 3D-styled Image Card with Mountain & Sun */}
-                <div className="col-span-5 aspect-[1.15/1] rounded-lg bg-gradient-to-br from-[#E2E8F0] via-[#DCE4EE] to-[#CBD5E1] border border-white/80 p-0.5 flex flex-col justify-end relative overflow-hidden shadow-[inset_0_1.5px_2.5px_rgba(0,0,0,0.08),0_1.5px_2px_rgba(255,255,255,0.8)]">
-                  {/* Sun Dot */}
-                  <div className="absolute top-1 right-1 w-1.5 h-1.5 rounded-full bg-[#94A3B8] shadow-inner" />
-                  
-                  {/* Mountain Graphic */}
-                  <svg
-                    viewBox="0 0 60 40"
-                    className="w-full h-auto text-[#CBD5E1] drop-shadow-xs"
-                    fill="currentColor"
-                  >
-                    <path d="M 3 36 L 20 14 L 38 36 Z" opacity="0.95" />
-                    <path d="M 26 36 L 42 19 L 57 36 Z" opacity="0.75" />
-                  </svg>
-
-                  {/* Subtle Ambient Shimmer on image placeholder */}
-                  <div className="absolute inset-0 -translate-x-full bg-gradient-to-r from-transparent via-white/40 to-transparent animate-[skeleton-shimmer_3s_ease-in-out_infinite]" />
-                </div>
-
-                {/* Right: Paragraph Skeleton Lines with Clean Natural Shimmer */}
-                <div className="col-span-7 flex flex-col gap-1 justify-center pr-0.5">
-                  <div className="relative w-[88%] h-[3px] bg-[#94A3B8] rounded-full overflow-hidden shadow-[inset_0_1px_1px_rgba(0,0,0,0.08)]">
-                    <div className="absolute inset-0 -translate-x-full bg-gradient-to-r from-transparent via-white/80 to-transparent animate-[skeleton-shimmer_2s_ease-in-out_infinite]" />
-                  </div>
-                  <div className="relative w-[100%] h-[2.8px] bg-[#CBD5E1] rounded-full overflow-hidden shadow-[inset_0_1px_1px_rgba(0,0,0,0.06)]">
-                    <div 
-                      className="absolute inset-0 -translate-x-full bg-gradient-to-r from-transparent via-white/80 to-transparent animate-[skeleton-shimmer_2s_ease-in-out_infinite]" 
-                      style={{ animationDelay: '150ms' }}
-                    />
-                  </div>
-                  <div className="relative w-[75%] h-[2.8px] bg-[#CBD5E1] rounded-full overflow-hidden shadow-[inset_0_1px_1px_rgba(0,0,0,0.06)]">
-                    <div 
-                      className="absolute inset-0 -translate-x-full bg-gradient-to-r from-transparent via-white/80 to-transparent animate-[skeleton-shimmer_2s_ease-in-out_infinite]" 
-                      style={{ animationDelay: '300ms' }}
-                    />
-                  </div>
-                  <div className="relative w-[55%] h-[2.4px] bg-[#E2E8F0] rounded-full overflow-hidden shadow-[inset_0_1px_1px_rgba(0,0,0,0.05)]">
-                    <div 
-                      className="absolute inset-0 -translate-x-full bg-gradient-to-r from-transparent via-white/80 to-transparent animate-[skeleton-shimmer_2s_ease-in-out_infinite]" 
-                      style={{ animationDelay: '450ms' }}
-                    />
-                  </div>
-                </div>
-              </div>
-
-              {/* Bottom Row: 3 Rounded Cards with Subtle Shimmer */}
-              <div className="grid grid-cols-3 gap-1 pt-0.5">
-                <div className="relative h-2.5 sm:h-3 rounded-md bg-gradient-to-b from-[#E2E8F0] to-[#CBD5E1]/80 border border-white/70 overflow-hidden shadow-[inset_0_1px_1.5px_rgba(0,0,0,0.05),0_1px_1px_rgba(255,255,255,0.9)]">
-                  <div className="absolute inset-0 -translate-x-full bg-gradient-to-r from-transparent via-white/50 to-transparent animate-[skeleton-shimmer_2.4s_ease-in-out_infinite]" />
-                </div>
-                <div className="relative h-2.5 sm:h-3 rounded-md bg-gradient-to-b from-[#E2E8F0] to-[#CBD5E1]/80 border border-white/70 overflow-hidden shadow-[inset_0_1px_1.5px_rgba(0,0,0,0.05),0_1px_1px_rgba(255,255,255,0.9)]">
-                  <div 
-                    className="absolute inset-0 -translate-x-full bg-gradient-to-r from-transparent via-white/50 to-transparent animate-[skeleton-shimmer_2.4s_ease-in-out_infinite]" 
-                    style={{ animationDelay: '200ms' }}
-                  />
-                </div>
-                <div className="relative h-2.5 sm:h-3 rounded-md bg-gradient-to-b from-[#E2E8F0] to-[#CBD5E1]/80 border border-white/70 overflow-hidden shadow-[inset_0_1px_1.5px_rgba(0,0,0,0.05),0_1px_1px_rgba(255,255,255,0.9)]">
-                  <div 
-                    className="absolute inset-0 -translate-x-full bg-gradient-to-r from-transparent via-white/50 to-transparent animate-[skeleton-shimmer_2.4s_ease-in-out_infinite]" 
-                    style={{ animationDelay: '400ms' }}
-                  />
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-
-        {/* ========================================================================= */}
-        {/* 3D MAGNIFYING GLASS (ZOOM.PNG) - CLEAN SCANNING & INSPECTION MOTION       */}
-        {/* ========================================================================= */}
-        <div
-          className="absolute z-30 pointer-events-none -translate-x-1/2 -translate-y-1/2"
-          style={{
-            left: '58%',
-            top: '50%',
-            width: '22%',
-            maxWidth: '96px',
-          }}
-        >
-          {/* Smooth Natural Scanning Motion */}
-          <div className="relative w-full aspect-square animate-[analyze-scan_7.5s_ease-in-out_infinite]">
-            {/* 3D Magnifying Glass Artwork */}
-            <img
-              src={zoomIcon}
-              alt="Zoom Analysis"
-              className="w-full h-full object-contain drop-shadow-[0_10px_18px_rgba(79,70,229,0.25)] drop-shadow-[0_2px_4px_rgba(0,0,0,0.06)] relative z-10"
-              loading="lazy"
-            />
-            
-            {/* Clean Optical Lens Reflection & Specular Sheen (Natural Glass Reflection) */}
-            <div className="absolute top-[16%] left-[16%] w-[46%] h-[46%] rounded-full overflow-hidden pointer-events-none z-20">
-              {/* Dynamic Glass Specular Sweep */}
-              <div className="absolute inset-0 bg-gradient-to-tr from-white/10 via-white/40 to-transparent animate-[lens-flare_4.5s_ease-in-out_infinite]" />
-              {/* Subtle Lens Focus Ring */}
-              <div className="absolute inset-0 m-auto w-full h-full rounded-full border border-white/40 animate-[lens-pulse_3s_ease-out_infinite]" />
-            </div>
-          </div>
-        </div>
-
-      </div>
-
-      {/* Embedded Keyframes for Scanning & Skeleton Loading */}
       <style>{`
-        /* Smooth continuous skeleton loading shimmer sweep */
-        @keyframes skeleton-shimmer {
+        @keyframes streamPulseAnalyse {
           0% {
-            transform: translateX(-150%);
+            stroke-dashoffset: 19.2;
           }
-          50%, 100% {
-            transform: translateX(250%);
+          100% {
+            stroke-dashoffset: 0;
           }
         }
-
-        /* Smooth Natural Scanning Trajectory across content */
-        @keyframes analyze-scan {
+        @keyframes subtleFloatBrowser {
+          0%, 100% {
+            transform: translateY(0px);
+          }
+          50% {
+            transform: translateY(-2px);
+          }
+        }
+        @keyframes popGlowAnalyse2s {
+          0% {
+            r: 2.8;
+            opacity: 0.85;
+          }
+          50% {
+            r: 5.5;
+            opacity: 0.5;
+          }
+          100% {
+            r: 7.0;
+            opacity: 0;
+          }
+        }
+        @keyframes skeletonPulseAnalyse {
+          0%, 100% {
+            opacity: 0.55;
+          }
+          50% {
+            opacity: 0.9;
+          }
+        }
+        @keyframes zoomScanMotion {
           0% {
             transform: translate(0px, 0px) rotate(0deg) scale(1);
           }
           20% {
-            transform: translate(-12px, -6px) rotate(-3deg) scale(1.04);
+            transform: translate(-10px, -6px) rotate(-3deg) scale(1.03);
           }
           45% {
-            transform: translate(-20px, 5px) rotate(-1.5deg) scale(1.06);
+            transform: translate(-16px, 4px) rotate(-1.5deg) scale(1.05);
           }
           70% {
-            transform: translate(-6px, 10px) rotate(2deg) scale(1.03);
+            transform: translate(-5px, 8px) rotate(2deg) scale(1.02);
           }
           85% {
-            transform: translate(4px, 3px) rotate(1deg) scale(1.01);
+            transform: translate(3px, 2px) rotate(1deg) scale(1.01);
           }
           100% {
             transform: translate(0px, 0px) rotate(0deg) scale(1);
           }
         }
-
-        /* Natural Glass Specular Flare */
-        @keyframes lens-flare {
+        @keyframes lensGleam {
           0%, 100% {
+            opacity: 0.25;
             transform: rotate(0deg) scale(0.95);
-            opacity: 0.3;
           }
           50% {
-            transform: rotate(180deg) scale(1.08);
             opacity: 0.75;
-          }
-        }
-
-        /* Subtle Lens Focus Pulse */
-        @keyframes lens-pulse {
-          0% {
-            transform: scale(0.3);
-            opacity: 0.8;
-          }
-          70%, 100% {
-            transform: scale(1.2);
-            opacity: 0;
+            transform: rotate(180deg) scale(1.06);
           }
         }
       `}</style>
+
+      {/* SVG Canvas with 450 x 300 Proportions matching UnderstandVisual */}
+      <svg
+        viewBox="0 0 450 300"
+        className="w-full h-full max-w-[450px] object-contain select-none"
+      >
+        <defs>
+          {/* Card Elevation Drop Shadow */}
+          <filter id="analyseCardShadow" x="-20%" y="-20%" width="140%" height="140%">
+            <feDropShadow dx="0" dy="2.5" stdDeviation="3.5" floodColor="#0F172A" floodOpacity="0.08" />
+          </filter>
+          <filter id="analyseCardActiveShadow" x="-30%" y="-30%" width="160%" height="160%">
+            <feDropShadow dx="0" dy="3.5" stdDeviation="5.5" floodColor="#8B5CF6" floodOpacity="0.16" />
+          </filter>
+
+          {/* Central 3D Browser Window Shadow */}
+          <filter id="browserShadow" x="-20%" y="-20%" width="140%" height="140%">
+            <feDropShadow dx="0" dy="4" stdDeviation="6" floodColor="#64748B" floodOpacity="0.12" />
+          </filter>
+
+          {/* Glowing Endpoint Dot Filter */}
+          <filter id="dotGlowFilterAnalyse" x="-50%" y="-50%" width="200%" height="200%">
+            <feGaussianBlur in="SourceGraphic" stdDeviation="1.8" result="blur" />
+            <feMerge>
+              <feMergeNode in="blur" />
+              <feMergeNode in="SourceGraphic" />
+            </feMerge>
+          </filter>
+
+          {/* Skeleton Shimmer Sweep Gradient */}
+          <linearGradient id="shimmerBeamAnalyse" x1="0%" y1="0%" x2="100%" y2="0%">
+            <stop offset="0%" stopColor="#FFFFFF" stopOpacity="0" />
+            <stop offset="50%" stopColor="#FFFFFF" stopOpacity="0.85" />
+            <stop offset="100%" stopColor="#FFFFFF" stopOpacity="0" />
+          </linearGradient>
+
+          {/* Browser Window Gradient */}
+          <linearGradient id="browserFrameGrad" x1="0%" y1="0%" x2="0%" y2="100%">
+            <stop offset="0%" stopColor="#FFFFFF" />
+            <stop offset="60%" stopColor="#FBFDFF" />
+            <stop offset="100%" stopColor="#F1F5F9" />
+          </linearGradient>
+
+          {/* Image Placeholder Card Gradient */}
+          <linearGradient id="imgCardGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+            <stop offset="0%" stopColor="#E2E8F0" />
+            <stop offset="50%" stopColor="#DCE4EE" />
+            <stop offset="100%" stopColor="#CBD5E1" />
+          </linearGradient>
+
+          {/* ClipPaths for each card's skeleton bars */}
+          {cards.map((card) => (
+            <clipPath key={`clip-${card.id}`} id={`clip-${card.id}`}>
+              <rect x={card.x + 10} y={card.y + 34} width="38" height="3.5" rx="1.75" />
+              <rect x={card.x + 14} y={card.y + 41} width="30" height="3" rx="1.5" />
+            </clipPath>
+          ))}
+
+          {/* ClipPath for Central Browser skeleton bars */}
+          <clipPath id="browserSkeletonClip">
+            <rect x="204" y="116" width="96" height="4.5" rx="2.25" />
+            <rect x="204" y="125" width="82" height="4" rx="2" />
+            <rect x="204" y="133" width="90" height="4" rx="2" />
+            <rect x="204" y="141" width="64" height="3.5" rx="1.75" />
+          </clipPath>
+        </defs>
+
+        {/* ========================================================================= */}
+        {/* 1. CENTRAL 3D BROWSER DASHBOARD (Reveals 1st at Step 1 & 2)                */}
+        {/* ========================================================================= */}
+        <g
+          style={{
+            transformBox: 'fill-box',
+            transformOrigin: 'center center',
+            transform: isBrowserPopped ? 'scale(1)' : 'scale(0.75)',
+            opacity: isBrowserPopped ? 1 : 0,
+            transition:
+              'transform 0.38s cubic-bezier(0.34, 1.56, 0.64, 1), opacity 0.22s ease-out',
+            animation: isBrowserPopped ? 'subtleFloatBrowser 5s ease-in-out infinite' : undefined,
+          }}
+        >
+          {/* Outer Browser Card */}
+          <rect
+            x="133"
+            y="87"
+            width="184"
+            height="126"
+            rx="14"
+            fill="url(#browserFrameGrad)"
+            stroke="#E2E8F0"
+            strokeWidth="0.9"
+            filter="url(#browserShadow)"
+          />
+
+          {/* Window Top Bar Traffic Lights */}
+          <circle cx="145" cy="97" r="3.2" fill="#FF5F56" />
+          <circle cx="154" cy="97" r="3.2" fill="#FFBD2E" />
+          <circle cx="163" cy="97" r="3.2" fill="#27C93F" />
+
+          {/* Header Divider Line */}
+          <line x1="133" y1="104" x2="317" y2="104" stroke="#F1F5F9" strokeWidth="0.8" />
+
+          {/* Left: Image Placeholder (Mountain & Sun) */}
+          <rect
+            x="143"
+            y="112"
+            width="52"
+            height="44"
+            rx="6"
+            fill="url(#imgCardGrad)"
+            stroke="#FFFFFF"
+            strokeWidth="0.8"
+          />
+          {/* Sun Dot */}
+          <circle cx="186" cy="120" r="2.2" fill="#94A3B8" />
+          {/* Mountain Silhouettes */}
+          <path d="M 147 152 L 160 134 L 174 152 Z" fill="#CBD5E1" />
+          <path d="M 166 152 L 178 138 L 191 152 Z" fill="#94A3B8" opacity="0.8" />
+
+          {/* Right: Paragraph Skeleton Lines */}
+          <g>
+            <rect
+              x="204"
+              y="116"
+              width="96"
+              height="4.5"
+              rx="2.25"
+              fill="#94A3B8"
+              style={{ animation: 'skeletonPulseAnalyse 1.6s ease-in-out infinite' }}
+            />
+            <rect
+              x="204"
+              y="125"
+              width="82"
+              height="4"
+              rx="2"
+              fill="#CBD5E1"
+              style={{ animation: 'skeletonPulseAnalyse 1.6s ease-in-out infinite' }}
+            />
+            <rect
+              x="204"
+              y="133"
+              width="90"
+              height="4"
+              rx="2"
+              fill="#CBD5E1"
+              style={{ animation: 'skeletonPulseAnalyse 1.6s ease-in-out infinite' }}
+            />
+            <rect
+              x="204"
+              y="141"
+              width="64"
+              height="3.5"
+              rx="1.75"
+              fill="#E2E8F0"
+              style={{ animation: 'skeletonPulseAnalyse 1.6s ease-in-out infinite' }}
+            />
+
+            {/* Sweep Shimmer on Paragraph Lines */}
+            <g clipPath="url(#browserSkeletonClip)">
+              <rect x="180" y="112" width="40" height="38" fill="url(#shimmerBeamAnalyse)" opacity="0.9">
+                <animateTransform
+                  attributeName="transform"
+                  type="translate"
+                  values="0 0; 130 0; 130 0"
+                  keyTimes="0; 0.7; 1"
+                  dur="1.8s"
+                  repeatCount="indefinite"
+                />
+              </rect>
+            </g>
+          </g>
+
+          {/* Bottom 3 Mini-Cards in Browser */}
+          <rect x="143" y="164" width="48" height="36" rx="6" fill="#F8FAFC" stroke="#E2E8F0" strokeWidth="0.6" />
+          <rect x="149" y="172" width="36" height="3" rx="1.5" fill="#CBD5E1" />
+          <rect x="149" y="179" width="24" height="2.5" rx="1.25" fill="#E2E8F0" />
+          <rect x="149" y="186" width="30" height="2.5" rx="1.25" fill="#E2E8F0" />
+
+          <rect x="201" y="164" width="48" height="36" rx="6" fill="#F8FAFC" stroke="#E2E8F0" strokeWidth="0.6" />
+          <rect x="207" y="172" width="36" height="3" rx="1.5" fill="#CBD5E1" />
+          <rect x="207" y="179" width="24" height="2.5" rx="1.25" fill="#E2E8F0" />
+          <rect x="207" y="186" width="30" height="2.5" rx="1.25" fill="#E2E8F0" />
+
+          <rect x="259" y="164" width="48" height="36" rx="6" fill="#F8FAFC" stroke="#E2E8F0" strokeWidth="0.6" />
+          <rect x="265" y="172" width="36" height="3" rx="1.5" fill="#CBD5E1" />
+          <rect x="265" y="179" width="24" height="2.5" rx="1.25" fill="#E2E8F0" />
+          <rect x="265" y="186" width="30" height="2.5" rx="1.25" fill="#E2E8F0" />
+
+          {/* 3D Magnifying Glass Artwork (zoom.png) with Smooth Entrance & Scanning */}
+          <g
+            style={{
+              transformBox: 'fill-box',
+              transformOrigin: 'center center',
+              transform: isZoomPopped ? 'scale(1)' : 'scale(0)',
+              opacity: isZoomPopped ? 1 : 0,
+              transition:
+                'transform 0.32s cubic-bezier(0.34, 1.56, 0.64, 1), opacity 0.18s ease-out',
+            }}
+          >
+            <g style={{ animation: isZoomPopped ? 'zoomScanMotion 7.5s ease-in-out infinite' : undefined }}>
+              <image
+                href={zoomIcon}
+                x="208"
+                y="108"
+                width="92"
+                height="92"
+                preserveAspectRatio="xMidYMid meet"
+                className="pointer-events-none select-none"
+              />
+              {/* Dynamic Glass Specular Flare */}
+              <circle
+                cx="237"
+                cy="137"
+                r="17"
+                fill="none"
+                stroke="#FFFFFF"
+                strokeWidth="1.2"
+                opacity="0.45"
+                style={{ animation: 'lensGleam 4.5s ease-in-out infinite' }}
+              />
+            </g>
+          </g>
+        </g>
+
+        {/* ========================================================================= */}
+        {/* 2. DOTTED CONNECTOR LINES & STREAMING PULSES                              */}
+        {/* ========================================================================= */}
+        {cards.map((card) => {
+          const isConnected = activeStep >= card.popStep;
+          const isJustConnecting = activeStep === card.popStep;
+
+          return (
+            <g key={`conn-${card.id}`}>
+              {/* Neutral Slate Dotted Line with Sequential Connection & Stream Pulse */}
+              <path
+                d={card.path}
+                fill="none"
+                stroke={isConnected ? '#94A3B8' : 'transparent'}
+                strokeWidth="1.2"
+                strokeDasharray="2 2.8"
+                strokeLinecap="round"
+                opacity={isConnected ? 0.75 : 0}
+                style={{
+                  animation: isConnected ? 'streamPulseAnalyse 1.2s linear infinite' : undefined,
+                  transition: 'opacity 0.12s ease-in',
+                }}
+              />
+
+              {/* Endpoint Solid Colored Dot Touching Border of Card */}
+              <circle
+                cx={card.dotX}
+                cy={card.dotY}
+                r={isJustConnecting ? 3.8 : isConnected ? 2.8 : 0}
+                fill={card.color}
+                opacity={isConnected ? 1 : 0}
+                filter={isJustConnecting ? 'url(#dotGlowFilterAnalyse)' : undefined}
+                style={{
+                  transition: 'r 0.18s cubic-bezier(0.34, 1.56, 0.64, 1), opacity 0.12s ease-out',
+                  transformBox: 'fill-box',
+                  transformOrigin: 'center center',
+                }}
+              />
+
+              {/* Flash Glow Pulse when Dot first connects */}
+              {isJustConnecting && (
+                <circle
+                  cx={card.dotX}
+                  cy={card.dotY}
+                  r="5.5"
+                  fill="none"
+                  stroke={card.color}
+                  strokeWidth="1.2"
+                  opacity="0.8"
+                  style={{
+                    animation: 'popGlowAnalyse2s 0.28s ease-out forwards',
+                  }}
+                />
+              )}
+            </g>
+          );
+        })}
+
+        {/* ========================================================================= */}
+        {/* 3. 6 FLOATING INTELLIGENCE CATEGORY CARDS (Pop after center card)         */}
+        {/* ========================================================================= */}
+        {cards.map((card) => {
+          const isPopped = activeStep >= card.popStep;
+          const isJustPopped = activeStep === card.popStep;
+
+          return (
+            <g
+              key={`card-${card.id}`}
+              style={{
+                transformBox: 'fill-box',
+                transformOrigin: card.origin,
+                transform: isPopped ? 'scale(1)' : 'scale(0)',
+                opacity: isPopped ? 1 : 0,
+                transition:
+                  'transform 0.24s cubic-bezier(0.34, 1.56, 0.64, 1), opacity 0.14s ease-out',
+              }}
+            >
+              {/* Card Container Box */}
+              <rect
+                x={card.x}
+                y={card.y}
+                width={card.width}
+                height={card.height}
+                rx="10"
+                fill="#FFFFFF"
+                stroke="#F1F5F9"
+                strokeWidth="0.9"
+                filter={isJustPopped ? 'url(#analyseCardActiveShadow)' : 'url(#analyseCardShadow)'}
+              />
+
+              {/* Category Icon */}
+              <image
+                href={card.icon}
+                x={card.x + (card.width - 24) / 2}
+                y={card.y + 6}
+                width="24"
+                height="24"
+                preserveAspectRatio="xMidYMid meet"
+                className="pointer-events-none select-none"
+              />
+
+              {/* Skeleton Loading Grey Bars Underneath Icon */}
+              <g>
+                {/* Top Skeleton Bar */}
+                <rect
+                  x={card.x + 10}
+                  y={card.y + 34}
+                  width="38"
+                  height="3.5"
+                  rx="1.75"
+                  fill="#CBD5E1"
+                  style={{ animation: 'skeletonPulseAnalyse 1.6s ease-in-out infinite' }}
+                />
+
+                {/* Bottom Skeleton Bar */}
+                <rect
+                  x={card.x + 14}
+                  y={card.y + 41}
+                  width="30"
+                  height="3"
+                  rx="1.5"
+                  fill="#E2E8F0"
+                  style={{ animation: 'skeletonPulseAnalyse 1.6s ease-in-out infinite' }}
+                />
+
+                {/* Shimmer Light Beam Sweeping Across Both Bars */}
+                <g clipPath={`url(#clip-${card.id})`}>
+                  <rect
+                    x={card.x - 15}
+                    y={card.y + 32}
+                    width="24"
+                    height="16"
+                    fill="url(#shimmerBeamAnalyse)"
+                    opacity="0.9"
+                  >
+                    <animateTransform
+                      attributeName="transform"
+                      type="translate"
+                      values={`0 0; ${card.width + 25} 0; ${card.width + 25} 0`}
+                      keyTimes="0; 0.7; 1"
+                      dur="1.4s"
+                      repeatCount="indefinite"
+                    />
+                  </rect>
+                </g>
+              </g>
+            </g>
+          );
+        })}
+      </svg>
     </div>
   );
 };

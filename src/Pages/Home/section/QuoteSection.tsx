@@ -39,7 +39,7 @@ export const QuoteSection: React.FC = () => {
   return (
     <>
       {/* Spacer in document flow defining the scroll distance */}
-      <div className="relative w-full h-[120vh] sm:h-[130vh] pointer-events-none" />
+      <div id="quote-parallax-spacer" className="relative w-full h-[120vh] sm:h-[130vh] pointer-events-none" />
 
       {/* Fixed Black Screen: Only active during quote reveal, never during Hero or top sections */}
       {isActive && (
