@@ -197,12 +197,12 @@ export const MarketIntelligence: React.FC = () => {
         </p>
 
         {/* Optimize My Presence indicator from second image */}
-        <div className="mt-8 sm:mt-10 flex justify-center">
+        {/* <div className="mt-8 sm:mt-10 flex justify-center">
           <div className="inline-flex items-center gap-1.5 text-sm sm:text-[15px] font-medium text-neutral-800 hover:text-black transition-colors cursor-pointer group">
             <span>Optimize My Presence</span>
             <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
           </div>
-        </div>
+        </div> */}
       </div>
 
       {/* Two Comparison Cards Side-by-Side */}
@@ -236,25 +236,15 @@ export const MarketIntelligence: React.FC = () => {
             />
           </div>
 
-          {/* Bottom Action Button (Doesn't link anywhere, routes kept clean) */}
+          {/* Bottom Action Button (Links to /seo) */}
           <div className="pt-2 text-center">
-            <button
-              type="button"
-              onClick={() => handleButtonClick('seo')}
+            <Link
+              to="/seo"
               className="cursor-pointer group relative inline-flex items-center justify-center gap-2 rounded-full bg-[#111827] hover:bg-black text-white px-6 sm:px-7 py-3 text-xs sm:text-sm font-medium transition-all duration-200 shadow-sm hover:shadow-md active:scale-98"
             >
-              {clickedButton === 'seo' ? (
-                <>
-                  <Check className="w-4 h-4 text-emerald-400" />
-                  <span>SEO Intelligence Ready</span>
-                </>
-              ) : (
-                <>
-                  <span>Explore SEO Intelligence</span>
-                  <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
-                </>
-              )}
-            </button>
+              <span>Explore SEO Intelligence</span>
+             
+            </Link>
           </div>
         </div>
 
@@ -283,25 +273,15 @@ export const MarketIntelligence: React.FC = () => {
             />
           </div>
 
-          {/* Bottom Action Button (Doesn't link anywhere, routes kept clean) */}
+          {/* Bottom Action Button (Links to /aeo) */}
           <div className="pt-2 text-center">
-            <button
-              type="button"
-              onClick={() => handleButtonClick('aeo')}
+            <Link
+              to="/aeo"
               className="cursor-pointer group relative inline-flex items-center justify-center gap-2 rounded-full bg-[#111827] hover:bg-black text-white px-6 sm:px-7 py-3 text-xs sm:text-sm font-medium transition-all duration-200 shadow-sm hover:shadow-md active:scale-98"
             >
-              {clickedButton === 'aeo' ? (
-                <>
-                  <Check className="w-4 h-4 text-emerald-400" />
-                  <span>AEO Intelligence Ready</span>
-                </>
-              ) : (
-                <>
-                  <span>Explore AEO Intelligence</span>
-                  <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
-                </>
-              )}
-            </button>
+              <span>Explore AEO Intelligence</span>
+             
+            </Link>
           </div>
         </div>
 

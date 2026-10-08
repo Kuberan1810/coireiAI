@@ -55,9 +55,9 @@ const ANSWER_ENGINES = [
 
 export const AEO: React.FC = () => {
   return (
-    <div className="w-full min-h-screen bg-white text-[#0B0F19] font-['Plus_Jakarta_Sans',sans-serif]">
+    <div className="w-full min-h-screen bg-white text-[#0B0F19] font-['Plus_Jakarta_Sans',sans-serif] overflow-x-hidden">
       {/* 1. HERO SECTION */}
-      <section className="relative w-full pt-20 sm:pt-28 md:pt-32 pb-[40px] px-6 sm:px-8 lg:px-12">
+      <section className="relative w-full pt-16 sm:pt-24 md:pt-32 pb-10 sm:pb-[40px] px-4 sm:px-8 lg:px-12">
         <div className="max-w-[1152px] mx-auto text-left">
           {/* Eyebrow (Manrope, 500 Medium, #A1A1AA) */}
           <div className="flex items-center gap-2 font-['Manrope',sans-serif] font-[500] text-[13px] sm:text-[14px] uppercase tracking-wider text-[#A1A1AA] mb-5 sm:mb-6">
@@ -515,14 +515,14 @@ export const AEO: React.FC = () => {
         </div>
 
         {/* Infinite Looping Marquee */}
-        <div className="flex overflow-hidden select-none">
+        <div className="flex overflow-hidden select-none pointer-events-none">
           <div className="animate-marquee flex items-center gap-12 sm:gap-16 lg:gap-20 shrink-0">
             {[...ANSWER_ENGINES, ...ANSWER_ENGINES, ...ANSWER_ENGINES, ...ANSWER_ENGINES].map((engine, idx) => {
               const Icon = engine.icon;
               return (
                 <div
                   key={idx}
-                  className="flex items-center gap-2.5 sm:gap-3 text-white shrink-0 hover:text-white/80 transition-colors"
+                  className="flex items-center gap-2.5 sm:gap-3 text-white shrink-0"
                 >
                   <Icon className="w-5 h-5 sm:w-6 sm:h-6 shrink-0" />
                   <span className="font-['Plus_Jakarta_Sans',sans-serif] font-semibold text-[17px] sm:text-[18px] tracking-tight whitespace-nowrap">

@@ -209,7 +209,7 @@ export const CompetitorAnalysis: React.FC = () => {
               className="inline-flex items-center justify-center gap-2 px-6 py-3 rounded-[10px] bg-[#0B0F19] hover:bg-neutral-800 text-white text-[13.5px] font-semibold transition-all duration-200 shadow-sm cursor-pointer active:scale-[0.99] w-full sm:w-auto"
             >
               <span>Analyze Competitors</span>
-              <ArrowRight className="w-4 h-4" />
+             
             </Link>
 
             <a
@@ -1063,7 +1063,7 @@ export const CompetitorAnalysis: React.FC = () => {
                 className="inline-flex items-center gap-2 px-5 py-2.5 rounded-[10px] bg-[#6366F1] hover:bg-[#4F46E5] text-white text-[12.5px] font-semibold transition-all duration-200 shadow-sm cursor-pointer self-start sm:self-auto active:scale-[0.99]"
               >
                 <span>Generate Full Analysis</span>
-                <span>→</span>
+             
               </button>
             </div>
           </div>
@@ -1090,7 +1090,7 @@ export const CompetitorAnalysis: React.FC = () => {
               className="inline-flex items-center gap-2 px-7 py-3.5 sm:py-4 rounded-[12px] bg-[#0B0F19] hover:bg-neutral-800 text-white text-[14px] sm:text-[14.5px] font-semibold transition-all duration-200 shadow-sm cursor-pointer active:scale-[0.99]"
             >
               <span>Analyze Your Market</span>
-              <span className="text-[14px]">→</span>
+              
             </Link>
 
 

@@ -128,21 +128,36 @@ export const Footer: React.FC = () => {
                 >
                   Competitor analysis
                 </Link>
-                <span className="text-white hover:text-neutral-300 transition-colors cursor-pointer">
+                {/* <Link
+                  to="/marketing"
+                  className="text-white hover:text-neutral-300 transition-colors cursor-pointer"
+                >
                   Market analysis
-                </span>
-                <span className="text-white hover:text-neutral-300 transition-colors cursor-pointer">
+                </Link> */}
+                <Link
+                  to="/marketing"
+                  className="text-white hover:text-neutral-300 transition-colors cursor-pointer"
+                >
                   Marketing
-                </span>
-                <span className="text-white hover:text-neutral-300 transition-colors cursor-pointer">
+                </Link>
+                <Link
+                  to="/engage"
+                  className="text-white hover:text-neutral-300 transition-colors cursor-pointer"
+                >
                   Engage
-                </span>
-                <span className="text-white hover:text-neutral-300 transition-colors cursor-pointer">
+                </Link>
+                <Link
+                  to="/aeo"
+                  className="text-white hover:text-neutral-300 transition-colors cursor-pointer"
+                >
                   Aeo
-                </span>
-                <span className="text-white hover:text-neutral-300 transition-colors cursor-pointer">
+                </Link>
+                <Link
+                  to="/seo"
+                  className="text-white hover:text-neutral-300 transition-colors cursor-pointer"
+                >
                   Seo
-                </span>
+                </Link>
               </div>
             </div>
 
@@ -159,27 +174,21 @@ export const Footer: React.FC = () => {
                   to="/about"
                   className="text-white hover:text-neutral-300 transition-colors cursor-pointer"
                 >
-                  Company
+                  About
                 </Link>
-                <Link
-                  to="/customers"
-                  className="text-white hover:text-neutral-300 transition-colors cursor-pointer"
-                >
-                  Case study
-                </Link>
-                <Link
+                {/* <Link
                   to="/pricing"
                   className="text-white hover:text-neutral-300 transition-colors cursor-pointer"
                 >
                   Pricing
-                </Link>
+                </Link> */}
               </div>
             </div>
           </div>
         </div>
       </div>
 
-      {/* Massive Coirei Wordmark Logo (Pulled up to decrease space) */}
+      {/* Massive Coirei Wordmark Logo matching coirei.com & Figma exactly */}
       <div className="w-full flex justify-center items-center overflow-hidden pointer-events-none select-none -mt-24 sm:-mt-36 md:-mt-48 lg:-mt-56 mb-0">
         <img
           src={footerLogo}

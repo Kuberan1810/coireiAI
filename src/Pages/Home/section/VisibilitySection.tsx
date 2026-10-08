@@ -1,4 +1,5 @@
 import React, { useState, useEffect, useRef } from 'react';
+import { Link } from 'react-router-dom';
 import {
   Search,
   Sparkles,
@@ -278,7 +279,7 @@ export const VisibilitySection: React.FC = () => {
           </ScrollReveal>
 
           {/* CTA Link */}
-          <ScrollReveal variant="fade-up" delay={240} duration={650} distance={16} className="mt-6">
+          {/* <ScrollReveal variant="fade-up" delay={240} duration={650} distance={16} className="mt-6">
             <a
               href="#optimize"
               className="inline-flex items-center gap-1.5 text-sm sm:text-[15px] font-medium text-[#0F172A] hover:text-blue-600 transition-colors group cursor-pointer"
@@ -286,7 +287,7 @@ export const VisibilitySection: React.FC = () => {
               <span>Optimize My Presence</span>
               <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
             </a>
-          </ScrollReveal>
+          </ScrollReveal> */}
         </div>
 
         {/* Dual Cards Container: Google & AI Visibility (Simultaneously Animated) */}
@@ -295,10 +296,14 @@ export const VisibilitySection: React.FC = () => {
           {/* Left Column: Search Visibility (Google) */}
           <div className="flex flex-col items-start w-full h-full">
             {/* Pill Header */}
-            <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-white text-slate-800 text-xs font-semibold mb-4 border border-slate-200/80 shadow-2xs shrink-0">
+            <Link
+              to="/seo"
+              className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-white hover:bg-slate-50 text-slate-800 text-xs font-semibold mb-4 border border-slate-200/80 shadow-2xs shrink-0 transition-colors group cursor-pointer"
+            >
               <Search className="w-3.5 h-3.5 text-slate-700" />
               <span>SEO</span>
-            </div>
+              <ArrowRight className="w-3 h-3 text-slate-400 group-hover:translate-x-0.5 transition-transform" />
+            </Link>
 
             {/* Google Card */}
             <div className="w-full h-full min-h-[340px] sm:min-h-[350px] bg-white rounded-[26px] border border-slate-200/90 shadow-[0_16px_48px_rgba(15,23,42,0.05),0_1px_3px_rgba(15,23,42,0.03)] p-5 sm:p-6 flex flex-col justify-start flex-1">
@@ -489,10 +494,14 @@ export const VisibilitySection: React.FC = () => {
           {/* Right Column: AI Visibility (ChatGPT / Perplexity / Gemini / Claude) */}
           <div className="flex flex-col items-start w-full h-full">
             {/* Pill Header */}
-            <div className="inline-flex items-center gap-1.5 px-3.5 py-1.5 rounded-full bg-white text-slate-800 text-xs font-semibold mb-4 border border-slate-200/80 shadow-2xs shrink-0">
+            <Link
+              to="/aeo"
+              className="inline-flex items-center gap-1.5 px-3.5 py-1.5 rounded-full bg-white hover:bg-slate-50 text-slate-800 text-xs font-semibold mb-4 border border-slate-200/80 shadow-2xs shrink-0 transition-colors group cursor-pointer"
+            >
               <Sparkles className="w-3.5 h-3.5 text-slate-700" />
               <span>AEO</span>
-            </div>
+              <ArrowRight className="w-3 h-3 text-slate-400 group-hover:translate-x-0.5 transition-transform" />
+            </Link>
 
             {/* AI Engine Card */}
             <div className="w-full h-full min-h-[340px] sm:min-h-[350px] bg-white rounded-[26px] border border-slate-200/90 shadow-[0_16px_48px_rgba(15,23,42,0.05),0_1px_3px_rgba(15,23,42,0.03)] p-5 sm:p-6 flex flex-col justify-between flex-1">

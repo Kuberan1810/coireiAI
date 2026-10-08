@@ -1,4 +1,12 @@
 import React, { useState, useEffect, useRef, useLayoutEffect } from 'react';
+import blogImg169 from '../../../assets/market/image 169.jpg';
+import blogImg170 from '../../../assets/market/image 170.jpg';
+import blogImg171 from '../../../assets/market/image 171.jpg';
+import blogImg172 from '../../../assets/market/image 172.jpg';
+import blogImg173 from '../../../assets/market/image 173.jpg';
+import blogImg174 from '../../../assets/market/image 174.jpg';
+import blogImg175 from '../../../assets/market/image 175.jpg';
+import blogImg176 from '../../../assets/market/image 176.jpg';
 
 interface BlogCardItem {
   id: string;
@@ -8,57 +16,45 @@ interface BlogCardItem {
   isNew?: boolean;
 }
 
-const DEFAULT_DESC =
-  'while other GTM products focus on AI-driven ICP, market research, signals, prospecting and GTM execution';
+// const DEFAULT_DESC =
+//   'while other GTM products focus on AI-driven ICP, market research, signals, prospecting and GTM execution';
 
 const INITIAL_CARDS: BlogCardItem[] = [
   {
     id: 'card-1',
-    img: 'https://images.unsplash.com/photo-1618005182384-a83a8bd57fbe?auto=format&fit=crop&w=400&q=80',
-    title: 'Automated research',
-    desc: DEFAULT_DESC,
+    img: blogImg169,
+    title: 'Competitor Intelligence',
+    desc: 'Real-time tracking of competitor positioning, pricing moves, and messaging changes.',
   },
   {
     id: 'card-2',
-    img: 'https://images.unsplash.com/photo-1677442136019-21780ecad995?auto=format&fit=crop&w=400&q=80',
-    title: 'Automated research',
-    desc: DEFAULT_DESC,
+    img: blogImg170,
+    title: 'Generative AI SEO',
+    desc: 'Autonomous blogs ranking brand authority across ChatGPT, Perplexity, and Gemini.',
   },
   {
     id: 'card-3',
-    img: 'https://images.unsplash.com/photo-1618005182384-a83a8bd57fbe?auto=format&fit=crop&w=400&q=80',
-    title: 'Automated research',
-    desc: DEFAULT_DESC,
+    img: blogImg171,
+    title: 'Buyer Intent Signals',
+    desc: 'Pinpointing active buyers based on real-time demand, searches, and engagement signals.',
   },
   {
     id: 'card-4',
-    img: 'https://images.unsplash.com/photo-1532693322450-2cb5c511067d?auto=format&fit=crop&w=400&q=80',
-    title: 'Automated research',
-    desc: DEFAULT_DESC,
+    img: blogImg172,
+    title: 'Market Gap Analysis',
+    desc: 'Discover underserved ICP clusters and profitable revenue opportunities in your niche.',
   },
   {
     id: 'card-5',
-    img: 'https://images.unsplash.com/photo-1550684848-fac1c5b4e853?auto=format&fit=crop&w=400&q=80',
-    title: 'Automated research',
-    desc: DEFAULT_DESC,
+    img: blogImg173,
+    title: 'Multi-Channel Outreach',
+    desc: 'Orchestrating high-converting buyer engagement across pipeline touchpoints automatically.',
   },
   {
     id: 'card-6',
-    img: 'https://images.unsplash.com/photo-1634017839464-5c339ebe3cb4?auto=format&fit=crop&w=400&q=80',
-    title: 'Automated research',
-    desc: DEFAULT_DESC,
-  },
-  {
-    id: 'card-7',
-    img: 'https://images.unsplash.com/photo-1635070041078-e363dbe005cb?auto=format&fit=crop&w=400&q=80',
-    title: 'Automated research',
-    desc: DEFAULT_DESC,
-  },
-  {
-    id: 'card-8',
-    img: 'https://images.unsplash.com/photo-1485827404703-89b55fcc595e?auto=format&fit=crop&w=400&q=80',
-    title: 'Automated research',
-    desc: DEFAULT_DESC,
+    img: blogImg174,
+    title: 'Automated Publishing',
+    desc: 'AI-driven content generation and direct CMS publishing to maintain high search visibility.',
   },
 ];
 
@@ -69,7 +65,7 @@ const PROMPT_QUEUE = [
     card: {
       title: 'Generative SEO & AEO',
       desc: 'Ranking your brand in generative search engines like ChatGPT, Perplexity, and Google SGE.',
-      img: 'https://images.unsplash.com/photo-1634017839464-5c339ebe3cb4?auto=format&fit=crop&w=400&q=80',
+      img: blogImg175,
     },
   },
   {
@@ -77,23 +73,23 @@ const PROMPT_QUEUE = [
     card: {
       title: 'GenAI in Modern Workflows',
       desc: 'Automating content creation and multi-channel marketing campaigns with generative AI.',
-      img: 'https://images.unsplash.com/photo-1677442136019-21780ecad995?auto=format&fit=crop&w=400&q=80',
+      img: blogImg170,
     },
   },
   {
     prompt: 'Create a blog for competitor signals',
     card: {
-      title: 'Competitor Movement Tracking',
-      desc: 'Real-time alerts on competitor campaign changes, messaging pivots, and pricing updates.',
-      img: 'https://images.unsplash.com/photo-1550684848-fac1c5b4e853?auto=format&fit=crop&w=400&q=80',
+      title: 'Competitor Movement Alerts',
+      desc: 'Real-time alerts on competitor campaign pivots, messaging shifts, and pricing updates.',
+      img: blogImg176,
     },
   },
   {
     prompt: 'Create a blog for audience targeting',
     card: {
       title: 'High-Intent ICP Discovery',
-      desc: 'Pinpointing active buyers based on real-time search behavior, signals, and buyer demand.',
-      img: 'https://images.unsplash.com/photo-1618005182384-a83a8bd57fbe?auto=format&fit=crop&w=400&q=80',
+      desc: 'Pinpointing verified decision-makers based on real-time search and buyer demand signals.',
+      img: blogImg171,
     },
   },
 ];
@@ -202,7 +198,7 @@ export const BlogAutomationShowcase: React.FC = () => {
                 });
                 prevRectsRef.current = rects;
 
-                // Add the RELEVANT blog card to the background grid
+                // Add the RELEVANT blog card to the background grid (maintain 6 cards)
                 const newCard: BlogCardItem = {
                   id: `card-new-${Date.now()}`,
                   img: currentItem.card.img,
@@ -211,7 +207,7 @@ export const BlogAutomationShowcase: React.FC = () => {
                   isNew: true,
                 };
 
-                setCards((prev) => [newCard, ...prev.slice(0, 7)]);
+                setCards((prev) => [newCard, ...prev.slice(0, 5)]);
 
                 // 5. Cursor glides away and fades out
                 setTimeout(() => {
@@ -241,8 +237,8 @@ export const BlogAutomationShowcase: React.FC = () => {
       {/* Outer Container matching Figma inspect: 610px × 450px, radius 10px, background #F3F3F3 */}
       <div className="relative w-full max-w-[610px] h-[450px] rounded-[10px] bg-[#F3F3F3] p-4 sm:p-5 overflow-hidden flex flex-col justify-between select-none">
         
-        {/* Background 4x2 Blog Grid */}
-        <div className="grid grid-cols-4 gap-3 sm:gap-3.5 w-full h-full">
+        {/* Background 3x2 Blog Grid (6 distinct cards) */}
+        <div className="grid grid-cols-3 gap-3.5 sm:gap-4 w-full h-full">
           {cards.map((item) => (
             <div
               key={item.id}
@@ -253,10 +249,10 @@ export const BlogAutomationShowcase: React.FC = () => {
                   itemRefs.current.delete(item.id);
                 }
               }}
-              className="flex flex-col w-[130px] sm:w-[135px] relative will-change-transform z-10"
+              className="flex flex-col w-full relative will-change-transform z-10"
             >
-              {/* Thumbnail Image: 135px × 135px, rounded-[10px], crop/cover */}
-              <div className="w-[130px] sm:w-[135px] h-[130px] sm:h-[135px] rounded-[10px] overflow-hidden bg-neutral-900 shrink-0 shadow-2xs">
+              {/* Thumbnail Image: rounded-[10px], crop/cover */}
+              <div className="w-full aspect-[4/3] rounded-[10px] overflow-hidden bg-neutral-900 shrink-0 shadow-2xs">
                 <img
                   src={item.img}
                   alt={item.title}
@@ -270,8 +266,8 @@ export const BlogAutomationShowcase: React.FC = () => {
                 <div className="font-['Plus_Jakarta_Sans',sans-serif] text-[11px] sm:text-[11.5px] font-semibold text-[#111827] truncate leading-tight">
                   {item.title}
                 </div>
-                {/* Description: Plus Jakarta Sans, 300 Light, clear and legible */}
-                <p className="font-['Plus_Jakarta_Sans',sans-serif] font-light text-[8px] sm:text-[8.5px] leading-[1.25] text-[#373737] mt-1 line-clamp-3">
+                {/* Description */}
+                <p className="font-['Plus_Jakarta_Sans',sans-serif] font-light text-[8px] sm:text-[8.5px] leading-[1.25] text-[#373737] mt-1 line-clamp-2 sm:line-clamp-3">
                   {item.desc}
                 </p>
               </div>

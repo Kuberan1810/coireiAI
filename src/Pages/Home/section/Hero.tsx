@@ -530,7 +530,7 @@ export const Hero: React.FC = () => {
               {/* Main Table */}
               <div
                 ref={tableScrollRef}
-                className="w-full h-full overflow-hidden"
+                className="w-full h-full overflow-x-auto overflow-y-hidden"
                 style={{
                   scrollbarWidth: 'none',
                   msOverflowStyle: 'none',
@@ -542,7 +542,7 @@ export const Hero: React.FC = () => {
                   }
                 `}</style>
 
-                <table className="w-full table-fixed text-left border-collapse">
+                <table className="w-full min-w-[680px] sm:min-w-full table-fixed text-left border-collapse">
                   <thead>
                     <tr className="border-b border-neutral-200 text-[12px] font-medium text-neutral-500 bg-neutral-50/95 sticky top-0 z-10 backdrop-blur-sm">
                       <th className="py-2.5 px-3.5 w-[46px] text-center font-normal">
@@ -696,7 +696,7 @@ export const Hero: React.FC = () => {
 
           {/* SECOND SEARCH BAR: FLOATING FIGMA CARD ON THE LEFT SIDE (Frame 2147225388) */}
           {/* Rendered after the desktop window with z-40 so it cleanly overlays the window and left border */}
-          <div className="absolute top-[132px] -left-2 sm:-left-10 md:-left-16 lg:-left-24 z-40 pointer-events-none select-none">
+          <div className="absolute top-[-20px] sm:top-[132px] left-3 xs:left-6 sm:-left-10 md:-left-16 lg:-left-24 z-40 pointer-events-none select-none scale-[0.80] xs:scale-[0.88] sm:scale-100 origin-top-left">
             <div
               className="w-[320px] sm:w-[380px] h-[92px] sm:h-[100px] rounded-[10px] bg-[#F4F4F4] relative pointer-events-none select-none"
               style={{

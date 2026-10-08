@@ -1,10 +1,75 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { Link, useLocation } from 'react-router-dom';
-import { Menu, X } from 'lucide-react';
+import { Menu, X, ChevronDown, BarChart3, TrendingUp, Search, Bot } from 'lucide-react';
 import coireiLogo from '../assets/logo/coireiLogo.png';
+
+interface FeatureSubItem {
+  title: string;
+  description: string;
+  href: string;
+  icon: React.ComponentType<{ className?: string; style?: React.CSSProperties; strokeWidth?: number }>;
+  iconColor: string;
+}
+
+interface FeatureCategory {
+  category: string;
+  items: FeatureSubItem[];
+}
+
+const FEATURE_CATEGORIES: FeatureCategory[] = [
+  {
+    category: 'RESEARCH',
+    items: [
+      {
+        title: 'Competitor Analysis',
+        description: 'Track competitor moves, pricing, and messaging shifts in real-time.',
+        href: '/competitor-analysis',
+        icon: BarChart3,
+        iconColor: '#F97316', // Orange
+      },
+      {
+        title: 'Market Intelligence',
+        description: 'Deep market trends and customer demand signals for GTM teams.',
+        href: '/marketing',
+        icon: TrendingUp,
+        iconColor: '#3B82F6', // Blue
+      },
+    ],
+  },
+  {
+    category: 'SOLUTIONS & SEARCH',
+    items: [
+      {
+        title: 'SEO Intelligence',
+        description: 'Search visibility, keyword rankings, and organic demand capture.',
+        href: '/seo',
+        icon: Search,
+        iconColor: '#0EA5E9', // Sky / Cyan
+      },
+      {
+        title: 'AEO (AI Search Engine)',
+        description: 'Optimize your brand presence across ChatGPT, Perplexity, and Gemini.',
+        href: '/aeo',
+        icon: Bot,
+        iconColor: '#8B5CF6', // Violet
+      },
+      // {
+      //   title: 'Engage',
+      //   description: 'Autonomous multi-channel buyer engagement and pipeline conversion.',
+      //   href: '/engage',
+      //   icon: Sparkles,
+      //   iconColor: '#EC4899', // Pink / Rose
+      // },
+    ],
+  },
+];
 
 export const Navbar: React.FC = () => {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
+  const [mobileFeaturesOpen, setMobileFeaturesOpen] = useState(true);
+  const [dropdownOpen, setDropdownOpen] = useState(false);
+  const dropdownTimeoutRef = useRef<ReturnType<typeof setTimeout> | null>(null);
+
   const location = useLocation();
   const isHomePage = location.pathname === '/';
 
@@ -18,6 +83,25 @@ export const Navbar: React.FC = () => {
   const isStepsActiveRef = useRef(false);
   const hideNavbarRef = useRef(false);
   const progressBarFillRef = useRef<HTMLDivElement>(null);
+
+  // Close menus on route change
+  useEffect(() => {
+    setMobileMenuOpen(false);
+    setDropdownOpen(false);
+  }, [location.pathname]);
+
+  const handleMouseEnter = () => {
+    if (dropdownTimeoutRef.current) {
+      clearTimeout(dropdownTimeoutRef.current);
+    }
+    setDropdownOpen(true);
+  };
+
+  const handleMouseLeave = () => {
+    dropdownTimeoutRef.current = setTimeout(() => {
+      setDropdownOpen(false);
+    }, 180);
+  };
 
   useEffect(() => {
     let ticking = false;
@@ -57,17 +141,13 @@ export const Navbar: React.FC = () => {
         return;
       }
 
-      // Scroll direction & threshold logic:
-      // 1. If at or near top (<= 30px) -> always original state
-      // 2. If scrolling UP (scrollDelta < -6) -> return to original state!
-      // 3. If scrolling DOWN (scrollDelta > 6 && scrollY > 60) -> compact pill state
       let nextScrolled = isScrolledRef.current;
       if (scrollY <= 30) {
         nextScrolled = false;
       } else if (scrollDelta < -6) {
-        nextScrolled = false; // user is scrolling up: return to original full navbar state
+        nextScrolled = false;
       } else if (scrollDelta > 6 && scrollY > 60) {
-        nextScrolled = true; // user is scrolling down: shrink to pill
+        nextScrolled = true;
       }
 
       if (nextScrolled !== isScrolledRef.current) {
@@ -90,7 +170,6 @@ export const Navbar: React.FC = () => {
           setIsStepsActive(inSteps);
         }
 
-        // Direct DOM update on GPU compositor: zero React re-renders during active scrolling!
         if (inSteps && progressBarFillRef.current && totalScrollable > 0) {
           const progress = Math.min(Math.max(-rect.top / totalScrollable, 0), 1);
           progressBarFillRef.current.style.transform = `scaleX(${progress})`;
@@ -206,34 +285,55 @@ export const Navbar: React.FC = () => {
             />
           </Link>
 
-          {/* Center Desktop Navigation: Positioned absolute in center so fading out never shifts Logo or Contact Us */}
+          {/* Center Desktop Navigation */}
           <nav 
-            className={`hidden md:flex items-center gap-8 absolute left-1/2 -translate-x-1/2 transition-opacity duration-300 ease-out whitespace-nowrap ${
+            className={`hidden md:flex items-center gap-7 absolute left-1/2 -translate-x-1/2 transition-opacity duration-300 ease-out whitespace-nowrap ${
               isScrolled 
                 ? 'opacity-0 pointer-events-none' 
                 : 'opacity-100 pointer-events-auto'
             }`}
           >
-            <Link
-              to="/competitor-analysis"
-              className="text-[14.5px] font-medium text-neutral-700 hover:text-neutral-900 transition-colors py-1"
+            {/* Features Link Trigger */}
+            <div 
+              className="py-4 cursor-pointer"
+              onMouseEnter={handleMouseEnter}
+              onMouseLeave={handleMouseLeave}
             >
-              Features
-            </Link>
-
-            <Link
-              to="/about"
-              className="text-[14.5px] font-medium text-neutral-700 hover:text-neutral-900 transition-colors py-1"
-            >
-              About
-            </Link>
+              <button
+                type="button"
+                className="flex items-center gap-1.5 text-[14.5px] font-medium text-neutral-700 hover:text-neutral-900 transition-colors py-1 cursor-pointer select-none group"
+                aria-expanded={dropdownOpen}
+              >
+                <span>Features</span>
+                <ChevronDown 
+                  className={`w-4 h-4 text-neutral-500 group-hover:text-neutral-900 transition-transform duration-250 ${
+                    dropdownOpen ? 'rotate-180 text-neutral-900' : ''
+                  }`} 
+                />
+              </button>
+            </div>
 
             {/* <Link
               to="/pricing"
-              className="text-[14.5px] font-medium text-neutral-700 hover:text-neutral-900 transition-colors py-1"
+              className={`text-[14.5px] font-medium transition-colors py-1 ${
+                location.pathname === '/pricing' 
+                  ? 'text-black font-semibold' 
+                  : 'text-neutral-700 hover:text-neutral-900'
+              }`}
             >
               Pricing
             </Link> */}
+
+            <Link
+              to="/about"
+              className={`text-[14.5px] font-medium transition-colors py-1 ${
+                location.pathname === '/about' 
+                  ? 'text-black font-semibold' 
+                  : 'text-neutral-700 hover:text-neutral-900'
+              }`}
+            >
+              About
+            </Link>
           </nav>
 
           {/* Right Action Buttons */}
@@ -266,58 +366,135 @@ export const Navbar: React.FC = () => {
           </div>
         </div>
 
-        {/* Mobile dropdown menu (only when not scrolled) */}
+        {/* Full-Screen Width Desktop Mega Menu (Figma W: 1536 / Full-width container) */}
+        {!isScrolled && (
+          <div 
+            className={`hidden md:block absolute top-full left-0 right-0 w-full bg-white border-b border-neutral-100 shadow-[0_24px_48px_-12px_rgba(0,0,0,0.06)] transition-all duration-200 ease-out origin-top ${
+              dropdownOpen 
+                ? 'opacity-100 translate-y-0 pointer-events-auto visible' 
+                : 'opacity-0 -translate-y-2 pointer-events-none invisible'
+            }`}
+            onMouseEnter={handleMouseEnter}
+            onMouseLeave={handleMouseLeave}
+          >
+            <div className="max-w-[1240px] mx-auto px-6 sm:px-8 pt-15 pb-15">
+              <div className="grid grid-cols-2 gap-12 lg:gap-20 max-w-4xl text-left">
+                {FEATURE_CATEGORIES.map((cat) => (
+                  <div key={cat.category} className="flex flex-col">
+                    <span className="text-[11px] font-medium tracking-widest text-neutral-400 uppercase mb-4 px-2">
+                      {cat.category}
+                    </span>
+                    <div className="flex flex-col gap-1.5">
+                      {cat.items.map((item) => {
+                        const Icon = item.icon;
+                        const isActive = location.pathname === item.href;
+                        return (
+                          <Link
+                            key={item.href}
+                            to={item.href}
+                            onClick={() => setDropdownOpen(false)}
+                            className={`flex items-start gap-4 p-3 rounded-xl transition-all duration-150 group ${
+                              isActive 
+                                ? 'bg-neutral-50 text-black' 
+                                : 'hover:bg-neutral-50/80 text-neutral-700 hover:text-black'
+                            }`}
+                          >
+                            <div className="mt-0.5 shrink-0">
+                              <Icon 
+                                className="w-5 h-5 transition-transform duration-150 group-hover:scale-110" 
+                                style={{ color: item.iconColor }}
+                                strokeWidth={1.8}
+                              />
+                            </div>
+                            <div className="flex flex-col">
+                              <span className="text-[14px] font-semibold tracking-tight text-neutral-900 group-hover:text-black leading-snug">
+                                {item.title}
+                              </span>
+                              <span className="text-[12.5px] text-neutral-500 font-normal leading-relaxed mt-0.5 group-hover:text-neutral-600">
+                                {item.description}
+                              </span>
+                            </div>
+                          </Link>
+                        );
+                      })}
+                    </div>
+                  </div>
+                ))}
+              </div>
+            </div>
+          </div>
+        )}
+
+        {/* Mobile dropdown menu (only active page routes matching App.tsx) */}
         {!isScrolled && mobileMenuOpen && (
-          <div className="md:hidden border-b border-neutral-100 bg-white/95 backdrop-blur-md px-6 pt-2 pb-6 space-y-3 shadow-lg">
-            <Link
-              to="/competitor-analysis"
+          <div className="md:hidden border-b border-neutral-100 bg-white/98 backdrop-blur-xl px-6 pt-3 pb-6 space-y-3 shadow-xl max-h-[85vh] overflow-y-auto">
+            {/* Features Accordion */}
+            <div>
+              <button
+                onClick={() => setMobileFeaturesOpen(!mobileFeaturesOpen)}
+                className="w-full flex items-center justify-between py-2 text-neutral-900 font-semibold text-base cursor-pointer"
+              >
+                <span>Features</span>
+                <ChevronDown className={`w-4 h-4 text-neutral-500 transition-transform ${mobileFeaturesOpen ? 'rotate-180' : ''}`} />
+              </button>
+
+              {mobileFeaturesOpen && (
+                <div className="pl-2 pr-1 py-2 space-y-4 border-l-2 border-neutral-100 ml-1 mt-2 text-left">
+                  {FEATURE_CATEGORIES.map((cat) => (
+                    <div key={cat.category} className="space-y-2">
+                      <span className="text-[11px] font-bold tracking-wider text-neutral-400 uppercase px-2">
+                        {cat.category}
+                      </span>
+                      <div className="space-y-1">
+                        {cat.items.map((item) => {
+                          const Icon = item.icon;
+                          const isActive = location.pathname === item.href;
+                          return (
+                            <Link
+                              key={item.href}
+                              to={item.href}
+                              onClick={() => setMobileMenuOpen(false)}
+                              className={`flex items-start gap-3 py-2 px-2.5 rounded-lg text-sm transition-colors ${
+                                isActive 
+                                  ? 'bg-neutral-100 text-black font-semibold' 
+                                  : 'text-neutral-700 hover:text-black hover:bg-neutral-50'
+                              }`}
+                            >
+                              <Icon 
+                                className="w-4 h-4 mt-0.5 shrink-0" 
+                                style={{ color: item.iconColor }} 
+                                strokeWidth={1.8}
+                              />
+                              <div className="flex flex-col">
+                                <span className="font-semibold text-[13.5px] text-neutral-900">{item.title}</span>
+                                <span className="text-[11.5px] text-neutral-500 font-normal mt-0.5 leading-snug">{item.description}</span>
+                              </div>
+                            </Link>
+                          );
+                        })}
+                      </div>
+                    </div>
+                  ))}
+                </div>
+              )}
+            </div>
+
+            {/* <Link
+              to="/pricing"
               onClick={() => setMobileMenuOpen(false)}
-              className="block py-2 text-neutral-700 font-medium text-base"
+              className="block py-2 text-neutral-700 font-medium text-base hover:text-black"
             >
-              Features
-            </Link>
+              Pricing
+            </Link> */}
+
             <Link
               to="/about"
               onClick={() => setMobileMenuOpen(false)}
-              className="block py-2 text-neutral-700 font-medium text-base"
+              className="block py-2 text-neutral-700 font-medium text-base hover:text-black"
             >
               About
             </Link>
-            <Link
-              to="/product"
-              onClick={() => setMobileMenuOpen(false)}
-              className="block py-2 text-neutral-700 font-medium text-base"
-            >
-              Product
-            </Link>
-            <Link
-              to="/solutions"
-              onClick={() => setMobileMenuOpen(false)}
-              className="block py-2 text-neutral-700 font-medium text-base"
-            >
-              Solutions
-            </Link>
-            <Link
-              to="/customers"
-              onClick={() => setMobileMenuOpen(false)}
-              className="block py-2 text-neutral-700 font-medium text-base"
-            >
-              Customers
-            </Link>
-            <Link
-              to="/resources"
-              onClick={() => setMobileMenuOpen(false)}
-              className="block py-2 text-neutral-700 font-medium text-base"
-            >
-              Resources
-            </Link>
-            <Link
-              to="/pricing"
-              onClick={() => setMobileMenuOpen(false)}
-              className="block py-2 text-neutral-700 font-medium text-base"
-            >
-              Pricing
-            </Link>
+
             <div className="pt-4 border-t border-neutral-100 flex flex-col gap-3">
               <Link
                 to="/contact"

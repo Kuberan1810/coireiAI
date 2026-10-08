@@ -1,4 +1,4 @@
-import React, { useRef, useState, useEffect } from 'react';
+import React, { useRef, useEffect } from 'react';
 
 export const HOW_WE_WORK_STEPS = [
   {
@@ -34,227 +34,234 @@ export const HOW_WE_WORK_STEPS = [
 ];
 
 export const HowWeWork: React.FC = () => {
-  const howWeWorkRef = useRef<HTMLElement>(null);
+  const sectionRef = useRef<HTMLElement>(null);
   const trackRef = useRef<HTMLDivElement>(null);
-  const badgeRefs = useRef<(HTMLDivElement | null)[]>([]);
+  const fillLineRef = useRef<HTMLDivElement>(null);
+  const pulseDotRef = useRef<HTMLDivElement>(null);
+  const cardRefs = useRef<(HTMLDivElement | null)[]>([]);
 
-  const [scrollProgress, setScrollProgress] = useState(0);
-  const [lineMetrics, setLineMetrics] = useState({
-    startX: 28,
-    totalWidth: 0,
-    stepProgressions: [0, 0.25, 0.5, 0.75, 1],
-  });
+  // Mobile refs
+  const mobileTrackRef = useRef<HTMLDivElement>(null);
+  const mobileFillLineRef = useRef<HTMLDivElement>(null);
+  const mobileCardRefs = useRef<(HTMLDivElement | null)[]>([]);
 
-  // Calculate badge center positions dynamically on any screen width
+  // High-performance direct DOM scroll animation with zero React re-renders
   useEffect(() => {
-    const updateMetrics = () => {
-      if (!trackRef.current) return;
-      const trackRect = trackRef.current.getBoundingClientRect();
-      const centers: number[] = [];
-
-      badgeRefs.current.forEach((badge) => {
-        if (badge) {
-          const bRect = badge.getBoundingClientRect();
-          const cx = bRect.left - trackRect.left + bRect.width / 2;
-          centers.push(cx);
-        }
-      });
-
-      if (centers.length >= 2) {
-        const startX = centers[0];
-        const endX = centers[centers.length - 1];
-        const totalW = Math.max(endX - startX, 0);
-        setLineMetrics({
-          startX,
-          totalWidth: totalW,
-          stepProgressions: centers.map((c) => (totalW > 0 ? (c - startX) / totalW : 0)),
-        });
-      }
-    };
-
-    updateMetrics();
-    window.addEventListener('resize', updateMetrics);
-    const timer = setTimeout(updateMetrics, 200);
-
-    return () => {
-      window.removeEventListener('resize', updateMetrics);
-      clearTimeout(timer);
-    };
-  }, []);
-
-  // Viewport scroll progression for progressive line joining and card reveal
-  useEffect(() => {
+    let isIntersecting = false;
     let ticking = false;
 
-    const handleScroll = () => {
-      if (!ticking) {
-        window.requestAnimationFrame(() => {
-          if (howWeWorkRef.current) {
-            const rect = howWeWorkRef.current.getBoundingClientRect();
-            const windowHeight = window.innerHeight;
+    const updateScroll = () => {
+      const windowHeight = window.innerHeight;
+      const isMobile = window.innerWidth < 640;
+      const activeTrack = isMobile ? mobileTrackRef.current : trackRef.current;
 
-            const triggerStart = windowHeight * 0.85;
-            const scrollDistance = rect.height + windowHeight * 0.25;
-            const scrolled = triggerStart - rect.top;
-            const progress = Math.min(Math.max(scrolled / scrollDistance, 0), 1);
-            setScrollProgress(progress);
-          }
-          ticking = false;
-        });
+      if (!activeTrack) return;
+      const trackRect = activeTrack.getBoundingClientRect();
+
+      // Trigger starts ONLY when the timeline track itself enters the comfortable viewing area (65% of viewport)
+      const startPoint = windowHeight * 0.65;
+      // Reaches 100% when the track is in the upper viewing area (22% of viewport)
+      const endPoint = windowHeight * 0.22;
+
+      const totalScrollRange = Math.max(startPoint - endPoint, 1);
+      const currentScrolled = startPoint - trackRect.top;
+
+      const rawProgress = currentScrolled / totalScrollRange;
+      const progress = Math.min(Math.max(rawProgress, 0), 1);
+
+      // 1. Desktop Direct DOM updates (GPU composited transform - 0 re-renders)
+      if (fillLineRef.current) {
+        fillLineRef.current.style.transform = `scaleX(${progress})`;
+      }
+
+      if (pulseDotRef.current && trackRef.current) {
+        const totalTrackWidth = trackRef.current.offsetWidth - 56;
+        if (totalTrackWidth > 0) {
+          pulseDotRef.current.style.transform = `translate3d(${progress * totalTrackWidth}px, -50%, 0)`;
+          pulseDotRef.current.style.opacity = progress > 0.02 && progress < 0.98 ? '1' : '0';
+        }
+      }
+
+      // Step thresholds: precisely calibrated to badge positions (01 -> 02 -> 03 -> 04 -> 05)
+      const thresholds = [0.03, 0.25, 0.50, 0.75, 0.96];
+      cardRefs.current.forEach((cardEl, idx) => {
+        if (!cardEl) return;
+        const isActive = progress >= thresholds[idx];
+        cardEl.setAttribute('data-active', isActive ? 'true' : 'false');
+      });
+
+      // 2. Mobile Direct DOM updates
+      if (mobileFillLineRef.current) {
+        mobileFillLineRef.current.style.transform = `scaleY(${progress})`;
+      }
+
+      mobileCardRefs.current.forEach((cardEl, idx) => {
+        if (!cardEl) return;
+        const isActive = progress >= thresholds[idx];
+        cardEl.setAttribute('data-active', isActive ? 'true' : 'false');
+      });
+
+      ticking = false;
+    };
+
+    const handleScroll = () => {
+      if (!isIntersecting) return;
+      if (!ticking) {
+        window.requestAnimationFrame(updateScroll);
         ticking = true;
       }
     };
 
+    const handleResize = () => {
+      updateScroll();
+    };
+
+    // IntersectionObserver to sleep when out of view and only listen to scroll when visible
+    const observer = new IntersectionObserver(
+      ([entry]) => {
+        isIntersecting = entry.isIntersecting;
+        if (isIntersecting) {
+          updateScroll();
+        }
+      },
+      {
+        threshold: 0,
+        rootMargin: '100px 0px',
+      }
+    );
+
+    if (sectionRef.current) {
+      observer.observe(sectionRef.current);
+    }
+
     window.addEventListener('scroll', handleScroll, { passive: true });
-    window.addEventListener('resize', handleScroll);
-    handleScroll();
+    window.addEventListener('resize', handleResize, { passive: true });
+    updateScroll();
 
     return () => {
+      observer.disconnect();
       window.removeEventListener('scroll', handleScroll);
-      window.removeEventListener('resize', handleScroll);
+      window.removeEventListener('resize', handleResize);
     };
   }, []);
 
   return (
     <section
-      ref={howWeWorkRef}
-      className="w-full bg-[#FFFFFF] pt-14 sm:pt-18 md:pt-20 pb-12 sm:pb-16 md:pb-20 px-4 sm:px-6 md:px-8 lg:px-12 border-t border-[#F1F5F9]"
+      ref={sectionRef}
+      className="w-full bg-[#FFFFFF] pt-14 sm:pt-18 md:pt-20 pb-16 sm:pb-20 md:pb-24 px-4 sm:px-6 md:px-8 lg:px-12 border-t border-[#F1F5F9]"
     >
       <div className="max-w-[1216px] w-full mx-auto text-left">
         {/* Eyebrow */}
-        <p className="text-[11px] sm:text-[12px] font-semibold uppercase tracking-[0.14em] text-[#8592A6] mb-3">
+        <p className="text-[11px] sm:text-[12px] font-semibold uppercase tracking-[0.14em] text-[#8592A6] mb-3 cursor-text select-text">
           How We Work
         </p>
 
         {/* Section Heading */}
-        <h2 className="text-3xl sm:text-4xl md:text-[44px] font-semibold tracking-tight text-[#0B0F19] leading-[1.18] mb-4">
+        <h2 className="text-3xl sm:text-4xl md:text-[44px] font-semibold tracking-tight text-[#0B0F19] leading-[1.18] mb-4 cursor-text select-text">
           From Complexity to Clarity
         </h2>
 
         {/* Subtitle */}
-        <p className="text-[14px] sm:text-[15px] md:text-[15.5px] text-[#64748B] max-w-3xl leading-relaxed font-normal mb-12 sm:mb-14 md:mb-16">
+        <p className="text-[14px] sm:text-[15px] md:text-[15.5px] text-[#64748B] max-w-3xl leading-relaxed font-normal mb-12 sm:mb-14 md:mb-16 cursor-text select-text">
           Every business has its own way of working. We understand the workflow first, identify
           where technology creates the most leverage, and engineer a solution around it.
         </p>
 
-        {/* Desktop & Tablet Timeline (Fluid Responsive layout that fits all 5 cards seamlessly on all tablet/laptop screens) */}
-        <div className="hidden sm:block relative pt-2 pb-6 w-full">
-          {/* Cards Track: Uses fluid flex-1 with proportional gaps so cards never overflow or get cut off */}
+        {/* Desktop & Tablet Timeline (Zero-Lag direct GPU render) */}
+        <div className="hidden sm:block relative pt-2 pb-4 w-full">
+          {/* Cards Track */}
           <div
             ref={trackRef}
-            className="relative flex items-start justify-between gap-3 md:gap-5 lg:gap-8 xl:gap-10 w-full pt-1"
+            className="relative flex items-start justify-between gap-4 md:gap-6 lg:gap-8 xl:gap-10 w-full pt-1"
           >
-            {/* Background Connecting Timeline Rail */}
+            {/* Background Timeline Rail */}
+            <div className="absolute top-[28px] left-[24px] right-[24px] md:left-[28px] md:right-[28px] h-[2px] bg-[#E2E8F0] z-0 rounded-full" />
+
+            {/* Active Connecting Fill Line with direct GPU scaleX transform */}
             <div
-              className="absolute top-[28px] h-[2px] bg-[#E2E2E2] z-0 rounded-full"
-              style={{
-                left: `${lineMetrics.startX}px`,
-                width: lineMetrics.totalWidth > 0 ? `${lineMetrics.totalWidth}px` : 'calc(100% - 56px)',
-              }}
+              ref={fillLineRef}
+              className="absolute top-[28px] left-[24px] right-[24px] md:left-[28px] md:right-[28px] h-[2px] bg-[#0B0F19] z-0 rounded-full origin-left will-change-transform"
+              style={{ transform: 'scaleX(0)' }}
             />
 
-            {/* Active Joining Line that progressively grows to physically join the badges */}
+            {/* Leading Pulse Dot */}
             <div
-              className="absolute top-[28px] h-[2px] bg-[#0B0F19] z-0 rounded-full transition-[width] duration-150 ease-out"
-              style={{
-                left: `${lineMetrics.startX}px`,
-                width: `${Math.min(
-                  lineMetrics.totalWidth,
-                  Math.max(0, lineMetrics.totalWidth * scrollProgress)
-                )}px`,
-              }}
+              ref={pulseDotRef}
+              className="absolute top-[29px] left-[24px] md:left-[28px] w-[8px] h-[8px] rounded-full bg-[#0B0F19] ring-4 ring-[#0B0F19]/20 -translate-x-1/2 -translate-y-1/2 z-10 will-change-transform pointer-events-none opacity-0 transition-opacity duration-150"
             />
 
-            {/* Leading pulse tip joining the line */}
-            {lineMetrics.totalWidth > 0 && scrollProgress > 0.02 && scrollProgress < 0.99 && (
+            {HOW_WE_WORK_STEPS.map((step, index) => (
               <div
-                className="absolute top-[29px] w-[7px] h-[7px] rounded-full bg-[#0B0F19] ring-4 ring-[#0B0F19]/15 -translate-x-1/2 -translate-y-1/2 z-10 transition-transform duration-75 pointer-events-none"
-                style={{
-                  left: `${lineMetrics.startX + lineMetrics.totalWidth * scrollProgress}px`,
+                key={step.step}
+                ref={(el) => {
+                  cardRefs.current[index] = el;
                 }}
-              />
-            )}
-
-            {HOW_WE_WORK_STEPS.map((step, index) => {
-              const threshold =
-                lineMetrics.stepProgressions[index] !== undefined
-                  ? lineMetrics.stepProgressions[index] - 0.03
-                  : index * 0.22;
-              const isRevealed = index === 0 ? true : scrollProgress >= threshold;
-
-              return (
+                data-active="false"
+                className="group flex-1 min-w-0 max-w-[240px] text-left relative z-10 cursor-pointer select-text transition-all duration-300 ease-out data-[active=false]:opacity-35 data-[active=true]:opacity-100 hover:opacity-100 hover:-translate-y-0.5"
+              >
+                {/* Step Number Badge */}
                 <div
-                  key={step.step}
-                  className="flex-1 min-w-0 max-w-[240px] text-left relative z-10"
+                  className="w-[48px] h-[48px] md:w-[56px] md:h-[56px] rounded-[10px] border flex items-center justify-center text-[13px] md:text-[14px] font-semibold select-none transition-all duration-300 group-data-[active=true]:bg-white group-data-[active=true]:border-black/15 group-data-[active=true]:text-[#0B0F19] group-data-[active=true]:shadow-[0px_2px_6px_rgba(0,0,0,0.06)] group-data-[active=false]:bg-white group-data-[active=false]:border-[#E2E8F0] group-data-[active=false]:text-neutral-400 group-hover:border-black/30 group-hover:text-black group-hover:shadow-sm"
                 >
-                  {/* Step Number Badge */}
-                  <div
-                    ref={(el) => {
-                      badgeRefs.current[index] = el;
-                    }}
-                    className={`w-[48px] h-[48px] md:w-[56px] md:h-[56px] rounded-[8px] border flex items-center justify-center text-[13px] md:text-[13.5px] font-semibold select-none transition-all duration-400 ${
-                      isRevealed
-                        ? 'bg-white border-black/[0.06] text-[#0B0F19] shadow-[0px_2px_4px_-2px_rgba(0,0,0,0.10),0px_4px_6px_-1px_rgba(0,0,0,0.10)] opacity-100'
-                        : 'bg-white border-[#E2E8F0] text-neutral-400 shadow-[0px_1px_3px_rgba(0,0,0,0.04)] opacity-40'
-                    }`}
-                  >
-                    {step.step}
-                  </div>
-
-                  {/* Card Body */}
-                  <div
-                    className={`transition-all duration-500 ease-out ${
-                      isRevealed
-                        ? 'opacity-100 translate-y-0 filter-none'
-                        : 'opacity-20 translate-y-3 filter blur-[0.5px] pointer-events-none'
-                    }`}
-                  >
-                    {/* Step Title */}
-                    <h3 className="text-[17px] md:text-[20px] lg:text-[22px] font-semibold text-[#1A1C1C] leading-[24px] md:leading-[28px] tracking-[-0.33px] mt-4 md:mt-6 mb-2">
-                      {step.title}
-                    </h3>
-
-                    {/* Step Description */}
-                    <p className="text-[12px] md:text-[13px] text-[#64748B] leading-relaxed font-normal">
-                      {step.description}
-                    </p>
-                  </div>
+                  {step.step}
                 </div>
-              );
-            })}
+
+                {/* Card Body */}
+                <div className="mt-4 md:mt-6 transition-all duration-300 group-data-[active=false]:translate-y-1 group-data-[active=true]:translate-y-0">
+                  {/* Step Title */}
+                  <h3 className="text-[17px] md:text-[19px] lg:text-[21px] font-semibold text-[#1A1C1C] leading-[24px] md:leading-[28px] tracking-[-0.33px] mb-2 group-hover:text-black cursor-text select-text">
+                    {step.title}
+                  </h3>
+
+                  {/* Step Description */}
+                  <p className="text-[12px] md:text-[13px] text-[#64748B] leading-relaxed font-normal group-hover:text-slate-800 cursor-text select-text">
+                    {step.description}
+                  </p>
+                </div>
+              </div>
+            ))}
           </div>
         </div>
 
         {/* Mobile Vertical Timeline Layout (< 640px) */}
-        <div className="sm:hidden relative pl-4 border-l-2 border-[#E2E8F0] space-y-8 mt-6">
-          {HOW_WE_WORK_STEPS.map((step, index) => {
-            const isRevealed = scrollProgress >= index * 0.18;
+        <div ref={mobileTrackRef} className="sm:hidden relative pl-4 mt-6">
+          {/* Background vertical rail */}
+          <div className="absolute left-[15px] top-4 bottom-4 w-[2px] bg-[#E2E8F0] z-0 rounded-full" />
 
-            return (
-              <div key={`mobile-${step.step}`} className="relative pl-6">
+          {/* Active vertical fill line */}
+          <div
+            ref={mobileFillLineRef}
+            className="absolute left-[15px] top-4 bottom-4 w-[2px] bg-[#0B0F19] z-0 rounded-full origin-top will-change-transform"
+            style={{ transform: 'scaleY(0)' }}
+          />
+
+          <div className="space-y-8">
+            {HOW_WE_WORK_STEPS.map((step, index) => (
+              <div
+                key={`mobile-${step.step}`}
+                ref={(el) => {
+                  mobileCardRefs.current[index] = el;
+                }}
+                data-active="false"
+                className="group relative pl-7 transition-all duration-300 ease-out data-[active=false]:opacity-35 data-[active=true]:opacity-100"
+              >
                 {/* Badge Dot */}
-                <div
-                  className={`absolute -left-[25px] top-0 w-8 h-8 rounded-lg border flex items-center justify-center text-xs font-semibold ${
-                    isRevealed
-                      ? 'bg-white border-black/10 text-[#0B0F19] shadow-sm'
-                      : 'bg-white border-[#E2E8F0] text-neutral-400'
-                  }`}
-                >
+                <div className="absolute -left-[16px] top-0 w-8 h-8 rounded-lg border flex items-center justify-center text-xs font-semibold select-none z-10 transition-colors duration-300 group-data-[active=true]:bg-white group-data-[active=true]:border-black/20 group-data-[active=true]:text-[#0B0F19] group-data-[active=true]:shadow-xs group-data-[active=false]:bg-white group-data-[active=false]:border-[#E2E8F0] group-data-[active=false]:text-neutral-400">
                   {step.step}
                 </div>
 
                 {/* Content */}
                 <div>
-                  <h3 className="text-lg font-semibold text-[#1A1C1C] mb-1">
+                  <h3 className="text-lg font-semibold text-[#1A1C1C] mb-1 cursor-text select-text">
                     {step.title}
                   </h3>
-                  <p className="text-[13px] text-[#64748B] leading-relaxed">
+                  <p className="text-[13px] text-[#64748B] leading-relaxed cursor-text select-text">
                     {step.description}
                   </p>
                 </div>
               </div>
-            );
-          })}
+            ))}
+          </div>
         </div>
       </div>
     </section>

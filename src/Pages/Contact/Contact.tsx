@@ -178,7 +178,7 @@ export const Contact: React.FC = () => {
             className="inline-flex items-center justify-center gap-2 px-5 py-2.5 rounded-[10px] bg-[#0B0F19] hover:bg-neutral-800 text-white text-[13.5px] font-semibold transition-all duration-200 shadow-xs cursor-pointer active:scale-[0.99]"
           >
             <span>Book a Demo</span>
-            <ArrowRight className="w-4 h-4" />
+            
           </button>
 
           <a
@@ -377,7 +377,7 @@ export const Contact: React.FC = () => {
                       className="inline-flex items-center justify-center gap-2 px-6 py-2.5 rounded-[8px] bg-[#0B0F19] hover:bg-neutral-800 disabled:opacity-70 text-white text-[13.5px] font-semibold transition-all duration-200 shadow-xs cursor-pointer active:scale-[0.99]"
                     >
                       <span>{isSubmitting ? 'Sending...' : 'Send Message'}</span>
-                      <ArrowRight className="w-4 h-4" />
+                  
                     </button>
                   </div>
                 </form>

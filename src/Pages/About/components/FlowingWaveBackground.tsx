@@ -10,7 +10,7 @@ interface FlowingWaveBackgroundProps {
 
 export const FlowingWaveBackground: React.FC<FlowingWaveBackgroundProps> = ({
   className = '',
-  lineCount = 52,
+  lineCount = 44,
   speed = 0.85,
   opacity = 0.95,
   spreadScale = 1.0,
@@ -24,7 +24,8 @@ export const FlowingWaveBackground: React.FC<FlowingWaveBackgroundProps> = ({
     const ctx = canvas.getContext('2d', { alpha: true });
     if (!ctx) return;
 
-    let animId: number;
+    let animId: number | null = null;
+    let isVisible = true;
     let width = (canvas.width = canvas.offsetWidth * window.devicePixelRatio);
     let height = (canvas.height = canvas.offsetHeight * window.devicePixelRatio);
     let dpr = window.devicePixelRatio || 1;
@@ -54,13 +55,36 @@ export const FlowingWaveBackground: React.FC<FlowingWaveBackgroundProps> = ({
     };
 
     window.addEventListener('resize', handleResize);
-    window.addEventListener('mousemove', handleMouseMove);
+    window.addEventListener('mousemove', handleMouseMove, { passive: true });
     document.addEventListener('mouseleave', handleMouseLeave);
 
+    // Pause rendering when Hero canvas is not visible to free 100% CPU/GPU for lower sections
+    const observer = new IntersectionObserver(
+      ([entry]) => {
+        isVisible = entry.isIntersecting;
+        if (isVisible && animId === null) {
+          startTime = performance.now() - pausedOffset;
+          animId = requestAnimationFrame(render);
+        } else if (!isVisible && animId !== null) {
+          cancelAnimationFrame(animId);
+          animId = null;
+        }
+      },
+      { threshold: 0 }
+    );
+    observer.observe(canvas);
+
     let startTime = performance.now();
+    let pausedOffset = 0;
 
     const render = (timeNow: number) => {
+      if (!isVisible) {
+        animId = null;
+        return;
+      }
+
       const elapsed = (timeNow - startTime) * 0.001 * speed;
+      pausedOffset = elapsed;
 
       // Smooth lerp mouse coordinates
       mouseX += (targetMouseX - mouseX) * 0.05;
@@ -69,7 +93,7 @@ export const FlowingWaveBackground: React.FC<FlowingWaveBackgroundProps> = ({
       ctx.clearRect(0, 0, width, height);
 
       const count = lineCount;
-      const stepX = Math.max(5, Math.floor(width / 130)); // High-res smooth curves across screen
+      const stepX = Math.max(8, Math.floor(width / 100)); // Optimized step size
       const centerY = height * 0.50;
       const baseAmplitude = Math.min(height * 0.25, 175 * dpr);
       const totalSpread = (115 * dpr) * spreadScale;
@@ -139,7 +163,6 @@ export const FlowingWaveBackground: React.FC<FlowingWaveBackgroundProps> = ({
           if (x === 0) {
             ctx.moveTo(x, y);
           } else {
-            // Smooth midpoint quadratic curve for silky anti-aliased wave
             const midX = (prevX + x) / 2;
             const midY = (prevY + y) / 2;
             ctx.quadraticCurveTo(prevX, prevY, midX, midY);
@@ -161,7 +184,8 @@ export const FlowingWaveBackground: React.FC<FlowingWaveBackgroundProps> = ({
     animId = requestAnimationFrame(render);
 
     return () => {
-      cancelAnimationFrame(animId);
+      if (animId !== null) cancelAnimationFrame(animId);
+      observer.disconnect();
       window.removeEventListener('resize', handleResize);
       window.removeEventListener('mousemove', handleMouseMove);
       document.removeEventListener('mouseleave', handleMouseLeave);
@@ -172,7 +196,6 @@ export const FlowingWaveBackground: React.FC<FlowingWaveBackgroundProps> = ({
     <canvas
       ref={canvasRef}
       className={`w-full h-full block pointer-events-none select-none ${className}`}
-      style={{ willChange: 'transform' }}
     />
   );
 };

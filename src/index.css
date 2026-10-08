@@ -1,5 +1,13 @@
 @import "tailwindcss";
 
+@font-face {
+  font-family: 'Gued';
+  src: url('./assets/font/gued.bold.otf') format('opentype');
+  font-weight: bold;
+  font-style: normal;
+  font-display: swap;
+}
+
 @layer base {
   html {
     scroll-behavior: smooth;
@@ -86,10 +94,8 @@
   display: flex;
   width: max-content;
   animation: marquee 30s linear infinite;
-}
-
-.animate-marquee:hover {
-  animation-play-state: paused;
+  animation-play-state: running !important;
+  will-change: transform;
 }
 
 @keyframes marquee-vertical {

@@ -100,7 +100,7 @@ export const BusinessSection: React.FC = () => {
                     ) : (
                       <>
                         <span>Start Exploring</span>
-                        <ArrowRight className="w-4 h-4 ml-0.5" />
+                        
                       </>
                     )}
                   </button>
