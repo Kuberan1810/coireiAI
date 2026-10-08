@@ -27,12 +27,12 @@ const INTELLIGENCE_ITEMS = [
   {
     title: 'Audience Intelligence',
     description: 'Discover who your ideal customers really are.',
-    link: '/market-intelligence',
+    link: '',
   },
   {
     title: 'Lead Intelligence',
     description: 'Find high-intent prospects built for your business.',
-    link: '/engage',
+    link: '',
   },
 ];
 

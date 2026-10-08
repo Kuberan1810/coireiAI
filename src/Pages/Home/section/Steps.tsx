@@ -3,6 +3,8 @@ import findSvg from '../../../assets/home/Find.svg';
 import { ScrollReveal } from '../../../components/ui/ScrollReveal';
 import AnalyseAnimation from '../animation/AnalyseAnimation';
 import UnderstandVisual from '../animation/UnderstandVisual';
+import FindVisual from '../animation/FindVisual';
+
 
 interface StepCardItem {
   id: string;
@@ -69,6 +71,10 @@ export const Steps: React.FC = () => {
                   ) : card.id === 'analyse' ? (
                     <div className="w-full h-full flex items-center justify-center overflow-hidden">
                       <AnalyseAnimation className="w-full h-full" />
+                    </div>
+                  ) : card.id === 'find' ? (
+                    <div className="w-full h-full flex items-center justify-center overflow-hidden">
+                      <FindVisual className="w-full h-full" />
                     </div>
                   ) : (
                     <img

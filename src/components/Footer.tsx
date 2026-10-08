@@ -1,6 +1,7 @@
-import React from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { Link } from 'react-router-dom';
-import footerLogo from '../assets/footerLogo.svg';
+
+const LETTERS = ['c', 'o', 'i', 'r', 'e', 'i'];
 
 const InstagramIcon: React.FC = () => (
   <svg
@@ -19,11 +20,11 @@ const InstagramIcon: React.FC = () => (
   </svg>
 );
 
-const XIcon: React.FC = () => (
-  <svg width="13" height="13" viewBox="0 0 24 24" fill="currentColor">
-    <path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z" />
-  </svg>
-);
+// const XIcon: React.FC = () => (
+//   <svg width="13" height="13" viewBox="0 0 24 24" fill="currentColor">
+//     <path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z" />
+//   </svg>
+// );
 
 const LinkedInIcon: React.FC = () => (
   <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor">
@@ -32,6 +33,47 @@ const LinkedInIcon: React.FC = () => (
 );
 
 export const Footer: React.FC = () => {
+  const [isVisible, setIsVisible] = useState(false);
+  const wordmarkRef = useRef<HTMLDivElement | null>(null);
+
+  useEffect(() => {
+    const el = wordmarkRef.current;
+    if (!el) return;
+
+    const checkVisibility = () => {
+      const rect = el.getBoundingClientRect();
+      if (rect.top <= (window.innerHeight || 600) + 80) {
+        setIsVisible(true);
+      }
+    };
+
+    const observer = new IntersectionObserver(
+      ([entry]) => {
+        if (entry.isIntersecting) {
+          setIsVisible(true);
+        } else {
+          // Reset only when scrolled well back up above the viewport
+          if (entry.boundingClientRect.top > (window.innerHeight || 600) + 100) {
+            setIsVisible(false);
+          }
+        }
+      },
+      {
+        threshold: 0.01,
+        rootMargin: '0px 0px 100px 0px',
+      }
+    );
+
+    observer.observe(el);
+    checkVisibility();
+
+    window.addEventListener('scroll', checkVisibility, { passive: true });
+    return () => {
+      observer.disconnect();
+      window.removeEventListener('scroll', checkVisibility);
+    };
+  }, []);
+
   return (
     <footer className="w-full bg-black text-white relative z-20 overflow-hidden pt-10 sm:pt-14 pb-0 border-t border-neutral-900 font-['Plus_Jakarta_Sans',sans-serif]">
       {/* Top Header Section */}
@@ -39,11 +81,11 @@ export const Footer: React.FC = () => {
         <div className="flex flex-col lg:flex-row items-start justify-between gap-8 lg:gap-0 relative">
 
           {/* Left Block: Socials + Address + Contact Info */}
-          <div className="w-full lg:w-[320px] shrink-0 pb-6 lg:pb-0 lg:pr-12">
+          <div className="w-full lg:w-[320px] shrink-0 pb-2 lg:pb-0 lg:pr-12">
             {/* Social Icons (Circles) */}
             <div className="flex items-center gap-3 mb-5">
               <a
-                href="https://instagram.com/coirei"
+                href="https://www.instagram.com/coirei_?stkn=YTNudGFybWd2dGY1"
                 target="_blank"
                 rel="noopener noreferrer"
                 aria-label="Instagram"
@@ -52,7 +94,7 @@ export const Footer: React.FC = () => {
                 <InstagramIcon />
               </a>
 
-              <a
+              {/* <a
                 href="https://x.com/coirei"
                 target="_blank"
                 rel="noopener noreferrer"
@@ -60,7 +102,7 @@ export const Footer: React.FC = () => {
                 className="w-9 h-9 rounded-full border border-neutral-700/90 flex items-center justify-center text-white hover:border-white hover:bg-white/5 transition-all duration-200"
               >
                 <XIcon />
-              </a>
+              </a> */}
 
               <a
                 href="https://linkedin.com/company/coirei"
@@ -74,20 +116,20 @@ export const Footer: React.FC = () => {
             </div>
 
             {/* Address & Contact Info */}
-            <div className="space-y-3.5 font-['Plus_Jakarta_Sans',sans-serif] text-[12px] font-medium text-[#FFFFFF] tracking-normal leading-[1.35]">
-              <div className="max-w-[260px]">
+            <div className="space-y-3 font-['Plus_Jakarta_Sans',sans-serif] text-[12px] sm:text-[12.5px] font-medium text-[#FFFFFF] tracking-normal leading-[1.4]">
+              <div className="max-w-[280px]">
                 <p>7th Floor, Spencer Plaza, Mount Road, Chennai, Tamil Nadu, India</p>
               </div>
 
               <div>
-                <p className="flex flex-wrap items-center gap-1.5 text-[#FFFFFF]">
+                <p className="flex flex-col sm:flex-row sm:items-center gap-1 sm:gap-1.5 text-[#FFFFFF]">
                   <a
                     href="mailto:info@coirei.com"
                     className="hover:text-neutral-300 transition-colors"
                   >
                     info@coirei.com
                   </a>
-                  <span className="text-neutral-400">/</span>
+                  <span className="hidden sm:inline text-neutral-500">/</span>
                   <a
                     href="mailto:coireitech@gmail.com"
                     className="hover:text-neutral-300 transition-colors"
@@ -100,7 +142,7 @@ export const Footer: React.FC = () => {
               <div>
                 <a
                   href="tel:+919840418139"
-                  className="text-[#FFFFFF] hover:text-neutral-300 transition-colors block"
+                  className="text-[#FFFFFF] hover:text-neutral-300 transition-colors inline-block"
                 >
                   (+91) 9840418139
                 </a>
@@ -115,10 +157,10 @@ export const Footer: React.FC = () => {
           />
 
           {/* Right Navigation / Columns */}
-          <div className="w-full lg:flex-1 flex flex-wrap items-start gap-12 sm:gap-16 lg:gap-24 lg:pl-14 pt-2 lg:pt-3">
+          <div className="w-full lg:flex-1 grid grid-cols-2 gap-8 sm:gap-14 lg:flex lg:gap-24 lg:pl-14 pt-2 lg:pt-3 pb-6 sm:pb-25 lg:pb-24">
             {/* Site Index Column */}
             <div className="flex flex-col space-y-3">
-              <span className="text-neutral-400 text-[15px] sm:text-[16px] font-normal select-none">
+              <span className="text-neutral-400 text-[14px] sm:text-[16px] font-normal select-none">
                 Site Index
               </span>
               <div className="flex flex-col space-y-2 text-[13px] sm:text-[13.5px] font-normal">
@@ -163,7 +205,10 @@ export const Footer: React.FC = () => {
 
             {/* Quick Links Column */}
             <div className="flex flex-col space-y-3">
-              <div className="flex flex-col space-y-2 text-[13px] sm:text-[13.5px] font-normal sm:pt-[33px]">
+              <span className="text-neutral-400 text-[14px] sm:text-[16px] font-normal select-none lg:invisible">
+                Links
+              </span>
+              <div className="flex flex-col space-y-2 text-[13px] sm:text-[13.5px] font-normal">
                 <Link
                   to="/contact"
                   className="text-white hover:text-neutral-300 transition-colors cursor-pointer"
@@ -188,13 +233,36 @@ export const Footer: React.FC = () => {
         </div>
       </div>
 
-      {/* Massive Coirei Wordmark Logo matching coirei.com & Figma exactly */}
-      <div className="w-full flex justify-center items-center overflow-hidden pointer-events-none select-none -mt-24 sm:-mt-36 md:-mt-48 lg:-mt-56 mb-0">
-        <img
-          src={footerLogo}
-          alt="coirei"
-          className="w-full h-auto max-w-[1440px] object-contain block opacity-100"
-        />
+      {/* Massive Coirei Wordmark in Gued Font with Letter-by-Letter Reveal */}
+      <div className="w-full flex justify-center items-center overflow-hidden pointer-events-none select-none -mt-4 sm:-mt-24 md:-mt-40 lg:-mt-56 -mb-4 sm:-mb-9 h-[150px] sm:h-[200px] md:h-[350px] lg:h-[550px]">
+        <span
+          ref={wordmarkRef}
+          className="text-[40vw] sm:text-[22vw] lg:text-[39vw] leading-none text-[#161616] select-none text-center flex items-center justify-center whitespace-nowrap"
+          style={{
+            fontFamily: "'Gued', sans-serif",
+            letterSpacing: '0.04em',
+          }}
+        >
+          {LETTERS.map((char, index) => (
+            <span
+              key={index}
+              className="inline-block transition-all duration-700 ease-[cubic-bezier(0.16,1,0.3,1)]"
+              style={{
+                opacity: isVisible ? 1 : 0,
+                transform: isVisible
+                  ? 'translate3d(0, 0, 0) scale(1)'
+                  : 'translate3d(0, 50px, 0) scale(0.92)',
+                filter: isVisible ? 'blur(0px)' : 'blur(6px)',
+                transitionDelay: isVisible
+                  ? `${index * 130}ms`
+                  : `${(LETTERS.length - 1 - index) * 40}ms`,
+                willChange: 'opacity, transform, filter',
+              }}
+            >
+              {char}
+            </span>
+          ))}
+        </span>
       </div>
     </footer>
   );

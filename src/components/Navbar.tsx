@@ -293,6 +293,17 @@ export const Navbar: React.FC = () => {
                 : 'opacity-100 pointer-events-auto'
             }`}
           >
+            <Link
+              to="/"
+              className={`text-[14.5px] font-medium transition-colors py-1 ${
+                location.pathname === '/' 
+                  ? 'text-black font-semibold' 
+                  : 'text-neutral-700 hover:text-neutral-900'
+              }`}
+            >
+              Home
+            </Link>
+
             {/* Features Link Trigger */}
             <div 
               className="py-4 cursor-pointer"
@@ -301,15 +312,10 @@ export const Navbar: React.FC = () => {
             >
               <button
                 type="button"
-                className="flex items-center gap-1.5 text-[14.5px] font-medium text-neutral-700 hover:text-neutral-900 transition-colors py-1 cursor-pointer select-none group"
+                className="flex items-center text-[14.5px] font-medium text-neutral-700 hover:text-neutral-900 transition-colors py-1 cursor-pointer select-none group"
                 aria-expanded={dropdownOpen}
               >
                 <span>Features</span>
-                <ChevronDown 
-                  className={`w-4 h-4 text-neutral-500 group-hover:text-neutral-900 transition-transform duration-250 ${
-                    dropdownOpen ? 'rotate-180 text-neutral-900' : ''
-                  }`} 
-                />
               </button>
             </div>
 
@@ -340,7 +346,9 @@ export const Navbar: React.FC = () => {
           <div className="flex items-center gap-2 shrink-0">
             <Link
               to="/contact"
-              className={`inline-flex items-center justify-center bg-black hover:bg-neutral-800 text-white font-medium rounded-full shadow-xs hover:shadow transition-all duration-500 ease-[cubic-bezier(0.16,1,0.3,1)] cursor-pointer shrink-0 ${
+              className={`${
+                isScrolled ? 'inline-flex' : 'hidden md:inline-flex'
+              } items-center justify-center bg-black hover:bg-neutral-800 text-white font-medium rounded-full shadow-xs hover:shadow transition-all duration-500 ease-[cubic-bezier(0.16,1,0.3,1)] cursor-pointer shrink-0 ${
                 isScrolled 
                   ? 'text-[12.5px] sm:text-[13px] px-3.5 sm:px-4 py-1.5 sm:py-2' 
                   : 'text-[13.5px] px-5 py-2'
@@ -428,6 +436,16 @@ export const Navbar: React.FC = () => {
         {/* Mobile dropdown menu (only active page routes matching App.tsx) */}
         {!isScrolled && mobileMenuOpen && (
           <div className="md:hidden border-b border-neutral-100 bg-white/98 backdrop-blur-xl px-6 pt-3 pb-6 space-y-3 shadow-xl max-h-[85vh] overflow-y-auto">
+            <Link
+              to="/"
+              onClick={() => setMobileMenuOpen(false)}
+              className={`block py-2 font-medium text-base hover:text-black ${
+                location.pathname === '/' ? 'text-black font-semibold' : 'text-neutral-700'
+              }`}
+            >
+              Home
+            </Link>
+
             {/* Features Accordion */}
             <div>
               <button
