@@ -3,6 +3,8 @@ import understandSvg from '../../../assets/home/Understand.svg';
 import analyseSvg from '../../../assets/home/Analyse.svg';
 import findSvg from '../../../assets/home/Find.svg';
 import { ScrollReveal } from '../../../components/ui/ScrollReveal';
+import { UnderstandVisual } from './UnderstandVisual';
+import { FindVisual } from './FindVisual';
 
 interface StepCardItem {
   id: string;
@@ -57,12 +59,18 @@ export const Steps: React.FC = () => {
               <div className="w-full min-h-[520px] sm:min-h-[560px] lg:min-h-[589px] bg-[#f3f3f3] rounded-[20px] border border-[#E5E7EB] p-4 sm:p-5 flex flex-col justify-start text-left ">
                 {/* Top Illustration Box (Figma Frame 2147225447) */}
                 <div className="relative w-full aspect-[340/320] overflow-hidden rounded-[16px] bg-[#ffffff] border border-[#F1F5F9] flex items-center justify-center ">
-                  <img
-                    src={card.image}
-                    alt={card.title}
-                    className="w-full h-full object-contain block select-none pointer-events-none"
-                    loading="lazy"
-                  />
+                  {card.id === 'understand' ? (
+                    <UnderstandVisual />
+                  ) : card.id === 'find' ? (
+                    <FindVisual />
+                  ) : (
+                    <img
+                      src={card.image}
+                      alt={card.title}
+                      className="w-full h-full object-contain block select-none pointer-events-none"
+                      loading="lazy"
+                    />
+                  )}
                 </div>
 
                 {/* Card Title */}
@@ -71,7 +79,7 @@ export const Steps: React.FC = () => {
                 </h3>
 
                 {/* Card Description */}
-                <p className="text-[15px] sm:text-[18x] text-[#64748B] font-normal leading-[1.65]">
+                <p className="text-[15px] sm:text-[18px] text-[#64748B] font-normal leading-[1.65]">
                   {card.description}
                 </p>
               </div>
