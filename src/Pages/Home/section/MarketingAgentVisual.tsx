@@ -122,17 +122,17 @@ export const MarketingAgentVisual: React.FC<MarketingAgentVisualProps> = ({
         </div>
 
         {/* Metrics Grid (Reach, Engagement, Leads) */}
-        <div className="grid grid-cols-3 gap-2 pt-0.5">
+        <div className="grid grid-cols-3 gap-1.5 sm:gap-2 pt-0.5">
           {/* Reach */}
           <div className="flex flex-col">
-            <span className="text-[11px] text-[#94A3B8] font-normal leading-none mb-1">
+            <span className="text-[9.5px] sm:text-[11px] text-[#94A3B8] font-normal leading-none mb-1">
               Reach
             </span>
-            <div className="flex items-baseline">
-              <span className="text-[14.5px] font-semibold text-[#0F172A] leading-tight tabular-nums">
+            <div className="flex items-baseline flex-wrap sm:flex-nowrap">
+              <span className="text-[11.5px] sm:text-[14.5px] font-semibold text-[#0F172A] leading-tight tabular-nums">
                 {currentReachVal}K
               </span>
-              <span className="text-[11px] text-[#10B981] font-semibold ml-1 leading-tight inline-flex items-center tabular-nums">
+              <span className="text-[9px] sm:text-[11px] text-[#10B981] font-semibold ml-0.5 sm:ml-1 leading-tight inline-flex items-center tabular-nums">
                 ↑{currentReachGain}%
               </span>
             </div>
@@ -140,14 +140,14 @@ export const MarketingAgentVisual: React.FC<MarketingAgentVisualProps> = ({
 
           {/* Engagement */}
           <div className="flex flex-col">
-            <span className="text-[11px] text-[#94A3B8] font-normal leading-none mb-1">
+            <span className="text-[9.5px] sm:text-[11px] text-[#94A3B8] font-normal leading-none mb-1">
               Engagement
             </span>
-            <div className="flex items-baseline">
-              <span className="text-[14.5px] font-semibold text-[#0F172A] leading-tight tabular-nums">
+            <div className="flex items-baseline flex-wrap sm:flex-nowrap">
+              <span className="text-[11.5px] sm:text-[14.5px] font-semibold text-[#0F172A] leading-tight tabular-nums">
                 {currentEngagementVal}%
               </span>
-              <span className="text-[11px] text-[#10B981] font-semibold ml-1 leading-tight inline-flex items-center tabular-nums">
+              <span className="text-[9px] sm:text-[11px] text-[#10B981] font-semibold ml-0.5 sm:ml-1 leading-tight inline-flex items-center tabular-nums">
                 ↑{currentEngagementGain}%
               </span>
             </div>
@@ -155,14 +155,14 @@ export const MarketingAgentVisual: React.FC<MarketingAgentVisualProps> = ({
 
           {/* Leads */}
           <div className="flex flex-col">
-            <span className="text-[11px] text-[#94A3B8] font-normal leading-none mb-1">
+            <span className="text-[9.5px] sm:text-[11px] text-[#94A3B8] font-normal leading-none mb-1">
               Leads
             </span>
-            <div className="flex items-baseline">
-              <span className="text-[14.5px] font-semibold text-[#0F172A] leading-tight tabular-nums">
+            <div className="flex items-baseline flex-wrap sm:flex-nowrap">
+              <span className="text-[11.5px] sm:text-[14.5px] font-semibold text-[#0F172A] leading-tight tabular-nums">
                 {currentLeadsVal}
               </span>
-              <span className="text-[11px] text-[#10B981] font-semibold ml-1 leading-tight inline-flex items-center tabular-nums">
+              <span className="text-[9px] sm:text-[11px] text-[#10B981] font-semibold ml-0.5 sm:ml-1 leading-tight inline-flex items-center tabular-nums">
                 ↑{currentLeadsGain}%
               </span>
             </div>
@@ -170,9 +170,9 @@ export const MarketingAgentVisual: React.FC<MarketingAgentVisualProps> = ({
         </div>
       </div>
 
-      {/* Card 2: AI Recommendation */}
+      {/* Card 2: AI Recommendation (Hidden on mobile) */}
       <div
-        className="w-full rounded-[14px] bg-[#EB6658]/[0.04] border border-[#EB6658]/25 pt-[10px] pr-[14px] pb-[10px] pl-[14px] flex flex-col gap-[12px] transition-all hover:border-[#EB6658]/45"
+        className="hidden sm:flex w-full rounded-[14px] bg-[#EB6658]/[0.04] border border-[#EB6658]/25 pt-[10px] pr-[14px] pb-[10px] pl-[14px] flex-col gap-[12px] transition-all hover:border-[#EB6658]/45"
       >
         {/* Recommendation Header */}
         <div className="flex items-center gap-1.5 leading-none">

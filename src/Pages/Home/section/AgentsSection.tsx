@@ -275,6 +275,15 @@ export const AgentsSection: React.FC = () => {
     touchStartXRef.current = null;
   };
 
+  const [isMobile, setIsMobile] = useState(false);
+
+  useEffect(() => {
+    const check = () => setIsMobile(typeof window !== 'undefined' && window.innerWidth < 768);
+    check();
+    window.addEventListener('resize', check);
+    return () => window.removeEventListener('resize', check);
+  }, []);
+
   // Helper to compute card transform, scale, opacity, and positioning
   // Front card: 889px x 446px, radius 40px
   // Back cards: 456px x 230px, radius 20px (scale: 456/889 = 0.513, center offset: 423px / 889px = 47.6%)
@@ -283,6 +292,31 @@ export const AgentsSection: React.FC = () => {
     let diff = (index - currentIndex) % total;
     if (diff < -Math.floor(total / 2)) diff += total;
     if (diff > Math.floor(total / 2)) diff -= total;
+
+    if (isMobile) {
+      if (diff === 0) {
+        return {
+          transform: 'translate3d(0, 0, 0)',
+          opacity: 1,
+          zIndex: 20,
+          pointerEvents: 'auto' as const,
+        };
+      } else if (diff === 1 || diff > 0) {
+        return {
+          transform: 'translate3d(100%, 0, 0)',
+          opacity: 0,
+          zIndex: 0,
+          pointerEvents: 'none' as const,
+        };
+      } else {
+        return {
+          transform: 'translate3d(-100%, 0, 0)',
+          opacity: 0,
+          zIndex: 0,
+          pointerEvents: 'none' as const,
+        };
+      }
+    }
 
     if (diff === 0) {
       return {
@@ -338,14 +372,14 @@ export const AgentsSection: React.FC = () => {
 
         {/* Carousel Container */}
         <div
-          className="relative mt-12 sm:mt-16 w-full flex flex-col items-center justify-center"
+          className="relative mt-8 sm:mt-12 md:mt-16 w-full flex flex-col items-center justify-center"
           onMouseEnter={() => setIsPaused(true)}
           onMouseLeave={() => setIsPaused(false)}
           onTouchStart={handleTouchStart}
           onTouchEnd={handleTouchEnd}
         >
-          {/* Slider Stage (889px x 446px exact Figma spec) */}
-          <div className="relative w-full max-w-[889px] mx-auto min-h-[500px] sm:min-h-[460px] md:h-[446px] flex items-center justify-center">
+          {/* Slider Stage (Locked uniform height: 530px on mobile, 480px on sm, 446px on md+) */}
+          <div className="relative w-full max-w-[889px] mx-auto h-[530px] sm:h-[480px] md:h-[446px] flex items-center justify-center">
             {AGENTS.map((agent, index) => {
               const isCenter = index === currentIndex;
               const cardStyle = getCardStyle(index);
@@ -357,63 +391,63 @@ export const AgentsSection: React.FC = () => {
                   onClick={() => {
                     if (!isCenter) setCurrentIndex(index);
                   }}
-                  className="absolute inset-x-0 mx-auto w-full max-w-[94%] sm:max-w-[780px] md:max-w-[840px] lg:w-[889px] transition-all duration-700 ease-[cubic-bezier(0.16,1,0.3,1)] will-change-transform"
+                  className="absolute inset-x-0 mx-auto w-full max-w-[94%] sm:max-w-[780px] md:max-w-[840px] lg:w-[889px] h-[530px] sm:h-[480px] md:h-[446px] transition-all duration-700 ease-[cubic-bezier(0.16,1,0.3,1)] will-change-transform"
                 >
-                  {/* Card Container: 889x446, Radius: 40px, Background: #FCFCFC, Border: 1px #F0F0F0 */}
+                  {/* Card Container: Exact same locked height on all cards */}
                   <div
-                    className="w-full md:h-[446px] bg-[#FCFCFC] rounded-[28px] sm:rounded-[36px] lg:rounded-[40px] border border-[#F0F0F0] p-6 sm:p-8 lg:p-10 flex flex-col justify-center"
+                    className="w-full h-full bg-[#FCFCFC] rounded-[24px] sm:rounded-[36px] lg:rounded-[40px] border border-[#F0F0F0] p-4.5 sm:p-8 lg:p-10 flex flex-col justify-between md:justify-center overflow-hidden"
                     style={{
                       boxShadow: isCenter
                         ? '0px 1px 150px 0px rgba(70, 70, 70, 0.25)'
                         : '0px 4px 20px 0px rgba(0, 0, 0, 0.05)',
                     }}
                   >
-                    <div className="grid grid-cols-1 md:grid-cols-12 gap-6 md:gap-8 lg:gap-10 items-stretch h-full">
+                    <div className="grid grid-cols-1 md:grid-cols-12 gap-3 sm:gap-6 md:gap-8 lg:gap-10 items-stretch h-full">
 
-                      {/* Left Column: Engage Celestial Orbit OR Competitor Agent Table OR Metric Progress Bars */}
-                      <div className={`md:col-span-7 flex flex-col justify-center h-full ${agent.id === 'engage' ? 'overflow-visible' : 'overflow-hidden'}`}>
+                      {/* Left Column: Fixed height slot for all visual types */}
+                      <div className="md:col-span-7 flex flex-col justify-center h-[260px] sm:h-[280px] md:h-full shrink-0 overflow-hidden">
                         {agent.id === 'engage' ? (
-                          <div className="w-full h-full max-h-[365px] flex items-center justify-center">
+                          <div className="w-full h-full flex items-center justify-center overflow-hidden">
                             <EngageAgentVisual />
                           </div>
                         ) : agent.id === 'research' ? (
-                          <div className="w-full h-full max-h-[365px] flex items-center justify-center">
+                          <div className="w-full h-full flex items-center justify-center overflow-hidden">
                             <CompetitorAgentTable />
                           </div>
                         ) : agent.id === 'marketing' ? (
-                          <div className="w-full h-full max-h-[365px] flex items-center justify-center">
+                          <div className="w-full h-full flex items-center justify-center overflow-hidden">
                             <MarketingAgentVisual isActive={isCenter} />
                           </div>
                         ) : (
-                          <>
-                            <h3 className="text-[17px] sm:text-[19px] font-semibold text-[#0F172A] tracking-tight mb-5 sm:mb-6">
+                          <div className="w-full h-full flex flex-col justify-center">
+                            <h3 className="text-[16px] sm:text-[19px] font-semibold text-[#0F172A] tracking-tight mb-4 sm:mb-6">
                               {agent.coverageTitle}
                             </h3>
 
-                            <div className="space-y-4 sm:space-y-4.5">
+                            <div className="space-y-3 sm:space-y-4.5">
                               {agent.metrics.map((metric, mIdx) => {
                                 const IconComponent = metric.icon;
                                 return (
-                                  <div key={mIdx} className="flex items-center gap-3 sm:gap-3.5">
+                                  <div key={mIdx} className="flex items-center gap-2.5 sm:gap-3.5">
                                     {/* Icon Badge */}
                                     <div
-                                      className={`w-8 h-8 rounded-lg flex items-center justify-center shrink-0 ${metric.iconBg} ${metric.iconColor}`}
+                                      className={`w-7 h-7 sm:w-8 sm:h-8 rounded-lg flex items-center justify-center shrink-0 ${metric.iconBg} ${metric.iconColor}`}
                                     >
-                                      <IconComponent className="w-4 h-4" />
+                                      <IconComponent className="w-3.5 h-3.5 sm:w-4 sm:h-4" />
                                     </div>
 
                                     {/* Label */}
-                                    <span className="text-[13px] sm:text-[14px] font-medium text-[#1E293B] shrink-0 w-[130px] sm:w-[155px] truncate">
+                                    <span className="text-[12px] sm:text-[14px] font-medium text-[#1E293B] shrink-0 w-[110px] sm:w-[155px] truncate">
                                       {metric.label}
                                     </span>
 
                                     {/* Percentage Value */}
-                                    <span className="text-[12.5px] sm:text-[13px] font-medium text-[#64748B] shrink-0 w-8 sm:w-10 text-right tabular-nums">
+                                    <span className="text-[11.5px] sm:text-[13px] font-medium text-[#64748B] shrink-0 w-7 sm:w-10 text-right tabular-nums">
                                       {metric.value}%
                                     </span>
 
                                     {/* Chunky Progress Bar Track */}
-                                    <div className="flex-1 h-3.5 sm:h-4 bg-[#F1F5F9] rounded-md sm:rounded-[7px] overflow-hidden min-w-[70px] sm:min-w-[120px]">
+                                    <div className="flex-1 h-3 sm:h-4 bg-[#F1F5F9] rounded-md sm:rounded-[7px] overflow-hidden min-w-[60px] sm:min-w-[120px]">
                                       <div
                                         className={`h-full rounded-md sm:rounded-[7px] transition-all duration-1000 ease-out ${metric.barColor}`}
                                         style={{
@@ -425,34 +459,28 @@ export const AgentsSection: React.FC = () => {
                                 );
                               })}
                             </div>
-                          </>
+                          </div>
                         )}
                       </div>
 
-                      {/* Right Column: Inner Framed Box Bracket (Figma: 300px × 369px, radius: top-right 10px, bottom-right 10px, border: 1px 1px 1px 0px, pt: 33px, pr: 53px, pb: 82px, pl: 20px, gap: 10px) */}
-                      <div className="md:col-span-5 flex flex-col items-center md:items-end justify-center">
+                      {/* Right Column: Inner Framed Box Bracket */}
+                      <div className="md:col-span-5 flex flex-col items-center md:items-end justify-center flex-1 md:flex-initial">
                         <div
-                          className="w-full md:w-[300px] md:h-[369px] rounded-tr-[10px] rounded-br-[10px] rounded-l-none bg-[#FCFCFC] pt-[33px] pr-[30px] sm:pr-[40px] md:pr-[53px] pb-[40px] md:pb-[82px] pl-[20px] flex flex-col justify-between"
-                          style={{
-                            borderTop: '1px solid #EDEDED',
-                            borderRight: '1px solid #DCDCDC',
-                            borderBottom: '1px solid #D4D4D4',
-                            borderLeft: 'none',
-                          }}
+                          className="w-full md:w-[300px] md:h-[369px] rounded-xl md:rounded-tr-[10px] md:rounded-br-[10px] md:rounded-l-none bg-[#FCFCFC] p-3.5 sm:p-6 md:pt-[33px] md:pr-[53px] md:pb-[82px] md:pl-[20px] flex flex-col justify-between border border-[#EDEDED] md:border-l-0 md:border-t-[#EDEDED] md:border-r-[#DCDCDC] md:border-b-[#D4D4D4]"
                         >
-                          <div className="flex flex-col gap-[10px]">
-                            <h4 className="text-[20px] sm:text-[22px] font-semibold text-[#0F172A] tracking-tight leading-snug">
+                          <div className="flex flex-col gap-1 sm:gap-[10px]">
+                            <h4 className="text-[17px] sm:text-[22px] font-semibold text-[#0F172A] tracking-tight leading-snug">
                               {agent.name}
                             </h4>
-                            <p className="text-[#64748B] text-[13px] sm:text-[13.5px] leading-relaxed font-normal">
+                            <p className="text-[#64748B] text-[12px] sm:text-[13.5px] leading-relaxed font-normal line-clamp-3 sm:line-clamp-none">
                               {agent.description}
                             </p>
                           </div>
 
-                          <div>
+                          <div className="mt-2.5 md:mt-0">
                             <Link
                               to={agent.link}
-                              className="inline-flex items-center gap-1.5 text-[13px] sm:text-[14px] font-medium text-[#475569] hover:text-blue-600 transition-colors group/link"
+                              className="inline-flex items-center gap-1.5 text-[12.5px] sm:text-[14px] font-medium text-[#475569] hover:text-blue-600 transition-colors group/link"
                             >
                               <span>Learn more</span>
                               <ChevronRight className="w-3.5 h-3.5 text-slate-400 group-hover/link:text-blue-600 group-hover/link:translate-x-0.5 transition-all" />
@@ -467,41 +495,61 @@ export const AgentsSection: React.FC = () => {
               );
             })}
 
-            {/* Left Chevron Button: positioned in the left peek area */}
+            {/* Left Chevron Button: positioned on desktop sides */}
             <button
               onClick={handlePrev}
               type="button"
               aria-label="Previous agent"
-              className="absolute left-1 sm:left-4 md:-left-6 lg:-left-12 top-1/2 -translate-y-1/2 w-9 h-9 sm:w-10 sm:h-10 rounded-full bg-[#E2E8F0]/90 hover:bg-[#CBD5E1] active:scale-95 text-slate-700 flex items-center justify-center border border-slate-300/60 transition-all z-30 cursor-pointer"
+              className="hidden md:flex absolute -left-5 lg:-left-12 top-1/2 -translate-y-1/2 w-10 h-10 rounded-full bg-[#E2E8F0]/90 hover:bg-[#CBD5E1] active:scale-95 text-slate-700 items-center justify-center border border-slate-300/60 transition-all z-30 cursor-pointer"
             >
-              <ChevronLeft className="w-4 h-4 sm:w-5 sm:h-5" />
+              <ChevronLeft className="w-5 h-5" />
             </button>
 
-            {/* Right Chevron Button: positioned in the right peek area */}
+            {/* Right Chevron Button: positioned on desktop sides */}
             <button
               onClick={handleNext}
               type="button"
               aria-label="Next agent"
-              className="absolute right-1 sm:right-4 md:-right-6 lg:-right-12 top-1/2 -translate-y-1/2 w-9 h-9 sm:w-10 sm:h-10 rounded-full bg-[#E2E8F0]/90 hover:bg-[#CBD5E1] active:scale-95 text-slate-700 flex items-center justify-center border border-slate-300/60 transition-all z-30 cursor-pointer"
+              className="hidden md:flex absolute -right-5 lg:-right-12 top-1/2 -translate-y-1/2 w-10 h-10 rounded-full bg-[#E2E8F0]/90 hover:bg-[#CBD5E1] active:scale-95 text-slate-700 items-center justify-center border border-slate-300/60 transition-all z-30 cursor-pointer"
             >
-              <ChevronRight className="w-4 h-4 sm:w-5 sm:h-5" />
+              <ChevronRight className="w-5 h-5" />
             </button>
           </div>
 
-          {/* Pagination Indicators (pill & dots) */}
-          <div className="flex items-center justify-center gap-2 mt-7 sm:mt-9">
-            {AGENTS.map((_, idx) => (
-              <button
-                key={idx}
-                type="button"
-                onClick={() => setCurrentIndex(idx)}
-                aria-label={`Go to slide ${idx + 1}`}
-                className={`h-1.5 rounded-full transition-all duration-300 cursor-pointer ${idx === currentIndex
-                  ? 'w-6 sm:w-7 bg-slate-400'
-                  : 'w-1.5 bg-slate-200 hover:bg-slate-300'
-                  }`}
-              />
-            ))}
+          {/* Pagination Indicators & Mobile Chevrons */}
+          <div className="flex items-center justify-center gap-3 mt-6 sm:mt-9">
+            <button
+              onClick={handlePrev}
+              type="button"
+              aria-label="Previous agent"
+              className="md:hidden w-8 h-8 rounded-full bg-[#F1F5F9] hover:bg-[#E2E8F0] active:scale-95 text-slate-700 flex items-center justify-center border border-slate-200 transition-all cursor-pointer"
+            >
+              <ChevronLeft className="w-4 h-4" />
+            </button>
+
+            <div className="flex items-center gap-1.5 sm:gap-2">
+              {AGENTS.map((_, idx) => (
+                <button
+                  key={idx}
+                  type="button"
+                  onClick={() => setCurrentIndex(idx)}
+                  aria-label={`Go to slide ${idx + 1}`}
+                  className={`h-1.5 rounded-full transition-all duration-300 cursor-pointer ${idx === currentIndex
+                    ? 'w-6 sm:w-7 bg-slate-400'
+                    : 'w-1.5 bg-slate-200 hover:bg-slate-300'
+                    }`}
+                />
+              ))}
+            </div>
+
+            <button
+              onClick={handleNext}
+              type="button"
+              aria-label="Next agent"
+              className="md:hidden w-8 h-8 rounded-full bg-[#F1F5F9] hover:bg-[#E2E8F0] active:scale-95 text-slate-700 flex items-center justify-center border border-slate-200 transition-all cursor-pointer"
+            >
+              <ChevronRight className="w-4 h-4" />
+            </button>
           </div>
         </div>
       </div>

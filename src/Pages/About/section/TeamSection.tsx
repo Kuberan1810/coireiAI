@@ -123,7 +123,7 @@ export const TeamSection: React.FC = () => {
             {/* ROW 3 */}
             {/* Row 3, Col 1: Vijalakshmi */}
             <MemberCard
-              name="VIJALAKSHMI"
+              name="VIJAYALAKSHMI V"
               role="AI ENGINEER"
               image={vijiImg}
               isRevealed={activeMember === 'desktop-viji'}
