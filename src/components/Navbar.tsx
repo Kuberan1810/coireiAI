@@ -105,11 +105,8 @@ export const Navbar: React.FC = () => {
 
   useEffect(() => {
     let ticking = false;
-    let lastScrollY = typeof window !== 'undefined' ? window.scrollY : 0;
-
     const updateNavbar = () => {
       const scrollY = window.scrollY;
-      const scrollDelta = scrollY - lastScrollY;
 
       // Track if at the very top of the page
       const atTop = scrollY <= 20;
@@ -126,8 +123,6 @@ export const Navbar: React.FC = () => {
         isScrolledRef.current = nextScrolled;
         setIsScrolled(nextScrolled);
       }
-
-      lastScrollY = scrollY;
 
       // Steps section scroll progress tracking (Home page only)
       if (isHomePage) {

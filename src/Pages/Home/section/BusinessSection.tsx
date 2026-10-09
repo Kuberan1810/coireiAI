@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useRef } from 'react';
-import { ArrowRight, CheckCircle2, Loader2 } from 'lucide-react';
+import { CheckCircle2, Loader2 } from 'lucide-react';
 import image115 from '../../../assets/image115.svg';
 import { ScrollReveal } from '../../../components/ui/ScrollReveal';
 

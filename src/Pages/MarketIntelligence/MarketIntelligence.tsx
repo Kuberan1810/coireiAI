@@ -1,6 +1,5 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { Link } from 'react-router-dom';
-import { ArrowRight, Check } from 'lucide-react';
 import SeoAnimation from './components/SeoAnimation';
 import AeoAnimation from './components/AeoAnimation';
 import BlogAutomationShowcase from './components/BlogAutomationShowcase';
@@ -14,8 +13,6 @@ import {
 } from './components/visibilityData';
 
 export const MarketIntelligence: React.FC = () => {
-  const [clickedButton, setClickedButton] = useState<'seo' | 'aeo' | null>(null);
-
   // Synchronized animation state across SEO and AEO cards
   const [activeEngine, setActiveEngine] = useState<AIEngine>('chatgpt');
   const [activeGoogleTab, setActiveGoogleTab] = useState('All');
@@ -151,13 +148,6 @@ export const MarketIntelligence: React.FC = () => {
     idleTimerRef.current = setTimeout(() => {
       userInteractedRef.current = false;
     }, 12000);
-  };
-
-  const handleButtonClick = (type: 'seo' | 'aeo') => {
-    setClickedButton(type);
-    setTimeout(() => {
-      setClickedButton(null);
-    }, 2000);
   };
 
   return (
