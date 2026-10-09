@@ -83,7 +83,7 @@ export const TeamSection: React.FC = () => {
 
             {/* Row 1, Col 2: Lalitha */}
             <MemberCard
-              name="KATTIMANI LALITHA BHAI"
+              name="KATTIMANI LALITHA BAI"
               role="COO & CO-FOUNDER"
               image={lalithaImg}
               isRevealed={activeMember === 'desktop-lalitha'}
@@ -172,7 +172,7 @@ export const TeamSection: React.FC = () => {
                 onToggle={() => handleToggle('mobile-naveen')}
               />
               <MemberCard
-                name="KATTIMANI LALITHA BHAI"
+                name="KATTIMANI LALITHA BAI"
                 role="COO & CO-FOUNDER"
                 image={lalithaImg}
                 isRevealed={activeMember === 'mobile-lalitha'}
@@ -193,7 +193,7 @@ export const TeamSection: React.FC = () => {
                 onToggle={() => handleToggle('mobile-niranjan')}
               />
               <MemberCard
-                name="VIJALAKSHMI"
+                name="VIJAYALAKSHMI V"
                 role="AI ENGINEER"
                 image={vijiImg}
                 isRevealed={activeMember === 'mobile-viji'}
