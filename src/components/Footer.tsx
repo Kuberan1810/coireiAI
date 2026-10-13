@@ -118,6 +118,10 @@ export const Footer: React.FC = () => {
             {/* Address & Contact Info */}
             <div className="space-y-3 font-['Plus_Jakarta_Sans',sans-serif] text-[12px] sm:text-[12.5px] font-medium text-[#FFFFFF] tracking-normal leading-[1.4]">
               <div className="max-w-[280px]">
+                <p>Coirei innovations pvt Ltd,</p>
+              </div>
+
+              <div className="max-w-[280px]">
                 <p>7th Floor, Spencer Plaza, Mount Road, Chennai, Tamil Nadu, India</p>
               </div>
 

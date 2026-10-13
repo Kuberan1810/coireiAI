@@ -26,27 +26,80 @@ export const FlowingWaveBackground: React.FC<FlowingWaveBackgroundProps> = ({
 
     let animId: number | null = null;
     let isVisible = true;
-    let width = (canvas.width = canvas.offsetWidth * window.devicePixelRatio);
-    let height = (canvas.height = canvas.offsetHeight * window.devicePixelRatio);
-    let dpr = window.devicePixelRatio || 1;
 
-    let mouseX = width / 2;
-    let mouseY = height / 2;
-    let targetMouseX = mouseX;
-    let targetMouseY = mouseY;
+    // Cap DPR to 1.25 for buttery-smooth rasterization without losing anti-aliased curve clarity
+    let dpr = Math.min(window.devicePixelRatio || 1, 1.25);
+    let width = 0;
+    let height = 0;
+    let strokeGrad: CanvasGradient | null = null;
+
+    let mouseX = 0;
+    let mouseY = 0;
+    let targetMouseX = 0;
+    let targetMouseY = 0;
     let isHovering = false;
 
-    const handleResize = () => {
+    // Cache the bounding rectangle to avoid DOM layout recalculation on every mousemove
+    let cachedRect: DOMRect | null = null;
+    const updateRect = () => {
+      if (canvas) cachedRect = canvas.getBoundingClientRect();
+    };
+
+    // Precomputed control points for smooth quadratic Bézier interpolation
+    const SAMPLE_COUNT = 40;
+    const xPoints: number[] = new Array(SAMPLE_COUNT + 1);
+    const nxPoints: number[] = new Array(SAMPLE_COUNT + 1);
+    const sCurveBase: number[] = new Array(SAMPLE_COUNT + 1);
+    const spreadFactorBase: number[] = new Array(SAMPLE_COUNT + 1);
+
+    const updateDimensionsAndPrecomputations = () => {
       if (!canvas) return;
-      dpr = window.devicePixelRatio || 1;
-      width = canvas.width = canvas.offsetWidth * dpr;
-      height = canvas.height = canvas.offsetHeight * dpr;
+      dpr = Math.min(window.devicePixelRatio || 1, 1.25);
+      cachedRect = canvas.getBoundingClientRect();
+      width = canvas.width = Math.round(cachedRect.width * dpr);
+      height = canvas.height = Math.round(cachedRect.height * dpr);
+
+      if (width <= 0 || height <= 0) return;
+
+      mouseX = targetMouseX = width / 2;
+      mouseY = targetMouseY = height / 2;
+
+      // Cache horizontal linear gradient matching Figma sky-blue tones
+      strokeGrad = ctx.createLinearGradient(0, 0, width, 0);
+      strokeGrad.addColorStop(0, 'rgba(186, 230, 253, 0.12)');
+      strokeGrad.addColorStop(0.18, 'rgba(125, 211, 252, 0.65)');
+      strokeGrad.addColorStop(0.5, 'rgba(56, 189, 248, 0.8)');
+      strokeGrad.addColorStop(0.82, 'rgba(125, 211, 252, 0.65)');
+      strokeGrad.addColorStop(1, 'rgba(186, 230, 253, 0.12)');
+
+      const baseAmp = Math.min(height * 0.25, 175 * dpr);
+      for (let j = 0; j <= SAMPLE_COUNT; j++) {
+        const nx = j / SAMPLE_COUNT;
+        xPoints[j] = nx * width;
+        nxPoints[j] = nx;
+        // Static geometry that only depends on nx
+        sCurveBase[j] =
+          Math.sin(nx * Math.PI * 1.5 - 0.35) * baseAmp * 0.85 +
+          Math.cos(nx * Math.PI * 2.6 + 0.4) * (baseAmp * 0.3);
+        spreadFactorBase[j] = 1.0 + Math.sin(nx * Math.PI * 1.4 + 0.2) * 0.35;
+      }
+    };
+
+    updateDimensionsAndPrecomputations();
+
+    const handleResize = () => {
+      updateDimensionsAndPrecomputations();
+    };
+
+    const handleScroll = () => {
+      updateRect();
     };
 
     const handleMouseMove = (e: MouseEvent) => {
-      const rect = canvas.getBoundingClientRect();
-      targetMouseX = (e.clientX - rect.left) * dpr;
-      targetMouseY = (e.clientY - rect.top) * dpr;
+      if (!cachedRect) updateRect();
+      if (!cachedRect) return;
+      targetMouseX = (e.clientX - cachedRect.left) * dpr;
+      targetMouseY = (e.clientY - cachedRect.top) * dpr;
       isHovering = true;
     };
 
@@ -54,16 +107,18 @@ export const FlowingWaveBackground: React.FC<FlowingWaveBackgroundProps> = ({
       isHovering = false;
     };
 
-    window.addEventListener('resize', handleResize);
+    window.addEventListener('resize', handleResize, { passive: true });
+    window.addEventListener('scroll', handleScroll, { passive: true });
     window.addEventListener('mousemove', handleMouseMove, { passive: true });
     document.addEventListener('mouseleave', handleMouseLeave);
 
-    // Pause rendering when Hero canvas is not visible to free 100% CPU/GPU for lower sections
+    // Pause rendering when Hero is scrolled out of viewport
     const observer = new IntersectionObserver(
       ([entry]) => {
         isVisible = entry.isIntersecting;
         if (isVisible && animId === null) {
           startTime = performance.now() - pausedOffset;
+          lastFrameTime = performance.now();
           animId = requestAnimationFrame(render);
         } else if (!isVisible && animId !== null) {
           cancelAnimationFrame(animId);
@@ -76,95 +131,100 @@ export const FlowingWaveBackground: React.FC<FlowingWaveBackgroundProps> = ({
 
     let startTime = performance.now();
     let pausedOffset = 0;
+    let lastFrameTime = performance.now();
+    const frameInterval = 1000 / 60; // Smooth 60 FPS cap to prevent 120Hz/144Hz screen overload
+
+    const count = lineCount; // Full count (44 strands) exactly as desired
+    const radius = 260 * dpr;
+    const radiusSq = radius * radius;
 
     const render = (timeNow: number) => {
-      if (!isVisible) {
+      if (!isVisible || width <= 0 || height <= 0) {
         animId = null;
         return;
       }
 
+      // 60 FPS frame rate throttle
+      const timeDelta = timeNow - lastFrameTime;
+      if (timeDelta < frameInterval) {
+        animId = requestAnimationFrame(render);
+        return;
+      }
+      lastFrameTime = timeNow - (timeDelta % frameInterval);
+
       const elapsed = (timeNow - startTime) * 0.001 * speed;
       pausedOffset = elapsed;
 
-      // Smooth lerp mouse coordinates
-      mouseX += (targetMouseX - mouseX) * 0.05;
-      mouseY += (targetMouseY - mouseY) * 0.05;
+      // Mouse coordinate lerping
+      if (isHovering) {
+        mouseX += (targetMouseX - mouseX) * 0.08;
+        mouseY += (targetMouseY - mouseY) * 0.08;
+      }
 
       ctx.clearRect(0, 0, width, height);
 
-      const count = lineCount;
-      const stepX = Math.max(8, Math.floor(width / 100)); // Optimized step size
       const centerY = height * 0.50;
       const baseAmplitude = Math.min(height * 0.25, 175 * dpr);
       const totalSpread = (115 * dpr) * spreadScale;
-
-      // Create horizontal gradient for stroke styling (matches Figma sky-blue tones)
-      const strokeGrad = ctx.createLinearGradient(0, 0, width, 0);
-      strokeGrad.addColorStop(0, 'rgba(186, 230, 253, 0.12)');
-      strokeGrad.addColorStop(0.18, 'rgba(125, 211, 252, 0.65)');
-      strokeGrad.addColorStop(0.5, 'rgba(56, 189, 248, 0.8)');
-      strokeGrad.addColorStop(0.82, 'rgba(125, 211, 252, 0.65)');
-      strokeGrad.addColorStop(1, 'rgba(186, 230, 253, 0.12)');
+      const dynOffsetMultiplier = 18 * dpr;
 
       ctx.lineWidth = 1.15 * dpr;
       ctx.lineCap = 'round';
       ctx.lineJoin = 'round';
+      if (strokeGrad) {
+        ctx.strokeStyle = strokeGrad;
+      }
 
       for (let i = 0; i < count; i++) {
-        const progress = i / (count - 1); // 0 to 1
-        const offsetProg = progress - 0.5; // -0.5 to +0.5
+        const progress = i / (count - 1);
+        const offsetProg = progress - 0.5;
 
-        // Phase offset per strand for harmonic ribbon undulation
         const strandPhase = i * 0.065;
         const lineTime = elapsed + strandPhase;
-
-        // Alpha modulation per strand (graduated depth)
         const strandAlpha = (0.2 + Math.sin(progress * Math.PI) * 0.6) * opacity;
 
+        ctx.globalAlpha = strandAlpha;
         ctx.beginPath();
 
         let prevX = 0;
         let prevY = centerY;
 
-        for (let x = 0; x <= width + stepX; x += stepX) {
-          const nx = x / width; // 0 to 1 across screen width
+        for (let j = 0; j <= SAMPLE_COUNT; j++) {
+          const x = xPoints[j];
+          const nx = nxPoints[j];
 
-          // 1. Broad sweeping S-curve matching Figma bluewave anatomy
-          const sCurve =
-            Math.sin(nx * Math.PI * 1.5 - 0.35) * baseAmplitude * 0.85 +
-            Math.cos(nx * Math.PI * 2.6 + 0.4) * (baseAmplitude * 0.3);
+          // Use precomputed static sCurve
+          const sCurve = sCurveBase[j];
 
-          // 2. Harmonic flowing oscillation
+          // Harmonic waves
           const wave1 = Math.sin(nx * 3.2 + lineTime * 1.2) * (baseAmplitude * 0.22);
           const wave2 = Math.cos(nx * 4.8 - lineTime * 0.85 + strandPhase) * (baseAmplitude * 0.14);
           const wave3 = Math.sin(nx * 1.8 + lineTime * 0.55) * (baseAmplitude * 0.16);
 
-          // 3. Balanced medium vertical ribbon fan spread
-          const spreadFactor = 1.0 + Math.sin(nx * Math.PI * 1.4 + 0.2) * 0.35;
-          const dynamicWaveOffset = Math.sin(nx * Math.PI * 2.2 + lineTime * 0.8) * (18 * dpr);
-          const ribbonFan = offsetProg * (totalSpread * spreadFactor + dynamicWaveOffset);
+          // Ribbon spread
+          const dynamicWaveOffset = Math.sin(nx * Math.PI * 2.2 + lineTime * 0.8) * dynOffsetMultiplier;
+          const ribbonFan = offsetProg * (totalSpread * spreadFactorBase[j] + dynamicWaveOffset);
 
-          // 4. Interactive mouse ripple influence
+          // Fast mouse interaction check
           let mouseInfluence = 0;
           if (isHovering) {
             const dx = x - mouseX;
             const dy = centerY - mouseY;
-            const dist = Math.sqrt(dx * dx + dy * dy);
-            const radius = 260 * dpr;
-            if (dist < radius) {
+            const distSq = dx * dx + dy * dy;
+            if (distSq < radiusSq) {
+              const dist = Math.sqrt(distSq);
               const factor = Math.cos((dist / radius) * (Math.PI / 2));
               mouseInfluence = Math.sin(dist * 0.025 - elapsed * 3.5) * (factor * 22 * dpr);
             }
           }
 
-          // Combined Y position
           const y = centerY + sCurve + wave1 + wave2 + wave3 + ribbonFan + mouseInfluence;
 
-          if (x === 0) {
+          if (j === 0) {
             ctx.moveTo(x, y);
           } else {
-            const midX = (prevX + x) / 2;
-            const midY = (prevY + y) / 2;
+            const midX = (prevX + x) * 0.5;
+            const midY = (prevY + y) * 0.5;
             ctx.quadraticCurveTo(prevX, prevY, midX, midY);
           }
 
@@ -172,8 +232,6 @@ export const FlowingWaveBackground: React.FC<FlowingWaveBackgroundProps> = ({
           prevY = y;
         }
 
-        ctx.strokeStyle = strokeGrad;
-        ctx.globalAlpha = strandAlpha;
         ctx.stroke();
       }
 
@@ -187,6 +245,7 @@ export const FlowingWaveBackground: React.FC<FlowingWaveBackgroundProps> = ({
       if (animId !== null) cancelAnimationFrame(animId);
       observer.disconnect();
       window.removeEventListener('resize', handleResize);
+      window.removeEventListener('scroll', handleScroll);
       window.removeEventListener('mousemove', handleMouseMove);
       document.removeEventListener('mouseleave', handleMouseLeave);
     };
@@ -195,7 +254,7 @@ export const FlowingWaveBackground: React.FC<FlowingWaveBackgroundProps> = ({
   return (
     <canvas
       ref={canvasRef}
-      className={`w-full h-full block pointer-events-none select-none ${className}`}
+      className={`w-full h-full block pointer-events-none select-none [transform:translateZ(0)] ${className}`}
     />
   );
 };

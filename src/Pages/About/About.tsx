@@ -1,7 +1,6 @@
 
 import React, { useState, useEffect, useRef } from 'react';
 import { Link } from 'react-router-dom';
-import { ArrowUpRight } from 'lucide-react';
 import { FlowingWaveBackground } from './components/FlowingWaveBackground';
 import HowWeWork from './section/HowWeWork';
 import BuildSection from './section/BuildSection';
@@ -20,22 +19,22 @@ const INTELLIGENCE_ITEMS = [
   {
     title: 'Market Intelligence',
     description: 'Understand your market, trends, and opportunities.',
-    link: '/market-intelligence',
+    // link: '',
   },
   {
     title: 'Competitor Intelligence',
     description: 'Know who you compete with and where you stand.',
-    link: '/competitor-analysis',
+    // link: '',
   },
   {
     title: 'Audience Intelligence',
     description: 'Discover who your ideal customers really are.',
-    link: '',
+    // link: '',
   },
   {
     title: 'Lead Intelligence',
     description: 'Find high-intent prospects built for your business.',
-    link: '',
+    // link: '',
   },
 ];
 
@@ -60,7 +59,7 @@ export const About: React.FC = () => {
     return () => observer.disconnect();
   }, []);
 
-  
+
   return (
     <div className="w-full min-h-screen bg-white text-[#0B0F19] font-['Plus_Jakarta_Sans',sans-serif]">
       {/* Top Surface: z-20 bg-white (slides up to reveal fixed black AwardSection) */}
@@ -144,23 +143,22 @@ export const About: React.FC = () => {
             {/* Right Column: 4 Intelligence Items with Dividers & Arrows */}
             <div className="lg:col-span-6 w-full divide-y divide-[#F1F5F9]">
               {INTELLIGENCE_ITEMS.map((item, idx) => (
-                <Link
+                <div
                   key={item.title}
-                  to={item.link}
-                  className={`group block py-5 sm:py-6 transition-colors ${
-                    idx === 0 ? 'pt-0 lg:pt-1' : ''
-                  }`}
+                  // to={item.link}
+                  className={`group block py-5 sm:py-6 transition-colors ${idx === 0 ? 'pt-0 lg:pt-1' : ''
+                    }`}
                 >
                   <div className="flex items-center justify-between">
                     <h3 className="text-[16px] font-medium leading-[24px] tracking-[0px] text-[#0A0A0A] group-hover:text-black">
                       {item.title}
                     </h3>
-                    <ArrowUpRight className="w-4 h-4 text-[#0A0A0A]/40 group-hover:text-[#0A0A0A] group-hover:translate-x-0.5 group-hover:-translate-y-0.5 transition-all" />
+                    {/* <ArrowUpRight className="w-4 h-4 text-[#0A0A0A]/40 group-hover:text-[#0A0A0A] group-hover:translate-x-0.5 group-hover:-translate-y-0.5 transition-all" /> */}
                   </div>
                   <p className="text-[14px] font-normal leading-[20px] tracking-[0px] text-[#0A0A0A]/60 mt-1">
                     {item.description}
                   </p>
-                </Link>
+                </div>
               ))}
             </div>
           </div>
@@ -173,7 +171,7 @@ export const About: React.FC = () => {
             <div className="lg:col-span-5 flex justify-center lg:justify-start">
               <div
                 ref={logoContainerRef}
-                className="w-full max-w-[378px] overflow-hidden rounded-[20px] sm:rounded-[24px] border border-neutral-100 shadow-[0_20px_60px_rgba(0,0,0,0.06)] bg-[#F8FAFC]"
+                className="w-full max-w-[478px] overflow-hidden rounded-[20px] sm:rounded-[24px] border border-neutral-100 shadow-[0_20px_60px_rgba(0,0,0,0.06)] bg-[#F8FAFC]"
               >
                 <img
                   src={ciLogoSvg}
@@ -191,13 +189,38 @@ export const About: React.FC = () => {
 
             {/* Right Column: Cormorant Garamond Quote with ScrollReveal */}
             <div className="lg:col-span-7 text-left">
+
+              {/* Mission Tag */}
+              <span className="inline-block px-2.5 py-0.5 rounded-[4px] border border-[#E2E8F0] text-[12px] text-[#64748B] font-normal mb-5 sm:mb-6">
+                Our Story
+              </span>
               <ScrollReveal variant="fade-up" duration={750} distance={20}>
-                <blockquote className="font-['Cormorant_Garamond',Georgia,serif] font-cormorant italic font-semibold text-3xl sm:text-4xl lg:text-[48px] leading-[1.22] lg:leading-[60px] tracking-[-0.6px] text-[#0A0A0A]">
+                {/* <blockquote className="font-['Cormorant_Garamond',Georgia,serif] font-cormorant italic font-semibold text-3xl sm:text-4xl lg:text-[48px] leading-[1.22] lg:leading-[60px] tracking-[-0.6px] text-[#0A0A0A]">
                   “Coirei transforms complex business <br className="hidden sm:inline" />
                   data into intelligent insights, <br className="hidden sm:inline" />
                   opportunities, and decisive growth”
-                </blockquote>
+                </blockquote> */}
+                {/* Headline */}
+                <h2 className="text-4xl sm:text-5xl lg:text-[52px] font-semibold tracking-[-1.5px] leading-[1.12] text-[#0B0F19] mb-5 sm:mb-6">
+                  From Intelligence <br />
+                  to Impact
+                </h2>
+
+                {/* Description */}
+                <p className="text-[15px] sm:text-[16px] text-[#475569] leading-[1.68] max-w-2xl font-normal mb-8 sm:mb-9">
+                  We build AI that solves real business problems, turning market intelligence into growth by helping businesses understand their customers and uncover the opportunities that matter most.
+                </p>
               </ScrollReveal>
+
+              {/* View more CTA Button linking to /about/ceo */}
+
+              <Link
+                to="/about/our-story"
+                className="inline-flex items-center justify-center px-6 py-2.5 rounded-full bg-[#1E232B] hover:bg-black text-white text-[13.5px] sm:text-[14px] font-medium leading-[20px] transition-all shadow-xs active:scale-[0.98] cursor-pointer"
+              >
+                View more
+              </Link>
+
             </div>
           </div>
         </section>
