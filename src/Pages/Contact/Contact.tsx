@@ -181,12 +181,7 @@ export const Contact: React.FC = () => {
             
           </button>
 
-          <a
-            href="mailto:info@coirei.com"
-            className="inline-flex items-center justify-center px-5 py-2.5 rounded-[10px] bg-white hover:bg-neutral-50 text-[#0B0F19] border border-[#E2E8F0] text-[13.5px] font-semibold transition-all duration-200 shadow-2xs cursor-pointer active:scale-[0.99]"
-          >
-            Talk to Sales
-          </a>
+         
         </div>
       </section>
 

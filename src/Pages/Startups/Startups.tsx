@@ -1,25 +1,20 @@
 import React, { useState, useEffect, useRef, useMemo } from 'react';
 import { Link } from 'react-router-dom';
-import { 
-  ChevronDown, 
-  ArrowRight, 
-  CheckCircle2, 
-  X, 
-  Rocket,
+import {
+  ChevronDown,
   ArrowUpRight,
   Check,
-  Info 
+  Info
 } from 'lucide-react';
 
 import amongManyPng from '../../assets/startups/Amongmany.png';
 import standApartPng from '../../assets/startups/StandApart.png';
 import startupUnlockedPng from '../../assets/startups/StartupUnlocked.png';
 import ciLogoStartupProg from '../../assets/startups/Ciforstartupprogram.svg';
-import startupCommunityImg from '../../assets/startups/startup_community.png';
+import firstmeetimgSvg from '../../assets/about/firstmeetimg.svg';
 import redSquaresPng from '../../assets/startups/redsquares.png';
 import purpleBgPng from '../../assets/startups/purplebg.png';
 import lastGradientPng from '../../assets/startups/lastgradiend.png';
-import coireiLogo from '../../assets/logo/coireiLogo.png';
 
 interface FAQItem {
   question: string;
@@ -47,10 +42,7 @@ const FAQ_ITEMS: FAQItem[] = [
     question: "What happens after my application is approved?",
     answer: "Once approved, you'll receive a welcome email with instructions to activate your tier benefits, access your workspace, and begin exploring."
   },
-  {
-    question: "Can an existing Coirei customer apply?",
-    answer: "Yes! Existing customers who meet the early-stage criteria and have not previously utilized startup program credits are eligible to apply."
-  }
+
 ];
 
 export const Startups: React.FC = () => {
@@ -60,9 +52,6 @@ export const Startups: React.FC = () => {
 
   // Scroll progress from 0.0 to 1.0 within the pinned section
   const [scrollProgress, setScrollProgress] = useState(0);
-
-  // The header remains completely transparent until the image section ends
-  const [isNavScrolled, setIsNavScrolled] = useState(false);
 
   // Inline Application Form state
   const [applyForm, setApplyForm] = useState({
@@ -77,18 +66,6 @@ export const Startups: React.FC = () => {
     description: '',
   });
   const [isApplySubmitted, setIsApplySubmitted] = useState(false);
-
-  // Application Modal state
-  const [isModalOpen, setIsModalOpen] = useState(false);
-  const [formSubmitted, setFormSubmitted] = useState(false);
-  const [formData, setFormData] = useState({
-    startupName: '',
-    website: '',
-    founderName: '',
-    email: '',
-    fundingStage: 'Pre-Seed',
-    targetAudience: ''
-  });
 
   // FAQ Accordion
   const [openFaq, setOpenFaq] = useState<number | null>(0);
@@ -110,10 +87,6 @@ export const Startups: React.FC = () => {
           const progress = Math.min(Math.max(currentScroll / scrollableDist, 0), 1);
           setScrollProgress(progress);
         }
-
-        // Header remains transparent throughout the entire image hero
-        const isPastHero = rect.bottom <= 80;
-        setIsNavScrolled(isPastHero);
       });
     };
 
@@ -130,40 +103,93 @@ export const Startups: React.FC = () => {
 
   // Compute opacities for seamless image cross-fading
   // Stage 0: 0.00 - 0.33 ("Among Many")
-  // Stage 1: 0.33 - 0.66 ("Stand Apart")
-  // Stage 2: 0.66 - 1.00 ("Startup Unlocked")
-  const { opacity0, opacity1, opacity2 } = useMemo(() => {
+  // Separate image cross-fade and text transitions to eliminate ghosting completely
+  const {
+    imageOpacity0, imageOpacity1, imageOpacity2,
+    textOpacity0, textOpacity1, textOpacity2
+  } = useMemo(() => {
     const p = scrollProgress;
 
-    let op0 = 0;
-    let op1 = 0;
-    let op2 = 0;
+    // 1. Photographic background cross-fades
+    let img0 = 0;
+    let img1 = 0;
+    let img2 = 0;
 
-    if (p <= 0.28) {
-      op0 = 1;
-      op1 = 0;
-      op2 = 0;
-    } else if (p < 0.40) {
-      const t = (p - 0.28) / 0.12;
-      op0 = 1 - t;
-      op1 = t;
-      op2 = 0;
-    } else if (p <= 0.60) {
-      op0 = 0;
-      op1 = 1;
-      op2 = 0;
-    } else if (p < 0.72) {
-      const t = (p - 0.60) / 0.12;
-      op0 = 0;
-      op1 = 1 - t;
-      op2 = t;
+    if (p < 0.20) {
+      img0 = 1;
+      img1 = 0;
+      img2 = 0;
+    } else if (p < 0.48) {
+      const t = (p - 0.20) / 0.28;
+      img0 = 1 - t;
+      img1 = t;
+      img2 = 0;
+    } else if (p < 0.65) {
+      img0 = 0;
+      img1 = 1;
+      img2 = 0;
+    } else if (p < 0.88) {
+      const t = (p - 0.65) / 0.23;
+      img0 = 0;
+      img1 = 1 - t;
+      img2 = t;
     } else {
-      op0 = 0;
-      op1 = 0;
-      op2 = 1;
+      img0 = 0;
+      img1 = 0;
+      img2 = 1;
     }
 
-    return { opacity0: op0, opacity1: op1, opacity2: op2 };
+    // 2. Crisp, non-overlapping text (ZERO ghosting: text A fully vanishes before text B begins)
+    let txt0 = 0;
+    let txt1 = 0;
+    let txt2 = 0;
+
+    if (p <= 0.20) {
+      txt0 = 1;
+      txt1 = 0;
+      txt2 = 0;
+    } else if (p < 0.30) {
+      txt0 = (0.30 - p) / 0.10;
+      txt1 = 0;
+      txt2 = 0;
+    } else if (p < 0.38) {
+      txt0 = 0;
+      txt1 = 0;
+      txt2 = 0;
+    } else if (p < 0.48) {
+      txt0 = 0;
+      txt1 = (p - 0.38) / 0.10;
+      txt2 = 0;
+    } else if (p <= 0.65) {
+      txt0 = 0;
+      txt1 = 1;
+      txt2 = 0;
+    } else if (p < 0.74) {
+      txt0 = 0;
+      txt1 = (0.74 - p) / 0.09;
+      txt2 = 0;
+    } else if (p < 0.80) {
+      txt0 = 0;
+      txt1 = 0;
+      txt2 = 0;
+    } else if (p < 0.89) {
+      txt0 = 0;
+      txt1 = 0;
+      txt2 = (p - 0.80) / 0.09;
+    } else {
+      txt0 = 0;
+      txt1 = 0;
+      txt2 = 1;
+    }
+
+    return {
+      imageOpacity0: img0,
+      imageOpacity1: img1,
+      imageOpacity2: img2,
+      textOpacity0: txt0,
+      textOpacity1: txt1,
+      textOpacity2: txt2,
+    };
   }, [scrollProgress]);
 
   const scrollToWhatIs = () => {
@@ -174,85 +200,23 @@ export const Startups: React.FC = () => {
     benefitsRef.current?.scrollIntoView({ behavior: 'smooth' });
   };
 
-  const handleSubmitApplication = (e: React.FormEvent) => {
-    e.preventDefault();
-    setFormSubmitted(true);
-    setTimeout(() => {
-      setTimeout(() => {
-        setIsModalOpen(false);
-        setFormSubmitted(false);
-      }, 2000);
-    }, 600);
+  const scrollToApply = () => {
+    document.getElementById('apply-form-section')?.scrollIntoView({ behavior: 'smooth' });
   };
 
   return (
-    <div className="w-full bg-white text-[#0B0F19] font-['Plus_Jakarta_Sans',sans-serif] selection:bg-sky-200">
-      
-      {/* 1. TOP NAVBAR (100% transparent, borderless, matching exact Figma design) */}
-      <header 
-        className={`fixed top-0 left-0 right-0 z-50 h-20 px-6 sm:px-12 flex items-center justify-between border-0 transition-colors duration-500 ease-out ${
-          isNavScrolled 
-            ? 'bg-white/90 backdrop-blur-md shadow-xs' 
-            : 'bg-transparent shadow-none'
-        }`}
-      >
-        {/* Left: Logo */}
-        <Link to="/" className="flex items-center group shrink-0">
-          <img
-            src={coireiLogo}
-            alt="coirei"
-            className="h-7 sm:h-8 w-auto object-contain transition-opacity group-hover:opacity-90"
-          />
-        </Link>
+    <div className="w-full bg-[#bad9db] text-[#0B0F19] font-['Plus_Jakarta_Sans',sans-serif] selection:bg-sky-200">
 
-        {/* Center / Navigation Links */}
-        <nav className="hidden md:flex items-center gap-7 lg:gap-8 text-[14.5px] font-medium text-neutral-800">
-          <Link to="/" className="hover:text-black transition-colors">
-            API Docs
-          </Link>
-          <Link to="/pricing" className="hover:text-black transition-colors">
-            Pricing
-          </Link>
-          <div className="group relative cursor-pointer flex items-center gap-1.5 py-2 hover:text-black transition-colors">
-            <span>Case Studies</span>
-            <ChevronDown className="w-3.5 h-3.5 text-neutral-500 transition-transform group-hover:rotate-180" />
-            <div className="absolute top-full left-0 hidden group-hover:block bg-white shadow-lg rounded-xl border-0 py-2 w-48 text-xs text-neutral-600">
-              <Link to="/about" className="block px-4 py-2 hover:bg-neutral-50 hover:text-black">Fintech Scaleups</Link>
-              <Link to="/about" className="block px-4 py-2 hover:bg-neutral-50 hover:text-black">AI SaaS Leaders</Link>
-              <Link to="/about" className="block px-4 py-2 hover:bg-neutral-50 hover:text-black">Enterprise Growth</Link>
-            </div>
-          </div>
-          <div className="group relative cursor-pointer flex items-center gap-1.5 py-2 hover:text-black transition-colors">
-            <span>Resources</span>
-            <ChevronDown className="w-3.5 h-3.5 text-neutral-500 transition-transform group-hover:rotate-180" />
-            <div className="absolute top-full left-0 hidden group-hover:block bg-white shadow-lg rounded-xl border-0 py-2 w-48 text-xs text-neutral-600">
-              <Link to="/marketing" className="block px-4 py-2 hover:bg-neutral-50 hover:text-black">Market Reports</Link>
-              <Link to="/seo" className="block px-4 py-2 hover:bg-neutral-50 hover:text-black">SEO Playbooks</Link>
-              <Link to="/aeo" className="block px-4 py-2 hover:bg-neutral-50 hover:text-black">AEO Search Guide</Link>
-            </div>
-          </div>
-        </nav>
-
-        {/* Right Action: Log in Pill */}
-        <div className="flex items-center gap-3">
-          <button
-            onClick={() => setIsModalOpen(true)}
-            className="inline-flex items-center justify-center bg-[#0B0F19] hover:bg-neutral-800 text-white font-medium text-[13.5px] px-5 py-2 rounded-full shadow-xs hover:shadow transition-all duration-200 cursor-pointer"
-          >
-            Log in
-          </button>
-        </div>
-      </header>
-
-      {/* 2. PINNED SCROLL HERO SECTION (Full-bleed edge-to-edge image, zero borders) */}
-      <section 
-        ref={containerRef} 
+      {/* 2. PINNED SCROLL HERO SECTION: Exactly 1 scroll = 1 transition */}
+      <section
+        id="startups-hero"
+        ref={containerRef}
         data-custom-padding
-        className="relative w-full h-[320vh] border-0"
+        className="relative w-full h-[210vh] bg-[#bad9db] border-0"
       >
         {/* Sticky 100vh Viewport */}
         <div className="sticky top-0 h-screen w-full overflow-hidden flex flex-col justify-between border-0">
-          
+
           {/* EDGE-TO-EDGE FULL BLEED IMAGES (Zero borders on left, right, top, or bottom) */}
           <div className="absolute inset-0 w-full h-full pointer-events-none select-none overflow-hidden border-0">
             {/* Stage 1: Among Many */}
@@ -260,8 +224,8 @@ export const Startups: React.FC = () => {
               src={amongManyPng}
               alt="Among Many"
               className="absolute inset-0 w-full h-full object-cover transition-opacity duration-300 ease-out will-change-[opacity] border-0"
-              style={{ 
-                opacity: opacity0,
+              style={{
+                opacity: imageOpacity0,
                 objectPosition: 'center 28%'
               }}
             />
@@ -271,8 +235,8 @@ export const Startups: React.FC = () => {
               src={standApartPng}
               alt="Stand Apart"
               className="absolute inset-0 w-full h-full object-cover transition-opacity duration-300 ease-out will-change-[opacity] border-0"
-              style={{ 
-                opacity: opacity1,
+              style={{
+                opacity: imageOpacity1,
                 objectPosition: 'center 28%'
               }}
             />
@@ -282,8 +246,8 @@ export const Startups: React.FC = () => {
               src={startupUnlockedPng}
               alt="Startup Unlocked"
               className="absolute inset-0 w-full h-full object-cover transition-opacity duration-300 ease-out will-change-[opacity] border-0"
-              style={{ 
-                opacity: opacity2,
+              style={{
+                opacity: imageOpacity2,
                 objectPosition: 'center 28%'
               }}
             />
@@ -296,11 +260,11 @@ export const Startups: React.FC = () => {
           {/* Left word: Left 240px, Top 170px | Right word: Left 727px, Top 222px */}
           {/* Font: Plus Jakarta Sans ExtraBold (800), 128px, Color: #3F3F3F, Line height: 100% */}
           <div className="hidden md:block absolute inset-0 w-full max-w-[1440px] mx-auto h-full pointer-events-none border-0">
-            
+
             {/* Stage 0: "Among" & "Many" */}
-            <div 
-              className="absolute inset-0 w-full h-full transition-opacity duration-300 ease-out will-change-[opacity]"
-              style={{ opacity: opacity0, visibility: opacity0 > 0.01 ? 'visible' : 'hidden' }}
+            <div
+              className="absolute inset-0 w-full h-full transition-opacity duration-200 ease-out will-change-[opacity]"
+              style={{ opacity: textOpacity0, visibility: textOpacity0 > 0.01 ? 'visible' : 'hidden' }}
             >
               <div
                 className="absolute flex items-start select-none left-1/2 -translate-x-1/2 whitespace-nowrap"
@@ -309,7 +273,7 @@ export const Startups: React.FC = () => {
                   columnGap: 'clamp(14px, calc(33 / 1440 * 100vw), 33px)',
                 }}
               >
-                <span 
+                <span
                   className="font-['Plus_Jakarta_Sans',sans-serif] font-extrabold text-[#3F3F3F] leading-none tracking-normal"
                   style={{
                     fontSize: 'clamp(44px, 8vw, 124px)',
@@ -318,7 +282,7 @@ export const Startups: React.FC = () => {
                 >
                   Among
                 </span>
-                <span 
+                <span
                   className="font-['Plus_Jakarta_Sans',sans-serif] font-extrabold text-[#3F3F3F] leading-none tracking-normal"
                   style={{
                     fontSize: 'clamp(44px, 8vw, 124px)',
@@ -332,9 +296,9 @@ export const Startups: React.FC = () => {
             </div>
 
             {/* Stage 1: "Stand" & "Apart" (33px gap, 28px vertical offset from Figma) */}
-            <div 
-              className="absolute inset-0 w-full h-full transition-opacity duration-300 ease-out will-change-[opacity]"
-              style={{ opacity: opacity1, visibility: opacity1 > 0.01 ? 'visible' : 'hidden' }}
+            <div
+              className="absolute inset-0 w-full h-full transition-opacity duration-200 ease-out will-change-[opacity]"
+              style={{ opacity: textOpacity1, visibility: textOpacity1 > 0.01 ? 'visible' : 'hidden' }}
             >
               <div
                 className="absolute flex items-start select-none left-1/2 -translate-x-1/2 whitespace-nowrap"
@@ -343,7 +307,7 @@ export const Startups: React.FC = () => {
                   columnGap: 'clamp(14px, calc(33 / 1440 * 100vw), 33px)',
                 }}
               >
-                <span 
+                <span
                   className="font-['Plus_Jakarta_Sans',sans-serif] font-extrabold text-[#3F3F3F] leading-none tracking-normal"
                   style={{
                     fontSize: 'clamp(44px, 8vw, 124px)',
@@ -352,7 +316,7 @@ export const Startups: React.FC = () => {
                 >
                   Stand
                 </span>
-                <span 
+                <span
                   className="font-['Plus_Jakarta_Sans',sans-serif] font-extrabold text-[#3F3F3F] leading-none tracking-normal"
                   style={{
                     fontSize: 'clamp(44px, 8vw, 124px)',
@@ -366,9 +330,9 @@ export const Startups: React.FC = () => {
             </div>
 
             {/* Stage 2: "Startup" & "Unlocked" */}
-            <div 
-              className="absolute inset-0 w-full h-full transition-opacity duration-300 ease-out will-change-[opacity]"
-              style={{ opacity: opacity2, visibility: opacity2 > 0.01 ? 'visible' : 'hidden' }}
+            <div
+              className="absolute inset-0 w-full h-full transition-opacity duration-200 ease-out will-change-[opacity]"
+              style={{ opacity: textOpacity2, visibility: textOpacity2 > 0.01 ? 'visible' : 'hidden' }}
             >
               <div
                 className="absolute flex items-start select-none left-1/2 -translate-x-1/2 whitespace-nowrap"
@@ -377,7 +341,7 @@ export const Startups: React.FC = () => {
                   columnGap: 'clamp(14px, calc(33 / 1440 * 100vw), 33px)',
                 }}
               >
-                <span 
+                <span
                   className="font-['Plus_Jakarta_Sans',sans-serif] font-extrabold text-[#3F3F3F] leading-none tracking-normal"
                   style={{
                     fontSize: 'clamp(44px, 8vw, 124px)',
@@ -386,7 +350,7 @@ export const Startups: React.FC = () => {
                 >
                   Startup
                 </span>
-                <span 
+                <span
                   className="font-['Plus_Jakarta_Sans',sans-serif] font-extrabold text-[#3F3F3F] leading-none tracking-normal"
                   style={{
                     fontSize: 'clamp(44px, 8vw, 124px)',
@@ -401,11 +365,11 @@ export const Startups: React.FC = () => {
 
             {/* Stage 2 Buttons & Quote positioned cleanly in open sky (no overlap with subject) */}
             <div
-              className="absolute inset-0 w-full h-full transition-all duration-500 ease-out pointer-events-none"
-              style={{ opacity: opacity2 }}
+              className="absolute inset-0 w-full h-full pointer-events-none transition-opacity duration-200 ease-out"
+              style={{ opacity: textOpacity2, visibility: textOpacity2 > 0.01 ? 'visible' : 'hidden' }}
             >
               {/* Left Button: Apply for Benefits ↗ (Figma: Left 287.43px, 155.16x36, r:6px, p:8px 12px, rot:2deg, #111827) */}
-              <div 
+              <div
                 className="absolute pointer-events-auto"
                 style={{
                   left: 'calc(287 / 1440 * 100%)',
@@ -413,20 +377,20 @@ export const Startups: React.FC = () => {
                 }}
               >
                 <button
-                  onClick={() => setIsModalOpen(true)}
-                  className="h-[36px] px-[12px] py-[8px] rounded-[6px] bg-[#111827] hover:bg-black text-white text-[13.5px] font-medium inline-flex items-center gap-1.5 shadow-md border-0 cursor-pointer transform rotate-[2deg] hover:rotate-0 transition-transform duration-200"
+                  onClick={scrollToApply}
+                  className="h-[36px] px-[12px] py-[8px] rounded-[6px] bg-[#111827] hover:bg-black text-white text-[13.5px] font-medium inline-flex items-center gap-1.5 shadow-md border-0 cursor-pointer"
                 >
                   <span>Apply for Benefits</span>
                   <ArrowUpRight className="w-3.5 h-3.5 text-neutral-300" />
                 </button>
               </div>
 
-              {/* Right Button: Explore Benefits (Figma: 130.87x38, r:6px, p:8px 12px, #FFFFFF) */}
-              <div 
+              {/* Right Button: Explore Benefits (aligned above quote paragraph) */}
+              <div
                 className="absolute pointer-events-auto"
                 style={{
-                  left: 'calc(840 / 1440 * 100%)',
-                  top: 'clamp(320px, 46vh, 430px)',
+                  left: 'calc(989 / 1440 * 100%)',
+                  bottom: 'clamp(130px, 24vh, 220px)',
                 }}
               >
                 <button
@@ -437,16 +401,16 @@ export const Startups: React.FC = () => {
                 </button>
               </div>
 
-              {/* Quote on right below Explore Benefits */}
-              <div 
+              {/* Quote on right beside arm/chest */}
+              <div
                 className="absolute pointer-events-none"
                 style={{
-                  left: 'calc(840 / 1440 * 100%)',
-                  top: 'clamp(390px, 55vh, 510px)',
-                  maxWidth: '360px',
+                  left: 'calc(989 / 1440 * 100%)',
+                  bottom: 'clamp(50px, 12vh, 1px)',
+                  maxWidth: '380px',
                 }}
               >
-                <p className="text-[14px] sm:text-[15px] font-normal leading-relaxed text-[#232F3E]">
+                <p className="text-[14px] sm:text-[15.5px] font-normal leading-relaxed text-[#232F3E]">
                   “Give your startup the intelligence to understand your market, find the right customers, and build a smarter growth strategy”
                 </p>
               </div>
@@ -454,43 +418,71 @@ export const Startups: React.FC = () => {
 
           </div>
 
-          {/* MOBILE HERO TEXT (< md) */}
-          <div className="md:hidden relative z-10 w-full px-6 pt-24 text-center pointer-events-none">
+          {/* MOBILE HERO TEXT (< md) - Positioned in the open sky above the subject */}
+          <div
+            className="md:hidden absolute inset-x-0 z-20 px-4 text-center pointer-events-none"
+            style={{
+              top: 'clamp(76px, 12vh, 100px)',
+            }}
+          >
             {/* Stage 0 */}
-            <div style={{ display: opacity0 > 0.01 ? 'block' : 'none', opacity: opacity0 }}>
-              <div className="text-[44px] font-extrabold text-[#3F3F3F] leading-none font-['Plus_Jakarta_Sans',sans-serif]">
+            <div
+              className="transition-opacity duration-200 ease-out"
+              style={{ display: textOpacity0 > 0.01 ? 'block' : 'none', opacity: textOpacity0 }}
+            >
+              <div className="text-[36px] xs:text-[42px] sm:text-[48px] font-extrabold text-[#3F3F3F] leading-none tracking-tight font-['Plus_Jakarta_Sans',sans-serif]">
                 Among Many
               </div>
             </div>
+
             {/* Stage 1 */}
-            <div style={{ display: opacity1 > 0.01 ? 'block' : 'none', opacity: opacity1 }}>
-              <div className="text-[44px] font-extrabold text-[#3F3F3F] leading-none font-['Plus_Jakarta_Sans',sans-serif]">
+            <div
+              className="transition-opacity duration-200 ease-out"
+              style={{ display: textOpacity1 > 0.01 ? 'block' : 'none', opacity: textOpacity1 }}
+            >
+              <div className="text-[36px] xs:text-[42px] sm:text-[48px] font-extrabold text-[#3F3F3F] leading-none tracking-tight font-['Plus_Jakarta_Sans',sans-serif]">
                 Stand Apart
               </div>
             </div>
+
             {/* Stage 2 */}
-            <div style={{ display: opacity2 > 0.01 ? 'block' : 'none', opacity: opacity2 }}>
-              <div className="text-[44px] font-extrabold text-[#3F3F3F] leading-none font-['Plus_Jakarta_Sans',sans-serif]">
+            <div
+              className="transition-opacity duration-200 ease-out flex flex-col items-center"
+              style={{ display: textOpacity2 > 0.01 ? 'flex' : 'none', opacity: textOpacity2 }}
+            >
+              <div className="text-[32px] xs:text-[38px] sm:text-[44px] font-extrabold text-[#3F3F3F] leading-none tracking-tight font-['Plus_Jakarta_Sans',sans-serif]">
                 Startup Unlocked
               </div>
-              <div className="mt-8 flex flex-col gap-3 items-center pointer-events-auto">
+              <div className="mt-3.5 flex items-center justify-center gap-2.5 pointer-events-auto">
                 <button
-                  onClick={() => setIsModalOpen(true)}
-                  className="w-full max-w-xs h-[38px] inline-flex items-center justify-center gap-1.5 bg-[#111827] text-white text-[13px] font-medium px-4 py-2 rounded-[6px] shadow-md border-0 cursor-pointer"
+                  onClick={scrollToApply}
+                  className="h-[36px] inline-flex items-center justify-center gap-1.5 bg-[#111827] text-white text-[12.5px] font-medium px-3.5 py-1.5 rounded-[6px] shadow-md border-0 cursor-pointer active:scale-95 transition-transform"
                 >
                   <span>Apply for Benefits</span>
-                  <ArrowUpRight className="w-3.5 h-3.5" />
+                  <ArrowUpRight className="w-3.5 h-3.5 text-neutral-300" />
                 </button>
                 <button
                   onClick={scrollToWhatIs}
-                  className="w-full max-w-xs h-[38px] inline-flex items-center justify-center bg-white text-[#1E293B] text-[13px] font-medium px-4 py-2 rounded-[6px] shadow-sm border-0 cursor-pointer"
+                  className="h-[36px] inline-flex items-center justify-center bg-white text-[#1E293B] text-[12.5px] font-medium px-3.5 py-1.5 rounded-[6px] shadow-sm border-0 cursor-pointer active:scale-95 transition-transform"
                 >
                   Explore Benefits
                 </button>
-                <p className="text-xs text-[#232F3E] max-w-xs mt-3 leading-relaxed">
-                  “Give your startup the intelligence to understand your market, find the right customers, and build a smarter growth strategy”
-                </p>
               </div>
+            </div>
+          </div>
+
+          {/* MOBILE HERO QUOTE (< md) - Floating card at the bottom */}
+          <div
+            className="md:hidden absolute bottom-6 inset-x-4 z-20 pointer-events-none transition-opacity duration-200 ease-out"
+            style={{
+              opacity: textOpacity2,
+              visibility: textOpacity2 > 0.01 ? 'visible' : 'hidden',
+            }}
+          >
+            <div className="bg-white/85 backdrop-blur-md px-4 py-2.5 rounded-xl border border-white/60 shadow-lg max-w-sm mx-auto text-center">
+              <p className="text-[12px] sm:text-[13px] font-normal leading-relaxed text-[#232F3E]">
+                “Give your startup the intelligence to understand your market, find the right customers, and build a smarter growth strategy”
+              </p>
             </div>
           </div>
 
@@ -498,7 +490,7 @@ export const Startups: React.FC = () => {
       </section>
 
       {/* 3. SECTION 2: "What Is Coirei for Startups" */}
-      <section 
+      <section
         ref={whatIsRef}
         id="what-is-coirei"
         data-custom-padding
@@ -506,7 +498,7 @@ export const Startups: React.FC = () => {
         style={{ paddingTop: '111px', paddingBottom: '111px' }}
       >
         <div className="max-w-4xl mx-auto flex flex-col items-center">
-          
+
           {/* Logo Badge */}
           <div className="relative select-none mb-6">
             <img
@@ -529,16 +521,16 @@ export const Startups: React.FC = () => {
       </section>
 
       {/* 3.1. BLUE BANNER: "THE STARTUP COMMUNITY" (Exact Figma recreation) */}
-      <section 
+      <section
         data-custom-padding
         className="relative z-30 w-full bg-[#4A7DFF] py-16 lg:py-20 px-6 sm:px-10 lg:px-16 border-0"
       >
         <div className="max-w-6xl mx-auto flex flex-col md:flex-row items-center justify-between gap-8 lg:gap-14">
-          
+
           {/* Left Photo with clean rounded card shape */}
           <div className="w-full md:w-[400px] lg:w-[440px] shrink-0">
             <img
-              src={startupCommunityImg}
+              src={firstmeetimgSvg}
               alt="The Startup Community"
               className="w-full h-auto object-cover rounded-3xl shadow-xl border-0 block"
             />
@@ -570,14 +562,14 @@ export const Startups: React.FC = () => {
       </section>
 
       {/* 4. SECTION: "What You Can Do with Coirei" (Exact Figma gap: 111px) */}
-      <section 
-        ref={benefitsRef} 
+      <section
+        ref={benefitsRef}
         data-custom-padding
         className="w-full bg-white px-6 sm:px-10 lg:px-16 border-0"
         style={{ paddingTop: '111px', paddingBottom: '111px' }}
       >
         <div className="max-w-[1240px] mx-auto">
-          
+
           {/* Header: Left title, Right description (Figma: 814px, 32px Medium, 100% line height, #000000) */}
           <div className="flex flex-col md:flex-row md:items-start justify-between gap-6 md:gap-10 mb-12 sm:mb-16">
             <h3 className="text-2xl sm:text-3xl lg:text-[32px] font-medium text-black tracking-[-0.01em] leading-[1.15] shrink-0 max-w-[260px]">
@@ -590,9 +582,9 @@ export const Startups: React.FC = () => {
 
           {/* 4 Feature Cards (Figma: 295px x 230px, Text: 272px x 90px, 24px Medium, #FFFFFF) */}
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-5 lg:gap-6 justify-center">
-            
+
             {/* Card 1: Dark Reflective Gradient */}
-            <div 
+            <div
               className="relative w-full h-[230px] rounded-[16px] overflow-hidden px-3.5 sm:px-4 py-5 flex items-center shadow-md select-none border border-neutral-800/10"
               style={{
                 background: 'linear-gradient(135deg, #666A72 0%, #4D5057 52%, #2F3136 53%, #222427 100%)'
@@ -649,13 +641,13 @@ export const Startups: React.FC = () => {
       </section>
 
       {/* 5. SECTION: "WHO CAN APPLY" (Exact Figma recreation from inspector specs) */}
-      <section 
+      <section
         data-custom-padding
         className="w-full bg-[#FBFBFB] border-0"
         style={{ paddingTop: '80px', paddingBottom: '80px' }}
       >
         <div className="max-w-[1280px] mx-auto px-4 sm:px-8 flex flex-col lg:flex-row items-center justify-between gap-10 lg:gap-12">
-          
+
           {/* Left Column (Figma width: ~492px) */}
           <div className="w-full lg:w-[492px] shrink-0 flex flex-col items-start text-left">
             <span className="text-[12px] sm:text-[13px] font-bold uppercase tracking-[0.16em] text-neutral-400">
@@ -667,7 +659,7 @@ export const Startups: React.FC = () => {
             <p className="text-neutral-500 text-[15px] sm:text-[16px] font-normal leading-relaxed max-w-[440px] mb-8">
               The Coirei Startup Program is intended for eligible early-stage businesses looking to accelerate their market understanding and growth.
             </p>
-            
+
             {/* Pill note (Figma: 492.67px Fill x 50.67px Hug, r:8px, p:16px, gap:12px, #FFFFFF) */}
             <div className="w-full max-w-[492.67px] min-h-[50.67px] rounded-[8px] bg-[#FFFFFF] px-[16px] py-[12px] flex items-center gap-[12px] text-[13px] text-neutral-600 shadow-xs border border-neutral-100">
               <Info className="w-4 h-4 text-neutral-400 shrink-0" />
@@ -686,7 +678,7 @@ export const Startups: React.FC = () => {
                 "Willingness to complete the startup verification process"
               ].map((text, idx) => (
                 /* Checklist row: Fill 635.33px x Hug 60px, r:8px, p:14px, gap:16px, #F9F9F9 */
-                <div 
+                <div
                   key={idx}
                   className="w-full min-h-[60px] bg-[#F9F9F9] hover:bg-[#F3F4F6] transition-colors rounded-[8px] px-[16px] py-[14px] flex items-center gap-[16px]"
                 >
@@ -703,13 +695,13 @@ export const Startups: React.FC = () => {
       </section>
 
       {/* 6. SECTION: "GET STARTED" - Four steps from application to activation */}
-      <section 
+      <section
         data-custom-padding
         className="w-full bg-white px-6 sm:px-10 lg:px-16 border-0 text-center"
         style={{ paddingTop: '111px', paddingBottom: '111px' }}
       >
         <div className="max-w-[1240px] mx-auto">
-          
+
           {/* Section Header */}
           <div className="max-w-2xl mx-auto mb-16 sm:mb-20">
             <span className="text-[12px] sm:text-[13px] font-bold uppercase tracking-[0.16em] text-neutral-400 block mb-3">
@@ -765,23 +757,27 @@ export const Startups: React.FC = () => {
       </section>
 
       {/* 7. SECTION: "APPLY TO THE COIREI STARTUP PROGRAM" (Exact Figma Dark Form) */}
-      <section 
+      <section
         id="apply-form-section"
         data-custom-padding
         className="w-full bg-[#000000] text-white px-6 sm:px-10 lg:px-16 border-0 text-center"
         style={{ paddingTop: '100px', paddingBottom: '110px' }}
       >
         <div className="max-w-4xl mx-auto">
-          
+
           {/* Header */}
-          <div className="max-w-2xl mx-auto mb-12 sm:mb-14">
-            <span className="text-[11px] sm:text-[12px] font-bold uppercase tracking-[0.18em] text-neutral-400 block mb-3">
+          <div className="max-w-[755px] mx-auto mb-12 sm:mb-14 flex flex-col items-center text-center">
+            <span
+              className="text-[12px] font-bold uppercase text-[#C5C5C5] tracking-[0.6px] leading-[16px] block mb-3 font-['Plus_Jakarta_Sans',sans-serif]"
+            >
               YOUR NEXT CHAPTER STARTS HERE
             </span>
-            <h2 className="text-3xl sm:text-4xl lg:text-[42px] font-bold text-white tracking-[-0.02em] leading-tight mb-4">
+            <h2 className="text-3xl sm:text-4xl lg:text-[42px] font-bold text-white tracking-[-0.02em] leading-tight mb-4 font-['Plus_Jakarta_Sans',sans-serif]">
               Apply to the Coirei Startup Program.
             </h2>
-            <p className="text-neutral-400 text-sm sm:text-[15.5px] font-normal leading-relaxed">
+            <p
+              className="max-w-[755px] w-full text-[16px] font-normal leading-[24px] tracking-[-0.18px] text-[#C6C6C6] font-['Plus_Jakarta_Sans',sans-serif]"
+            >
               Tell us about your startup. Our team will review your application and contact you regarding eligibility and next steps.
             </p>
           </div>
@@ -813,12 +809,12 @@ export const Startups: React.FC = () => {
                     <label className="block text-[13px] font-semibold text-[#0F172A] mb-1.5">
                       Founder or applicant name <span className="text-red-500">*</span>
                     </label>
-                    <input 
+                    <input
                       type="text"
                       required
                       placeholder="Elena Vance"
                       value={applyForm.founderName}
-                      onChange={(e) => setApplyForm({...applyForm, founderName: e.target.value})}
+                      onChange={(e) => setApplyForm({ ...applyForm, founderName: e.target.value })}
                       className="w-full bg-[#F9F9F9] rounded-[8px] px-3.5 py-3 text-[14px] text-[#0F172A] placeholder:text-neutral-400 border-0 focus:outline-none focus:ring-2 focus:ring-black/10 transition-all"
                     />
                   </div>
@@ -828,12 +824,12 @@ export const Startups: React.FC = () => {
                     <label className="block text-[13px] font-semibold text-[#0F172A] mb-1.5">
                       Work email <span className="text-red-500">*</span>
                     </label>
-                    <input 
+                    <input
                       type="email"
                       required
                       placeholder="elena@company.com"
                       value={applyForm.workEmail}
-                      onChange={(e) => setApplyForm({...applyForm, workEmail: e.target.value})}
+                      onChange={(e) => setApplyForm({ ...applyForm, workEmail: e.target.value })}
                       className="w-full bg-[#F9F9F9] rounded-[8px] px-3.5 py-3 text-[14px] text-[#0F172A] placeholder:text-neutral-400 border-0 focus:outline-none focus:ring-2 focus:ring-black/10 transition-all"
                     />
                     <span className="block text-[11px] text-neutral-400 mt-1">
@@ -846,12 +842,12 @@ export const Startups: React.FC = () => {
                     <label className="block text-[13px] font-semibold text-[#0F172A] mb-1.5">
                       Company name <span className="text-red-500">*</span>
                     </label>
-                    <input 
+                    <input
                       type="text"
                       required
                       placeholder="Vance Intelligence Inc."
                       value={applyForm.companyName}
-                      onChange={(e) => setApplyForm({...applyForm, companyName: e.target.value})}
+                      onChange={(e) => setApplyForm({ ...applyForm, companyName: e.target.value })}
                       className="w-full bg-[#F9F9F9] rounded-[8px] px-3.5 py-3 text-[14px] text-[#0F172A] placeholder:text-neutral-400 border-0 focus:outline-none focus:ring-2 focus:ring-black/10 transition-all"
                     />
                   </div>
@@ -861,12 +857,12 @@ export const Startups: React.FC = () => {
                     <label className="block text-[13px] font-semibold text-[#0F172A] mb-1.5">
                       Company website <span className="text-red-500">*</span>
                     </label>
-                    <input 
+                    <input
                       type="url"
                       required
                       placeholder="https://vanceintel.ai"
                       value={applyForm.companyWebsite}
-                      onChange={(e) => setApplyForm({...applyForm, companyWebsite: e.target.value})}
+                      onChange={(e) => setApplyForm({ ...applyForm, companyWebsite: e.target.value })}
                       className="w-full bg-[#F9F9F9] rounded-[8px] px-3.5 py-3 text-[14px] text-[#0F172A] placeholder:text-neutral-400 border-0 focus:outline-none focus:ring-2 focus:ring-black/10 transition-all"
                     />
                   </div>
@@ -876,10 +872,10 @@ export const Startups: React.FC = () => {
                     <label className="block text-[13px] font-semibold text-[#0F172A] mb-1.5">
                       Startup stage <span className="text-red-500">*</span>
                     </label>
-                    <select 
+                    <select
                       required
                       value={applyForm.startupStage}
-                      onChange={(e) => setApplyForm({...applyForm, startupStage: e.target.value})}
+                      onChange={(e) => setApplyForm({ ...applyForm, startupStage: e.target.value })}
                       className="w-full bg-[#F9F9F9] rounded-[8px] px-3.5 py-3 text-[14px] text-[#0F172A] border-0 focus:outline-none focus:ring-2 focus:ring-black/10 transition-all cursor-pointer"
                     >
                       <option value="" disabled>Select funding stage</option>
@@ -896,10 +892,10 @@ export const Startups: React.FC = () => {
                     <label className="block text-[13px] font-semibold text-[#0F172A] mb-1.5">
                       Industry <span className="text-red-500">*</span>
                     </label>
-                    <select 
+                    <select
                       required
                       value={applyForm.industry}
-                      onChange={(e) => setApplyForm({...applyForm, industry: e.target.value})}
+                      onChange={(e) => setApplyForm({ ...applyForm, industry: e.target.value })}
                       className="w-full bg-[#F9F9F9] rounded-[8px] px-3.5 py-3 text-[14px] text-[#0F172A] border-0 focus:outline-none focus:ring-2 focus:ring-black/10 transition-all cursor-pointer"
                     >
                       <option value="" disabled>Select sector</option>
@@ -918,10 +914,10 @@ export const Startups: React.FC = () => {
                     <label className="block text-[13px] font-semibold text-[#0F172A] mb-1.5">
                       Team size <span className="text-red-500">*</span>
                     </label>
-                    <select 
+                    <select
                       required
                       value={applyForm.teamSize}
-                      onChange={(e) => setApplyForm({...applyForm, teamSize: e.target.value})}
+                      onChange={(e) => setApplyForm({ ...applyForm, teamSize: e.target.value })}
                       className="w-full bg-[#F9F9F9] rounded-[8px] px-3.5 py-3 text-[14px] text-[#0F172A] border-0 focus:outline-none focus:ring-2 focus:ring-black/10 transition-all cursor-pointer"
                     >
                       <option value="" disabled>Select team count</option>
@@ -937,10 +933,10 @@ export const Startups: React.FC = () => {
                     <label className="block text-[13px] font-semibold text-[#0F172A] mb-1.5">
                       Primary growth challenge <span className="text-red-500">*</span>
                     </label>
-                    <select 
+                    <select
                       required
                       value={applyForm.growthChallenge}
-                      onChange={(e) => setApplyForm({...applyForm, growthChallenge: e.target.value})}
+                      onChange={(e) => setApplyForm({ ...applyForm, growthChallenge: e.target.value })}
                       className="w-full bg-[#F9F9F9] rounded-[8px] px-3.5 py-3 text-[14px] text-[#0F172A] border-0 focus:outline-none focus:ring-2 focus:ring-black/10 transition-all cursor-pointer"
                     >
                       <option value="" disabled>Select key focus area</option>
@@ -958,12 +954,12 @@ export const Startups: React.FC = () => {
                   <label className="block text-[13px] font-semibold text-[#0F172A] mb-1.5">
                     Brief description of the company <span className="text-red-500">*</span>
                   </label>
-                  <textarea 
+                  <textarea
                     required
                     rows={3}
                     placeholder="What are you building and who are your initial customers?"
                     value={applyForm.description}
-                    onChange={(e) => setApplyForm({...applyForm, description: e.target.value})}
+                    onChange={(e) => setApplyForm({ ...applyForm, description: e.target.value })}
                     className="w-full bg-[#F9F9F9] rounded-[8px] p-3.5 text-[14px] text-[#0F172A] placeholder:text-neutral-400 border-0 focus:outline-none focus:ring-2 focus:ring-black/10 transition-all resize-none"
                   />
                 </div>
@@ -973,7 +969,7 @@ export const Startups: React.FC = () => {
                   type="submit"
                   className="w-full py-3.5 px-4 rounded-[8px] bg-[#E5E7EB] hover:bg-neutral-300 text-neutral-800 font-medium text-[14.5px] transition-colors cursor-pointer border-0"
                 >
-                  Submit Application →
+                  Submit Application
                 </button>
 
                 {/* Disclaimer */}
@@ -988,7 +984,7 @@ export const Startups: React.FC = () => {
       </section>
 
       {/* 8. SECTION: "QUESTIONS BEFORE YOU APPLY?" (Exact Figma Accordion) */}
-      <section 
+      <section
         data-custom-padding
         className="w-full bg-white px-6 sm:px-8 border-0"
         style={{ paddingTop: '100px', paddingBottom: '100px' }}
@@ -1004,7 +1000,7 @@ export const Startups: React.FC = () => {
             {FAQ_ITEMS.map((item, idx) => {
               const isOpen = openFaq === idx;
               return (
-                <div 
+                <div
                   key={idx}
                   className="bg-[#F9FAFB] hover:bg-neutral-100/70 rounded-xl border-0 overflow-hidden transition-colors"
                 >
@@ -1027,17 +1023,19 @@ export const Startups: React.FC = () => {
         </div>
       </section>
 
-      {/* 9. SECTION: FINAL BOTTOM CTA CARD (Exact Figma recreation) */}
-      <section 
+      {/* 9. SECTION: FINAL BOTTOM CTA CARD (Exact Figma specs from inspector) */}
+      <section
         data-custom-padding
-        className="w-full bg-white px-6 sm:px-10 lg:px-16 border-0"
-        style={{ paddingTop: '40px', paddingBottom: '110px' }}
+        className="w-full bg-white px-4 sm:px-8 border-0"
+        style={{ paddingTop: '40px', paddingBottom: '100px' }}
       >
-        <div className="max-w-[1240px] mx-auto bg-[#F9FAFB] rounded-[32px] px-6 sm:px-12 py-16 sm:py-20 text-center border border-neutral-100">
-          <h2 className="text-3xl sm:text-4xl lg:text-[44px] font-bold text-[#0F172A] tracking-[-0.02em] leading-tight max-w-2xl mx-auto mb-4">
+        <div
+          className="max-w-[1280px] w-full min-h-[442px] mx-auto bg-[#FAFAFA]  py-[96px] px-6 sm:px-12 lg:px-[128px] text-center flex flex-col items-center justify-center border-0 select-none"
+        >
+          <h2 className="text-3xl sm:text-4xl lg:text-[44px] font-bold text-[#0F172A] tracking-[-0.02em] leading-[1.15] max-w-[760px] mx-auto mb-4">
             Your next stage of growth starts with better intelligence.
           </h2>
-          <p className="text-neutral-500 text-sm sm:text-[16px] max-w-xl mx-auto mb-9 font-normal">
+          <p className="text-neutral-500 text-sm sm:text-[16px] max-w-xl mx-auto mb-9 font-normal leading-relaxed">
             Understand your market, find your opportunities, and build your next move with Coirei.
           </p>
           <div className="flex flex-col sm:flex-row items-center justify-center gap-3.5">
@@ -1048,7 +1046,7 @@ export const Startups: React.FC = () => {
               className="inline-flex items-center gap-2 bg-white hover:bg-neutral-50 text-[#0F172A] font-medium text-[13.5px] px-5 py-2.5 rounded-[8px] shadow-xs border border-neutral-200/60 transition-colors cursor-pointer"
             >
               <span>Apply for Startup Benefits</span>
-              <ArrowRight className="w-3.5 h-3.5" />
+             
             </button>
             <Link
               to="/about"
@@ -1060,151 +1058,7 @@ export const Startups: React.FC = () => {
         </div>
       </section>
 
-      {/* 8. APPLICATION MODAL */}
-      {isModalOpen && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/60 backdrop-blur-sm p-4 animate-in fade-in duration-200">
-          <div 
-            className="relative w-full max-w-lg bg-white rounded-3xl shadow-2xl p-6 sm:p-8 border-0"
-            onClick={(e) => e.stopPropagation()}
-          >
-            {/* Close button */}
-            <button
-              onClick={() => setIsModalOpen(false)}
-              className="absolute top-5 right-5 text-neutral-400 hover:text-black p-1.5 rounded-full hover:bg-neutral-100 transition-colors border-0"
-            >
-              <X className="w-5 h-5" />
-            </button>
 
-            {formSubmitted ? (
-              <div className="py-10 text-center flex flex-col items-center">
-                <div className="w-16 h-16 bg-emerald-100 text-emerald-600 rounded-full flex items-center justify-center mb-4">
-                  <CheckCircle2 className="w-8 h-8" />
-                </div>
-                <h3 className="text-2xl font-bold text-[#0F172A] mb-2">Application Received!</h3>
-                <p className="text-neutral-600 text-sm max-w-sm">
-                  Thank you! Our startup partnerships team will review your application and send your credits voucher within 24-48 hours.
-                </p>
-              </div>
-            ) : (
-              <>
-                <div className="mb-6">
-                  <div className="flex items-center gap-2 text-sky-600 font-bold text-xs uppercase tracking-wider mb-1">
-                    <Rocket className="w-3.5 h-3.5" />
-                    <span>Fast-Track Application</span>
-                  </div>
-                  <h3 className="text-2xl font-bold text-[#0F172A]">
-                    Apply for Coirei for Startups
-                  </h3>
-                  <p className="text-neutral-500 text-xs sm:text-sm mt-1">
-                    Fill in your details below to claim up to 90% platform credits.
-                  </p>
-                </div>
-
-                <form onSubmit={handleSubmitApplication} className="space-y-4">
-                  <div>
-                    <label className="block text-xs font-semibold text-neutral-700 mb-1">
-                      Startup / Company Name *
-                    </label>
-                    <input
-                      type="text"
-                      required
-                      placeholder="e.g. Acme AI"
-                      value={formData.startupName}
-                      onChange={(e) => setFormData({ ...formData, startupName: e.target.value })}
-                      className="w-full px-3.5 py-2.5 rounded-xl border border-neutral-200 text-sm focus:outline-none focus:border-black"
-                    />
-                  </div>
-
-                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                    <div>
-                      <label className="block text-xs font-semibold text-neutral-700 mb-1">
-                        Company Website *
-                      </label>
-                      <input
-                        type="url"
-                        required
-                        placeholder="https://example.com"
-                        value={formData.website}
-                        onChange={(e) => setFormData({ ...formData, website: e.target.value })}
-                        className="w-full px-3.5 py-2.5 rounded-xl border border-neutral-200 text-sm focus:outline-none focus:border-black"
-                      />
-                    </div>
-                    <div>
-                      <label className="block text-xs font-semibold text-neutral-700 mb-1">
-                        Funding Stage
-                      </label>
-                      <select
-                        value={formData.fundingStage}
-                        onChange={(e) => setFormData({ ...formData, fundingStage: e.target.value })}
-                        className="w-full px-3.5 py-2.5 rounded-xl border border-neutral-200 text-sm focus:outline-none focus:border-black bg-white"
-                      >
-                        <option value="Bootstrapped">Bootstrapped</option>
-                        <option value="Pre-Seed">Pre-Seed</option>
-                        <option value="Seed">Seed ($500k - $2M)</option>
-                        <option value="Series A">Series A</option>
-                      </select>
-                    </div>
-                  </div>
-
-                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                    <div>
-                      <label className="block text-xs font-semibold text-neutral-700 mb-1">
-                        Founder Name *
-                      </label>
-                      <input
-                        type="text"
-                        required
-                        placeholder="Jane Doe"
-                        value={formData.founderName}
-                        onChange={(e) => setFormData({ ...formData, founderName: e.target.value })}
-                        className="w-full px-3.5 py-2.5 rounded-xl border border-neutral-200 text-sm focus:outline-none focus:border-black"
-                      />
-                    </div>
-                    <div>
-                      <label className="block text-xs font-semibold text-neutral-700 mb-1">
-                        Work Email *
-                      </label>
-                      <input
-                        type="email"
-                        required
-                        placeholder="founder@company.com"
-                        value={formData.email}
-                        onChange={(e) => setFormData({ ...formData, email: e.target.value })}
-                        className="w-full px-3.5 py-2.5 rounded-xl border border-neutral-200 text-sm focus:outline-none focus:border-black"
-                      />
-                    </div>
-                  </div>
-
-                  <div>
-                    <label className="block text-xs font-semibold text-neutral-700 mb-1">
-                      Who are your target customers?
-                    </label>
-                    <input
-                      type="text"
-                      placeholder="e.g. B2B SaaS heads of sales, enterprise marketing leads"
-                      value={formData.targetAudience}
-                      onChange={(e) => setFormData({ ...formData, targetAudience: e.target.value })}
-                      className="w-full px-3.5 py-2.5 rounded-xl border border-neutral-200 text-sm focus:outline-none focus:border-black"
-                    />
-                  </div>
-
-                  <div className="pt-2">
-                    <button
-                      type="submit"
-                      className="w-full bg-[#0B0F19] hover:bg-neutral-800 text-white font-medium text-sm py-3 rounded-xl shadow-md border-0 transition-colors cursor-pointer"
-                    >
-                      Submit Application
-                    </button>
-                    <p className="text-[11px] text-neutral-400 text-center mt-2.5">
-                      No credit card required. Free tier access granted upon verification.
-                    </p>
-                  </div>
-                </form>
-              </>
-            )}
-          </div>
-        </div>
-      )}
 
     </div>
   );
