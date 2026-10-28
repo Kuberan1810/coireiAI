@@ -186,7 +186,7 @@ export const CompetitorAgentTable: React.FC = () => {
       </div>
 
       {/* Spreadsheet Table Container */}
-      <div className="flex-1 overflow-x-auto overflow-y-auto max-h-[250px] sm:max-h-[340px] no-scrollbar">
+      <div className="flex-1 min-h-0 overflow-x-auto overflow-y-auto no-scrollbar">
         <table className="w-full border-collapse text-left text-[11.5px] whitespace-nowrap">
           {/* Table Header */}
           <thead className="bg-[#FAFBFD] sticky top-0 z-10 border-b border-slate-100 text-slate-400 font-normal">

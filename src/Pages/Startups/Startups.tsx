@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useRef, useMemo } from 'react';
+import React, { useState, useRef } from 'react';
 import { Link } from 'react-router-dom';
 import {
   ChevronDown,
@@ -7,14 +7,46 @@ import {
   Info
 } from 'lucide-react';
 
-import amongManyPng from '../../assets/startups/Amongmany.png';
-import standApartPng from '../../assets/startups/StandApart.png';
-import startupUnlockedPng from '../../assets/startups/StartupUnlocked.png';
+import Hero from './section/Hero';
+import CustomSelect from '../../components/ui/CustomSelect';
 import ciLogoStartupProg from '../../assets/startups/Ciforstartupprogram.svg';
 import firstmeetimgSvg from '../../assets/about/firstmeetimg.svg';
 import redSquaresPng from '../../assets/startups/redsquares.png';
 import purpleBgPng from '../../assets/startups/purplebg.png';
 import lastGradientPng from '../../assets/startups/lastgradiend.png';
+
+const STARTUP_STAGE_OPTIONS = [
+  'Bootstrapped',
+  'Pre-Seed',
+  'Seed',
+  'Series A',
+  'Series B+',
+];
+
+const INDUSTRY_OPTIONS = [
+  'AI / Machine Learning',
+  'B2B SaaS',
+  'Fintech',
+  'Developer Tools',
+  'E-commerce',
+  'Healthcare',
+  'Other',
+];
+
+const TEAM_SIZE_OPTIONS = [
+  { value: '1-5', label: '1 - 5' },
+  { value: '6-15', label: '6 - 15' },
+  { value: '16-50', label: '16 - 50' },
+  { value: '50+', label: '50+' },
+];
+
+const GROWTH_CHALLENGE_OPTIONS = [
+  'Finding ICP & Leads',
+  'Competitor Tracking',
+  'SEO & AEO Visibility',
+  'Market Demand Signals',
+  'GTM Execution',
+];
 
 interface FAQItem {
   question: string;
@@ -46,12 +78,8 @@ const FAQ_ITEMS: FAQItem[] = [
 ];
 
 export const Startups: React.FC = () => {
-  const containerRef = useRef<HTMLDivElement>(null);
   const whatIsRef = useRef<HTMLDivElement>(null);
   const benefitsRef = useRef<HTMLElement>(null);
-
-  // Scroll progress from 0.0 to 1.0 within the pinned section
-  const [scrollProgress, setScrollProgress] = useState(0);
 
   // Inline Application Form state
   const [applyForm, setApplyForm] = useState({
@@ -70,128 +98,6 @@ export const Startups: React.FC = () => {
   // FAQ Accordion
   const [openFaq, setOpenFaq] = useState<number | null>(0);
 
-  // Track scroll within the hero track
-  useEffect(() => {
-    let animId: number;
-
-    const handleScroll = () => {
-      animId = requestAnimationFrame(() => {
-        const container = containerRef.current;
-        if (!container) return;
-
-        const rect = container.getBoundingClientRect();
-        const scrollableDist = container.offsetHeight - window.innerHeight;
-
-        if (scrollableDist > 0) {
-          const currentScroll = -rect.top;
-          const progress = Math.min(Math.max(currentScroll / scrollableDist, 0), 1);
-          setScrollProgress(progress);
-        }
-      });
-    };
-
-    window.addEventListener('scroll', handleScroll, { passive: true });
-    window.addEventListener('resize', handleScroll, { passive: true });
-    handleScroll();
-
-    return () => {
-      window.removeEventListener('scroll', handleScroll);
-      window.removeEventListener('resize', handleScroll);
-      cancelAnimationFrame(animId);
-    };
-  }, []);
-
-  // Compute opacities for seamless image cross-fading
-  // Stage 0: 0.00 - 0.33 ("Among Many")
-  // Separate image cross-fade and text transitions to eliminate ghosting completely
-  const {
-    imageOpacity0, imageOpacity1, imageOpacity2,
-    textOpacity0, textOpacity1, textOpacity2
-  } = useMemo(() => {
-    const p = scrollProgress;
-
-    // 1. Photographic background cross-fades
-    let img0 = 0;
-    let img1 = 0;
-    let img2 = 0;
-
-    if (p < 0.20) {
-      img0 = 1;
-      img1 = 0;
-      img2 = 0;
-    } else if (p < 0.48) {
-      const t = (p - 0.20) / 0.28;
-      img0 = 1 - t;
-      img1 = t;
-      img2 = 0;
-    } else if (p < 0.65) {
-      img0 = 0;
-      img1 = 1;
-      img2 = 0;
-    } else if (p < 0.88) {
-      const t = (p - 0.65) / 0.23;
-      img0 = 0;
-      img1 = 1 - t;
-      img2 = t;
-    } else {
-      img0 = 0;
-      img1 = 0;
-      img2 = 1;
-    }
-
-    // 2. Crisp, non-overlapping text (ZERO ghosting: text A fully vanishes before text B begins)
-    let txt0 = 0;
-    let txt1 = 0;
-    let txt2 = 0;
-
-    if (p <= 0.20) {
-      txt0 = 1;
-      txt1 = 0;
-      txt2 = 0;
-    } else if (p < 0.30) {
-      txt0 = (0.30 - p) / 0.10;
-      txt1 = 0;
-      txt2 = 0;
-    } else if (p < 0.38) {
-      txt0 = 0;
-      txt1 = 0;
-      txt2 = 0;
-    } else if (p < 0.48) {
-      txt0 = 0;
-      txt1 = (p - 0.38) / 0.10;
-      txt2 = 0;
-    } else if (p <= 0.65) {
-      txt0 = 0;
-      txt1 = 1;
-      txt2 = 0;
-    } else if (p < 0.74) {
-      txt0 = 0;
-      txt1 = (0.74 - p) / 0.09;
-      txt2 = 0;
-    } else if (p < 0.80) {
-      txt0 = 0;
-      txt1 = 0;
-      txt2 = 0;
-    } else if (p < 0.89) {
-      txt0 = 0;
-      txt1 = 0;
-      txt2 = (p - 0.80) / 0.09;
-    } else {
-      txt0 = 0;
-      txt1 = 0;
-      txt2 = 1;
-    }
-
-    return {
-      imageOpacity0: img0,
-      imageOpacity1: img1,
-      imageOpacity2: img2,
-      textOpacity0: txt0,
-      textOpacity1: txt1,
-      textOpacity2: txt2,
-    };
-  }, [scrollProgress]);
-
   const scrollToWhatIs = () => {
     whatIsRef.current?.scrollIntoView({ behavior: 'smooth' });
   };
@@ -207,287 +113,11 @@ export const Startups: React.FC = () => {
   return (
     <div className="w-full bg-[#bad9db] text-[#0B0F19] font-['Plus_Jakarta_Sans',sans-serif] selection:bg-sky-200">
 
-      {/* 2. PINNED SCROLL HERO SECTION: Exactly 1 scroll = 1 transition */}
-      <section
-        id="startups-hero"
-        ref={containerRef}
-        data-custom-padding
-        className="relative w-full h-[210vh] bg-[#bad9db] border-0"
-      >
-        {/* Sticky 100vh Viewport */}
-        <div className="sticky top-0 h-screen w-full overflow-hidden flex flex-col justify-between border-0">
-
-          {/* EDGE-TO-EDGE FULL BLEED IMAGES (Zero borders on left, right, top, or bottom) */}
-          <div className="absolute inset-0 w-full h-full pointer-events-none select-none overflow-hidden border-0">
-            {/* Stage 1: Among Many */}
-            <img
-              src={amongManyPng}
-              alt="Among Many"
-              className="absolute inset-0 w-full h-full object-cover transition-opacity duration-300 ease-out will-change-[opacity] border-0"
-              style={{
-                opacity: imageOpacity0,
-                objectPosition: 'center 28%'
-              }}
-            />
-
-            {/* Stage 2: Stand Apart */}
-            <img
-              src={standApartPng}
-              alt="Stand Apart"
-              className="absolute inset-0 w-full h-full object-cover transition-opacity duration-300 ease-out will-change-[opacity] border-0"
-              style={{
-                opacity: imageOpacity1,
-                objectPosition: 'center 28%'
-              }}
-            />
-
-            {/* Stage 3: Startup Unlocked */}
-            <img
-              src={startupUnlockedPng}
-              alt="Startup Unlocked"
-              className="absolute inset-0 w-full h-full object-cover transition-opacity duration-300 ease-out will-change-[opacity] border-0"
-              style={{
-                opacity: imageOpacity2,
-                objectPosition: 'center 28%'
-              }}
-            />
-          </div>
-
-          {/* Top spacer for navbar */}
-          <div className="h-20 w-full shrink-0 pointer-events-none" />
-
-          {/* DESKTOP HERO TEXT: EXACT FIGMA MEASUREMENTS & GAP */}
-          {/* Left word: Left 240px, Top 170px | Right word: Left 727px, Top 222px */}
-          {/* Font: Plus Jakarta Sans ExtraBold (800), 128px, Color: #3F3F3F, Line height: 100% */}
-          <div className="hidden md:block absolute inset-0 w-full max-w-[1440px] mx-auto h-full pointer-events-none border-0">
-
-            {/* Stage 0: "Among" & "Many" */}
-            <div
-              className="absolute inset-0 w-full h-full transition-opacity duration-200 ease-out will-change-[opacity]"
-              style={{ opacity: textOpacity0, visibility: textOpacity0 > 0.01 ? 'visible' : 'hidden' }}
-            >
-              <div
-                className="absolute flex items-start select-none left-1/2 -translate-x-1/2 whitespace-nowrap"
-                style={{
-                  top: 'clamp(55px, calc(80 / 1440 * 100vw), 90px)',
-                  columnGap: 'clamp(14px, calc(33 / 1440 * 100vw), 33px)',
-                }}
-              >
-                <span
-                  className="font-['Plus_Jakarta_Sans',sans-serif] font-extrabold text-[#3F3F3F] leading-none tracking-normal"
-                  style={{
-                    fontSize: 'clamp(44px, 8vw, 124px)',
-                    lineHeight: '100%',
-                  }}
-                >
-                  Among
-                </span>
-                <span
-                  className="font-['Plus_Jakarta_Sans',sans-serif] font-extrabold text-[#3F3F3F] leading-none tracking-normal"
-                  style={{
-                    fontSize: 'clamp(44px, 8vw, 124px)',
-                    lineHeight: '100%',
-                    marginTop: 'clamp(12px, calc(28 / 1440 * 100vw), 28px)',
-                  }}
-                >
-                  Many
-                </span>
-              </div>
-            </div>
-
-            {/* Stage 1: "Stand" & "Apart" (33px gap, 28px vertical offset from Figma) */}
-            <div
-              className="absolute inset-0 w-full h-full transition-opacity duration-200 ease-out will-change-[opacity]"
-              style={{ opacity: textOpacity1, visibility: textOpacity1 > 0.01 ? 'visible' : 'hidden' }}
-            >
-              <div
-                className="absolute flex items-start select-none left-1/2 -translate-x-1/2 whitespace-nowrap"
-                style={{
-                  top: 'clamp(55px, calc(80 / 1440 * 100vw), 90px)',
-                  columnGap: 'clamp(14px, calc(33 / 1440 * 100vw), 33px)',
-                }}
-              >
-                <span
-                  className="font-['Plus_Jakarta_Sans',sans-serif] font-extrabold text-[#3F3F3F] leading-none tracking-normal"
-                  style={{
-                    fontSize: 'clamp(44px, 8vw, 124px)',
-                    lineHeight: '100%',
-                  }}
-                >
-                  Stand
-                </span>
-                <span
-                  className="font-['Plus_Jakarta_Sans',sans-serif] font-extrabold text-[#3F3F3F] leading-none tracking-normal"
-                  style={{
-                    fontSize: 'clamp(44px, 8vw, 124px)',
-                    lineHeight: '100%',
-                    marginTop: 'clamp(12px, calc(28 / 1440 * 100vw), 28px)',
-                  }}
-                >
-                  Apart
-                </span>
-              </div>
-            </div>
-
-            {/* Stage 2: "Startup" & "Unlocked" */}
-            <div
-              className="absolute inset-0 w-full h-full transition-opacity duration-200 ease-out will-change-[opacity]"
-              style={{ opacity: textOpacity2, visibility: textOpacity2 > 0.01 ? 'visible' : 'hidden' }}
-            >
-              <div
-                className="absolute flex items-start select-none left-1/2 -translate-x-1/2 whitespace-nowrap"
-                style={{
-                  top: 'clamp(55px, calc(80 / 1440 * 100vw), 90px)',
-                  columnGap: 'clamp(14px, calc(33 / 1440 * 100vw), 33px)',
-                }}
-              >
-                <span
-                  className="font-['Plus_Jakarta_Sans',sans-serif] font-extrabold text-[#3F3F3F] leading-none tracking-normal"
-                  style={{
-                    fontSize: 'clamp(44px, 8vw, 124px)',
-                    lineHeight: '100%',
-                  }}
-                >
-                  Startup
-                </span>
-                <span
-                  className="font-['Plus_Jakarta_Sans',sans-serif] font-extrabold text-[#3F3F3F] leading-none tracking-normal"
-                  style={{
-                    fontSize: 'clamp(44px, 8vw, 124px)',
-                    lineHeight: '100%',
-                    marginTop: 'clamp(12px, calc(28 / 1440 * 100vw), 28px)',
-                  }}
-                >
-                  Unlocked
-                </span>
-              </div>
-            </div>
-
-            {/* Stage 2 Buttons & Quote positioned cleanly in open sky (no overlap with subject) */}
-            <div
-              className="absolute inset-0 w-full h-full pointer-events-none transition-opacity duration-200 ease-out"
-              style={{ opacity: textOpacity2, visibility: textOpacity2 > 0.01 ? 'visible' : 'hidden' }}
-            >
-              {/* Left Button: Apply for Benefits ↗ (Figma: Left 287.43px, 155.16x36, r:6px, p:8px 12px, rot:2deg, #111827) */}
-              <div
-                className="absolute pointer-events-auto"
-                style={{
-                  left: 'calc(287 / 1440 * 100%)',
-                  top: 'clamp(320px, 46vh, 430px)',
-                }}
-              >
-                <button
-                  onClick={scrollToApply}
-                  className="h-[36px] px-[12px] py-[8px] rounded-[6px] bg-[#111827] hover:bg-black text-white text-[13.5px] font-medium inline-flex items-center gap-1.5 shadow-md border-0 cursor-pointer"
-                >
-                  <span>Apply for Benefits</span>
-                  <ArrowUpRight className="w-3.5 h-3.5 text-neutral-300" />
-                </button>
-              </div>
-
-              {/* Right Button: Explore Benefits (aligned above quote paragraph) */}
-              <div
-                className="absolute pointer-events-auto"
-                style={{
-                  left: 'calc(989 / 1440 * 100%)',
-                  bottom: 'clamp(130px, 24vh, 220px)',
-                }}
-              >
-                <button
-                  onClick={scrollToWhatIs}
-                  className="h-[38px] px-[12px] py-[8px] rounded-[6px] bg-white hover:bg-neutral-50 text-[#1E293B] border-0 text-[13.5px] font-medium inline-flex items-center justify-center shadow-[0_4px_16px_rgba(0,0,0,0.06)] cursor-pointer transition-colors"
-                >
-                  Explore Benefits
-                </button>
-              </div>
-
-              {/* Quote on right beside arm/chest */}
-              <div
-                className="absolute pointer-events-none"
-                style={{
-                  left: 'calc(989 / 1440 * 100%)',
-                  bottom: 'clamp(50px, 12vh, 1px)',
-                  maxWidth: '380px',
-                }}
-              >
-                <p className="text-[14px] sm:text-[15.5px] font-normal leading-relaxed text-[#232F3E]">
-                  “Give your startup the intelligence to understand your market, find the right customers, and build a smarter growth strategy”
-                </p>
-              </div>
-            </div>
-
-          </div>
-
-          {/* MOBILE HERO TEXT (< md) - Positioned in the open sky above the subject */}
-          <div
-            className="md:hidden absolute inset-x-0 z-20 px-4 text-center pointer-events-none"
-            style={{
-              top: 'clamp(76px, 12vh, 100px)',
-            }}
-          >
-            {/* Stage 0 */}
-            <div
-              className="transition-opacity duration-200 ease-out"
-              style={{ display: textOpacity0 > 0.01 ? 'block' : 'none', opacity: textOpacity0 }}
-            >
-              <div className="text-[36px] xs:text-[42px] sm:text-[48px] font-extrabold text-[#3F3F3F] leading-none tracking-tight font-['Plus_Jakarta_Sans',sans-serif]">
-                Among Many
-              </div>
-            </div>
-
-            {/* Stage 1 */}
-            <div
-              className="transition-opacity duration-200 ease-out"
-              style={{ display: textOpacity1 > 0.01 ? 'block' : 'none', opacity: textOpacity1 }}
-            >
-              <div className="text-[36px] xs:text-[42px] sm:text-[48px] font-extrabold text-[#3F3F3F] leading-none tracking-tight font-['Plus_Jakarta_Sans',sans-serif]">
-                Stand Apart
-              </div>
-            </div>
-
-            {/* Stage 2 */}
-            <div
-              className="transition-opacity duration-200 ease-out flex flex-col items-center"
-              style={{ display: textOpacity2 > 0.01 ? 'flex' : 'none', opacity: textOpacity2 }}
-            >
-              <div className="text-[32px] xs:text-[38px] sm:text-[44px] font-extrabold text-[#3F3F3F] leading-none tracking-tight font-['Plus_Jakarta_Sans',sans-serif]">
-                Startup Unlocked
-              </div>
-              <div className="mt-3.5 flex items-center justify-center gap-2.5 pointer-events-auto">
-                <button
-                  onClick={scrollToApply}
-                  className="h-[36px] inline-flex items-center justify-center gap-1.5 bg-[#111827] text-white text-[12.5px] font-medium px-3.5 py-1.5 rounded-[6px] shadow-md border-0 cursor-pointer active:scale-95 transition-transform"
-                >
-                  <span>Apply for Benefits</span>
-                  <ArrowUpRight className="w-3.5 h-3.5 text-neutral-300" />
-                </button>
-                <button
-                  onClick={scrollToWhatIs}
-                  className="h-[36px] inline-flex items-center justify-center bg-white text-[#1E293B] text-[12.5px] font-medium px-3.5 py-1.5 rounded-[6px] shadow-sm border-0 cursor-pointer active:scale-95 transition-transform"
-                >
-                  Explore Benefits
-                </button>
-              </div>
-            </div>
-          </div>
-
-          {/* MOBILE HERO QUOTE (< md) - Floating card at the bottom */}
-          <div
-            className="md:hidden absolute bottom-6 inset-x-4 z-20 pointer-events-none transition-opacity duration-200 ease-out"
-            style={{
-              opacity: textOpacity2,
-              visibility: textOpacity2 > 0.01 ? 'visible' : 'hidden',
-            }}
-          >
-            <div className="bg-white/85 backdrop-blur-md px-4 py-2.5 rounded-xl border border-white/60 shadow-lg max-w-sm mx-auto text-center">
-              <p className="text-[12px] sm:text-[13px] font-normal leading-relaxed text-[#232F3E]">
-                “Give your startup the intelligence to understand your market, find the right customers, and build a smarter growth strategy”
-              </p>
-            </div>
-          </div>
-
-        </div>
-      </section>
+      {/* 2. PINNED SCROLL HERO SECTION */}
+      <Hero
+        scrollToWhatIs={scrollToWhatIs}
+        scrollToApply={scrollToApply}
+      />
 
       {/* 3. SECTION 2: "What Is Coirei for Startups" */}
       <section
@@ -812,7 +442,7 @@ export const Startups: React.FC = () => {
                     <input
                       type="text"
                       required
-                      placeholder="Elena Vance"
+                      placeholder="Enter your full name"
                       value={applyForm.founderName}
                       onChange={(e) => setApplyForm({ ...applyForm, founderName: e.target.value })}
                       className="w-full bg-[#F9F9F9] rounded-[8px] px-3.5 py-3 text-[14px] text-[#0F172A] placeholder:text-neutral-400 border-0 focus:outline-none focus:ring-2 focus:ring-black/10 transition-all"
@@ -827,7 +457,7 @@ export const Startups: React.FC = () => {
                     <input
                       type="email"
                       required
-                      placeholder="elena@company.com"
+                      placeholder="Enter your work email"
                       value={applyForm.workEmail}
                       onChange={(e) => setApplyForm({ ...applyForm, workEmail: e.target.value })}
                       className="w-full bg-[#F9F9F9] rounded-[8px] px-3.5 py-3 text-[14px] text-[#0F172A] placeholder:text-neutral-400 border-0 focus:outline-none focus:ring-2 focus:ring-black/10 transition-all"
@@ -845,7 +475,7 @@ export const Startups: React.FC = () => {
                     <input
                       type="text"
                       required
-                      placeholder="Vance Intelligence Inc."
+                      placeholder="Enter your company name"
                       value={applyForm.companyName}
                       onChange={(e) => setApplyForm({ ...applyForm, companyName: e.target.value })}
                       className="w-full bg-[#F9F9F9] rounded-[8px] px-3.5 py-3 text-[14px] text-[#0F172A] placeholder:text-neutral-400 border-0 focus:outline-none focus:ring-2 focus:ring-black/10 transition-all"
@@ -860,7 +490,7 @@ export const Startups: React.FC = () => {
                     <input
                       type="url"
                       required
-                      placeholder="https://vanceintel.ai"
+                      placeholder="Enter your company website"
                       value={applyForm.companyWebsite}
                       onChange={(e) => setApplyForm({ ...applyForm, companyWebsite: e.target.value })}
                       className="w-full bg-[#F9F9F9] rounded-[8px] px-3.5 py-3 text-[14px] text-[#0F172A] placeholder:text-neutral-400 border-0 focus:outline-none focus:ring-2 focus:ring-black/10 transition-all"
@@ -872,19 +502,13 @@ export const Startups: React.FC = () => {
                     <label className="block text-[13px] font-semibold text-[#0F172A] mb-1.5">
                       Startup stage <span className="text-red-500">*</span>
                     </label>
-                    <select
+                    <CustomSelect
                       required
+                      placeholder="Select funding stage"
                       value={applyForm.startupStage}
-                      onChange={(e) => setApplyForm({ ...applyForm, startupStage: e.target.value })}
-                      className="w-full bg-[#F9F9F9] rounded-[8px] px-3.5 py-3 text-[14px] text-[#0F172A] border-0 focus:outline-none focus:ring-2 focus:ring-black/10 transition-all cursor-pointer"
-                    >
-                      <option value="" disabled>Select funding stage</option>
-                      <option value="Bootstrapped">Bootstrapped</option>
-                      <option value="Pre-Seed">Pre-Seed</option>
-                      <option value="Seed">Seed</option>
-                      <option value="Series A">Series A</option>
-                      <option value="Series B+">Series B+</option>
-                    </select>
+                      onChange={(val) => setApplyForm({ ...applyForm, startupStage: val })}
+                      options={STARTUP_STAGE_OPTIONS}
+                    />
                   </div>
 
                   {/* Industry */}
@@ -892,21 +516,13 @@ export const Startups: React.FC = () => {
                     <label className="block text-[13px] font-semibold text-[#0F172A] mb-1.5">
                       Industry <span className="text-red-500">*</span>
                     </label>
-                    <select
+                    <CustomSelect
                       required
+                      placeholder="Select sector"
                       value={applyForm.industry}
-                      onChange={(e) => setApplyForm({ ...applyForm, industry: e.target.value })}
-                      className="w-full bg-[#F9F9F9] rounded-[8px] px-3.5 py-3 text-[14px] text-[#0F172A] border-0 focus:outline-none focus:ring-2 focus:ring-black/10 transition-all cursor-pointer"
-                    >
-                      <option value="" disabled>Select sector</option>
-                      <option value="AI / Machine Learning">AI / Machine Learning</option>
-                      <option value="B2B SaaS">B2B SaaS</option>
-                      <option value="Fintech">Fintech</option>
-                      <option value="Developer Tools">Developer Tools</option>
-                      <option value="E-commerce">E-commerce</option>
-                      <option value="Healthcare">Healthcare</option>
-                      <option value="Other">Other</option>
-                    </select>
+                      onChange={(val) => setApplyForm({ ...applyForm, industry: val })}
+                      options={INDUSTRY_OPTIONS}
+                    />
                   </div>
 
                   {/* Team size */}
@@ -914,18 +530,13 @@ export const Startups: React.FC = () => {
                     <label className="block text-[13px] font-semibold text-[#0F172A] mb-1.5">
                       Team size <span className="text-red-500">*</span>
                     </label>
-                    <select
+                    <CustomSelect
                       required
+                      placeholder="Select team count"
                       value={applyForm.teamSize}
-                      onChange={(e) => setApplyForm({ ...applyForm, teamSize: e.target.value })}
-                      className="w-full bg-[#F9F9F9] rounded-[8px] px-3.5 py-3 text-[14px] text-[#0F172A] border-0 focus:outline-none focus:ring-2 focus:ring-black/10 transition-all cursor-pointer"
-                    >
-                      <option value="" disabled>Select team count</option>
-                      <option value="1-5">1 - 5</option>
-                      <option value="6-15">6 - 15</option>
-                      <option value="16-50">16 - 50</option>
-                      <option value="50+">50+</option>
-                    </select>
+                      onChange={(val) => setApplyForm({ ...applyForm, teamSize: val })}
+                      options={TEAM_SIZE_OPTIONS}
+                    />
                   </div>
 
                   {/* Primary growth challenge */}
@@ -933,19 +544,13 @@ export const Startups: React.FC = () => {
                     <label className="block text-[13px] font-semibold text-[#0F172A] mb-1.5">
                       Primary growth challenge <span className="text-red-500">*</span>
                     </label>
-                    <select
+                    <CustomSelect
                       required
+                      placeholder="Select key focus area"
                       value={applyForm.growthChallenge}
-                      onChange={(e) => setApplyForm({ ...applyForm, growthChallenge: e.target.value })}
-                      className="w-full bg-[#F9F9F9] rounded-[8px] px-3.5 py-3 text-[14px] text-[#0F172A] border-0 focus:outline-none focus:ring-2 focus:ring-black/10 transition-all cursor-pointer"
-                    >
-                      <option value="" disabled>Select key focus area</option>
-                      <option value="Finding ICP & Leads">Finding ICP & Leads</option>
-                      <option value="Competitor Tracking">Competitor Tracking</option>
-                      <option value="SEO & AEO Visibility">SEO & AEO Visibility</option>
-                      <option value="Market Demand Signals">Market Demand Signals</option>
-                      <option value="GTM Execution">GTM Execution</option>
-                    </select>
+                      onChange={(val) => setApplyForm({ ...applyForm, growthChallenge: val })}
+                      options={GROWTH_CHALLENGE_OPTIONS}
+                    />
                   </div>
                 </div>
 
@@ -1002,20 +607,41 @@ export const Startups: React.FC = () => {
               return (
                 <div
                   key={idx}
-                  className="bg-[#F9FAFB] hover:bg-neutral-100/70 rounded-xl border-0 overflow-hidden transition-colors"
+                  className={`rounded-xl border-0 overflow-hidden transition-all duration-300 ${
+                    isOpen
+                      ? 'bg-[#F9FAFB] shadow-xs'
+                      : 'bg-[#F9FAFB] hover:bg-neutral-100/80'
+                  }`}
                 >
                   <button
+                    type="button"
                     onClick={() => setOpenFaq(isOpen ? null : idx)}
-                    className="w-full py-4.5 px-6 text-left flex items-center justify-between font-semibold text-[15px] sm:text-[15.5px] text-[#0F172A] cursor-pointer border-0"
+                    className="w-full py-4.5 px-6 text-left flex items-center justify-between font-semibold text-[15px] sm:text-[15.5px] text-[#0F172A] cursor-pointer border-0 select-none"
                   >
                     <span>{item.question}</span>
-                    <ChevronDown className={`w-4 h-4 text-neutral-400 shrink-0 transition-transform duration-200 ${isOpen ? 'rotate-180' : ''}`} />
+                    <ChevronDown
+                      className={`w-4 h-4 text-neutral-400 shrink-0 transition-transform duration-300 ease-out ${
+                        isOpen ? 'rotate-180 text-[#0F172A]' : ''
+                      }`}
+                    />
                   </button>
-                  {isOpen && (
-                    <div className="px-6 pb-5 pt-1 text-sm text-neutral-600 leading-relaxed border-0">
-                      {item.answer}
+                  <div
+                    style={{
+                      display: 'grid',
+                      gridTemplateRows: isOpen ? '1fr' : '0fr',
+                      transition: 'grid-template-rows 320ms cubic-bezier(0.16, 1, 0.3, 1)',
+                    }}
+                  >
+                    <div className="overflow-hidden">
+                      <div
+                        className={`px-6 pb-5 pt-1 text-sm text-neutral-600 leading-relaxed border-0 transition-all duration-300 ease-out ${
+                          isOpen ? 'opacity-100 translate-y-0' : 'opacity-0 -translate-y-1'
+                        }`}
+                      >
+                        {item.answer}
+                      </div>
                     </div>
-                  )}
+                  </div>
                 </div>
               );
             })}

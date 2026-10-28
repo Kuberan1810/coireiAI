@@ -75,19 +75,34 @@ export const Navbar: React.FC = () => {
 
   const [isScrolled, setIsScrolled] = useState(false);
   const [isAtTop, setIsAtTop] = useState(true);
-  const [isStepsActive, setIsStepsActive] = useState(false);
   const [hideNavbar, setHideNavbar] = useState(false);
 
+  const isStartupInit = location.pathname.toLowerCase().includes('startup') || 
+                        location.pathname.toLowerCase().includes('coirei-for-startups');
+  const [inStartupHero, setInStartupHero] = useState(isStartupInit);
+  const inStartupHeroRef = useRef(isStartupInit);
   const isScrolledRef = useRef(false);
   const isAtTopRef = useRef(true);
-  const isStepsActiveRef = useRef(false);
   const hideNavbarRef = useRef(false);
-  const progressBarFillRef = useRef<HTMLDivElement>(null);
+  const lastScrollYRef = useRef(0);
+  const accumulatedDeltaRef = useRef(0);
+  const heroStepRef = useRef(0);
 
   // Close menus on route change
   useEffect(() => {
     setMobileMenuOpen(false);
     setDropdownOpen(false);
+    isScrolledRef.current = false;
+    setIsScrolled(false);
+    isAtTopRef.current = true;
+    setIsAtTop(true);
+    lastScrollYRef.current = 0;
+    accumulatedDeltaRef.current = 0;
+    heroStepRef.current = 0;
+    const isStartup = location.pathname.toLowerCase().includes('startup') || 
+                      location.pathname.toLowerCase().includes('coirei-for-startups');
+    inStartupHeroRef.current = isStartup;
+    setInStartupHero(isStartup);
   }, [location.pathname]);
 
   const handleMouseEnter = () => {
@@ -104,52 +119,69 @@ export const Navbar: React.FC = () => {
   };
 
   useEffect(() => {
+    const isStartup = location.pathname.toLowerCase().includes('startup') || 
+                      location.pathname.toLowerCase().includes('coirei-for-startups');
+
     let ticking = false;
     const updateNavbar = () => {
-      const scrollY = window.scrollY;
+      const scrollY = Math.max(0, window.scrollY);
+      const diff = scrollY - lastScrollYRef.current;
 
-      // Track if at the very top of the page
-      const atTop = scrollY <= 20;
+      // On Startups page, user is only at the top if scrollY <= 25 AND hero is on Step 0
+      const atTop = scrollY <= 25 && (!isStartup || heroStepRef.current === 0);
       if (atTop !== isAtTopRef.current) {
         isAtTopRef.current = atTop;
         setIsAtTop(atTop);
       }
 
       // Track floating pill state on scroll:
-      // At the very top (scrollY <= 25) -> full width
-      // Scrolled down (scrollY > 40) -> floating pill animation
-      let nextScrolled = scrollY > 40;
-      if (nextScrolled !== isScrolledRef.current) {
-        isScrolledRef.current = nextScrolled;
-        setIsScrolled(nextScrolled);
-      }
-
-      // Steps section scroll progress tracking (Home page only)
-      if (isHomePage) {
-        const stepsSection = document.getElementById('steps-section');
-        if (stepsSection) {
-          const rect = stepsSection.getBoundingClientRect();
-          const windowHeight = window.innerHeight;
-          const totalScrollable = rect.height - windowHeight;
-
-          const inSteps = rect.top <= 80 && rect.bottom > 80;
-          if (inSteps !== isStepsActiveRef.current) {
-            isStepsActiveRef.current = inSteps;
-            setIsStepsActive(inSteps);
-          }
-
-          if (inSteps && progressBarFillRef.current && totalScrollable > 0) {
-            const progress = Math.min(Math.max(-rect.top / totalScrollable, 0), 1);
-            progressBarFillRef.current.style.transform = `scaleX(${progress})`;
-          }
-        } else if (isStepsActiveRef.current) {
-          isStepsActiveRef.current = false;
-          setIsStepsActive(false);
+      // At the very top -> always expand (full width)
+      if (atTop) {
+        accumulatedDeltaRef.current = 0;
+        if (isScrolledRef.current) {
+          isScrolledRef.current = false;
+          setIsScrolled(false);
         }
-      } else if (isStepsActiveRef.current) {
-        isStepsActiveRef.current = false;
-        setIsStepsActive(false);
+      } else {
+        // Scrolled down in the page:
+        // Scroll DOWN -> shrink to small pill (isScrolled = true)
+        // Scroll UP -> expand to full navbar with links (isScrolled = false)
+        if (diff > 0) {
+          if (accumulatedDeltaRef.current < 0) {
+            accumulatedDeltaRef.current = 0;
+          }
+          accumulatedDeltaRef.current += diff;
+
+          if (accumulatedDeltaRef.current > 12 && (scrollY > 50 || isStartup)) {
+            if (!isScrolledRef.current) {
+              isScrolledRef.current = true;
+              setIsScrolled(true);
+            }
+          }
+        } else if (diff < 0) {
+          if (accumulatedDeltaRef.current > 0) {
+            accumulatedDeltaRef.current = 0;
+          }
+          accumulatedDeltaRef.current += diff;
+
+          if (accumulatedDeltaRef.current < -12) {
+            if (isScrolledRef.current) {
+              isScrolledRef.current = false;
+              setIsScrolled(false);
+            }
+          }
+        }
       }
+
+      if (isStartup) {
+        const inHero = heroStepRef.current <= 2 && scrollY < 120;
+        if (inHero !== inStartupHeroRef.current) {
+          inStartupHeroRef.current = inHero;
+          setInStartupHero(inHero);
+        }
+      }
+
+      lastScrollYRef.current = scrollY;
 
       // Hide navbar ONLY when the user is viewing a fixed black parallax section
       let nextHide = false;
@@ -195,12 +227,45 @@ export const Navbar: React.FC = () => {
       }
     };
 
+    // Listen to Startups hero step transitions
+    const handleHeroStepChange = (e: Event) => {
+      const customEvent = e as CustomEvent<{ step: number; direction: 'up' | 'down' }>;
+      if (!customEvent.detail) return;
+      const { step, direction } = customEvent.detail;
+      heroStepRef.current = step;
+
+      const inHero = step <= 2;
+      if (inHero !== inStartupHeroRef.current) {
+        inStartupHeroRef.current = inHero;
+        setInStartupHero(inHero);
+      }
+
+      if (step === 0) {
+        isAtTopRef.current = true;
+        setIsAtTop(true);
+        isScrolledRef.current = false;
+        setIsScrolled(false);
+      } else {
+        isAtTopRef.current = false;
+        setIsAtTop(false);
+        if (direction === 'down') {
+          isScrolledRef.current = true;
+          setIsScrolled(true);
+        } else if (direction === 'up') {
+          isScrolledRef.current = false;
+          setIsScrolled(false);
+        }
+      }
+    };
+
     updateNavbar();
     window.addEventListener('scroll', handleScroll, { passive: true });
     window.addEventListener('resize', handleScroll, { passive: true });
+    window.addEventListener('hero-step-change', handleHeroStepChange);
     return () => {
       window.removeEventListener('scroll', handleScroll);
       window.removeEventListener('resize', handleScroll);
+      window.removeEventListener('hero-step-change', handleHeroStepChange);
     };
   }, [isHomePage, location.pathname]);
 
@@ -220,49 +285,60 @@ export const Navbar: React.FC = () => {
           }`}
         style={{
           backgroundColor: isScrolled
-            ? 'rgba(255, 255, 255, 0.38)'
+            ? isStartupPage && inStartupHero
+              ? 'rgba(255, 255, 255, 0.22)'
+              : 'rgba(255, 255, 255, 0.88)'
             : mobileMenuOpen
               ? '#ffffff'
-              : isStartupPage
-                ? 'transparent'
-                : isAtTop
-                  ? '#ffffff'
+              : isAtTop
+                ? isStartupPage
+                  ? 'transparent'
+                  : '#ffffff'
+                : isStartupPage && inStartupHero
+                  ? 'transparent'
                   : 'rgba(255, 255, 255, 0.95)',
           backdropFilter: isScrolled
-            ? 'blur(12px) saturate(160%)'
-            : isStartupPage || isAtTop
+            ? isStartupPage && inStartupHero
+              ? 'blur(16px) saturate(140%)'
+              : 'blur(12px) saturate(160%)'
+            : isStartupPage && inStartupHero
               ? 'none'
-              : 'blur(12px)',
+              : isAtTop
+                ? 'none'
+                : 'blur(12px)',
           WebkitBackdropFilter: isScrolled
-            ? 'blur(12px) saturate(160%)'
-            : isStartupPage || isAtTop
+            ? isStartupPage && inStartupHero
+              ? 'blur(16px) saturate(140%)'
+              : 'blur(12px) saturate(160%)'
+            : isStartupPage && inStartupHero
               ? 'none'
-              : 'blur(12px)',
+              : isAtTop
+                ? 'none'
+                : 'blur(12px)',
           boxShadow: isScrolled
-            ? '0 12px 32px -4px rgba(0, 0, 0, 0.08), 0 4px 12px -2px rgba(0, 0, 0, 0.04), inset 0 1px 1px 0 rgba(255, 255, 255, 0.7)'
+            ? isStartupPage && inStartupHero
+              ? '0 8px 24px -4px rgba(0, 0, 0, 0.05), inset 0 1px 1px 0 rgba(255, 255, 255, 0.4)'
+              : '0 12px 32px -4px rgba(0, 0, 0, 0.08), 0 4px 12px -2px rgba(0, 0, 0, 0.04), inset 0 1px 1px 0 rgba(255, 255, 255, 0.7)'
             : mobileMenuOpen
               ? '0 4px 12px -2px rgba(0, 0, 0, 0.06)'
-              : isStartupPage || isAtTop
+              : isStartupPage && inStartupHero
                 ? 'none'
-                : '0 1px 3px 0 rgba(0, 0, 0, 0.04)',
+                : isAtTop
+                  ? 'none'
+                  : '0 4px 20px -2px rgba(0, 0, 0, 0.06)',
           borderColor: isScrolled
-            ? 'rgba(255, 255, 255, 0.6)'
-            : isStartupPage || isAtTop
+            ? isStartupPage && inStartupHero
+              ? 'rgba(255, 255, 255, 0.35)'
+              : 'rgba(255, 255, 255, 0.6)'
+            : isStartupPage && inStartupHero
               ? 'transparent'
-              : 'rgba(241, 245, 249, 0.9)',
+              : isAtTop
+                ? 'transparent'
+                : 'rgba(241, 245, 249, 0.9)',
         }}
       >
         {/* Scroll Progress Bar: Very thin (2px), active only when inside Steps section */}
-        <div
-          className={`absolute top-0 inset-x-5 h-[2px] rounded-full overflow-hidden pointer-events-none transition-opacity duration-300 ${isStepsActive ? 'opacity-100 bg-neutral-200/50' : 'opacity-0'
-            }`}
-        >
-          <div
-            ref={progressBarFillRef}
-            className="h-full bg-black origin-left w-full will-change-transform"
-            style={{ transform: 'scaleX(0)' }}
-          />
-        </div>
+        
 
         {/* Navbar Inner Content */}
         <div

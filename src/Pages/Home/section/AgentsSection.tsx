@@ -196,10 +196,11 @@ const AGENTS: AgentData[] = [
 export const AgentsSection: React.FC = () => {
   const [currentIndex, setCurrentIndex] = useState(0);
   const [isPaused, setIsPaused] = useState(false);
-  const [isVisible, setIsVisible] = useState(false);
+  const [isVisible, setIsVisible] = useState(true);
   const [animateProgress, setAnimateProgress] = useState(false);
   const touchStartXRef = useRef<number | null>(null);
   const sectionRef = useRef<HTMLElement>(null);
+  const pauseTimeoutRef = useRef<ReturnType<typeof setTimeout> | null>(null);
 
   // Trigger animation only when section reaches the viewport
   useEffect(() => {
@@ -208,29 +209,39 @@ export const AgentsSection: React.FC = () => {
 
     const observer = new IntersectionObserver(
       ([entry]) => {
-        if (entry.isIntersecting) {
-          setIsVisible(true);
-        } else {
-          setIsVisible(false);
-        }
+        setIsVisible(entry.isIntersecting);
       },
-      { threshold: 0.2 }
+      { threshold: 0.05, rootMargin: '100px 0px' }
     );
 
     observer.observe(el);
     return () => observer.disconnect();
   }, []);
 
-  // Auto-advance carousel smoothly every 4.2 seconds only when section is in view
+  // Auto-advance carousel smoothly every 3.5 seconds
   useEffect(() => {
     if (!isVisible || isPaused) return;
 
     const timer = setInterval(() => {
       setCurrentIndex((prev) => (prev + 1) % AGENTS.length);
-    }, 4200);
+    }, 3500);
 
     return () => clearInterval(timer);
-  }, [isVisible, isPaused]);
+  }, [isVisible, isPaused, currentIndex]);
+
+  // Handle temporary hover pause that automatically resumes after 2.5s
+  const handleMouseEnter = () => {
+    setIsPaused(true);
+    if (pauseTimeoutRef.current) clearTimeout(pauseTimeoutRef.current);
+    pauseTimeoutRef.current = setTimeout(() => {
+      setIsPaused(false);
+    }, 2500);
+  };
+
+  const handleMouseLeave = () => {
+    if (pauseTimeoutRef.current) clearTimeout(pauseTimeoutRef.current);
+    setIsPaused(false);
+  };
 
   // Trigger fluid progress bar animation whenever index changes or section becomes visible
   useEffect(() => {
@@ -373,8 +384,8 @@ export const AgentsSection: React.FC = () => {
         {/* Carousel Container */}
         <div
           className="relative mt-8 sm:mt-12 md:mt-16 w-full flex flex-col items-center justify-center"
-          onMouseEnter={() => setIsPaused(true)}
-          onMouseLeave={() => setIsPaused(false)}
+          onMouseEnter={handleMouseEnter}
+          onMouseLeave={handleMouseLeave}
           onTouchStart={handleTouchStart}
           onTouchEnd={handleTouchEnd}
         >
@@ -404,8 +415,8 @@ export const AgentsSection: React.FC = () => {
                   >
                     <div className="grid grid-cols-1 md:grid-cols-12 gap-3 sm:gap-6 md:gap-8 lg:gap-10 items-stretch h-full">
 
-                      {/* Left Column: Fixed height slot for all visual types */}
-                      <div className="md:col-span-7 flex flex-col justify-center h-[260px] sm:h-[280px] md:h-full shrink-0 overflow-hidden">
+                      {/* Left Column: Fixed uniform height slot for all visual types */}
+                      <div className="md:col-span-7 flex flex-col justify-center h-[260px] sm:h-[300px] md:h-[369px] shrink-0 overflow-hidden">
                         {agent.id === 'engage' ? (
                           <div className="w-full h-full flex items-center justify-center overflow-hidden">
                             <EngageAgentVisual />

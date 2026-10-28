@@ -65,127 +65,135 @@ export const MarketingAgentVisual: React.FC<MarketingAgentVisualProps> = ({
 
   return (
     <div
-      className={`w-full max-w-[394px] bg-white rounded-[24px] border border-[#E2E8F0]/80 p-4 sm:p-5 flex flex-col gap-3.5 select-none transition-all duration-300 ${className}`}
-      style={{
-        boxShadow: '0 4px 20px -2px rgba(0, 0, 0, 0.05), 0 2px 6px -1px rgba(0, 0, 0, 0.02)',
-      }}
+      className={`w-full h-full bg-white rounded-2xl border border-slate-200/80 shadow-xs flex flex-col overflow-hidden select-none text-left transition-all duration-300 ${className}`}
     >
-      {/* Top Header */}
-      <div className="flex items-center justify-between px-0.5">
-        <div className="flex items-center gap-3">
-          {/* Megaphone Icon Badge */}
-          <div className="w-10 h-10 rounded-[12px] bg-[#EB6658]/10 flex items-center justify-center shrink-0">
-            <Megaphone className="w-5 h-5 text-[#EB6658]" />
+      {/* Top Bar Header matching CompetitorAgentTable */}
+      <div className="flex items-center gap-2 px-3.5 py-2.5 bg-white border-b border-slate-100 shrink-0">
+        <Sparkles className="w-3.5 h-3.5 text-[#EB6658] shrink-0" />
+        <span className="text-[12px] font-semibold text-slate-800 tracking-tight">
+          launch targeted ad campaigns
+        </span>
+      </div>
+
+      {/* Main Content Body */}
+      <div className="flex-1 min-h-0 p-3 sm:p-4 md:p-4.5 flex flex-col justify-between gap-2 sm:gap-3 overflow-hidden">
+        {/* Top Agent Sub-Header */}
+        <div className="flex items-center justify-between px-0.5">
+          <div className="flex items-center gap-2.5 sm:gap-3">
+            {/* Megaphone Icon Badge */}
+            <div className="w-8 h-8 sm:w-9 sm:h-9 md:w-10 md:h-10 rounded-[10px] sm:rounded-[12px] bg-[#EB6658]/10 flex items-center justify-center shrink-0">
+              <Megaphone className="w-4 h-4 sm:w-5 sm:h-5 text-[#EB6658]" />
+            </div>
+
+            {/* Titles */}
+            <div className="flex flex-col">
+              <h4 className="text-[13.5px] sm:text-[15px] font-semibold text-[#0F172A] tracking-tight leading-snug">
+                Marketing Agent
+              </h4>
+              <p className="text-[11px] sm:text-[12px] text-[#64748B] font-normal leading-tight mt-0.5 line-clamp-1">
+                Turning market signals into campaigns
+              </p>
+            </div>
           </div>
 
-          {/* Titles */}
-          <div className="flex flex-col">
-            <h4 className="text-[15px] font-semibold text-[#0F172A] tracking-tight leading-snug">
-              Marketing Agent
-            </h4>
-            <p className="text-[12px] text-[#64748B] font-normal leading-tight mt-0.5">
-              Turning market signals into campaigns
-            </p>
-          </div>
+          {/* More Options */}
+          <button
+            type="button"
+            aria-label="More options"
+            className="text-[#94A3B8] hover:text-[#475569] p-1 rounded-md transition-colors"
+          >
+            <MoreHorizontal className="w-4.5 h-4.5 sm:w-5 sm:h-5" />
+          </button>
         </div>
 
-        {/* More Options */}
-        <button
-          type="button"
-          aria-label="More options"
-          className="text-[#94A3B8] hover:text-[#475569] p-1 rounded-md transition-colors"
+        {/* Card 1: Q4 Product Launch */}
+        <div
+          className="w-full rounded-[12px] sm:rounded-[14px] bg-white border border-[#E2E8F0]/90 p-2.5 sm:pt-[11px] sm:pr-[14px] sm:pb-[10px] sm:pl-[14px] flex flex-col gap-2 sm:gap-[12px] transition-all hover:border-[#CBD5E1]"
         >
-          <MoreHorizontal className="w-5 h-5" />
-        </button>
-      </div>
-
-      {/* Card 1: Q4 Product Launch (Figma: Fill 362px, Hug 105.25px, Radius 14px, Border 1px #E2E8F0 90%, Padding: 11px 14px 10px 14px, Gap: 12px) */}
-      <div
-        className="w-full rounded-[14px] bg-white border border-[#E2E8F0]/90 pt-[11px] pr-[14px] pb-[10px] pl-[14px] flex flex-col gap-[12px] transition-all hover:border-[#CBD5E1]"
-      >
-        {/* Campaign Header */}
-        <div className="flex items-center justify-between leading-none">
-          <span className="text-[13px] font-semibold text-[#0F172A] tracking-tight">
-            Q4 Product Launch
-          </span>
-          <span className="text-[12px] text-[#64748B] font-normal tabular-nums">
-            {currentCompletion}% complete
-          </span>
-        </div>
-
-        {/* Progress Bar Track (Figma: 239.04 x 5, Radius 9999px, #063CB1) */}
-        <div className="w-full h-[5px] bg-[#E2E8F0] rounded-full overflow-hidden">
-          <div
-            className="h-full bg-[#063CB1] rounded-full transition-[width] duration-75 ease-out will-change-[width]"
-            style={{ width: `${currentBarWidth}%` }}
-          />
-        </div>
-
-        {/* Metrics Grid (Reach, Engagement, Leads) */}
-        <div className="grid grid-cols-3 gap-1.5 sm:gap-2 pt-0.5">
-          {/* Reach */}
-          <div className="flex flex-col">
-            <span className="text-[9.5px] sm:text-[11px] text-[#94A3B8] font-normal leading-none mb-1">
-              Reach
+          {/* Campaign Header */}
+          <div className="flex items-center justify-between leading-none">
+            <span className="text-[12px] sm:text-[13px] font-semibold text-[#0F172A] tracking-tight">
+              Q4 Product Launch
             </span>
-            <div className="flex items-baseline flex-wrap sm:flex-nowrap">
-              <span className="text-[11.5px] sm:text-[14.5px] font-semibold text-[#0F172A] leading-tight tabular-nums">
-                {currentReachVal}K
-              </span>
-              <span className="text-[9px] sm:text-[11px] text-[#10B981] font-semibold ml-0.5 sm:ml-1 leading-tight inline-flex items-center tabular-nums">
-                ↑{currentReachGain}%
-              </span>
-            </div>
+            <span className="text-[11px] sm:text-[12px] text-[#64748B] font-normal tabular-nums">
+              {currentCompletion}% complete
+            </span>
           </div>
 
-          {/* Engagement */}
-          <div className="flex flex-col">
-            <span className="text-[9.5px] sm:text-[11px] text-[#94A3B8] font-normal leading-none mb-1">
-              Engagement
-            </span>
-            <div className="flex items-baseline flex-wrap sm:flex-nowrap">
-              <span className="text-[11.5px] sm:text-[14.5px] font-semibold text-[#0F172A] leading-tight tabular-nums">
-                {currentEngagementVal}%
-              </span>
-              <span className="text-[9px] sm:text-[11px] text-[#10B981] font-semibold ml-0.5 sm:ml-1 leading-tight inline-flex items-center tabular-nums">
-                ↑{currentEngagementGain}%
-              </span>
-            </div>
+          {/* Progress Bar Track */}
+          <div className="w-full h-[5px] bg-[#E2E8F0] rounded-full overflow-hidden">
+            <div
+              className="h-full bg-[#063CB1] rounded-full transition-[width] duration-75 ease-out will-change-[width]"
+              style={{ width: `${currentBarWidth}%` }}
+            />
           </div>
 
-          {/* Leads */}
-          <div className="flex flex-col">
-            <span className="text-[9.5px] sm:text-[11px] text-[#94A3B8] font-normal leading-none mb-1">
-              Leads
-            </span>
-            <div className="flex items-baseline flex-wrap sm:flex-nowrap">
-              <span className="text-[11.5px] sm:text-[14.5px] font-semibold text-[#0F172A] leading-tight tabular-nums">
-                {currentLeadsVal}
+          {/* Metrics Grid (Reach, Engagement, Leads) */}
+          <div className="grid grid-cols-3 gap-1.5 sm:gap-2 pt-0.5">
+            {/* Reach */}
+            <div className="flex flex-col">
+              <span className="text-[9.5px] sm:text-[11px] text-[#94A3B8] font-normal leading-none mb-0.5 sm:mb-1">
+                Reach
               </span>
-              <span className="text-[9px] sm:text-[11px] text-[#10B981] font-semibold ml-0.5 sm:ml-1 leading-tight inline-flex items-center tabular-nums">
-                ↑{currentLeadsGain}%
+              <div className="flex items-baseline flex-wrap sm:flex-nowrap">
+                <span className="text-[11px] sm:text-[13.5px] md:text-[14.5px] font-semibold text-[#0F172A] leading-tight tabular-nums">
+                  {currentReachVal}K
+                </span>
+                <span className="text-[8.5px] sm:text-[10px] md:text-[11px] text-[#10B981] font-semibold ml-0.5 sm:ml-1 leading-tight inline-flex items-center tabular-nums">
+                  ↑{currentReachGain}%
+                </span>
+              </div>
+            </div>
+
+            {/* Engagement */}
+            <div className="flex flex-col">
+              <span className="text-[9.5px] sm:text-[11px] text-[#94A3B8] font-normal leading-none mb-0.5 sm:mb-1">
+                Engagement
               </span>
+              <div className="flex items-baseline flex-wrap sm:flex-nowrap">
+                <span className="text-[11px] sm:text-[13.5px] md:text-[14.5px] font-semibold text-[#0F172A] leading-tight tabular-nums">
+                  {currentEngagementVal}%
+                </span>
+                <span className="text-[8.5px] sm:text-[10px] md:text-[11px] text-[#10B981] font-semibold ml-0.5 sm:ml-1 leading-tight inline-flex items-center tabular-nums">
+                  ↑{currentEngagementGain}%
+                </span>
+              </div>
+            </div>
+
+            {/* Leads */}
+            <div className="flex flex-col">
+              <span className="text-[9.5px] sm:text-[11px] text-[#94A3B8] font-normal leading-none mb-0.5 sm:mb-1">
+                Leads
+              </span>
+              <div className="flex items-baseline flex-wrap sm:flex-nowrap">
+                <span className="text-[11px] sm:text-[13.5px] md:text-[14.5px] font-semibold text-[#0F172A] leading-tight tabular-nums">
+                  {currentLeadsVal}
+                </span>
+                <span className="text-[8.5px] sm:text-[10px] md:text-[11px] text-[#10B981] font-semibold ml-0.5 sm:ml-1 leading-tight inline-flex items-center tabular-nums">
+                  ↑{currentLeadsGain}%
+                </span>
+              </div>
             </div>
           </div>
         </div>
-      </div>
 
-      {/* Card 2: AI Recommendation (Hidden on mobile) */}
-      <div
-        className="hidden sm:flex w-full rounded-[14px] bg-[#EB6658]/[0.04] border border-[#EB6658]/25 pt-[10px] pr-[14px] pb-[10px] pl-[14px] flex-col gap-[12px] transition-all hover:border-[#EB6658]/45"
-      >
-        {/* Recommendation Header */}
-        <div className="flex items-center gap-1.5 leading-none">
-          <Sparkles className="w-3.5 h-3.5 text-[#EB6658]" />
-          <span className="text-[12.5px] font-semibold text-[#EB6658] tracking-tight">
-            AI Recommendation
-          </span>
+        {/* Card 2: AI Recommendation */}
+        <div
+          className="flex w-full rounded-[12px] sm:rounded-[14px] bg-[#EB6658]/[0.04] border border-[#EB6658]/25 p-2.5 sm:pt-[10px] sm:pr-[14px] sm:pb-[10px] sm:pl-[14px] flex-col gap-1.5 sm:gap-[10px] transition-all hover:border-[#EB6658]/45"
+        >
+          {/* Recommendation Header */}
+          <div className="flex items-center gap-1.5 leading-none">
+            <Sparkles className="w-3 sm:w-3.5 h-3 sm:h-3.5 text-[#EB6658]" />
+            <span className="text-[11.5px] sm:text-[12.5px] font-semibold text-[#EB6658] tracking-tight">
+              AI Recommendation
+            </span>
+          </div>
+
+          {/* Recommendation Body */}
+          <p className="text-[11px] sm:text-[12.5px] text-[#334155] leading-[1.35] sm:leading-[1.45] font-normal">
+            LinkedIn engagement is 23% higher for your target audience. Increase campaign focus on LinkedIn.
+          </p>
         </div>
-
-        {/* Recommendation Body */}
-        <p className="text-[12.5px] text-[#334155] leading-[1.45] font-normal">
-          LinkedIn ment is 23% higher for your target audience. Increase campaign focus on LinkedIn.
-        </p>
       </div>
     </div>
   );

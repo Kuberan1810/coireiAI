@@ -1,7 +1,15 @@
 import React, { useEffect, useRef } from 'react';
-import { Mail, User } from 'lucide-react';
+import { Mail, User, Sparkles } from 'lucide-react';
 
-export const EngageAgentVisual: React.FC = () => {
+interface EngageAgentVisualProps {
+  className?: string;
+  showCardFrame?: boolean;
+}
+
+export const EngageAgentVisual: React.FC<EngageAgentVisualProps> = ({
+  className = '',
+  showCardFrame = true,
+}) => {
   const containerRef = useRef<HTMLDivElement>(null);
   const capsule1Ref = useRef<HTMLDivElement>(null);
   const capsule2Ref = useRef<HTMLDivElement>(null);
@@ -153,16 +161,10 @@ export const EngageAgentVisual: React.FC = () => {
     };
   }, []);
 
-  return (
+  const orbitStage = (
     <div
       ref={containerRef}
-      onMouseEnter={() => {
-        isPausedRef.current = true;
-      }}
-      onMouseLeave={() => {
-        isPausedRef.current = false;
-      }}
-      className="relative w-full h-[270px] sm:h-[320px] md:h-[365px] flex items-center justify-center overflow-hidden select-none"
+      className="relative flex-1 min-h-0 w-full overflow-hidden flex items-center justify-center select-none"
     >
       {/* Background SVG Orbital Geometry */}
       <svg
@@ -352,6 +354,44 @@ export const EngageAgentVisual: React.FC = () => {
           </div>
         </div>
       </div>
+    </div>
+  );
+
+  if (!showCardFrame) {
+    return (
+      <div
+        onMouseEnter={() => {
+          isPausedRef.current = true;
+        }}
+        onMouseLeave={() => {
+          isPausedRef.current = false;
+        }}
+        className={`relative w-full h-[270px] sm:h-[320px] md:h-[365px] flex items-center justify-center overflow-hidden select-none ${className}`}
+      >
+        {orbitStage}
+      </div>
+    );
+  }
+
+  return (
+    <div
+      onMouseEnter={() => {
+        isPausedRef.current = true;
+      }}
+      onMouseLeave={() => {
+        isPausedRef.current = false;
+      }}
+      className={`w-full h-full bg-white rounded-2xl border border-slate-200/80 shadow-xs flex flex-col overflow-hidden select-none text-left ${className}`}
+    >
+      {/* Top Bar Header matching CompetitorAgentTable */}
+      <div className="flex items-center gap-2 px-3.5 py-2.5 bg-white border-b border-slate-100 shrink-0 z-20">
+        <Sparkles className="w-3.5 h-3.5 text-[#EB6658] shrink-0" />
+        <span className="text-[12px] font-semibold text-slate-800 tracking-tight">
+          orchestrate personalized outreach
+        </span>
+      </div>
+
+      {orbitStage}
     </div>
   );
 };

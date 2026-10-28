@@ -1059,39 +1059,37 @@ const AudienceIntelligenceCard: React.FC = () => {
   );
 };
 
-// Card 5: Track Every Touchpoint. Measure Revenue Impact. (Parallel Animation: 0 to current height bar growth + stroke-dashoffset line drawing + live counter + exact Figma specs)
+// Card 5: Business Growth 128% Line Chart (Matching reference image with exact #DBAE5E golden curve, full-card graph, and top-left number overlay)
 const TouchpointStockChart: React.FC = () => {
   const linePathRef = useRef<SVGPathElement | null>(null);
   const waypointRef = useRef<SVGGElement | null>(null);
   const metricTextRef = useRef<HTMLDivElement | null>(null);
-  const barRefs = useRef<(SVGRectElement | null)[]>([]);
+  const clipRectRef = useRef<SVGRectElement | null>(null);
+  const badgeRef = useRef<HTMLDivElement | null>(null);
   const containerRef = useRef<HTMLDivElement | null>(null);
 
-  // Exact Figma Bar Specs (Rectangles 321-325 in 375x261 coordinate space):
-  const barTargets = [
-    { x: 22, w: 46, targetH: 65, rx: 10 },   // Rectangle 321 (Bar 1: low, y=196)
-    { x: 92, w: 46, targetH: 115, rx: 10 },  // Rectangle 322 (Bar 2: medium, y=146, peak at x=98)
-    { x: 162, w: 48, targetH: 155, rx: 10 }, // Rectangle 323 (Bar 3: tall, y=106)
-    { x: 232, w: 46, targetH: 85, rx: 10 },  // Rectangle 324 (Bar 4: low-medium, y=176, waypoint at x=245)
-    { x: 300, w: 46, targetH: 140, rx: 10 }, // Rectangle 325 (Bar 5: tall right, y=121)
-  ];
-
-  // Exact Vector 54 trajectory matching Figma:
-  const linePath = 'M 2,259 L 98,142 L 162,160 L 208,160 L 245,128 L 282,128 L 373,46';
-  const PATH_LEN = 1000;
+  // Exact full-card trajectory extracted from reference image (viewBox: 0 0 544 377):
+  // Starts at Jan (x=45, y=310) -> crests near early Feb (x=105, y=280) -> dips in Feb (x=135, y=287)
+  // -> rises to late Feb (x=185, y=260) -> wave plateau over Mar (x=215, y=258) -> rises (x=250, y=240)
+  // -> flat (x=275, y=239) -> shoulder into Apr (x=315, y=225.5) -> climbs into May (x=365, y=193.5)
+  // -> crests at May (x=405, y=176) -> dips past May (x=425, y=179.5) -> steep climb to Jun peak at 128% (x=466.5, y=147.5)
+  const linePath =
+    'M 45,310 C 65,300 85,285 105,280 C 118,277 125,286 135,287 C 155,289 170,268 185,260 C 196,254 204,258 215,258 C 230,258 238,244 250,240 C 258,237 266,239 275,239 C 290,239 302,230 315,225.5 C 335,219 350,202 365,193.5 C 382,184 394,175 405,176 C 413,177 418,180 425,179.5 C 440,178 452,160 466.5,147.5';
+  const areaPath =
+    'M 45,310 C 65,300 85,285 105,280 C 118,277 125,286 135,287 C 155,289 170,268 185,260 C 196,254 204,258 215,258 C 230,258 238,244 250,240 C 258,237 266,239 275,239 C 290,239 302,230 315,225.5 C 335,219 350,202 365,193.5 C 382,184 394,175 405,176 C 413,177 418,180 425,179.5 C 440,178 452,160 466.5,147.5 L 466.5,318 L 45,318 Z';
+  const PATH_LEN = 473;
 
   useEffect(() => {
     let active = true;
     let animId: number;
     let timeoutId: ReturnType<typeof setTimeout>;
 
-    // Ultra-smooth Cubic-Quartic Ease Out for line drawing and bar growth
     const easeOutQuart = (t: number) => 1 - Math.pow(1 - t, 3.5);
 
-    const runParallelGrowth = () => {
+    const runAnimation = () => {
       if (!active) return;
 
-      // 1. Reset all elements to 0
+      // Reset initial states
       if (containerRef.current) {
         containerRef.current.style.opacity = '1';
       }
@@ -1100,26 +1098,24 @@ const TouchpointStockChart: React.FC = () => {
         linePathRef.current.setAttribute('stroke-dashoffset', `${PATH_LEN}`);
         linePathRef.current.style.strokeDashoffset = `${PATH_LEN}`;
       }
+      if (clipRectRef.current) {
+        clipRectRef.current.setAttribute('width', '45');
+      }
       if (metricTextRef.current) {
-        metricTextRef.current.textContent = '+0.00%';
+        metricTextRef.current.textContent = '0%';
+      }
+      if (badgeRef.current) {
+        badgeRef.current.style.opacity = '0.4';
+        badgeRef.current.style.transform = 'translateY(4px)';
       }
       if (waypointRef.current) {
         waypointRef.current.style.opacity = '0';
-        waypointRef.current.style.transform = 'translate(245px, 128px) scale(0)';
       }
-      barTargets.forEach((_, i) => {
-        const barElem = barRefs.current[i];
-        if (barElem) {
-          barElem.setAttribute('y', '261');
-          barElem.setAttribute('height', '0');
-        }
-      });
 
-      // 2. Start parallel growth & line draw animation
       timeoutId = setTimeout(() => {
         if (!active) return;
 
-        const duration = 2300; // 2.3s for smooth line drawing & parallel bar growth
+        const duration = 2200; // 2.2s smooth reveal
         const startTime = performance.now();
 
         const animateFrame = (now: number) => {
@@ -1128,62 +1124,67 @@ const TouchpointStockChart: React.FC = () => {
           const rawProgress = Math.min(elapsed / duration, 1);
           const eased = easeOutQuart(rawProgress);
 
-          // A. Parallel Line Drawing Animation (smooth strokeDashoffset sweep from left to right)
+          // 1. Full Line draw animation
           const currentOffset = PATH_LEN * (1 - eased);
           if (linePathRef.current) {
             linePathRef.current.setAttribute('stroke-dashoffset', currentOffset.toFixed(2));
             linePathRef.current.style.strokeDashoffset = `${currentOffset.toFixed(2)}`;
           }
 
-          // B. Parallel 0 to Target Height Bar Growth
-          barTargets.forEach((bar, i) => {
-            const barElem = barRefs.current[i];
-            if (barElem) {
-              const currentH = eased * bar.targetH;
-              const currentY = 261 - currentH;
-              barElem.setAttribute('y', currentY.toFixed(2));
-              barElem.setAttribute('height', currentH.toFixed(2));
-            }
-          });
-
-          // C. Parallel Metric Count (+0.00% to +38.65%)
-          if (metricTextRef.current) {
-            const currentVal = (eased * 38.65).toFixed(2);
-            metricTextRef.current.textContent = `+${currentVal}%`;
+          // 2. Area clip revealing in parallel across the full card
+          const currentClipW = 45 + eased * (466.5 - 45 + 10);
+          if (clipRectRef.current) {
+            clipRectRef.current.setAttribute('width', currentClipW.toFixed(2));
           }
 
-          // D. Synchronized Waypoint Pop-in when line arrives at waypoint (245, 128) ~ 58% of line length
+          // 3. Counter 0% -> 128%
+          if (metricTextRef.current) {
+            const currentVal = Math.round(eased * 128);
+            metricTextRef.current.textContent = `${currentVal}%`;
+          }
+
+          // 4. Badge fade/slide in
+          if (badgeRef.current) {
+            const badgeT = Math.min(rawProgress / 0.4, 1);
+            badgeRef.current.style.opacity = `${0.4 + badgeT * 0.6}`;
+            badgeRef.current.style.transform = `translateY(${(1 - badgeT) * 4}px)`;
+          }
+
+          // 5. Waypoint dot pop-in when line arrives at Jun peak (eased >= 0.94)
           if (waypointRef.current) {
-            if (eased < 0.56) {
+            if (eased < 0.94) {
               waypointRef.current.style.opacity = '0';
-              waypointRef.current.style.transform = 'translate(245px, 128px) scale(0)';
             } else {
-              const dotT = Math.min((eased - 0.56) / 0.22, 1);
-              const dotScale = dotT === 1 ? 1 : Math.sin(dotT * Math.PI * 0.5) * 1.12;
+              const dotT = Math.min((eased - 0.94) / 0.06, 1);
               waypointRef.current.style.opacity = `${Math.min(dotT * 1.5, 1)}`;
-              waypointRef.current.style.transform = `translate(245px, 128px) scale(${dotScale.toFixed(2)})`;
             }
           }
 
           if (rawProgress < 1) {
             animId = requestAnimationFrame(animateFrame);
           } else {
-            // Reached 100%! Hold state for 4.0s
+            // Reached completion
             if (linePathRef.current) {
               linePathRef.current.setAttribute('stroke-dashoffset', '0');
               linePathRef.current.style.strokeDashoffset = '0';
             }
+            if (clipRectRef.current) {
+              clipRectRef.current.setAttribute('width', '544');
+            }
             if (metricTextRef.current) {
-              metricTextRef.current.textContent = '+38.65%';
+              metricTextRef.current.textContent = '128%';
+            }
+            if (badgeRef.current) {
+              badgeRef.current.style.opacity = '1';
+              badgeRef.current.style.transform = 'translateY(0px)';
             }
             if (waypointRef.current) {
               waypointRef.current.style.opacity = '1';
-              waypointRef.current.style.transform = 'translate(245px, 128px) scale(1)';
             }
 
+            // Hold for 4.2s, then loop smoothly
             timeoutId = setTimeout(() => {
               if (!active) return;
-              // Smooth fade-out before next loop
               if (containerRef.current) {
                 containerRef.current.style.transition = 'opacity 0.45s ease-out';
                 containerRef.current.style.opacity = '0';
@@ -1194,9 +1195,9 @@ const TouchpointStockChart: React.FC = () => {
                 if (containerRef.current) {
                   containerRef.current.style.transition = 'none';
                 }
-                runParallelGrowth();
+                runAnimation();
               }, 480);
-            }, 4000);
+            }, 4200);
           }
         };
 
@@ -1204,7 +1205,7 @@ const TouchpointStockChart: React.FC = () => {
       }, 250);
     };
 
-    runParallelGrowth();
+    runAnimation();
 
     return () => {
       active = false;
@@ -1214,126 +1215,198 @@ const TouchpointStockChart: React.FC = () => {
   }, []);
 
   return (
-    <div className="relative z-10 w-full flex items-center justify-center select-none pt-2 pb-1">
-      {/* Inner Card Box (Exact Figma Specs: 16px corner radius, 1px border #D9D9D9, clean static design) */}
-      <div className="relative w-full aspect-[375/320]  rounded-[16px] border border-[#D9D9D9] bg-white/95 backdrop-blur-xs overflow-hidden flex flex-col justify-between p-4 sm:p-5 shadow-[0_1px_6px_rgba(0,0,0,0.02)]">
-        {/* Parallel Dot Grid Background inside Card */}
-        <div
-          className="absolute inset-0 bg-[radial-gradient(#94A3B8_1.2px,transparent_1.2px)] [background-size:18px_18px] pointer-events-none opacity-45"
-          style={{ backgroundPosition: '4px 4px' }}
-        />
+    <div className="relative z-10 w-full h-full flex-1 flex flex-col items-center justify-center select-none pt-2 pb-1">
+      {/* Outer Card: exact full width and height with rounded corners */}
+      <div
+        ref={containerRef}
+        className="relative w-full h-full min-h-[380px] sm:min-h-[420px] rounded-[28px] border border-[#EBEBEF] bg-white overflow-hidden flex flex-col justify-between"
+      >
+        {/* Full-Card Graph Canvas spanning the entire card area behind/underneath the overlay */}
+        <svg
+          viewBox="0 0 544 377"
+          className="absolute inset-0 w-full h-full pointer-events-none"
+          preserveAspectRatio="none"
+        >
+          <defs>
+            {/* Soft warm golden peach area gradient with exact user color #DBAE5E */}
+            <linearGradient id="businessGrowthGrad" x1="0" y1="0" x2="0" y2="1">
+              <stop offset="0%" stopColor="#DBAE5E" stopOpacity="0.30" />
+              <stop offset="45%" stopColor="#DBAE5E" stopOpacity="0.16" />
+              <stop offset="85%" stopColor="#DBAE5E" stopOpacity="0.04" />
+              <stop offset="100%" stopColor="#FFFFFF" stopOpacity="0.0" />
+            </linearGradient>
 
-        {/* Top Content: "2025" tag and "+38.65%" stat in Plus Jakarta Sans */}
-        <div className="relative z-20 flex flex-col pointer-events-none">
-          <span
-            className="text-[13px] sm:text-[14px] font-bold text-[#1E293B] tracking-tight leading-none"
+            {/* Clip path for revealing area gradient synchronously with the full line */}
+            <clipPath id="businessGrowthClip">
+              <rect ref={clipRectRef} x="0" y="0" width="45" height="377" />
+            </clipPath>
+          </defs>
+
+          {/* Horizontal Gridlines spanning across to right side */}
+          {/* 150% Line (starts beside 128% text to avoid overlapping) */}
+          <line
+            x1="235"
+            y1="111"
+            x2="480"
+            y2="111"
+            stroke="#E5E7EB"
+            strokeWidth="1"
+            strokeDasharray="4 4"
+            opacity="0.85"
+          />
+          {/* 100% Line (starts beside pill badge to avoid overlapping) */}
+          <line
+            x1="235"
+            y1="180"
+            x2="480"
+            y2="180"
+            stroke="#E5E7EB"
+            strokeWidth="1"
+            strokeDasharray="4 4"
+            opacity="0.85"
+          />
+          {/* 50% Line across lower section */}
+          <line
+            x1="35"
+            y1="250"
+            x2="480"
+            y2="250"
+            stroke="#E5E7EB"
+            strokeWidth="1"
+            strokeDasharray="4 4"
+            opacity="0.85"
+          />
+          {/* 0% Baseline */}
+          <line
+            x1="35"
+            y1="318"
+            x2="480"
+            y2="318"
+            stroke="#F1F3F5"
+            strokeWidth="1.2"
+          />
+
+          {/* Y-Axis Percentage Labels on the right side */}
+          <g
+            className="text-[12px] font-medium"
+            fill="#9CA3AF"
             style={{ fontFamily: "'Plus Jakarta Sans', system-ui, sans-serif" }}
           >
-            2025
+            <text x="498" y="115" textAnchor="start">150%</text>
+            <text x="498" y="184" textAnchor="start">100%</text>
+            <text x="498" y="254" textAnchor="start">50%</text>
+            <text x="498" y="322" textAnchor="start">0%</text>
+          </g>
+
+          {/* Area Fill underneath the full curve */}
+          <g clipPath="url(#businessGrowthClip)">
+            <path d={areaPath} fill="url(#businessGrowthGrad)" />
+          </g>
+
+          {/* Thin, Sleek Climbing Golden Curve with exact color #DBAE5E */}
+          <path
+            ref={linePathRef}
+            d={linePath}
+            pathLength={PATH_LEN}
+            strokeDasharray={PATH_LEN}
+            strokeDashoffset={PATH_LEN}
+            fill="none"
+            stroke="#DBAE5E"
+            strokeWidth="2"
+            strokeLinecap="round"
+            strokeLinejoin="round"
+          />
+
+          {/* Waypoint Golden Ring at Jun peak (466.5, 147.5) matching user close-up image */}
+          <g
+            ref={waypointRef}
+            style={{
+              opacity: 0,
+              filter: 'drop-shadow(0px 2px 7px rgba(219, 174, 94, 0.5))',
+              transition: 'opacity 0.15s ease-out',
+            }}
+          >
+            {/* 1. Outer White Halo Ring */}
+            <circle
+              cx="466.5"
+              cy="147.5"
+              r="9.5"
+              fill="#FFFFFF"
+              stroke="#FFFFFF"
+              strokeWidth="1.2"
+            />
+            {/* 2. Main Golden Amber Ring */}
+            <circle
+              cx="466.5"
+              cy="147.5"
+              r="7.8"
+              fill="none"
+              stroke="#DBAE5E"
+              strokeWidth="3.2"
+            />
+            {/* 3. Pure White Center Hole */}
+            <circle
+              cx="466.5"
+              cy="147.5"
+              r="4.2"
+              fill="#FFFFFF"
+            />
+          </g>
+
+          {/* X-Axis Month Labels along the bottom */}
+          <g
+            className="text-[12.5px] font-medium"
+            fill="#9CA3AF"
+            style={{ fontFamily: "'Plus Jakarta Sans', system-ui, sans-serif" }}
+          >
+            <text x="48" y="356" textAnchor="middle">Jan</text>
+            <text x="129" y="356" textAnchor="middle">Feb</text>
+            <text x="211" y="356" textAnchor="middle">Mar</text>
+            <text x="294.5" y="356" textAnchor="middle">Apr</text>
+            <text x="378.5" y="356" textAnchor="middle">May</text>
+            <text x="466.5" y="356" textAnchor="middle">Jun</text>
+          </g>
+        </svg>
+
+        {/* Top-Left Metric Overlay exactly as in the reference image */}
+        <div className="absolute top-6 left-6 sm:top-7 sm:left-7 z-20 flex flex-col items-start pointer-events-none">
+          <span
+            className="text-[14px] sm:text-[15px] font-medium text-[#71717A] tracking-[-0.01em]"
+            style={{ fontFamily: "'Plus Jakarta Sans', system-ui, sans-serif" }}
+          >
+            Business Growth
           </span>
+
           <div
             ref={metricTextRef}
-            className="text-[34px] sm:text-[38px] md:text-[50px] font-bold text-[#FF6550] tracking-tight leading-none mt-2 sm:mt-2.5"
+            className="text-[52px] sm:text-[62px] font-bold text-[#18181B] tracking-[-0.03em] leading-none my-1"
             style={{
               fontFamily: "'Plus Jakarta Sans', system-ui, sans-serif",
               fontVariantNumeric: 'tabular-nums',
             }}
           >
-            +0.00%
+            128%
           </div>
-        </div>
 
-        {/* Chart SVG spanning bottom of the inner box */}
-        <div
-          ref={containerRef}
-          className="absolute inset-0 pointer-events-none overflow-hidden"
-        >
-          <svg
-            viewBox="0 0 375 261"
-            preserveAspectRatio="none"
-            className="absolute inset-0 w-full h-full overflow-hidden"
+          <span
+            className="text-[13px] sm:text-[14px] text-[#71717A] font-normal mb-3"
+            style={{ fontFamily: "'Plus Jakarta Sans', system-ui, sans-serif" }}
           >
-            <defs>
-              {/* Figma Vector 54 Stroke Linear Gradient: #707070 to #818181 */}
-              <linearGradient id="vector54Gradient" x1="0" y1="1" x2="1" y2="0">
-                <stop offset="0%" stopColor="#707070" />
-                <stop offset="100%" stopColor="#818181" />
-              </linearGradient>
+            Growth this quarter
+          </span>
 
-              {/* Figma Light Opacity Bar Linear Gradient */}
-              <linearGradient id="figmaBarGrad" x1="0" y1="0" x2="0" y2="1">
-                <stop offset="0%" stopColor="#E6ECF5" stopOpacity="0.75" />
-                <stop offset="100%" stopColor="#F1F5F9" stopOpacity="0.4" />
-              </linearGradient>
-
-              {/* Soft glow filter for waypoint dot */}
-              <filter id="figmaWaypointGlow" x="-50%" y="-50%" width="200%" height="200%">
-                <feDropShadow dx="0" dy="1.5" stdDeviation="2.5" floodColor="#FF6550" floodOpacity="0.35" />
-              </filter>
-            </defs>
-
-            {/* 5 Background Light Opacity Bars (Figma Rectangles 321-325) growing from 0 to target height */}
-            {barTargets.map((bar, i) => (
-              <rect
-                key={i}
-                ref={(el) => { barRefs.current[i] = el; }}
-                x={bar.x}
-                y="261"
-                width={bar.w}
-                height="0"
-                rx={bar.rx}
-                fill="url(#figmaBarGrad)"
-              />
-            ))}
-
-            {/* Figma Vector 54 Graph Line (Exact 11px border with #707070-#818181 linear gradient) with line draw animation */}
-            <path
-              ref={linePathRef}
-              d={linePath}
-              pathLength={PATH_LEN}
-              strokeDasharray={PATH_LEN}
-              strokeDashoffset={PATH_LEN}
-              fill="none"
-              stroke="url(#vector54Gradient)"
-              strokeWidth="11"
-              strokeLinecap="round"
-              strokeLinejoin="round"
-            />
-
-            {/* Waypoint Coral Ring Dot riding directly on top of Bar 4 at (245, 128) */}
-            <g
-              ref={waypointRef}
-              transform="translate(245, 128) scale(0)"
-              className="transition-all duration-150 origin-center"
-              style={{
-                transformOrigin: '245px 128px',
-                opacity: 0,
-                transform: 'translate(245px, 128px) scale(0)',
-              }}
-            >
-              {/* Outer Subtle Pulsing Wave */}
-              <circle
-                cx="0"
-                cy="0"
-                r="15"
-                fill="none"
-                stroke="#FF6550"
-                strokeWidth="2"
-                opacity={0.35}
-                className="animate-ping"
-              />
-              {/* Solid White Center with Coral Border */}
-              <circle
-                cx="0"
-                cy="0"
-                r="9.5"
-                fill="#FFFFFF"
-                stroke="#FF6550"
-                strokeWidth="5"
-                filter="url(#figmaWaypointGlow)"
-              />
-            </g>
-          </svg>
+          {/* Pill Badge: ↑ 28% vs last quarter */}
+          <div
+            ref={badgeRef}
+            className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-[12px] bg-[#ECFDF5] border border-[#D1FAE5] transition-all duration-300"
+          >
+            <span className="text-[13.5px] font-semibold text-[#16A34A] flex items-center gap-0.5">
+              <span className="text-[14px] leading-none">&uarr;</span> 28%
+            </span>
+            <span className="text-[13px] text-[#4B5563] font-normal">
+              vs last quarter
+            </span>
+          </div>
         </div>
       </div>
     </div>
@@ -2488,9 +2561,9 @@ export const Features: React.FC = () => {
             <AutomateAdsCard />
 
             {/* 5. Track Every Touchpoint. Measure Revenue Impact. */}
-            <div className="col-span-1 lg:col-span-5 xl:col-span-5 p-6 sm:p-8 flex flex-col justify-between relative overflow-hidden min-h-[290px] sm:min-h-[330px] border-t lg:border-t-0 lg:border-l border-neutral-200/90 group">
-              {/* Dot Grid Background */}
-              <div className="absolute inset-0 bg-[radial-gradient(#CBD5E1_1.25px,transparent_1.25px)] [background-size:16px_16px] pointer-events-none opacity-80" />
+            <div className="col-span-1 lg:col-span-5 xl:col-span-5 p-6 sm:p-8 flex flex-col justify-between relative overflow-hidden min-h-[440px] sm:min-h-[500px] border-t lg:border-t-0 lg:border-l border-neutral-200/90 group">
+              {/* Dot Grid Background aligned to 24px grid */}
+              <div className="absolute inset-0 bg-[radial-gradient(#CBD5E1_1.2px,transparent_1.2px)] [background-size:24px_24px] pointer-events-none opacity-60" />
 
               {/* Title */}
               <div className="relative z-10">
