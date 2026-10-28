@@ -18,13 +18,13 @@ const STEP_CARDS: StepCardItem[] = [
     id: 'understand',
     title: 'Understand',
     description:
-      'We analyze and extract relevant data from your website to build a complete understanding of your company, product, services, target audience, positioning, and what makes you different.',
+      'We analyze your website to understand your business, products, services, value proposition, target audience, and competitive positioning.',
   },
   {
     id: 'analyse',
     title: 'Analyse',
     description:
-      'We analyze and extract relevant data from your website to build a complete understanding of your company, product, services, target audience, positioning, and what makes you different.',
+      'We examine market trends, competitors, industry dynamics, and demand signals to uncover market opportunities and assess your competitive landscape.',
   },
   {
     id: 'find',

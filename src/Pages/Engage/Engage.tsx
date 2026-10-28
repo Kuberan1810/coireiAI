@@ -137,7 +137,7 @@ export const Engage: React.FC = () => {
           {/* Left Column: Narrative & Description */}
           <div className="lg:col-span-5 text-left flex flex-col justify-center">
             {/* Eyebrow */}
-            <div className="font-['Manrope',sans-serif] font-semibold text-[13px] sm:text-[14px] uppercase tracking-wider text-[#2563EB] mb-4">
+            <div className="font-['Manrope',sans-serif] font-semibold text-[13px] sm:text-[14px] uppercase tracking-wider text-[#94A3B8] mb-3">
               ENGAGE AGENT
             </div>
 
@@ -152,9 +152,7 @@ export const Engage: React.FC = () => {
 
             {/* Description Paragraph */}
             <p className="font-['Manrope',sans-serif] font-normal text-[15px] sm:text-[16px] leading-[26px] text-[#475569] max-w-lg">
-              Engage is an AI-powered communication agent that manages conversations across your customer
-              channels — responding instantly, following up automatically, and keeping every interaction
-              moving forward.
+              Engage Agent is Coirei GTM’s AI-powered communication agent that manages conversations across customer channels, automates personalized responses and follow-ups, and turns every interaction into an opportunity.
             </p>
           </div>
 
@@ -490,13 +488,13 @@ export const Engage: React.FC = () => {
 
                 {/* Description */}
                 <p className="font-['Manrope',sans-serif] text-[13px] leading-[20px] text-[#64748B] font-normal">
-                  Generate and send context-aware replies automatically, based on your brand voice and rules.
+                  Send personalized outreach, respond to enquiries, and adapt conversations to each prospect's context and your brand voice.
                 </p>
               </div>
 
               {/* Bottom Micro-tag */}
               <div className="pt-3 border-t border-[#F8FAFC] text-[11.5px] text-[#94A3B8] font-normal">
-                Deterministic guardrails
+                Personalized messaging & communication workflows
               </div>
             </div>
 
@@ -567,109 +565,56 @@ export const Engage: React.FC = () => {
           >
             <div className="divide-y divide-[#F1F5F9]">
 
-              {/* Row 1: Instagram */}
-              <div className="px-6 py-4 sm:px-8 sm:py-4.5 flex flex-col md:flex-row md:items-center gap-4 md:gap-6 hover:bg-[#FBFBFC] transition-colors">
-                {/* Channel Title & Subtitle */}
-                <div className="w-full md:w-[220px] flex items-center gap-3 shrink-0">
-                  <div className="w-[26px] h-[26px] shrink-0">
-                    <svg className="w-full h-full" viewBox="0 0 24 24" fill="none">
-                      <defs>
-                        <radialGradient id="ig-real-gradient" cx="0.2" cy="1" r="1">
-                          <stop offset="0%" stopColor="#fdf497" />
-                          <stop offset="5%" stopColor="#fdf497" />
-                          <stop offset="45%" stopColor="#fd5949" />
-                          <stop offset="60%" stopColor="#d6249f" />
-                          <stop offset="90%" stopColor="#285AEB" />
-                        </radialGradient>
-                      </defs>
-                      <rect width="24" height="24" rx="6" fill="url(#ig-real-gradient)" />
-                      <rect x="4.5" y="4.5" width="15" height="15" rx="4" stroke="white" strokeWidth="1.8" />
-                      <circle cx="12" cy="12" r="3.7" stroke="white" strokeWidth="1.8" />
-                      <circle cx="16.5" cy="7.5" r="1.1" fill="white" />
-                    </svg>
-                  </div>
-                  <div>
-                    <h3 className="font-['Plus_Jakarta_Sans',sans-serif] font-semibold text-[14.5px] text-[#0D0D0D] leading-tight">
-                      Instagram
-                    </h3>
-                    <p className="font-['Plus_Jakarta_Sans',sans-serif] font-normal text-[11px] leading-[16.5px] text-[#64748B] mt-0.5">
-                      Direct Messages &amp; Comments
-                    </p>
-                  </div>
-                </div>
-
-                {/* 4 Feature Bullets */}
-                <div className="flex-1 grid grid-cols-2 lg:grid-cols-4 gap-2.5 sm:gap-4 items-center">
-                  <div className="flex items-center gap-2 text-[12.5px] text-[#475569] font-normal">
-                    <span className="w-1.5 h-1.5 rounded-full bg-[#3B82F6] shrink-0" />
-                    <span className="truncate">Auto-reply to DMs</span>
-                  </div>
-                  <div className="flex items-center gap-2 text-[12.5px] text-[#475569] font-normal">
-                    <span className="w-1.5 h-1.5 rounded-full bg-[#3B82F6] shrink-0" />
-                    <span className="truncate">Respond to enquiries</span>
-                  </div>
-                  <div className="flex items-center gap-2 text-[12.5px] text-[#475569] font-normal">
-                    <span className="w-1.5 h-1.5 rounded-full bg-[#3B82F6] shrink-0" />
-                    <span className="truncate">Qualify prospects</span>
-                  </div>
-                  <div className="flex items-center gap-2 text-[12.5px] text-[#475569] font-normal">
-                    <span className="w-1.5 h-1.5 rounded-full bg-[#3B82F6] shrink-0" />
-                    <span className="truncate">Follow up automatically</span>
-                  </div>
+              {/* Table Header */}
+              <div className="px-6 py-3.5 sm:px-8 bg-[#F8FAFC] border-b border-[#F1F5F9] hidden md:flex items-center gap-6 text-[12px] font-semibold text-[#64748B] tracking-wider uppercase">
+                <div className="w-[230px] shrink-0">Channel</div>
+                <div className="flex-1 grid grid-cols-2 gap-6">
+                  <div>Inbound capabilities</div>
+                  <div>Outbound capabilities</div>
                 </div>
               </div>
 
-              {/* Row 2: WhatsApp */}
-              <div className="px-6 py-4 sm:px-8 sm:py-4.5 flex flex-col md:flex-row md:items-center gap-4 md:gap-6 hover:bg-[#FBFBFC] transition-colors">
-                <div className="w-full md:w-[220px] flex items-center gap-3 shrink-0">
+              {/* Row 1: Call */}
+              <div className="px-6 py-4.5 sm:px-8 sm:py-5 flex flex-col md:flex-row md:items-center gap-3 md:gap-6 hover:bg-[#FBFBFC] transition-colors">
+                <div className="w-full md:w-[230px] flex items-center gap-3 shrink-0">
                   <div className="w-[26px] h-[26px] shrink-0 flex items-center justify-center">
-                    <svg className="w-[24px] h-[24px]" viewBox="0 0 24 24" fill="none">
-                      <path
-                        d="M12.04 2C6.58 2 2.13 6.45 2.13 11.91C2.13 13.66 2.59 15.36 3.45 16.86L2.05 22L7.3 20.62C8.75 21.41 10.38 21.83 12.04 21.83C17.5 21.83 21.95 17.38 21.95 11.92C21.95 9.27 20.92 6.78 19.05 4.91C17.18 3.03 14.69 2 12.04 2Z"
-                        stroke="#25D366"
-                        strokeWidth="1.9"
-                        strokeLinecap="round"
-                        strokeLinejoin="round"
-                      />
-                      <path
-                        d="M16.56 15.3C16.31 15.17 15.09 14.58 14.86 14.49C14.63 14.41 14.47 14.36 14.3 14.62C14.13 14.87 13.66 15.43 13.51 15.59C13.37 15.76 13.22 15.78 12.97 15.65C12.72 15.52 11.91 15.26 10.95 14.4C10.2 13.73 9.69 12.9 9.54 12.65C9.39 12.4 9.52 12.26 9.65 12.14C9.76 12.03 9.9 11.85 10.02 11.7C10.15 11.55 10.19 11.45 10.27 11.28C10.35 11.11 10.31 10.97 10.25 10.84C10.19 10.71 9.69 9.49 9.48 8.99C9.28 8.5 9.07 8.57 8.92 8.56H8.44C8.27 8.56 8 8.62 7.77 8.87C7.54 9.12 6.89 9.73 6.89 10.97C6.89 12.21 7.79 13.41 7.92 13.58C8.05 13.75 9.69 16.28 12.21 17.37C12.81 17.63 13.28 17.78 13.65 17.9C14.25 18.09 14.8 18.06 15.23 18C15.71 17.93 16.7 17.4 16.91 16.82C17.12 16.24 17.12 15.75 17.06 15.64C17 15.53 16.81 15.43 16.56 15.3Z"
-                        fill="#25D366"
-                      />
+                    <svg
+                      className="w-[22px] h-[22px] text-[#2563EB]"
+                      viewBox="0 0 24 24"
+                      fill="none"
+                      stroke="currentColor"
+                      strokeWidth="2"
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                    >
+                      <path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z" />
                     </svg>
                   </div>
                   <div>
                     <h3 className="font-['Plus_Jakarta_Sans',sans-serif] font-semibold text-[14.5px] text-[#0D0D0D] leading-tight">
-                      WhatsApp
+                      Call
                     </h3>
                     <p className="font-['Plus_Jakarta_Sans',sans-serif] font-normal text-[11px] leading-[16.5px] text-[#64748B] mt-0.5">
-                      Business Cloud API
+                      Inbound &amp; Outbound AI
                     </p>
                   </div>
                 </div>
 
-                <div className="flex-1 grid grid-cols-2 lg:grid-cols-4 gap-2.5 sm:gap-4 items-center">
-                  <div className="flex items-center gap-2 text-[12.5px] text-[#475569] font-normal">
-                    <span className="w-1.5 h-1.5 rounded-full bg-[#3B82F6] shrink-0" />
-                    <span className="truncate">Automated conversations</span>
+                <div className="flex-1 grid grid-cols-1 md:grid-cols-2 gap-2 md:gap-6 text-[13px] leading-[20px] text-[#475569]">
+                  <div>
+                    <span className="md:hidden block text-[11px] uppercase font-semibold text-[#94A3B8] mb-0.5">Inbound capabilities:</span>
+                    <span>Answer calls 24/7, qualify inbound prospects, capture enquiries, route calls &amp; book meetings</span>
                   </div>
-                  <div className="flex items-center gap-2 text-[12.5px] text-[#475569] font-normal">
-                    <span className="w-1.5 h-1.5 rounded-full bg-[#3B82F6] shrink-0" />
-                    <span className="truncate">Lead qualification</span>
-                  </div>
-                  <div className="flex items-center gap-2 text-[12.5px] text-[#475569] font-normal">
-                    <span className="w-1.5 h-1.5 rounded-full bg-[#3B82F6] shrink-0" />
-                    <span className="truncate">Appointment coordination</span>
-                  </div>
-                  <div className="flex items-center gap-2 text-[12.5px] text-[#475569] font-normal">
-                    <span className="w-1.5 h-1.5 rounded-full bg-[#3B82F6] shrink-0" />
-                    <span className="truncate">Follow-ups</span>
+                  <div>
+                    <span className="md:hidden block text-[11px] uppercase font-semibold text-[#94A3B8] mb-0.5">Outbound capabilities:</span>
+                    <span>Conduct AI outbound calls, follow up with qualified leads, deliver voice updates, confirm appointments</span>
                   </div>
                 </div>
               </div>
 
-              {/* Row 3: Email */}
-              <div className="px-6 py-4 sm:px-8 sm:py-4.5 flex flex-col md:flex-row md:items-center gap-4 md:gap-6 hover:bg-[#FBFBFC] transition-colors">
-                <div className="w-full md:w-[220px] flex items-center gap-3 shrink-0">
+              {/* Row 2: Email */}
+              <div className="px-6 py-4.5 sm:px-8 sm:py-5 flex flex-col md:flex-row md:items-center gap-3 md:gap-6 hover:bg-[#FBFBFC] transition-colors">
+                <div className="w-full md:w-[230px] flex items-center gap-3 shrink-0">
                   <div className="w-[26px] h-[26px] shrink-0 flex items-center justify-center">
                     <svg
                       className="w-[24px] h-[24px]"
@@ -708,29 +653,61 @@ export const Engage: React.FC = () => {
                   </div>
                 </div>
 
-                <div className="flex-1 grid grid-cols-2 lg:grid-cols-4 gap-2.5 sm:gap-4 items-center">
-                  <div className="flex items-center gap-2 text-[12.5px] text-[#475569] font-normal">
-                    <span className="w-1.5 h-1.5 rounded-full bg-[#3B82F6] shrink-0" />
-                    <span className="truncate">Read incoming enquiries</span>
+                <div className="flex-1 grid grid-cols-1 md:grid-cols-2 gap-2 md:gap-6 text-[13px] leading-[20px] text-[#475569]">
+                  <div>
+                    <span className="md:hidden block text-[11px] uppercase font-semibold text-[#94A3B8] mb-0.5">Inbound capabilities:</span>
+                    <span>Read enquiries, categorize conversations, draft replies, qualify leads</span>
                   </div>
-                  <div className="flex items-center gap-2 text-[12.5px] text-[#475569] font-normal">
-                    <span className="w-1.5 h-1.5 rounded-full bg-[#3B82F6] shrink-0" />
-                    <span className="truncate">Draft and send replies</span>
+                  <div>
+                    <span className="md:hidden block text-[11px] uppercase font-semibold text-[#94A3B8] mb-0.5">Outbound capabilities:</span>
+                    <span>Send personalized outreach, automate follow-ups, run email sequences</span>
                   </div>
-                  <div className="flex items-center gap-2 text-[12.5px] text-[#475569] font-normal">
-                    <span className="w-1.5 h-1.5 rounded-full bg-[#3B82F6] shrink-0" />
-                    <span className="truncate">Categorize conversations</span>
+                </div>
+              </div>
+
+              {/* Row 3: WhatsApp */}
+              <div className="px-6 py-4.5 sm:px-8 sm:py-5 flex flex-col md:flex-row md:items-center gap-3 md:gap-6 hover:bg-[#FBFBFC] transition-colors">
+                <div className="w-full md:w-[230px] flex items-center gap-3 shrink-0">
+                  <div className="w-[26px] h-[26px] shrink-0 flex items-center justify-center">
+                    <svg className="w-[24px] h-[24px]" viewBox="0 0 24 24" fill="none">
+                      <path
+                        d="M12.04 2C6.58 2 2.13 6.45 2.13 11.91C2.13 13.66 2.59 15.36 3.45 16.86L2.05 22L7.3 20.62C8.75 21.41 10.38 21.83 12.04 21.83C17.5 21.83 21.95 17.38 21.95 11.92C21.95 9.27 20.92 6.78 19.05 4.91C17.18 3.03 14.69 2 12.04 2Z"
+                        stroke="#25D366"
+                        strokeWidth="1.9"
+                        strokeLinecap="round"
+                        strokeLinejoin="round"
+                      />
+                      <path
+                        d="M16.56 15.3C16.31 15.17 15.09 14.58 14.86 14.49C14.63 14.41 14.47 14.36 14.3 14.62C14.13 14.87 13.66 15.43 13.51 15.59C13.37 15.76 13.22 15.78 12.97 15.65C12.72 15.52 11.91 15.26 10.95 14.4C10.2 13.73 9.69 12.9 9.54 12.65C9.39 12.4 9.52 12.26 9.65 12.14C9.76 12.03 9.9 11.85 10.02 11.7C10.15 11.55 10.19 11.45 10.27 11.28C10.35 11.11 10.31 10.97 10.25 10.84C10.19 10.71 9.69 9.49 9.48 8.99C9.28 8.5 9.07 8.57 8.92 8.56H8.44C8.27 8.56 8 8.62 7.77 8.87C7.54 9.12 6.89 9.73 6.89 10.97C6.89 12.21 7.79 13.41 7.92 13.58C8.05 13.75 9.69 16.28 12.21 17.37C12.81 17.63 13.28 17.78 13.65 17.9C14.25 18.09 14.8 18.06 15.23 18C15.71 17.93 16.7 17.4 16.91 16.82C17.12 16.24 17.12 15.75 17.06 15.64C17 15.53 16.81 15.43 16.56 15.3Z"
+                        fill="#25D366"
+                      />
+                    </svg>
                   </div>
-                  <div className="flex items-center gap-2 text-[12.5px] text-[#475569] font-normal">
-                    <span className="w-1.5 h-1.5 rounded-full bg-[#3B82F6] shrink-0" />
-                    <span className="truncate">Automated follow-ups</span>
+                  <div>
+                    <h3 className="font-['Plus_Jakarta_Sans',sans-serif] font-semibold text-[14.5px] text-[#0D0D0D] leading-tight">
+                      WhatsApp
+                    </h3>
+                    <p className="font-['Plus_Jakarta_Sans',sans-serif] font-normal text-[11px] leading-[16.5px] text-[#64748B] mt-0.5">
+                      Business Cloud API
+                    </p>
+                  </div>
+                </div>
+
+                <div className="flex-1 grid grid-cols-1 md:grid-cols-2 gap-2 md:gap-6 text-[13px] leading-[20px] text-[#475569]">
+                  <div>
+                    <span className="md:hidden block text-[11px] uppercase font-semibold text-[#94A3B8] mb-0.5">Inbound capabilities:</span>
+                    <span>Respond to incoming messages, qualify leads, answer questions, coordinate appointments</span>
+                  </div>
+                  <div>
+                    <span className="md:hidden block text-[11px] uppercase font-semibold text-[#94A3B8] mb-0.5">Outbound capabilities:</span>
+                    <span>Send approved templates, follow up with opted-in contacts, share updates and offers</span>
                   </div>
                 </div>
               </div>
 
               {/* Row 4: LinkedIn */}
-              <div className="px-6 py-4 sm:px-8 sm:py-4.5 flex flex-col md:flex-row md:items-center gap-4 md:gap-6 hover:bg-[#FBFBFC] transition-colors">
-                <div className="w-full md:w-[220px] flex items-center gap-3 shrink-0">
+              <div className="px-6 py-4.5 sm:px-8 sm:py-5 flex flex-col md:flex-row md:items-center gap-3 md:gap-6 hover:bg-[#FBFBFC] transition-colors">
+                <div className="w-full md:w-[230px] flex items-center gap-3 shrink-0">
                   <div className="w-[26px] h-[26px] shrink-0 flex items-center justify-center">
                     <svg
                       className="w-[26px] h-[26px]"
@@ -754,77 +731,59 @@ export const Engage: React.FC = () => {
                   </div>
                 </div>
 
-                <div className="flex-1 grid grid-cols-2 lg:grid-cols-4 gap-2.5 sm:gap-4 items-center">
-                  <div className="flex items-center gap-2 text-[12.5px] text-[#475569] font-normal">
-                    <span className="w-1.5 h-1.5 rounded-full bg-[#3B82F6] shrink-0" />
-                    <span className="truncate">Respond to messages</span>
+                <div className="flex-1 grid grid-cols-1 md:grid-cols-2 gap-2 md:gap-6 text-[13px] leading-[20px] text-[#475569]">
+                  <div>
+                    <span className="md:hidden block text-[11px] uppercase font-semibold text-[#94A3B8] mb-0.5">Inbound capabilities:</span>
+                    <span>Respond to messages, identify prospect intent, qualify opportunities</span>
                   </div>
-                  <div className="flex items-center gap-2 text-[12.5px] text-[#475569] font-normal">
-                    <span className="w-1.5 h-1.5 rounded-full bg-[#3B82F6] shrink-0" />
-                    <span className="truncate">Engage prospects</span>
-                  </div>
-                  <div className="flex items-center gap-2 text-[12.5px] text-[#475569] font-normal">
-                    <span className="w-1.5 h-1.5 rounded-full bg-[#3B82F6] shrink-0" />
-                    <span className="truncate">Follow up with leads</span>
-                  </div>
-                  <div className="flex items-center gap-2 text-[12.5px] text-[#475569] font-normal">
-                    <span className="w-1.5 h-1.5 rounded-full bg-[#3B82F6] shrink-0" />
-                    <span className="truncate">Identify buying intent</span>
+                  <div>
+                    <span className="md:hidden block text-[11px] uppercase font-semibold text-[#94A3B8] mb-0.5">Outbound capabilities:</span>
+                    <span>Research prospects, personalize outreach, follow up on conversations</span>
                   </div>
                 </div>
               </div>
 
-              {/* Row 5: Website Chat */}
-              <div className="px-6 py-4 sm:px-8 sm:py-4.5 flex flex-col md:flex-row md:items-center gap-4 md:gap-6 hover:bg-[#FBFBFC] transition-colors">
-                <div className="w-full md:w-[220px] flex items-center gap-3 shrink-0">
-                  <div className="w-[26px] h-[26px] shrink-0 flex items-center justify-center">
-                    <svg
-                      className="w-[24px] h-[24px] text-[#4BA2F2]"
-                      viewBox="0 0 24 24"
-                      fill="none"
-                      stroke="currentColor"
-                      strokeWidth="1.6"
-                      strokeLinecap="round"
-                      strokeLinejoin="round"
-                    >
-                      <circle cx="12" cy="12" r="9.5" />
-                      <ellipse cx="12" cy="12" rx="4.5" ry="9.5" />
-                      <line x1="2.5" y1="12" x2="21.5" y2="12" />
-                      <path d="M4.5 7.5h15" />
-                      <path d="M4.5 16.5h15" />
+              {/* Row 5: Instagram */}
+              <div className="px-6 py-4.5 sm:px-8 sm:py-5 flex flex-col md:flex-row md:items-center gap-3 md:gap-6 hover:bg-[#FBFBFC] transition-colors">
+                <div className="w-full md:w-[230px] flex items-center gap-3 shrink-0">
+                  <div className="w-[26px] h-[26px] shrink-0">
+                    <svg className="w-full h-full" viewBox="0 0 24 24" fill="none">
+                      <defs>
+                        <radialGradient id="ig-real-gradient" cx="0.2" cy="1" r="1">
+                          <stop offset="0%" stopColor="#fdf497" />
+                          <stop offset="5%" stopColor="#fdf497" />
+                          <stop offset="45%" stopColor="#fd5949" />
+                          <stop offset="60%" stopColor="#d6249f" />
+                          <stop offset="90%" stopColor="#285AEB" />
+                        </radialGradient>
+                      </defs>
+                      <rect width="24" height="24" rx="6" fill="url(#ig-real-gradient)" />
+                      <rect x="4.5" y="4.5" width="15" height="15" rx="4" stroke="white" strokeWidth="1.8" />
+                      <circle cx="12" cy="12" r="3.7" stroke="white" strokeWidth="1.8" />
+                      <circle cx="16.5" cy="7.5" r="1.1" fill="white" />
                     </svg>
                   </div>
                   <div>
                     <h3 className="font-['Plus_Jakarta_Sans',sans-serif] font-semibold text-[14.5px] text-[#0D0D0D] leading-tight">
-                      Website Chat
+                      Instagram
                     </h3>
                     <p className="font-['Plus_Jakarta_Sans',sans-serif] font-normal text-[11px] leading-[16.5px] text-[#64748B] mt-0.5">
-                      Embedded Widget
+                      Direct Messages &amp; Comments
                     </p>
                   </div>
                 </div>
 
-                <div className="flex-1 grid grid-cols-2 lg:grid-cols-4 gap-2.5 sm:gap-4 items-center">
-                  <div className="flex items-center gap-2 text-[12.5px] text-[#475569] font-normal">
-                    <span className="w-1.5 h-1.5 rounded-full bg-[#3B82F6] shrink-0" />
-                    <span className="truncate">24/7 AI responses</span>
+                <div className="flex-1 grid grid-cols-1 md:grid-cols-2 gap-2 md:gap-6 text-[13px] leading-[20px] text-[#475569]">
+                  <div>
+                    <span className="md:hidden block text-[11px] uppercase font-semibold text-[#94A3B8] mb-0.5">Inbound capabilities:</span>
+                    <span>Auto-reply to DMs, respond to comments, qualify prospects, answer enquiries</span>
                   </div>
-                  <div className="flex items-center gap-2 text-[12.5px] text-[#475569] font-normal">
-                    <span className="w-1.5 h-1.5 rounded-full bg-[#3B82F6] shrink-0" />
-                    <span className="truncate">Product questions</span>
-                  </div>
-                  <div className="flex items-center gap-2 text-[12.5px] text-[#475569] font-normal">
-                    <span className="w-1.5 h-1.5 rounded-full bg-[#3B82F6] shrink-0" />
-                    <span className="truncate">Lead qualification</span>
-                  </div>
-                  <div className="flex items-center gap-2 text-[12.5px] text-[#475569] font-normal">
-                    <span className="w-1.5 h-1.5 rounded-full bg-[#3B82F6] shrink-0" />
-                    <span className="truncate">Meeting booking</span>
+                  <div>
+                    <span className="md:hidden block text-[11px] uppercase font-semibold text-[#94A3B8] mb-0.5">Outbound capabilities:</span>
+                    <span>Reply to eligible interactions, follow up on conversations, initiate permitted messaging</span>
                   </div>
                 </div>
-              </div>
-
-            </div>
+              </div></div>
           </div>
         </div>
       </section>

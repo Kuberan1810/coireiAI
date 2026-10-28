@@ -168,17 +168,18 @@ export const Hero: React.FC = () => {
   }, [typedHeadline, isDeletingHeadline, wordIndex]);
 
   // 2. Second search bar (floating Figma card on the left side): AUTOMATIC TYPEWRITER
-  const targetText = 'Find My Competitors';
+  const targetText = 'Extract My Leads';
   const [typedUrl, setTypedUrl] = useState('');
   const [isTyping, setIsTyping] = useState(true);
   const [isKnobPressed, setIsKnobPressed] = useState(false);
+  const [animationCycle, setAnimationCycle] = useState(0);
 
   // Animated Cursor state: 'hidden' | 'gliding' | 'entering' | 'on-target' | 'clicking' | 'clicked' | 'leaving'
   type CursorState = 'hidden' | 'gliding' | 'entering' | 'on-target' | 'clicking' | 'clicked' | 'leaving';
   const [cursorState, setCursorState] = useState<CursorState>('hidden');
 
   // 3. Desktop mockup search query subheader: types out when send button is clicked
-  const PROMPT_TARGET = 'scraping all the competitors';
+  const PROMPT_TARGET = 'Extracting all the Leads';
   const [promptText, setPromptText] = useState('');
   const [isPromptTyping, setIsPromptTyping] = useState(false);
   const [isPromptVisible, setIsPromptVisible] = useState(false);
@@ -245,12 +246,28 @@ export const Hero: React.FC = () => {
 
   // Sequence:
   // 1. Table is pre-filled with INITIAL_ROWS_COUNT (4 rows)
-  // 2. Auto-type targetText
+  // 2. Auto-type targetText ("Extract My Leads")
   // 3. Cursor appears and glides to send button
   // 4. Cursor clicks the send button (ripple + button press)
   // 5. New list rows add to table one-by-one and table automatically scrolls down
   // 6. Enters infinite smooth auto-scroll when ready
+  // 7. Loops continuously after showing extracted leads
   useEffect(() => {
+    const timeouts: ReturnType<typeof setTimeout>[] = [];
+    const intervals: ReturnType<typeof setInterval>[] = [];
+
+    const safeTimeout = (fn: () => void, delay: number) => {
+      const id = setTimeout(fn, delay);
+      timeouts.push(id);
+      return id;
+    };
+
+    const safeInterval = (fn: () => void, delay: number) => {
+      const id = setInterval(fn, delay);
+      intervals.push(id);
+      return id;
+    };
+
     let charIndex = 0;
     setTypedUrl('');
     setIsTyping(true);
@@ -270,8 +287,8 @@ export const Hero: React.FC = () => {
     setIsPromptVisible(false);
 
     // Initial pause while showing pre-filled table before typing starts
-    const startTimer = setTimeout(() => {
-      const typeInterval = setInterval(() => {
+    safeTimeout(() => {
+      const typeInterval = safeInterval(() => {
         if (charIndex < targetText.length) {
           charIndex++;
           setTypedUrl(targetText.slice(0, charIndex));
@@ -280,30 +297,30 @@ export const Hero: React.FC = () => {
           setIsTyping(false);
 
           // Step 1: Brief pause (220ms) after typing, then cursor glides directly to the send button in a single animation
-          setTimeout(() => {
+          safeTimeout(() => {
             setCursorState('gliding');
 
             // Step 2: Clicks immediately when cursor reaches the send knob (420ms glide)
-            setTimeout(() => {
+            safeTimeout(() => {
               setCursorState('clicking');
               setIsKnobPressed(true);
 
               // Step 3: Click releases (130ms press) -> triggers table addition, prompt typing animation & ripple
-              setTimeout(() => {
+              safeTimeout(() => {
                 setCursorState('clicked');
                 setIsKnobPressed(false);
                 setTableStatus('adding');
                 startPromptAnimation();
 
                 // Cursor glides away and fades out
-                setTimeout(() => {
+                safeTimeout(() => {
                   setCursorState('leaving');
-                  setTimeout(() => setCursorState('hidden'), 350);
+                  safeTimeout(() => setCursorState('hidden'), 350);
                 }, 150);
 
                 // Add new rows one-by-one and auto-scroll down
                 let rowIdx = INITIAL_ROWS_COUNT;
-                const addInterval = setInterval(() => {
+                const addInterval = safeInterval(() => {
                   if (rowIdx < competitorsData.length) {
                     rowIdx++;
                     setCreatedRowsCount(rowIdx);
@@ -316,8 +333,13 @@ export const Hero: React.FC = () => {
                     }
                   } else {
                     clearInterval(addInterval);
-                    setTimeout(() => {
+                    safeTimeout(() => {
                       setTableStatus('ready');
+
+                      // After displaying extracted leads for 3.5 seconds, restart the sequence loop
+                      safeTimeout(() => {
+                        setAnimationCycle((prev) => prev + 1);
+                      }, 3500);
                     }, 400);
                   }
                 }, 220); // 220ms per new row added
@@ -329,12 +351,13 @@ export const Hero: React.FC = () => {
     }, 900);
 
     return () => {
-      clearTimeout(startTimer);
+      timeouts.forEach((id) => clearTimeout(id));
+      intervals.forEach((id) => clearInterval(id));
       if (promptIntervalRef.current) {
         clearInterval(promptIntervalRef.current);
       }
     };
-  }, [targetText]);
+  }, [targetText, animationCycle]);
 
   // Automatic smooth scrolling loop (pure animation, non-interactive)
   useEffect(() => {
@@ -429,7 +452,7 @@ export const Hero: React.FC = () => {
         {/* Subtitle */}
         <ScrollReveal variant="fade-up" delay={150} duration={650} distance={18}>
           <p className="mt-5 text-[18px] text-[#000000] max-w-2xl mx-auto leading-snug font-normal text-center">
-            Coirei GTM is an AI-powered strategist that identifies the right customers, builds GTM strategies, and turns leads into sales.
+            Coirei GTM turns market intelligence into actionable strategies to identify target markets, discover leads, reach the right customers, and drive revenue growth.
           </p>
         </ScrollReveal>
 
@@ -449,7 +472,7 @@ export const Hero: React.FC = () => {
             <button
               type="submit"
               aria-label="Connect"
-              title="Connect your website"
+              title=""
               className="h-[38px] px-4 rounded-[86px] bg-black hover:bg-neutral-800 text-white text-[13px] font-medium flex items-center justify-center shrink-0 transition-all cursor-pointer active:scale-95"
             >
               Connect
@@ -715,7 +738,7 @@ export const Hero: React.FC = () => {
                     </span>
                   ) : (
                     <span className="text-[12.5px] text-[#4C4C4C] font-normal leading-none flex items-center">
-                      Connect your website
+                      
                       <span className="inline-block w-[1.5px] h-3.5 bg-[#2563EB] ml-1 animate-pulse" />
                     </span>
                   )}
