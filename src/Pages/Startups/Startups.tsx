@@ -56,11 +56,11 @@ interface FAQItem {
 const FAQ_ITEMS: FAQItem[] = [
   {
     question: "Who can apply for the Coirei Startup Program?",
-    answer: "Any venture-backed, angel-funded, or bootstrapped tech startup founded within the last 5 years with under $5M in total funding is eligible to apply for up to 90% platform credits in Year 1."
+    answer: "The program is open to startups and growing businesses across industries and stages. Applicants with a valid business presence, company website, and clearly defined product or service can register to access exclusive discounts on Coirei's GTM intelligence platform."
   },
   {
     question: "What benefits are available to eligible startups?",
-    answer: "Eligible startups receive platform credits (up to 90% off), full access to Coirei's AI-powered GTM intelligence suite, marketing tools, and founder community perks."
+    answer: "Eligible startups receive exclusive discounts on Coirei's AI-powered GTM intelligence and marketing platform, providing access to tools for market research, competitor analysis, audience insights, and go-to-market strategy development."
   },
   {
     question: "Is the program free?",
@@ -68,11 +68,11 @@ const FAQ_ITEMS: FAQItem[] = [
   },
   {
     question: "How long does the application review take?",
-    answer: "Our team reviews applications on a rolling basis. You will typically hear back from our startup partnerships team within 24 to 48 business hours."
+    answer: "Our team reviews applications on a rolling basis. You will typically hear back from our startup partnerships team within 4 to 7 business days."
   },
   {
     question: "What happens after my application is approved?",
-    answer: "Once approved, you'll receive a welcome email with instructions to activate your tier benefits, access your workspace, and begin exploring."
+    answer: "Once approved, you'll receive a welcome email with instructions to activour tier benefits, access your workspace, and begin exploring."
   },
 
 ];
@@ -145,7 +145,7 @@ export const Startups: React.FC = () => {
 
           {/* Subtitle / Paragraph */}
           <p className="max-w-[760px] text-neutral-600 text-base sm:text-[17px] md:text-[18px] leading-relaxed font-normal">
-            Coirei for Startups is a dedicated program designed to help early-stage startups grow smarter with exclusive benefits and access to Coirei's AI-powered GTM intelligence and marketing platform.
+            Coirei for Startups is a dedicated program designed to startups grow smarter with exclusive benefits and access to Coirei GTM platform
           </p>
         </div>
       </section>
@@ -169,13 +169,13 @@ export const Startups: React.FC = () => {
           {/* Right Content */}
           <div className="flex-1 text-left flex flex-col items-start text-white">
             <span className="text-[12px] sm:text-[13px] font-bold uppercase tracking-[0.16em] text-[#DCE7FE]">
-              The Startup Community
+              THE COIREI STARTUP PROGRAM
             </span>
             <h3 className="text-2xl sm:text-3xl lg:text-[40px] font-bold text-white tracking-[-0.02em] leading-[1.18] mt-3 mb-4">
-              Great things happen when startups connect.
+              Give Your Startup a Smarter Way to Grow.
             </h3>
             <p className="text-white/90 text-[15px] sm:text-[16px] md:text-[17px] font-normal leading-relaxed max-w-xl">
-              Connect with ambitious founders, exchange ideas, discover new opportunities, and build meaningful relationships to accelerate your startup's growth.
+              Get exclusive access to Coirei's AI-powered GTM intelligence and marketing platform at special startup pricing. Discover market opportunities, understand your competitors, and build smarter go-to-market strategies.
             </p>
             <div className="mt-7">
               <button
@@ -287,7 +287,7 @@ export const Startups: React.FC = () => {
               Designed for teams building what comes next.
             </h3>
             <p className="text-neutral-500 text-[15px] sm:text-[16px] font-normal leading-relaxed max-w-[440px] mb-8">
-              The Coirei Startup Program is intended for eligible early-stage businesses looking to accelerate their market understanding and growth.
+              The Coirei Startup Program is intended for start-ups looking to accelerate their market understanding and growth.
             </p>
 
             {/* Pill note (Figma: 492.67px Fill x 50.67px Hug, r:8px, p:16px, gap:12px, #FFFFFF) */}
@@ -301,11 +301,11 @@ export const Startups: React.FC = () => {
           <div className="w-full lg:flex-1 max-w-[667px]">
             <div className="w-full bg-[#FFFFFF] rounded-[8px] p-[16px] flex flex-col gap-[12px] shadow-xs border border-neutral-100/60">
               {[
-                "Early-stage startup or growing technology business",
+                "Registered startup or established business",
                 "Valid company website or product landing page",
-                "Business email address (no personal webmail)",
-                "Clear product, service, or business offering",
-                "Willingness to complete the startup verification process"
+                "Business email address",
+                "Clearly defined product, service, or business offering",
+                "Valid business registration details"
               ].map((text, idx) => (
                 /* Checklist row: Fill 635.33px x Hug 60px, r:8px, p:14px, gap:16px, #F9F9F9 */
                 <div

@@ -12,26 +12,26 @@ interface QueryItem {
 const QUERIES: QueryItem[] = [
   {
     id: 'traction',
-    question: '“What campaigns are gaining traction?”',
+    question: '“Which marketing channels drive the most engagement?”',
     response:
-      'Competitor acquisition campaigns targeting dissatisfied legacy users show 34% higher traction. For your brand, speed-to-value ad creative delivers 2.4x higher conversion rate than feature-centric ads.',
-    metrics: ['34% higher search visibility', '2.4x CVR', '48 ad sets analyzed'],
+      'LinkedIn campaigns generate 42% higher engagement than other channels, while email campaigns deliver the strongest conversion rates.',
+    metrics: ['42% higher engagement ', '3 channels analyzed', '2.1x email conversions'],
     sourcesCount: 83,
   },
   {
     id: 'audience',
-    question: '“Which audience should we target next?”',
+    question: '“What type of content resonates with our target audience?”',
     response:
-      'High-growth teams with <15 seats. 82% of market alternatives prioritize enterprise accounts, creating an unaddressed segment with a 94.2% opportunity confidence score.',
-    metrics: ['<15 seats target', '82% competitor exclusion rate', '94.2% opportunity confidence'],
+      'Educational content and industry insights receive 56% more engagement than promotional posts, indicating a stronger preference for value-driven content.',
+    metrics: ['31% higher CTR', '24 campaigns analyzed', '4 opportunities found'],
     sourcesCount: 114,
   },
   {
     id: 'messaging',
-    question: '“What messaging are competitors using?”',
+    question: '“What messaging drives more customer conversions?”',
     response:
-      '70%+ of tracked alternatives push enterprise AI automation and complex customizations. Under 15% emphasize rapid setup, leaving a clear gap for zero-configuration messaging.',
-    metrics: ['70%+ enterprise automation push', '<15% setup messaging', '5-minute migration gap'],
+      'Benefit-led messaging generates stronger responses than feature-focused copy, with customer pain-point messaging showing higher conversion potential.',
+    metrics: ['28% higher conversions', '2 messaging styles', '18 ads analyzed'],
     sourcesCount: 96,
   },
   {
@@ -117,13 +117,7 @@ export const AskMarketingDataSection: React.FC = () => {
               <span className="text-[#9CA3AF] font-normal">
                 Based on {activeQuery.sourcesCount} data sources
               </span>
-              <button
-                type="button"
-                className="text-[#2563EB] font-medium hover:underline inline-flex items-center gap-1 cursor-pointer"
-              >
-                <span>View full analysis</span>
-                <ArrowRight className="w-3.5 h-3.5" />
-              </button>
+           
             </div>
 
           </div>

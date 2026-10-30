@@ -97,7 +97,7 @@ const AGENTS: AgentData[] = [
     coverageTitle: 'Marketing Coverage',
     description:
       'Generates high-converting multi-channel ad copy, creatives, and targeted funnels tailored precisely to each buyer persona and their unique pain points.',
-    link: '',
+    link: '/marketing',
     metrics: [
       {
         label: 'Ad Creatives Generated',
@@ -147,7 +147,7 @@ const AGENTS: AgentData[] = [
     coverageTitle: 'Research Coverage',
     description:
       'An AI-powered research agent that analyzes companies, markets, competitors, and customer signals to uncover valuable insights and opportunities.',
-    link: '',
+    link: '/competitor-analysis',
     metrics: [
       {
         label: 'Companies Analyzed',

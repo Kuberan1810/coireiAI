@@ -1,0 +1,116 @@
+:root {
+  --color-cream: #f5e7df;
+  --color-dark: #1f1d1d;
+  --letter-spacing-display: -0.025em;
+}
+
+@font-face {
+  font-family: 'CabinetGrotesk-Bold';
+  src: url('assets/CabinetGrotesk-Bold-ChXdH3YW.woff2') format('woff2');
+  font-weight: 700;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'CabinetGrotesk-Variable';
+  src: url('assets/CabinetGrotesk-Variable-BZl-SSEF.woff2') format('woff2');
+  font-weight: 100 900;
+  font-style: normal;
+  font-display: swap;
+}
+
+.transition-animation-wrapper {
+  background-color: var(--color-dark);
+  color: var(--color-cream);
+  position: relative;
+  width: 100%;
+}
+
+.transition-pin-height {
+  height: 350vh; /* Scroll distance for the animation */
+}
+
+.transition-container {
+  z-index: 1;
+  background-color: var(--color-dark);
+  height: 100vh;
+  position: relative;
+  overflow: hidden;
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.transition-header {
+  z-index: 2;
+  text-align: center;
+  pointer-events: none;
+  width: 100%;
+  position: absolute;
+  top: 14vh;
+  left: 0;
+}
+
+.transition-title {
+  font-family: 'CabinetGrotesk-Variable', 'CabinetGrotesk-Bold', Arial, sans-serif;
+  font-size: max(48px, 6vw);
+  font-weight: 700;
+  letter-spacing: var(--letter-spacing-display);
+  margin: 0;
+  color: var(--color-cream);
+}
+
+.transition-subtitle {
+  text-align: center;
+  margin-top: 1.5vh;
+  font-family: 'CabinetGrotesk-Variable', Arial, sans-serif;
+  font-size: max(20px, 2vw);
+  font-weight: 300;
+  color: var(--color-cream);
+}
+
+/* Card centering area */
+.transition-card-center {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -20%);
+  z-index: 3;
+}
+
+/* Transition Card */
+.transition-card {
+  aspect-ratio: 231 / 392;
+  width: clamp(200px, 20vw, 270px);
+  border-radius: 36px;
+  overflow: hidden;
+  position: relative;
+  transform-origin: 50% 50%;
+  box-shadow: 0 15px 45px rgba(0, 0, 0, 0.45);
+  background-color: transparent;
+  will-change: transform;
+}
+
+.transition-card__bg {
+  object-fit: cover;
+  width: 100%;
+  height: 100%;
+  display: block;
+  position: absolute;
+  inset: 0;
+}
+
+/* Three.js Canvas covering card for fluid wave reveal */
+.transition-card__reveal-canvas {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  z-index: 2;
+  opacity: 0;
+  pointer-events: none;
+  display: block;
+}
+

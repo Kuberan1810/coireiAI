@@ -3,6 +3,7 @@ import Hero from './section/Hero';
 import Features from './section/Features';
 import Steps from './section/Steps';
 import AgentsSection from './section/AgentsSection';
+import ManifestoSection from './section/ManifestoSection';
 import VisibilitySection from './section/VisibilitySection';
 import QuoteSection from './section/QuoteSection';
 import BusinessSection from './section/BusinessSection';
@@ -16,6 +17,7 @@ export const Home: React.FC = () => {
         <Features />
         <Steps />
         <AgentsSection />
+        <ManifestoSection />
         <VisibilitySection />
       </div>
 

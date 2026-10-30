@@ -1,0 +1,185 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Manifesto Horizontal Scroll Animation — Guillaume Zhu</title>
+  <link rel="stylesheet" href="Manifesto.css">
+
+  <style>
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+    body {
+      background-color: #f5e7df;
+      color: #1f1d1d;
+      font-family: -apple-system, BlinkMacSystemFont, sans-serif;
+      overflow-x: hidden;
+    }
+    .intro-hero {
+      height: 70vh;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      text-align: center;
+      padding: 2rem;
+    }
+    .intro-hero h1 {
+      font-family: 'CabinetGrotesk-Variable', sans-serif;
+      font-size: clamp(32px, 5vw, 64px);
+      letter-spacing: -0.02em;
+      margin-bottom: 0.75rem;
+    }
+    .intro-hero p {
+      font-size: clamp(16px, 1.8vw, 22px);
+      opacity: 0.7;
+      max-width: 600px;
+    }
+    .intro-hero .arrow {
+      margin-top: 2rem;
+      font-size: 24px;
+      animation: bounce 1.8s infinite ease-in-out;
+    }
+    @keyframes bounce {
+      0%, 100% { transform: translateY(0); }
+      50% { transform: translateY(10px); }
+    }
+    .outro-section {
+      height: 100vh;
+      background-color: #1f1d1d;
+      color: #f5e7df;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      font-family: 'CabinetGrotesk-Variable', sans-serif;
+      font-size: clamp(32px, 5vw, 64px);
+      font-weight: 700;
+    }
+  </style>
+
+  <!-- React 18, ReactDOM & Babel -->
+  <script src="https://unpkg.com/react@18/umd/react.development.js" crossorigin></script>
+  <script src="https://unpkg.com/react-dom@18/umd/react-dom.development.js" crossorigin></script>
+  <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+
+  <!-- GSAP & ScrollTrigger -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollTrigger.min.js"></script>
+</head>
+<body>
+  <!-- React Mount Point -->
+  <div id="root"></div>
+
+  <div class="outro-section">
+    <h2>Next Section</h2>
+  </div>
+
+  <script type="text/babel">
+    const { useEffect, useRef } = React;
+    gsap.registerPlugin(ScrollTrigger);
+
+    function Manifesto() {
+      const manifestoRef = useRef(null);
+      const containerRef = useRef(null);
+      const textRef = useRef(null);
+
+      useEffect(() => {
+        const textEl = textRef.current;
+        const containerEl = containerRef.current;
+        const manifestoEl = manifestoRef.current;
+        if (!textEl || !containerEl || !manifestoEl) return;
+
+        // Split text into individual letters and spaces
+        const originalText = textEl.textContent.trim();
+        textEl.innerHTML = originalText
+          .split("")
+          .map((char) =>
+            char === " "
+              ? `<span>&nbsp;</span>`
+              : `<span class="letter">${char}</span>`
+          )
+          .join("");
+
+        const letterEls = textEl.querySelectorAll(".letter");
+
+        // Horizontal scroll calculation
+        const getScrollDistance = () => textEl.clientWidth - document.body.clientWidth;
+        const speedRatio = 0.65;
+        const getDuration = () => getScrollDistance() * speedRatio;
+
+        // Pin duration
+        const getPinDistance = () => {
+          const dur = getDuration();
+          const offset = Math.min(1175 * speedRatio, dur * 0.2);
+          return Math.max(dur - offset, 1);
+        };
+
+        // Pin the container while scrolling
+        const pinTrigger = ScrollTrigger.create({
+          trigger: containerEl,
+          start: "top top",
+          end: () => `+=${getPinDistance()}`,
+          pin: true,
+          invalidateOnRefresh: true,
+        });
+
+        // Main horizontal scroll animation
+        const scrollTween = gsap.to(textEl, {
+          x: () => -getScrollDistance(),
+          ease: "none",
+          scrollTrigger: {
+            trigger: containerEl,
+            start: "top top",
+            end: () => `+=${getDuration()}`,
+            scrub: true,
+            invalidateOnRefresh: true,
+          },
+        });
+
+        // Individual letter entrance physics (random y bounce and 3D tilt with elastic spring)
+        const letterTriggers = [];
+        letterEls.forEach((letter) => {
+          const tween = gsap.from(letter, {
+            yPercent: (Math.random() - 0.5) * 400,
+            rotation: (Math.random() - 0.5) * 60,
+            ease: "elastic.out(1.2, 1)",
+            scrollTrigger: {
+              trigger: letter,
+              containerAnimation: scrollTween,
+              start: "left 100%",
+              end: "left 0%",
+              scrub: 0.5,
+            },
+          });
+          if (tween.scrollTrigger) letterTriggers.push(tween.scrollTrigger);
+        });
+
+        return () => {
+          pinTrigger.kill();
+          scrollTween.scrollTrigger?.kill();
+          scrollTween.kill();
+          letterTriggers.forEach((st) => st.kill());
+        };
+      }, []);
+
+      return (
+        <div className="manifesto-wrapper">
+          <section ref={manifestoRef} className="manifesto" id="manifesto">
+            <div ref={containerRef} className="container">
+              <p ref={textRef} className="text">
+                Understand Every Lead Before You Reach Out.
+              </p>
+            </div>
+          </section>
+        </div>
+      );
+    }
+
+    ReactDOM.createRoot(document.getElementById("root")).render(<Manifesto />);
+  </script>
+</body>
+</html>
+

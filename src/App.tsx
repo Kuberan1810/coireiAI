@@ -15,6 +15,7 @@ import Engage from './Pages/Engage/Engage';
 import AboutCEO from './Pages/About/AboutCeo/AboutCEO';
 import OurStory from './Pages/About/OurStory/OurStory';
 import Startups from './Pages/Startups/Startups';
+import LeadNurturing from './Pages/LeadNurturing/LeadNurturing';
 
 // Simple Scroll to Top on route change
 function ScrollToTop() {
@@ -27,32 +28,40 @@ function ScrollToTop() {
   return null;
 }
 
+const AppContent: FC = () => {
+  return (
+    <div className="min-h-screen flex flex-col bg-white text-[#0B0F19]">
+      <Navbar />
+      <main className="flex-1">
+        <Routes>
+          <Route path="/" element={<Home />} />
+          <Route path="/marketing" element={<MarketIntelligence />} />
+          <Route path="/competitor-analysis" element={<CompetitorAnalysis />} />
+          <Route path="/seo" element={<SEO />} />
+          <Route path="/aeo" element={<AEO />} />
+          <Route path="/engage" element={<Engage />} />
+          <Route path="/lead-nurturing" element={<LeadNurturing />} />
+          <Route path="/leadnurturing" element={<LeadNurturing />} />
+          <Route path="/pricing" element={<Pricing />} />
+          <Route path="/contact" element={<Contact />} />
+          <Route path="/about" element={<About />} />
+          <Route path="/about/ceo" element={<AboutCEO />} />
+          <Route path="/about/our-story" element={<OurStory />} />
+          <Route path="/startups" element={<Startups />} />
+          <Route path="/startup" element={<Startups />} />
+          <Route path="/coirei-for-startups" element={<Startups />} />
+        </Routes>
+      </main>
+      <Footer />
+    </div>
+  );
+};
+
 export const App: FC = () => {
   return (
     <BrowserRouter>
       <ScrollToTop />
-      <div className="min-h-screen flex flex-col bg-white text-[#0B0F19]">
-        <Navbar />
-        <main className="flex-1">
-          <Routes>
-            <Route path="/" element={<Home />} />
-            <Route path="/marketing" element={<MarketIntelligence />} />
-            <Route path="/competitor-analysis" element={<CompetitorAnalysis />} />
-            <Route path="/seo" element={<SEO />} />
-            <Route path="/aeo" element={<AEO />} />
-            <Route path="/engage" element={<Engage />} />
-            <Route path="/pricing" element={<Pricing />} />
-            <Route path="/contact" element={<Contact />} />
-            <Route path="/about" element={<About />} />
-            <Route path="/about/ceo" element={<AboutCEO />} />
-            <Route path="/about/our-story" element={<OurStory />} />
-            <Route path="/startups" element={<Startups />} />
-            <Route path="/startup" element={<Startups />} />
-            <Route path="/coirei-for-startups" element={<Startups />} />
-          </Routes>
-        </main>
-        <Footer />
-      </div>
+      <AppContent />
     </BrowserRouter>
   );
 };

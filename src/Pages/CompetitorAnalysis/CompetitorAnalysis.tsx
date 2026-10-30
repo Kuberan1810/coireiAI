@@ -14,7 +14,13 @@ import {
   CreditCard,
   MoreHorizontal,
   ShieldCheck,
+  Lock,
+  BarChart2,
+  Zap,
+  Clock,
+  Box,
 } from 'lucide-react';
+import { DeepResearchSection } from './components/DeepResearchSection';
 
 import marketPositionSvg from '../../assets/competitor/marketposition.svg';
 import compAnalysisSvg from '../../assets/competitor/companalysis.svg';
@@ -84,9 +90,9 @@ const activeCluster = {
   gap: {
     badge: 'PRIMARY MARKET GAP DETECTED',
     confidence: '94.2%',
-    headline: 'Unaddressed segment: High-growth teams with <15 engineers',
+    headline: 'Untapped segment: Growing SaaS companies seeking faster GTM execution',
     description:
-      '82% of tracked alternatives pitch enterprise customization. Customer friction data highlights onboarding complexity as the primary reason for churn.',
+      'Competitor analysis reveals gaps in integrated market intelligence and GTM planning. Growing SaaS companies may benefit from a unified approach to market research, lead discovery, and marketing strategy.',
     tags: [
       'Differentiation: Self-serve setup',
       'Speed to value under 10m',
@@ -220,90 +226,148 @@ export const CompetitorAnalysis: React.FC = () => {
           </div>
         </div>
 
-        {/* 2. BROWSER WINDOW MOCKUP CARD (Exact Figma: 1022 Fill x 52 Hug Header, #F9FAFB 70%, 1px #0B0F19 5% border) */}
-        <div className="mt-14 sm:mt-16 max-w-[1022px] mx-auto">
+        {/* 2. BROWSER WINDOW MOCKUP CARD (Exact Figma: Fixed 300px Cards, 340x30 URL bar) */}
+        <div className="mt-14 sm:mt-16 max-w-[1140px] mx-auto">
           <div
             id="sample-report"
             className="w-full bg-white rounded-[16px] border border-[#E2E8F0] shadow-[0_20px_50px_-20px_rgba(0,0,0,0.07)] overflow-hidden"
           >
-            {/* Browser Top Navigation Bar (Exact Figma: 1022 Fill x 52 Hug, px 20px, py 14px, bg #F9FAFB 70%, border-b #0B0F19 5%) */}
-            <div className="w-full h-[52px] px-[20px] py-[14px] bg-[#F9FAFB]/70 border-b border-[#0B0F19]/[0.05] flex items-center justify-between">
-              {/* Window Dots, Divider & URL */}
-              <div className="flex items-center gap-3">
-                {/* 3 Window Dots */}
-                <div className="flex items-center gap-1.5 shrink-0">
-                  <div className="w-2.5 h-2.5 rounded-full bg-[#E2E8F0]" />
-                  <div className="w-2.5 h-2.5 rounded-full bg-[#E2E8F0]" />
-                  <div className="w-2.5 h-2.5 rounded-full bg-[#E2E8F0]" />
+            {/* Browser Top Navigation Bar (Figma: URL 340x30, radius 13px, pad 16px, gap 8px, #F6F7F9) */}
+            <div className="w-full h-[52px] px-5 sm:px-6 bg-white border-b border-[#F1F5F9] flex items-center justify-between">
+              {/* Left: Window Dots & URL Bar */}
+              <div className="flex items-center gap-4 sm:gap-5">
+                {/* 3 Mac Traffic Light Dots */}
+                <div className="flex items-center gap-[7px] shrink-0">
+                  <div className="w-[10px] h-[10px] rounded-full bg-[#FF5F56]" />
+                  <div className="w-[10px] h-[10px] rounded-full bg-[#FFBD2E]" />
+                  <div className="w-[10px] h-[10px] rounded-full bg-[#27C93F]" />
                 </div>
 
-                {/* Subtle vertical separator */}
-                <div className="h-3.5 w-[1px] bg-[#E2E8F0] mx-0.5" />
-
-                {/* URL */}
-                <div className="flex items-center gap-1.5 text-[12px] text-[#64748B] font-mono">
-                  <ShieldCheck className="w-3.5 h-3.5 text-blue-500 shrink-0" />
-                  <span>{activeCluster.urlPill}</span>
+                {/* URL Pill Bar (Figma: 340px x 30px, radius 13px, #F6F7F9, px 16px, gap 8px) */}
+                <div className="w-[260px] sm:w-[340px] h-[30px] rounded-[13px] bg-[#F6F7F9] px-4 flex items-center gap-2 text-[12px] text-[#475569] font-['Plus_Jakarta_Sans',sans-serif]">
+                  <Lock className="w-3 h-3 text-[#64748B] stroke-[2.2] shrink-0" />
+                  <span className="truncate">{activeCluster.urlPill}</span>
                 </div>
-              </div>
+              </div>     
             </div>
 
             {/* Inner Dashboard Content */}
-            <div className="p-5 sm:p-6 md:p-7 bg-[#FAFBFD]/50">
-              <div className="grid grid-cols-1 lg:grid-cols-12 gap-5 sm:gap-6">
-                {/* Left Card: Target Cluster (Exact Figma: 4x1, 303.33 Fill x 203 Hug, bg #F9FAFB 40%, border #111827 8%) */}
-                <div className="lg:col-span-4 bg-[#F9FAFB]/40 rounded-[14px] border border-[#111827]/[0.08] p-5 sm:p-[20px] flex flex-col justify-between text-left">
+            <div className="p-5 sm:p-6 lg:p-7 bg-[#FFFFFF]">
+              <div className="flex flex-col lg:flex-row gap-5 items-stretch">
+                {/* Left Card: Target Cluster (Figma: 356px x 300px, radius 14px, border 1px #E9EDF4, pad 24px, gap 11px, linear gradient #FAFAFC to #FCFCFD) */}
+                <div className="w-full lg:w-[356px] min-h-[300px] rounded-[14px] border border-[#E9EDF4] bg-gradient-to-b from-[#FAFAFC] to-[#FCFCFD] p-6 flex flex-col justify-between text-left shrink-0">
                   <div>
-                    <p className="text-[11px] font-semibold uppercase tracking-[0.14em] text-[#94A3B8] mb-2">
+                    <p className="text-[11px] font-bold uppercase tracking-[0.08em] text-[#8C9BAE] mb-2">
                       TARGET CLUSTER
                     </p>
-                    <h3 className="text-[17px] sm:text-[18px] font-semibold text-[#0B0F19] tracking-tight mb-2">
+                    <h3 className="font-['Plus_Jakarta_Sans',sans-serif] text-[19px] sm:text-[20px] font-bold text-[#0D0D0D] tracking-tight leading-snug mb-2">
                       {activeCluster.name}
                     </h3>
-                    <p className="text-[12.5px] sm:text-[13px] text-[#64748B] leading-relaxed font-normal mb-5">
+                    <p className="text-[12px] sm:text-[12.5px] leading-[18.5px] text-[#64748B] font-normal">
                       Analyzed {activeCluster.stats.positioningUpdates} positioning updates,{' '}
                       {activeCluster.stats.pricingOverhauls} pricing overhauls, and{' '}
                       {activeCluster.stats.changelogs} product changelogs over the past 30 days.
                     </p>
                   </div>
 
-                  <div className="pt-4 border-t border-[#111827]/[0.06] flex items-center justify-between text-[12.5px] sm:text-[13px]">
-                    <span className="font-semibold text-[#0B0F19]">Market Saturation</span>
-                    <span className="text-[#64748B] font-medium">{activeCluster.stats.saturation}</span>
+                  {/* Bottom Metrics Rows */}
+                  <div className="pt-3 border-t border-[#EEF2F6] flex flex-col gap-2.5">
+                    {/* Row 1: Market Saturation */}
+                    <div className="flex items-center justify-between text-[12.5px]">
+                      <div className="flex items-center gap-2 text-[#475569]">
+                        <BarChart2 className="w-3.5 h-3.5 text-[#64748B] stroke-[2]" />
+                        <span className="font-normal">Market Saturation</span>
+                      </div>
+                      <span className="font-medium text-[#0D0D0D]">{activeCluster.stats.saturation}</span>
+                    </div>
+
+                    {/* Row 2: Key Competitors */}
+                    <div className="flex items-center justify-between text-[12.5px]">
+                      <div className="flex items-center gap-2 text-[#475569]">
+                        <Users className="w-3.5 h-3.5 text-[#64748B] stroke-[2]" />
+                        <span className="font-normal">Key Competitors</span>
+                      </div>
+                      <span className="font-medium text-[#0D0D0D]">12</span>
+                    </div>
                   </div>
                 </div>
 
-                {/* Right Card: Primary Market Gap Detected (Exact Figma: 8x1, 630.67 Fill x 183 Hug, padding 20px, bg #EEF2FF 20%, border #E0E7FF) */}
-                <div className="lg:col-span-8 bg-[#EEF2FF]/20 rounded-[14px] border border-[#E0E7FF] p-5 sm:p-[20px] flex flex-col justify-between text-left">
-                  <div>
-                    <div className="flex items-center justify-between gap-2 mb-2.5">
-                      <span className="inline-block px-2.5 py-0.5 rounded-[5px] bg-[#F1F5F9] text-[#475569] text-[10.5px] font-semibold tracking-wider uppercase">
-                        {activeCluster.gap.badge}
-                      </span>
-                      <span className="text-[12px] font-medium text-[#94A3B8]">
-                        Confidence: {activeCluster.gap.confidence}
-                      </span>
+                {/* Right Card: Primary Market Gap Detected (Figma: 740px x 300px, radius 14px, border 1px linear gradient #D8F1EB to #E1E5FF, bg linear gradient #FAFDFC to #F8FAFF) */}
+                <div className="w-full lg:flex-1 min-h-[300px] rounded-[14px] p-[1px] bg-gradient-to-r from-[#D8F1EB] to-[#E1E5FF] shadow-xs">
+                  <div className="w-full h-full rounded-[13px] bg-gradient-to-b from-[#FAFDFC] to-[#F8FAFF] p-6 flex flex-col justify-between text-left">
+                    <div>
+                      {/* Top Header Row */}
+                      <div className="flex items-center justify-between gap-2 mb-3">
+                        <div className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-[6px] bg-white border border-[#E2E8F0] shadow-2xs">
+                          <span className="w-1.5 h-1.5 rounded-full bg-[#10B981]" />
+                          <span className="text-[10px] font-bold tracking-[0.06em] text-[#0D0D0D] uppercase">
+                            {activeCluster.gap.badge}
+                          </span>
+                        </div>
+                        <div className="flex items-center gap-1.5 text-[12px] font-normal text-[#64748B]">
+                          <BarChart2 className="w-3.5 h-3.5 text-[#64748B] stroke-[2]" />
+                          <span>Confidence: {activeCluster.gap.confidence}</span>
+                        </div>
+                      </div>
+
+                      {/* Headline */}
+                      <h3 className="font-['Plus_Jakarta_Sans',sans-serif] text-[18px] sm:text-[20px] font-bold text-[#0D0D0D] tracking-tight leading-snug mb-2">
+                        {activeCluster.gap.headline}
+                      </h3>
+
+                      {/* Description */}
+                      <p className="text-[12.5px] sm:text-[13px] leading-[19px] text-[#64748B] font-normal max-w-2xl">
+                        {activeCluster.gap.description}
+                      </p>
                     </div>
 
-                    <h3 className="text-[15.5px] sm:text-[16px] font-semibold text-[#0B0F19] leading-snug mt-2 mb-1.5">
-                      {activeCluster.gap.headline}
-                    </h3>
+                    {/* Bottom 3 Feature Pills */}
+                    <div className="flex flex-wrap items-center gap-2.5 sm:gap-3 pt-4">
+                      {/* Pill 1: Differentiation */}
+                      <div className="bg-white rounded-[12px] border border-[#F1F5F9] shadow-[0_1px_3px_rgba(0,0,0,0.03)] px-3.5 py-2 flex items-center gap-2.5">
+                        <div className="w-7 h-7 rounded-full bg-[#D1FAE5]/60 flex items-center justify-center shrink-0">
+                          <Zap className="w-3.5 h-3.5 text-[#059669] fill-[#059669]" />
+                        </div>
+                        <div className="text-left">
+                          <span className="block text-[10px] text-[#64748B] leading-none mb-0.5">
+                            Differentiation:
+                          </span>
+                          <span className="block text-[12px] font-medium text-[#0D0D0D] leading-none">
+                            Unified GTM intelligence
+                          </span>
+                        </div>
+                      </div>
 
-                    <p className="text-[12.5px] sm:text-[13px] text-[#64748B] leading-relaxed font-normal mb-5">
-                      {activeCluster.gap.description}
-                    </p>
-                  </div>
+                      {/* Pill 2: Speed to value */}
+                      <div className="bg-white rounded-[12px] border border-[#F1F5F9] shadow-[0_1px_3px_rgba(0,0,0,0.03)] px-3.5 py-2 flex items-center gap-2.5">
+                        <div className="w-7 h-7 rounded-full bg-[#E0F2FE]/70 flex items-center justify-center shrink-0">
+                          <Clock className="w-3.5 h-3.5 text-[#0284C7] stroke-[2.2]" />
+                        </div>
+                        <div className="text-left">
+                          <span className="block text-[10px] text-[#64748B] leading-none mb-0.5">
+                            Speed to Insight
+                          </span>
+                          <span className="block text-[12px] font-medium text-[#0D0D0D] leading-none">
+                            Real-time market signals
+                          </span>
+                        </div>
+                      </div>
 
-                  {/* Pill Tags */}
-                  <div className="flex flex-wrap items-center gap-2 pt-1">
-                    {activeCluster.gap.tags.map((tag) => (
-                      <span
-                        key={tag}
-                        className="px-3 py-1.5 rounded-[8px] border border-[#E2E8F0] bg-white text-[11.5px] font-medium text-[#334155] shadow-2xs"
-                      >
-                        {tag}
-                      </span>
-                    ))}
+                      {/* Pill 3: Transparent flat tier */}
+                      <div className="bg-white rounded-[12px] border border-[#F1F5F9] shadow-[0_1px_3px_rgba(0,0,0,0.03)] px-3.5 py-2 flex items-center gap-2.5">
+                        <div className="w-7 h-7 rounded-full bg-[#CCFBF1]/70 flex items-center justify-center shrink-0">
+                          <Box className="w-3.5 h-3.5 text-[#0D9488] stroke-[2.2]" />
+                        </div>
+                        <div className="text-left">
+                          <span className="block text-[10px] text-[#64748B] leading-none mb-0.5">
+                            Growth Focus
+                          </span>
+                          <span className="block text-[12px] font-medium text-[#0D0D0D] leading-none">
+                            Data-driven targeting
+                          </span>
+                        </div>
+                      </div>
+                    </div>
                   </div>
                 </div>
               </div>
@@ -313,55 +377,7 @@ export const CompetitorAnalysis: React.FC = () => {
       </section>
 
       {/* 3. DEEP RESEARCH SECTION */}
-      <section className="w-full bg-[#FFFFFF] py-12 sm:py-16 px-4 sm:px-6 lg:px-8 border-t border-[#F1F5F9]">
-        <div className="max-w-[1022px] mx-auto text-center">
-          {/* Eyebrow */}
-          <p className="text-[11px] sm:text-[12px] font-semibold uppercase tracking-[0.14em] text-[#8592A6] mb-3">
-            DEEP RESEARCH
-          </p>
-
-          {/* Section Heading */}
-          <h2 className="text-3xl sm:text-4xl md:text-[44px] lg:text-[48px] font-semibold tracking-tight text-[#0B0F19] leading-[1.15]">
-            Understand Your Competitors,
-            <br />
-            Backed by Real Data.
-          </h2>
-
-          {/* Subtitle */}
-          <p className="mt-4 sm:mt-5 text-[15px] sm:text-[16px] text-[#64748B] max-w-2xl mx-auto leading-relaxed font-normal mb-12 sm:mb-16">
-            Get detailed analysis of market size, growth trends, industry
-            <br className="hidden sm:inline" /> shifts, competitor landscape and emerging opportunities
-            <br className="hidden sm:inline" /> — so you can make smarter, faster decisions.
-          </p>
-
-          {/* 4 Cards Grid (Exact Figma: 227 Hug x 214 Fixed, 8px radius, padding 30px 20px, bg #FBFBFC, gap 3.25px) */}
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 sm:gap-5 lg:gap-6">
-            {DEEP_RESEARCH_CARDS.map((card) => (
-              <div
-                key={card.title}
-                className="relative w-full h-[214px] rounded-[8px] bg-[#FBFBFC] px-[20px] py-[30px] overflow-hidden flex flex-col justify-start text-left select-none transition-all duration-300 hover:shadow-xs group"
-              >
-                {/* Text Content */}
-                <div className="relative z-10">
-                  <h3 className="text-[16px] font-semibold text-[#0B0F19] leading-snug mb-[3.25px]">
-                    {card.title}
-                  </h3>
-                  <p className="text-[13px] text-[#64748B] leading-[1.45] font-normal">
-                    {card.description}
-                  </p>
-                </div>
-
-                {/* Bottom Right Watermark SVG */}
-                <img
-                  src={card.svg}
-                  alt=""
-                  className={`absolute pointer-events-none select-none transition-transform duration-300 group-hover:scale-105 ${card.svgClass}`}
-                />
-              </div>
-            ))}
-          </div>
-        </div>
-      </section>
+      <DeepResearchSection />
 
       {/* 3. DEEP PROFILE EXTRACTION */}
       <section className="w-full bg-[#FFFFFF] py-12 sm:py-16 px-6 sm:px-8 lg:px-12 border-t border-[#F1F5F9]">
@@ -423,18 +439,7 @@ export const CompetitorAnalysis: React.FC = () => {
 
               {/* Action Buttons */}
               <div className="flex items-center gap-2">
-                <button
-                  type="button"
-                  onClick={() => setIsTracked(!isTracked)}
-                  style={buttonStyle}
-                  className="flex items-center gap-2 px-3.5 rounded-lg text-[13px] font-medium text-gray-700 hover:text-black transition-colors cursor-pointer"
-                >
-                  <Radio
-                    className={`w-3.5 h-3.5 ${isTracked ? 'text-[#16A34A] animate-pulse' : 'text-gray-500'}`}
-                  />
-                  <span>{isTracked ? 'Tracking' : 'Track Competitor'}</span>
-                </button>
-
+                
                 <button
                   type="button"
                   style={{ ...buttonStyle, width: '32px' }}
@@ -774,8 +779,7 @@ export const CompetitorAnalysis: React.FC = () => {
               Research is useful. Insights are better.
             </h2>
             <p className="mt-3 text-[14px] sm:text-[15px] text-[#64748B] max-w-2xl font-normal leading-relaxed">
-              Coirei GTM synthesizes raw competitive signals into strategic opportunities that inform
-              product roadmap, messaging, and GTM moves.
+              Coirei GTM transforms competitor intelligence into actionable insights that sharpen product positioning, refine messaging, and guide smarter go-to-market decisions.
             </p>
           </div>
 
@@ -843,232 +847,7 @@ export const CompetitorAnalysis: React.FC = () => {
         </div>
       </section>
 
-      {/* 5. LIVE MARKET DELTA */}
-      <section className="w-full bg-[#FFFFFF] py-12 sm:py-16 px-6 sm:px-8 lg:px-12 border-t border-[#F1F5F9]">
-        <div className="max-w-[1152px] mx-auto text-left">
-          {/* Eyebrow & Title Header */}
-          <div className="mb-8 sm:mb-9">
-            <p className="text-[12px] sm:text-[13px] font-bold uppercase tracking-[0.14em] text-[#777779] mb-3">
-              Live Market Delta
-            </p>
-            <h2 className="text-3xl sm:text-4xl md:text-[44px] font-semibold tracking-tight text-[#0B0F19] leading-[1.18]">
-              Stay ahead of market changes.
-            </h2>
-            <p className="mt-3 text-[14px] sm:text-[15px] text-[#64748B] max-w-2xl font-normal leading-relaxed">
-              Coirei keeps track of meaningful competitor changes so teams can understand what
-              changed and why it matters.
-            </p>
-          </div>
-
-          {/* Timeline & Event Cards */}
-          <div className="relative">
-            {/* Horizontal timeline connector bar across desktop columns */}
-            <div className="hidden lg:block absolute top-[7px] left-0 right-0 h-[1.5px] bg-[#E2E8F0]" />
-
-            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-5 sm:gap-6 items-stretch">
-              {MARKET_DELTA_EVENTS.map((event, idx) => (
-                <div key={idx} className="flex flex-col">
-                  {/* Timeline circle node */}
-                  <div className="mb-4 sm:mb-5 flex items-center">
-                    <div className="w-3.5 h-3.5 rounded-full border-2 border-[#6366F1] bg-white relative z-10 ml-4 sm:ml-5 shrink-0 shadow-2xs" />
-                  </div>
-
-                  {/* Card */}
-                  <div className="w-full h-full bg-white rounded-[16px] border border-[#E5E7EB] p-5 sm:p-6 shadow-[0_2px_8px_rgba(0,0,0,0.02)] flex flex-col justify-between hover:border-[#CBD5E1] transition-all">
-                    <div>
-                      {/* Badge and timestamp */}
-                      <div className="flex items-center justify-between gap-2 mb-3.5">
-                        <span
-                          className={`px-2 py-0.5 rounded text-[10.5px] font-bold tracking-wider uppercase ${event.categoryColor}`}
-                        >
-                          {event.category}
-                        </span>
-                        <span className="text-[11.5px] text-[#94A3B8] font-normal">
-                          {event.time}
-                        </span>
-                      </div>
-
-                      {/* Title */}
-                      <h4 className="text-[14.5px] sm:text-[15px] font-semibold text-[#0B0F19] tracking-tight mb-2">
-                        {event.title}
-                      </h4>
-
-                      {/* Description */}
-                      <p className="text-[12.5px] sm:text-[13px] text-[#64748B] leading-relaxed font-normal">
-                        {event.description}
-                      </p>
-                    </div>
-                  </div>
-                </div>
-              ))}
-            </div>
-          </div>
-        </div>
-      </section>
-
-      {/* 6. AI SUMMARY SECTION (DARK PREMIUM) */}
-      <section className="w-full bg-[#0B0F19] py-14 sm:py-18 px-6 sm:px-8 lg:px-12 border-t border-[#1E293B]">
-        <div className="max-w-[1280px] mx-auto flex flex-col items-center text-center">
-          {/* Executive Briefing Pill */}
-          <div className="inline-flex items-center px-3.5 py-1 rounded-full bg-[#1E293B]/70 border border-[#334155]/60 text-[11px] font-semibold text-[#818CF8] tracking-widest uppercase mb-6">
-            Executive Briefing
-          </div>
-
-          {/* Heading */}
-          <h2 className="text-3xl sm:text-4xl md:text-[46px] font-semibold tracking-tight text-white leading-[1.18] mb-4">
-            Your competitive landscape,
-            <br />
-            summarized by AI.
-          </h2>
-
-          {/* Subtitle */}
-          <p className="text-[14px] sm:text-[15.5px] text-[#94A3B8] max-w-xl mx-auto font-normal leading-relaxed mb-12 sm:mb-14">
-            Coirei synthesizes high-velocity market activity into clean, executive-ready
-            intelligence memorandums.
-          </p>
-
-          {/* Card Container (1024 Fill x 638 Hug, bg #111827 80%, border 1px #FFFFFF 10%, backdrop blur 4px, p-40px, rounded-16px) */}
-          <div
-            className="w-full max-w-[1024px] rounded-[16px] border border-white/10 bg-[#111827]/80 backdrop-blur-[4px] p-6 sm:p-10 flex flex-col gap-8 text-left shadow-[0_20px_50px_rgba(0,0,0,0.5)]"
-          >
-            {/* Card Header Row */}
-            <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
-              <div className="flex items-center gap-3">
-                <div className="w-8 h-8 rounded-[8px] bg-[#1E293B] border border-white/10 flex items-center justify-center text-[#818CF8] text-[12px] font-mono font-bold shrink-0">
-                  Q2
-                </div>
-                <div>
-                  <h3 className="text-white font-semibold text-[16px] sm:text-[17px] tracking-tight">
-                    Competitive Landscape Memorandum
-                  </h3>
-                  <p className="text-[#94A3B8] text-[12px] mt-0.5 font-normal">
-                    Generated on May 28, 2025 • Target: SaaS DevTools Segment
-                  </p>
-                </div>
-              </div>
-
-              <div className="flex items-center gap-2 text-[12px] sm:text-[12.5px] text-[#34D399] font-medium shrink-0">
-                <span className="w-2 h-2 rounded-full bg-[#10B981] animate-pulse" />
-                <span>99.1% Confidence Score</span>
-              </div>
-            </div>
-
-            {/* Market Summary */}
-            <div className="space-y-2">
-              <h4 className="text-[#60A5FA] font-bold text-[11px] tracking-wider uppercase">
-                Market Summary
-              </h4>
-              <p className="text-[#CBD5E1] text-[13.5px] sm:text-[14px] leading-relaxed font-normal">
-                Market is becoming increasingly focused on AI automation. Over 70% of tracked
-                alternatives have updated their hero messaging within the past 45 days to
-                incorporate generative AI keywords, while core workflow differentiation remains
-                largely unchanged.
-              </p>
-            </div>
-
-            {/* Two Column Grid (455 Fill x 218 Hug, bg #0B0F19 60%, border 1px #FFFFFF 5%, rounded-12px, p-20px) */}
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
-              {/* Box 1: Key Trends */}
-              <div className="rounded-[12px] border border-white/[0.05] bg-[#0B0F19]/60 p-5 flex flex-col justify-between">
-                <h5 className="font-['Plus_Jakarta_Sans',sans-serif] font-bold text-[12px] leading-[16px] tracking-[0.6px] uppercase text-[#818CF8] mb-3.5">
-                  Key Trends
-                </h5>
-                <div className="space-y-3">
-                  <div className="flex items-start gap-2.5 text-[12.5px] sm:text-[13px] leading-relaxed">
-                    <span className="font-['Plus_Jakarta_Sans',sans-serif] font-bold text-[14px] leading-[20px] tracking-[0px] text-[#818CF8] shrink-0 whitespace-nowrap">
-                      01 —
-                    </span>
-                    <p className="text-[#94A3B8]">
-                      <strong className="text-white font-medium">AI-first workflows:</strong> Shift
-                      from passive recording toward proactive task suggestions.
-                    </p>
-                  </div>
-
-                  <div className="flex items-start gap-2.5 text-[12.5px] sm:text-[13px] leading-relaxed">
-                    <span className="font-['Plus_Jakarta_Sans',sans-serif] font-bold text-[14px] leading-[20px] tracking-[0px] text-[#818CF8] shrink-0 whitespace-nowrap">
-                      02 —
-                    </span>
-                    <p className="text-[#94A3B8]">
-                      <strong className="text-white font-medium">Self-serve onboarding:</strong>{' '}
-                      Elimination of mandatory sales demos across series A competitors.
-                    </p>
-                  </div>
-
-                  <div className="flex items-start gap-2.5 text-[12.5px] sm:text-[13px] leading-relaxed">
-                    <span className="font-['Plus_Jakarta_Sans',sans-serif] font-bold text-[14px] leading-[20px] tracking-[0px] text-[#818CF8] shrink-0 whitespace-nowrap">
-                      03 —
-                    </span>
-                    <p className="text-[#94A3B8]">
-                      <strong className="text-white font-medium">
-                        Vertical-specific solutions:
-                      </strong>{' '}
-                      Specialized templates outperforming broad generic tools.
-                    </p>
-                  </div>
-                </div>
-              </div>
-
-              {/* Box 2: Recommended Opportunities (Exact Figma: Plus Jakarta Sans, 700 Bold, 12px/16px, 0.6px letter spacing, uppercase, #34D399) */}
-              <div className="rounded-[12px] border border-white/[0.05] bg-[#0B0F19]/60 p-5 flex flex-col justify-between">
-                <h5 className="font-['Plus_Jakarta_Sans',sans-serif] font-bold text-[12px] leading-[16px] tracking-[0.6px] uppercase text-[#34D399] mb-3.5">
-                  Recommended Opportunities
-                </h5>
-                <div className="space-y-3">
-                  <div className="flex items-start gap-2.5 text-[12.5px] sm:text-[13px] leading-relaxed">
-                    <span className="font-['Plus_Jakarta_Sans',sans-serif] font-bold text-[14px] leading-[20px] tracking-[0px] text-[#34D399] shrink-0 whitespace-nowrap">
-                      01 —
-                    </span>
-                    <p className="text-[#94A3B8]">
-                      <strong className="text-white font-medium">
-                        Differentiate around simplicity:
-                      </strong>{' '}
-                      Lead with immediate time-to-value without configuration.
-                    </p>
-                  </div>
-
-                  <div className="flex items-start gap-2.5 text-[12.5px] sm:text-[13px] leading-relaxed">
-                    <span className="font-['Plus_Jakarta_Sans',sans-serif] font-bold text-[14px] leading-[20px] tracking-[0px] text-[#34D399] shrink-0 whitespace-nowrap">
-                      02 —
-                    </span>
-                    <p className="text-[#94A3B8]">
-                      <strong className="text-white font-medium">Target underserved SMB teams:</strong>{' '}
-                      Capture 10–30 seat organizations priced out by enterprise tiers.
-                    </p>
-                  </div>
-
-                  <div className="flex items-start gap-2.5 text-[12.5px] sm:text-[13px] leading-relaxed">
-                    <span className="font-['Plus_Jakarta_Sans',sans-serif] font-bold text-[14px] leading-[20px] tracking-[0px] text-[#34D399] shrink-0 whitespace-nowrap">
-                      03 —
-                    </span>
-                    <p className="text-[#94A3B8]">
-                      <strong className="text-white font-medium">
-                        Build stronger implementation messaging:
-                      </strong>{' '}
-                      Contrast 5-minute setup against 3-week deployments.
-                    </p>
-                  </div>
-                </div>
-              </div>
-            </div>
-
-            {/* Bottom Footer Bar */}
-            <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 pt-1">
-              <span className="text-[12px] sm:text-[12.5px] text-[#64748B] font-normal">
-                Export formats: PDF, Notion, Slack Sync, Markdown
-              </span>
-
-              <button
-                type="button"
-                className="inline-flex items-center gap-2 px-5 py-2.5 rounded-[10px] bg-[#6366F1] hover:bg-[#4F46E5] text-white text-[12.5px] font-semibold transition-all duration-200 shadow-sm cursor-pointer self-start sm:self-auto active:scale-[0.99]"
-              >
-                <span>Generate Full Analysis</span>
-             
-              </button>
-            </div>
-          </div>
-        </div>
-      </section>
-
+     
       {/* 7. CLOSING CTA SECTION */}
       <section className="w-full bg-[#FFFFFF] py-16 sm:py-20 md:py-24 px-6 sm:px-8 lg:px-12 border-t border-[#F1F5F9]">
         <div className="max-w-4xl mx-auto flex flex-col items-center text-center">

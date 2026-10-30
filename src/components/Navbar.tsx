@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { Link, useLocation } from 'react-router-dom';
-import { Menu, X, ChevronDown, BarChart3, TrendingUp, Search, Bot } from 'lucide-react';
+import { Menu, X, ChevronDown, BarChart3, TrendingUp, Search, Bot, Sparkles } from 'lucide-react';
 import coireiLogo from '../assets/logo/coireiLogo.png';
 
 interface FeatureSubItem {
@@ -20,16 +20,16 @@ const FEATURE_CATEGORIES: FeatureCategory[] = [
   {
     category: 'RESEARCH',
     items: [
+      // {
+      //   title: 'Analysis Engine',
+      //   description: 'Track competitor moves, pricing, and messaging shifts in real-time.',
+      //   href: '/competitor-analysis',
+      //   icon: BarChart3,
+      //   iconColor: '#F97316', // Orange
+      // },
       {
-        title: 'Competitor Analysis',
-        description: 'Track competitor moves, pricing, and messaging shifts in real-time.',
-        href: '/competitor-analysis',
-        icon: BarChart3,
-        iconColor: '#F97316', // Orange
-      },
-      {
-        title: 'Market Intelligence',
-        description: 'Deep market trends and customer demand signals for GTM teams.',
+        title: 'Marketing Intelligence',
+        description: 'Create targeted campaigns and improve marketing performance.',
         href: '/marketing',
         icon: TrendingUp,
         iconColor: '#3B82F6', // Blue
@@ -37,29 +37,23 @@ const FEATURE_CATEGORIES: FeatureCategory[] = [
     ],
   },
   {
-    category: 'SOLUTIONS & SEARCH',
+    category: 'AGENTS',
     items: [
       {
-        title: 'SEO Intelligence',
-        description: 'Search visibility, keyword rankings, and organic demand capture.',
-        href: '/seo',
-        icon: Search,
-        iconColor: '#0EA5E9', // Sky / Cyan
+        title: 'Engage Agent',
+        description: 'Autonomous multi-channel buyer engagement and pipeline conversion.',
+        href: '/engage',
+        icon: Sparkles,
+        iconColor: '#EC4899', // Pink / Rose
       },
       {
-        title: 'AEO (AI Search Engine)',
-        description: 'Optimize your brand presence across ChatGPT, Perplexity, and Gemini.',
-        href: '/aeo',
-        icon: Bot,
-        iconColor: '#8B5CF6', // Violet
+        title: 'Lead-Nurturing',
+        description: 'Build meaningful customer relationships with personalized engagement and timely follow-ups.',
+        href: '/lead-nurturing',
+        icon: TrendingUp,
+        iconColor: '#8B5CF6', // Purple
       },
-      // {
-      //   title: 'Engage',
-      //   description: 'Autonomous multi-channel buyer engagement and pipeline conversion.',
-      //   href: '/engage',
-      //   icon: Sparkles,
-      //   iconColor: '#EC4899', // Pink / Rose
-      // },
+
     ],
   },
 ];
@@ -77,8 +71,8 @@ export const Navbar: React.FC = () => {
   const [isAtTop, setIsAtTop] = useState(true);
   const [hideNavbar, setHideNavbar] = useState(false);
 
-  const isStartupInit = location.pathname.toLowerCase().includes('startup') || 
-                        location.pathname.toLowerCase().includes('coirei-for-startups');
+  const isStartupInit = location.pathname.toLowerCase().includes('startup') ||
+    location.pathname.toLowerCase().includes('coirei-for-startups');
   const [inStartupHero, setInStartupHero] = useState(isStartupInit);
   const inStartupHeroRef = useRef(isStartupInit);
   const isScrolledRef = useRef(false);
@@ -99,8 +93,8 @@ export const Navbar: React.FC = () => {
     lastScrollYRef.current = 0;
     accumulatedDeltaRef.current = 0;
     heroStepRef.current = 0;
-    const isStartup = location.pathname.toLowerCase().includes('startup') || 
-                      location.pathname.toLowerCase().includes('coirei-for-startups');
+    const isStartup = location.pathname.toLowerCase().includes('startup') ||
+      location.pathname.toLowerCase().includes('coirei-for-startups');
     inStartupHeroRef.current = isStartup;
     setInStartupHero(isStartup);
   }, [location.pathname]);
@@ -119,8 +113,8 @@ export const Navbar: React.FC = () => {
   };
 
   useEffect(() => {
-    const isStartup = location.pathname.toLowerCase().includes('startup') || 
-                      location.pathname.toLowerCase().includes('coirei-for-startups');
+    const isStartup = location.pathname.toLowerCase().includes('startup') ||
+      location.pathname.toLowerCase().includes('coirei-for-startups');
 
     let ticking = false;
     const updateNavbar = () => {
@@ -269,9 +263,9 @@ export const Navbar: React.FC = () => {
     };
   }, [isHomePage, location.pathname]);
 
-  const isStartupPage = location.pathname.toLowerCase().includes('startup') || 
-                        location.pathname.toLowerCase().includes('coirei-for-startups') || 
-                        Boolean(typeof document !== 'undefined' && document.getElementById('startups-hero'));
+  const isStartupPage = location.pathname.toLowerCase().includes('startup') ||
+    location.pathname.toLowerCase().includes('coirei-for-startups') ||
+    Boolean(typeof document !== 'undefined' && document.getElementById('startups-hero'));
 
   return (
     <>
@@ -338,7 +332,7 @@ export const Navbar: React.FC = () => {
         }}
       >
         {/* Scroll Progress Bar: Very thin (2px), active only when inside Steps section */}
-        
+
 
         {/* Navbar Inner Content */}
         <div

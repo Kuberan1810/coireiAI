@@ -1,7 +1,10 @@
 import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
-import { Send, ArrowRight, Zap, Shield, ArrowLeftRight, MessageSquare, Clock, PenLine, User, Calendar } from 'lucide-react';
-import EngageAgentVisual from '../Home/section/EngageAgentVisual';
+import { Send, User, Calendar } from 'lucide-react';
+import { EngageDashboardHero } from './components/EngageDashboardHero';
+import { LeadNurturingSection } from './components/LeadNurturingSection';
+import ProcessArchitectureScroll from './components/ProcessArchitectureScroll';
+import { CapabilitiesDial } from './components/CapabilitiesDial';
 
 interface ConversationItem {
   id: string;
@@ -43,6 +46,7 @@ const CONVERSATIONS: ConversationItem[] = [
   },
 ];
 
+
 export const Engage: React.FC = () => {
   const [selectedConvoId, setSelectedConvoId] = useState<string>('alex');
   const [activeChannel, setActiveChannel] = useState<string>('all');
@@ -53,76 +57,12 @@ export const Engage: React.FC = () => {
   return (
     <div className="w-full min-h-screen bg-white text-[#0B0F19] font-['Plus_Jakarta_Sans',sans-serif]">
       {/* =========================================================
-          SECTION 1: ENGAGE HERO & ORBIT SECTION (From Home Section)
+          SECTION 1: ENGAGE HERO (Specialized Agents & Dashboard)
           ========================================================= */}
-      <section className="relative z-20 w-full pt-20 sm:pt-28 md:pt-32 pb-[40px] px-4 sm:px-6 lg:px-8 bg-white overflow-hidden">
-        <div className="w-full max-w-7xl mx-auto">
-          {/* Section Header */}
-          <div className="text-center max-w-4xl mx-auto">
-            <h1 className="text-3xl sm:text-4xl md:text-[48px] lg:text-[58px] font-semibold text-[#0D0D0D] tracking-[-0.45px] leading-[1.15] lg:leading-[62px]">
-              A team of specialized agents, <br className="hidden sm:inline" />
-              working for you
-            </h1>
-
-            <p className="mt-3.5 sm:mt-4 text-slate-500 text-sm sm:text-base max-w-xl mx-auto leading-relaxed">
-              Coirei GTM orchestrates a team of AI agents to turn market intelligence into strategy, execution, and measurable growth.
-            </p>
-          </div>
-
-          {/* Engage Agent Main Card Container (889x446 exact Figma spec from Home) */}
-          <div className="relative mt-12 sm:mt-16 w-full flex flex-col items-center justify-center">
-            <div
-              className="w-full max-w-[889px] mx-auto min-h-[500px] sm:min-h-[460px] md:h-[446px] bg-[#FCFCFC] rounded-[28px] sm:rounded-[36px] lg:rounded-[40px] border border-[#F0F0F0] p-6 sm:p-8 lg:p-10 flex flex-col justify-center"
-              style={{
-                boxShadow: '0px 1px 150px 0px rgba(70, 70, 70, 0.25)',
-              }}
-            >
-              <div className="grid grid-cols-1 md:grid-cols-12 gap-6 md:gap-8 lg:gap-10 items-stretch h-full">
-                {/* Left Column: Engage Celestial Orbit Visual */}
-                <div className="md:col-span-7 flex flex-col justify-center h-full overflow-visible">
-                  <div className="w-full h-full max-h-[365px] flex items-center justify-center">
-                    <EngageAgentVisual />
-                  </div>
-                </div>
-
-                {/* Right Column: Inner Framed Box (300px × 369px Home spec) */}
-                <div className="md:col-span-5 flex flex-col items-center md:items-end justify-center">
-                  <div
-                    className="w-full md:w-[300px] md:h-[369px] rounded-tr-[10px] rounded-br-[10px] rounded-l-none bg-[#FCFCFC] pt-[33px] pr-[30px] sm:pr-[40px] md:pr-[53px] pb-[40px] md:pb-[82px] pl-[20px] flex flex-col justify-between"
-                    style={{
-                      borderTop: '1px solid #EDEDED',
-                      borderRight: '1px solid #DCDCDC',
-                      borderBottom: '1px solid #D4D4D4',
-                      borderLeft: 'none',
-                    }}
-                  >
-                    <div className="flex flex-col gap-[10px]">
-                      <h2 className="text-[20px] sm:text-[22px] font-semibold text-[#0F172A] tracking-tight leading-snug">
-                        Engage Agent
-                      </h2>
-                      <p className="text-[#64748B] text-[13px] sm:text-[13.5px] leading-relaxed font-normal">
-                        An AI-powered engagement engine that creates personalized outreach, nurtures prospects, and builds meaningful customer relationships across every stage of the sales journey.
-                      </p>
-                    </div>
-
-                    <div>
-                      <Link
-                        to="/contact"
-                        className="inline-flex items-center gap-1.5 text-[13px] sm:text-[14px] font-medium text-[#475569] hover:text-blue-600 transition-colors group/link"
-                      >
-                        <span>Get Started</span>
-                        <ArrowRight className="w-3.5 h-3.5 text-slate-400 group-hover/link:text-blue-600 group-hover/link:translate-x-0.5 transition-all" />
-                      </Link>
-                    </div>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-      </section>
+      <EngageDashboardHero />
 
       {/* =========================================================
+          SECTION 2: CONVERSATION TO OPPORTUNITY      {/* =========================================================
           SECTION 2: CONVERSATION TO OPPORTUNITY (Figma Section)
           ========================================================= */}
       <section
@@ -143,16 +83,16 @@ export const Engage: React.FC = () => {
 
             {/* Headline */}
             <h2 className="font-['Plus_Jakarta_Sans',sans-serif] text-3xl sm:text-4xl lg:text-[44px] font-semibold tracking-[-1.2px] leading-[1.12] text-[#0D0D0D] mb-5">
-              Turn every
+              Turn every Leads
               <br />
-              conversation into an
-              <br />
+               into an
+            
               opportunity.
             </h2>
 
             {/* Description Paragraph */}
             <p className="font-['Manrope',sans-serif] font-normal text-[15px] sm:text-[16px] leading-[26px] text-[#475569] max-w-lg">
-              Engage Agent is Coirei GTM’s AI-powered communication agent that manages conversations across customer channels, automates personalized responses and follow-ups, and turns every interaction into an opportunity.
+              Engage Agent powers Coirei GTM with AI-driven outreach, intelligent conversations, automated follow-ups, and lead qualification to turn prospects into business opportunities.
             </p>
           </div>
 
@@ -372,169 +312,14 @@ export const Engage: React.FC = () => {
       </section>
 
       {/* =========================================================
-          SECTION 3: PROCESS ARCHITECTURE (Exact Figma Spec)
+          LEAD NURTURING SECTION
           ========================================================= */}
-      <section className="relative w-full py-[40px] sm:py-[56px] px-6 sm:px-8 lg:px-12 bg-white">
-        <div className="max-w-[1240px] mx-auto text-left">
-          {/* Eyebrow */}
-          <div className="font-['Manrope',sans-serif] font-semibold text-[13px] sm:text-[14px] uppercase tracking-wider text-[#94A3B8] mb-3">
-            PROCESS ARCHITECTURE
-          </div>
+      <LeadNurturingSection />
 
-          {/* Headline */}
-          <h2 className="font-['Plus_Jakarta_Sans',sans-serif] text-3xl sm:text-4xl lg:text-[42px] font-semibold tracking-[-1px] leading-[1.15] text-[#0D0D0D] mb-3">
-            One agent. Every conversation.
-          </h2>
-
-          {/* Subtitle */}
-          <p className="font-['Manrope',sans-serif] font-normal text-[15px] sm:text-[16px] text-[#64748B] leading-relaxed mb-10 max-w-2xl">
-            Continuous ingestion to qualification without human bottlenecks.
-          </p>
-
-          {/* 4 Cards Grid (Figma: 276 Fill × 217 Hug, Radius: 16px, Border: 1px #E2E8F0 85%, Padding: 20px, space-between) */}
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-5">
-            {/* Card 1: Capture */}
-            <div
-              className="bg-white rounded-[16px] p-[20px] flex flex-col justify-between min-h-[217px] transition-all duration-200 hover:shadow-xs"
-              style={{
-                border: '1px solid rgba(226, 232, 240, 0.85)',
-              }}
-            >
-              <div>
-                {/* Top Row: Number Badge & Stage */}
-                <div className="flex items-center justify-between">
-                  <span className="inline-block px-2 py-0.5 rounded-[5px] bg-[#EFF6FF] border border-[#DBEAFE] text-[12px] font-semibold text-[#2563EB] tabular-nums">
-                    01
-                  </span>
-                  <span className="text-[11.5px] text-[#94A3B8] font-normal">
-                    Ingest
-                  </span>
-                </div>
-
-                {/* Title */}
-                <h3 className="font-['Plus_Jakarta_Sans',sans-serif] text-[18px] font-semibold text-[#0D0D0D] mt-3.5 mb-2">
-                  Capture
-                </h3>
-
-                {/* Description */}
-                <p className="font-['Manrope',sans-serif] text-[13px] leading-[20px] text-[#64748B] font-normal">
-                  Automatically collect incoming messages, enquiries and responses across connected channels.
-                </p>
-              </div>
-
-              {/* Bottom Micro-tag */}
-              <div className="pt-3 border-t border-[#F8FAFC] text-[11.5px] text-[#94A3B8] font-normal">
-                Webhooks &amp; native APIs
-              </div>
-            </div>
-
-            {/* Card 2: Understand */}
-            <div
-              className="bg-white rounded-[16px] p-[20px] flex flex-col justify-between min-h-[217px] transition-all duration-200 hover:shadow-xs"
-              style={{
-                border: '1px solid rgba(226, 232, 240, 0.85)',
-              }}
-            >
-              <div>
-                {/* Top Row: Number Badge & Stage */}
-                <div className="flex items-center justify-between">
-                  <span className="inline-block px-2 py-0.5 rounded-[5px] bg-[#EFF6FF] border border-[#DBEAFE] text-[12px] font-semibold text-[#2563EB] tabular-nums">
-                    02
-                  </span>
-                  <span className="text-[11.5px] text-[#94A3B8] font-normal">
-                    Analyze
-                  </span>
-                </div>
-
-                {/* Title */}
-                <h3 className="font-['Plus_Jakarta_Sans',sans-serif] text-[18px] font-semibold text-[#0D0D0D] mt-3.5 mb-2">
-                  Understand
-                </h3>
-
-                {/* Description */}
-                <p className="font-['Manrope',sans-serif] text-[13px] leading-[20px] text-[#64748B] font-normal">
-                  AI identifies intent, sentiment, context and whether the person is a potential lead.
-                </p>
-              </div>
-
-              {/* Bottom Micro-tag */}
-              <div className="pt-3 border-t border-[#F8FAFC] text-[11.5px] text-[#94A3B8] font-normal">
-                Contextual memory model
-              </div>
-            </div>
-
-            {/* Card 3: Respond */}
-            <div
-              className="bg-white rounded-[16px] p-[20px] flex flex-col justify-between min-h-[217px] transition-all duration-200 hover:shadow-xs"
-              style={{
-                border: '1px solid rgba(226, 232, 240, 0.85)',
-              }}
-            >
-              <div>
-                {/* Top Row: Number Badge & Stage */}
-                <div className="flex items-center justify-between">
-                  <span className="inline-block px-2 py-0.5 rounded-[5px] bg-[#EFF6FF] border border-[#DBEAFE] text-[12px] font-semibold text-[#2563EB] tabular-nums">
-                    03
-                  </span>
-                  <span className="text-[11.5px] text-[#94A3B8] font-normal">
-                    Execute
-                  </span>
-                </div>
-
-                {/* Title */}
-                <h3 className="font-['Plus_Jakarta_Sans',sans-serif] text-[18px] font-semibold text-[#0D0D0D] mt-3.5 mb-2">
-                  Respond
-                </h3>
-
-                {/* Description */}
-                <p className="font-['Manrope',sans-serif] text-[13px] leading-[20px] text-[#64748B] font-normal">
-                  Send personalized outreach, respond to enquiries, and adapt conversations to each prospect's context and your brand voice.
-                </p>
-              </div>
-
-              {/* Bottom Micro-tag */}
-              <div className="pt-3 border-t border-[#F8FAFC] text-[11.5px] text-[#94A3B8] font-normal">
-                Personalized messaging & communication workflows
-              </div>
-            </div>
-
-            {/* Card 4: Follow up */}
-            <div
-              className="bg-white rounded-[16px] p-[20px] flex flex-col justify-between min-h-[217px] transition-all duration-200 hover:shadow-xs"
-              style={{
-                border: '1px solid rgba(226, 232, 240, 0.85)',
-              }}
-            >
-              <div>
-                {/* Top Row: Number Badge & Stage */}
-                <div className="flex items-center justify-between">
-                  <span className="inline-block px-2 py-0.5 rounded-[5px] bg-[#EFF6FF] border border-[#DBEAFE] text-[12px] font-semibold text-[#2563EB] tabular-nums">
-                    04
-                  </span>
-                  <span className="text-[11.5px] text-[#94A3B8] font-normal">
-                    Nurture
-                  </span>
-                </div>
-
-                {/* Title */}
-                <h3 className="font-['Plus_Jakarta_Sans',sans-serif] text-[18px] font-semibold text-[#0D0D0D] mt-3.5 mb-2">
-                  Follow up
-                </h3>
-
-                {/* Description */}
-                <p className="font-['Manrope',sans-serif] text-[13px] leading-[20px] text-[#64748B] font-normal">
-                  Continue the conversation, schedule follow-ups and hand qualified opportunities to your team.
-                </p>
-              </div>
-
-              {/* Bottom Micro-tag */}
-              <div className="pt-3 border-t border-[#F8FAFC] text-[11.5px] text-[#94A3B8] font-normal">
-                Automated handoff &amp; CRM sync
-              </div>
-            </div>
-          </div>
-        </div>
-      </section>
+      {/* =========================================================
+          SECTION 3: PROCESS ARCHITECTURE (Scroll-Driven Reveal on Right Corner)
+          ========================================================= */}
+      <ProcessArchitectureScroll />
 
       {/* =========================================================
           SECTION 4: OMNICHANNEL CONNECTIVITY (Exact Figma Spec)
@@ -789,122 +574,15 @@ export const Engage: React.FC = () => {
       </section>
 
       {/* =========================================================
-          SECTION 5: INTELLIGENCE & CAPABILITIES (Exact Figma Spec)
+          SECTION 5: CAPABILITIES DIAL
           ========================================================= */}
-      <section className="relative w-full py-[40px] sm:py-[56px] px-6 sm:px-8 lg:px-12 bg-white border-t border-[#F1F5F9]">
-        <div className="max-w-[1240px] mx-auto grid grid-cols-1 lg:grid-cols-12 gap-10 lg:gap-16 items-start">
-
-          {/* Left Column: Headline */}
-          <div className="lg:col-span-4 text-left">
-            <h2 className="font-['Plus_Jakarta_Sans',sans-serif] text-3xl sm:text-4xl lg:text-[40px] font-semibold tracking-[-1.2px] leading-[1.18] text-[#0D0D0D]">
-              It doesn't just reply.
-              <br />
-              It understands.
-            </h2>
-          </div>
-
-          {/* Right Column: 2-Column Grid of 6 Capabilities */}
-          <div className="lg:col-span-8 grid grid-cols-1 sm:grid-cols-2 gap-x-10 sm:gap-x-12 gap-y-7 sm:gap-y-9">
-
-            {/* 1. Intent detection */}
-            <div className="flex items-start gap-3.5 text-left">
-              <div className="w-[36px] h-[36px] rounded-[10px] bg-[#EFF6FF] text-[#2563EB] flex items-center justify-center shrink-0 mt-0.5">
-                <Zap className="w-[17px] h-[17px] stroke-[1.9]" />
-              </div>
-              <div>
-                <h3 className="font-['Plus_Jakarta_Sans',sans-serif] font-semibold text-[14.5px] text-[#0D0D0D] leading-snug mb-1">
-                  Intent detection
-                </h3>
-                <p className="font-['Plus_Jakarta_Sans',sans-serif] font-normal text-[12px] leading-[19.5px] text-[#737373] max-w-[274px]">
-                  Understand what every conversation is actually about.
-                </p>
-              </div>
-            </div>
-
-            {/* 2. Context-aware replies */}
-            <div className="flex items-start gap-3.5 text-left">
-              <div className="w-[36px] h-[36px] rounded-[10px] bg-[#EFF6FF] text-[#2563EB] flex items-center justify-center shrink-0 mt-0.5">
-                <MessageSquare className="w-[17px] h-[17px] stroke-[1.9]" />
-              </div>
-              <div>
-                <h3 className="font-['Plus_Jakarta_Sans',sans-serif] font-semibold text-[14.5px] text-[#0D0D0D] leading-snug mb-1">
-                  Context-aware replies
-                </h3>
-                <p className="font-['Plus_Jakarta_Sans',sans-serif] font-normal text-[12px] leading-[19.5px] text-[#737373] max-w-[274px]">
-                  Respond using previous conversation context, customer information and your brand guidelines.
-                </p>
-              </div>
-            </div>
-
-            {/* 3. Lead qualification */}
-            <div className="flex items-start gap-3.5 text-left">
-              <div className="w-[36px] h-[36px] rounded-[10px] bg-[#EFF6FF] text-[#2563EB] flex items-center justify-center shrink-0 mt-0.5">
-                <Shield className="w-[17px] h-[17px] stroke-[1.9]" />
-              </div>
-              <div>
-                <h3 className="font-['Plus_Jakarta_Sans',sans-serif] font-semibold text-[14.5px] text-[#0D0D0D] leading-snug mb-1">
-                  Lead qualification
-                </h3>
-                <p className="font-['Plus_Jakarta_Sans',sans-serif] font-normal text-[12px] leading-[19.5px] text-[#737373] max-w-[274px]">
-                  Identify high-intent prospects automatically.
-                </p>
-              </div>
-            </div>
-
-            {/* 4. Smart follow-ups */}
-            <div className="flex items-start gap-3.5 text-left">
-              <div className="w-[36px] h-[36px] rounded-[10px] bg-[#EFF6FF] text-[#2563EB] flex items-center justify-center shrink-0 mt-0.5">
-                <Clock className="w-[17px] h-[17px] stroke-[1.9]" />
-              </div>
-              <div>
-                <h3 className="font-['Plus_Jakarta_Sans',sans-serif] font-semibold text-[14.5px] text-[#0D0D0D] leading-snug mb-1">
-                  Smart follow-ups
-                </h3>
-                <p className="font-['Plus_Jakarta_Sans',sans-serif] font-normal text-[12px] leading-[19.5px] text-[#737373] max-w-[274px]">
-                  Know when to follow up without manually tracking every conversation.
-                </p>
-              </div>
-            </div>
-
-            {/* 5. Conversation routing */}
-            <div className="flex items-start gap-3.5 text-left">
-              <div className="w-[36px] h-[36px] rounded-[10px] bg-[#EFF6FF] text-[#2563EB] flex items-center justify-center shrink-0 mt-0.5">
-                <ArrowLeftRight className="w-[17px] h-[17px] stroke-[1.9]" />
-              </div>
-              <div>
-                <h3 className="font-['Plus_Jakarta_Sans',sans-serif] font-semibold text-[14.5px] text-[#0D0D0D] leading-snug mb-1">
-                  Conversation routing
-                </h3>
-                <p className="font-['Plus_Jakarta_Sans',sans-serif] font-normal text-[12px] leading-[19.5px] text-[#737373] max-w-[274px]">
-                  Send important conversations to the right person when human input is needed.
-                </p>
-              </div>
-            </div>
-
-            {/* 6. Brand voice */}
-            <div className="flex items-start gap-3.5 text-left">
-              <div className="w-[36px] h-[36px] rounded-[10px] bg-[#EFF6FF] text-[#2563EB] flex items-center justify-center shrink-0 mt-0.5">
-                <PenLine className="w-[17px] h-[17px] stroke-[1.9]" />
-              </div>
-              <div>
-                <h3 className="font-['Plus_Jakarta_Sans',sans-serif] font-semibold text-[14.5px] text-[#0D0D0D] leading-snug mb-1">
-                  Brand voice
-                </h3>
-                <p className="font-['Plus_Jakarta_Sans',sans-serif] font-normal text-[12px] leading-[19.5px] text-[#737373] max-w-[274px]">
-                  Keep every AI response aligned with your tone, messaging and communication rules.
-                </p>
-              </div>
-            </div>
-
-          </div>
-
-        </div>
-      </section>
+      <CapabilitiesDial />
 
       {/* =========================================================
+          SECTION 6: HUMAN-IN-THE-LOOP      {/* =========================================================
           SECTION 6: HUMAN-IN-THE-LOOP / HANDOFF (Exact Figma Spec)
           ========================================================= */}
-      <section className="relative w-full py-[40px] sm:py-[56px] px-6 sm:px-8 lg:px-12 bg-[#FAF9F6] border-t border-[#F1F5F9]">
+      <section className="relative w-full py-[40px] sm:py-[56px] px-6 sm:px-8 lg:px-12 bg-[#FFFFF] border-t border-[#F1F5F9]">
         <div className="max-w-[1240px] mx-auto grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-10 items-center">
 
           {/* Left Column: Headline & Narrative */}
@@ -922,7 +600,7 @@ export const Engage: React.FC = () => {
 
             {/* Sub-note */}
             <p className="font-['Plus_Jakarta_Sans',sans-serif] font-normal text-[12px] sm:text-[12.5px] text-[#94A3B8] leading-[18px] max-w-md">
-              The AI doesn't have to replace human conversations; it can hand conversations over when necessary.
+              Engage Agent works alongside your team, seamlessly handing conversations over to humans whenever personal attention or intervention is needed.
             </p>
           </div>
 
@@ -1076,7 +754,7 @@ export const Engage: React.FC = () => {
       {/* =========================================================
           SECTION 7: FINAL CTA SECTION (Exact Design Spec)
           ========================================================= */}
-      <section className="relative w-full py-[56px] sm:py-[72px] lg:py-[88px] px-6 sm:px-8 lg:px-12 bg-[#FAF9F6] border-t border-[#F1F5F9]">
+      <section className="relative w-full py-[56px] sm:py-[72px] lg:py-[88px] px-6 sm:px-8 lg:px-12 bg-[#FFFFF] border-t border-[#F1F5F9]">
         <div className="max-w-[1000px] mx-auto text-center flex flex-col items-center justify-center">
           {/* Main Headline */}
           <h2 className="font-['Plus_Jakarta_Sans',sans-serif] text-3xl sm:text-4xl lg:text-[42px] font-semibold tracking-[-1.2px] leading-[1.18] text-[#0D0D0D]">
