@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { Link, useLocation } from 'react-router-dom';
-import { Menu, X, ChevronDown, BarChart3, TrendingUp, Search, Bot, Sparkles } from 'lucide-react';
+import { Menu, X, ChevronDown, TrendingUp, Sparkles } from 'lucide-react';
 import coireiLogo from '../assets/logo/coireiLogo.png';
 
 interface FeatureSubItem {

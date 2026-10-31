@@ -1062,7 +1062,7 @@ const AudienceIntelligenceCard: React.FC = () => {
 // Card 5: Business Growth 128% Line Chart (Matching reference image with exact #DBAE5E golden curve, full-card graph, and top-left number overlay)
 const TouchpointStockChart: React.FC = () => {
   const linePathRef = useRef<SVGPathElement | null>(null);
-  const waypointRef = useRef<SVGGElement | null>(null);
+  const waypointRef = useRef<HTMLDivElement | null>(null);
   const metricTextRef = useRef<HTMLDivElement | null>(null);
   const clipRectRef = useRef<SVGRectElement | null>(null);
   const badgeRef = useRef<HTMLDivElement | null>(null);
@@ -1317,41 +1317,7 @@ const TouchpointStockChart: React.FC = () => {
             strokeLinejoin="round"
           />
 
-          {/* Waypoint Golden Ring at Jun peak (466.5, 147.5) matching user close-up image */}
-          <g
-            ref={waypointRef}
-            style={{
-              opacity: 0,
-              filter: 'drop-shadow(0px 2px 7px rgba(219, 174, 94, 0.5))',
-              transition: 'opacity 0.15s ease-out',
-            }}
-          >
-            {/* 1. Outer White Halo Ring */}
-            <circle
-              cx="466.5"
-              cy="147.5"
-              r="9.5"
-              fill="#FFFFFF"
-              stroke="#FFFFFF"
-              strokeWidth="1.2"
-            />
-            {/* 2. Main Golden Amber Ring */}
-            <circle
-              cx="466.5"
-              cy="147.5"
-              r="7.8"
-              fill="none"
-              stroke="#DBAE5E"
-              strokeWidth="3.2"
-            />
-            {/* 3. Pure White Center Hole */}
-            <circle
-              cx="466.5"
-              cy="147.5"
-              r="4.2"
-              fill="#FFFFFF"
-            />
-          </g>
+
 
           {/* X-Axis Month Labels along the bottom */}
           <g
@@ -1367,6 +1333,54 @@ const TouchpointStockChart: React.FC = () => {
             <text x="466.5" y="356" textAnchor="middle">Jun</text>
           </g>
         </svg>
+
+        {/* Waypoint Golden Ring at Jun peak - Rendered in a 1:1 overlay so it remains a true circle regardless of card dimensions */}
+        <div
+          ref={waypointRef}
+          className="absolute pointer-events-none -translate-x-1/2 -translate-y-1/2 z-10"
+          style={{
+            left: `${(466.5 / 544) * 100}%`,
+            top: `${(147.5 / 377) * 100}%`,
+            opacity: 0,
+            transition: 'opacity 0.15s ease-out',
+          }}
+        >
+          <svg
+            width="28"
+            height="28"
+            viewBox="0 0 28 28"
+            className="overflow-visible block"
+            style={{
+              filter: 'drop-shadow(0px 2px 7px rgba(219, 174, 94, 0.55))',
+            }}
+          >
+            {/* 1. Outer White Halo Ring */}
+            <circle
+              cx="14"
+              cy="14"
+              r="9.5"
+              fill="#FFFFFF"
+              stroke="#FFFFFF"
+              strokeWidth="1.2"
+            />
+            {/* 2. Main Golden Amber Ring */}
+            <circle
+              cx="14"
+              cy="14"
+              r="7.8"
+              fill="none"
+              stroke="#DBAE5E"
+              strokeWidth="3.2"
+            />
+            {/* 3. Pure White Center Hole */}
+            <circle
+              cx="14"
+              cy="14"
+              r="4.2"
+              fill="#FFFFFF"
+            />
+          </svg>
+        </div>
 
         {/* Top-Left Metric Overlay exactly as in the reference image */}
         <div className="absolute top-6 left-6 sm:top-7 sm:left-7 z-20 flex flex-col items-start pointer-events-none">

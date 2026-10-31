@@ -6,14 +6,12 @@ import {
   MapPin,
   Globe,
   Calendar,
-  Radio,
   Tag,
   TrendingUp,
   Target,
   Cpu,
   CreditCard,
   MoreHorizontal,
-  ShieldCheck,
   Lock,
   BarChart2,
   Zap,
@@ -22,10 +20,6 @@ import {
 } from 'lucide-react';
 import { DeepResearchSection } from './components/DeepResearchSection';
 
-import marketPositionSvg from '../../assets/competitor/marketposition.svg';
-import compAnalysisSvg from '../../assets/competitor/companalysis.svg';
-import trendAnalysisSvg from '../../assets/competitor/trendanalysis.svg';
-import actionableInsightsSvg from '../../assets/competitor/actionableinsights.svg';
 
 // ExportSquare Icon matching CoireiGTM CompanyDetails
 const ExportSquareIcon: React.FC<{ size?: number; className?: string }> = ({
@@ -48,33 +42,6 @@ const ExportSquareIcon: React.FC<{ size?: number; className?: string }> = ({
     />
   </svg>
 );
-
-const DEEP_RESEARCH_CARDS = [
-  {
-    title: 'Market Positioning',
-    description: 'Compare your brand against competitors and uncover market gaps and opportunities.',
-    svg: marketPositionSvg,
-    svgClass: 'w-[104px] h-[98px] right-0 bottom-0',
-  },
-  {
-    title: 'Competitor Intelligence',
-    description: 'Strengths, weaknesses, pricing and positioning.',
-    svg: compAnalysisSvg,
-    svgClass: 'w-[97px] h-[103px] right-0 bottom-0',
-  },
-  {
-    title: 'Trend Analysis',
-    description: 'Emerging trends, customer behaviour and industry shifts.',
-    svg: trendAnalysisSvg,
-    svgClass: 'w-[102px] h-[104px] right-0 bottom-0',
-  },
-  {
-    title: 'Actionable Insights',
-    description: 'Clear recommendations to stay ahead.',
-    svg: actionableInsightsSvg,
-    svgClass: 'w-[107px] h-[110px] right-0 bottom-0',
-  },
-];
 
 const activeCluster = {
   id: 'workspace',
@@ -101,41 +68,6 @@ const activeCluster = {
   },
 };
 
-const MARKET_DELTA_EVENTS = [
-  {
-    category: 'PRICING',
-    categoryColor: 'bg-[#EEF2FF] text-[#4F46E5]',
-    time: 'Yesterday, 14:20',
-    title: 'Pricing changed',
-    description:
-      'Competitor A updated its pricing structure, adding an annual minimum on enterprise tiers.',
-  },
-  {
-    category: 'PRODUCT',
-    categoryColor: 'bg-[#ECFDF5] text-[#059669]',
-    time: '3 days ago',
-    title: 'New feature launched',
-    description:
-      'Competitor B introduced AI-powered workflows and automated roadmap triage.',
-  },
-  {
-    category: 'POSITIONING',
-    categoryColor: 'bg-[#FAF5FF] text-[#9333EA]',
-    time: 'May 12',
-    title: 'Messaging updated',
-    description:
-      'Competitor C shifted its homepage positioning from "Agile tracker" to "Autonomous software studio."',
-  },
-  {
-    category: 'CAMPAIGN',
-    categoryColor: 'bg-[#FFFBEB] text-[#D97706]',
-    time: 'May 09',
-    title: 'New campaign detected',
-    description:
-      'Competitor A launched a new acquisition campaign targeting unhappy Jira Cloud customers.',
-  },
-];
-
 export const CompetitorAnalysis: React.FC = () => {
   const [searchQuery, setSearchQuery] = useState('');
 
@@ -143,7 +75,6 @@ export const CompetitorAnalysis: React.FC = () => {
   const [activeTab, setActiveTab] = useState<
     'overview' | 'products-pricing' | 'team' | 'jobs' | 'news'
   >('products-pricing');
-  const [isTracked, setIsTracked] = useState(false);
 
   const companyName = 'clay';
   const companyWebsite = 'http://clay.run/';

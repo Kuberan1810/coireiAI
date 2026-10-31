@@ -168,11 +168,17 @@ export const Footer: React.FC = () => {
                 Site Index
               </span>
               <div className="flex flex-col space-y-2 text-[13px] sm:text-[13.5px] font-normal">
-                <Link
+                {/* <Link
                   to="/competitor-analysis"
                   className="text-white hover:text-neutral-300 transition-colors cursor-pointer"
                 >
                   Competitor analysis
+                </Link> */}
+                <Link
+                  to="/lead-nurturing"
+                  className="text-white hover:text-neutral-300 transition-colors cursor-pointer"
+                >
+                  Lead nurturing
                 </Link>
                 {/* <Link
                   to="/marketing"
@@ -203,6 +209,12 @@ export const Footer: React.FC = () => {
                   className="text-white hover:text-neutral-300 transition-colors cursor-pointer"
                 >
                   Seo
+                </Link>
+                <Link
+                  to="/startups"
+                  className="text-white hover:text-neutral-300 transition-colors cursor-pointer"
+                >
+                  Startups
                 </Link>
               </div>
             </div>
