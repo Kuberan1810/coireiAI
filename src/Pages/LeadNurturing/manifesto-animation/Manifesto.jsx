@@ -108,7 +108,7 @@ export default function Manifesto() {
   return (
     <div className="manifesto-wrapper">
       <section ref={manifestoRef} className="manifesto" id="manifesto">
-        <div ref={containerRef} className="container">
+        <div ref={containerRef} className="lead-manifesto-container">
           <p ref={textRef} className="text">
             Understand Every Lead Before You Reach Out.
           </p>

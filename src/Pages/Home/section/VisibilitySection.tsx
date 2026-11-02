@@ -266,7 +266,7 @@ export const VisibilitySection: React.FC = () => {
 
           {/* Main Headline */}
           <ScrollReveal variant="fade-up" delay={80} duration={700} distance={24}>
-            <h2 className="text-2xl sm:text-3xl md:text-[40px] lg:text-[48px] font-semibold text-[#0F172A] tracking-[-1.25px] leading-[1.2] lg:leading-[56px] md:whitespace-nowrap cursor-text select-text">
+            <h2 className="text-2xl sm:text-3xl md:text-[40px] lg:text-[48px] font-semibold text-[#0F172A] tracking-[-1.25px] leading-[1.2] lg:leading-[56px] lg:whitespace-nowrap cursor-text select-text">
               Be found. Be understood. Be recommended.
             </h2>
           </ScrollReveal>

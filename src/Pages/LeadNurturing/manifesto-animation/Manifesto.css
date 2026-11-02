@@ -34,7 +34,7 @@
   transition: background-color 0.4s ease;
 }
 
-.manifesto .container {
+.manifesto .lead-manifesto-container {
   transform-origin: top center;
   will-change: transform, border-radius;
   border-radius: 0;
@@ -51,18 +51,18 @@
   background-color: var(--color-dark);
 }
 
-.manifesto.is-exiting .container {
+.manifesto.is-exiting .lead-manifesto-container {
   background-color: var(--color-cream);
 }
 
 .manifesto .text {
   white-space: nowrap;
   width: max-content;
-  color: var(--color-dark);
+  color: #0B1329 !important;
   cursor: default;
   padding: 0 101vw;
   font-size: 12vw;
-  font-family: 'CabinetGrotesk-Variable', 'CabinetGrotesk-Bold', Arial, Helvetica, sans-serif;
+  font-family: 'CabinetGrotesk-Variable', 'CabinetGrotesk-Bold', 'Plus Jakarta Sans', Arial, Helvetica, sans-serif;
   font-weight: 700;
   line-height: 1;
   letter-spacing: var(--letter-spacing-display);

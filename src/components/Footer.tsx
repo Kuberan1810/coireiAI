@@ -35,8 +35,59 @@ const LinkedInIcon: React.FC = () => (
 export const Footer: React.FC = () => {
   const [isVisible, setIsVisible] = useState(false);
   const wordmarkRef = useRef<HTMLDivElement | null>(null);
+  const footerRef = useRef<HTMLElement | null>(null);
+  const spotlightRef = useRef<HTMLDivElement | null>(null);
+  const isMouseDownRef = useRef<boolean>(false);
+
+  const updateSpotlight = (clientX: number, clientY: number, isDown: boolean) => {
+    const footer = footerRef.current;
+    const spotlight = spotlightRef.current;
+    if (!footer || !spotlight) return;
+
+    const rect = footer.getBoundingClientRect();
+    const x = clientX - rect.left;
+    const y = clientY - rect.top;
+
+    // Interactive spotlight effect matching Marichka94's CodePen:
+    // Default: wide ambient beam; MouseDown: tightened, focused spotlight
+    const spotlightPattern = isDown
+      ? `circle 180px at ${x}px ${y}px, rgba(255, 255, 255, 0.28) 0%, rgba(255, 255, 255, 0.08) 60%, transparent 65%`
+      : `circle 320px at ${x}px ${y}px, rgba(255, 255, 255, 0.18) 0%, rgba(229, 215, 215, 0.05) 45%, transparent 70%`;
+
+    spotlight.style.backgroundImage = `radial-gradient(${spotlightPattern})`;
+    spotlight.style.opacity = '1';
+  };
+
+  const handleMouseMove = (e: React.MouseEvent<HTMLElement>) => {
+    updateSpotlight(e.clientX, e.clientY, isMouseDownRef.current);
+  };
+
+  const handleMouseEnter = (e: React.MouseEvent<HTMLElement>) => {
+    updateSpotlight(e.clientX, e.clientY, isMouseDownRef.current);
+  };
+
+  const handleMouseLeave = () => {
+    if (spotlightRef.current) {
+      spotlightRef.current.style.opacity = '0';
+    }
+  };
+
+  const handleMouseDown = (e: React.MouseEvent<HTMLElement>) => {
+    isMouseDownRef.current = true;
+    updateSpotlight(e.clientX, e.clientY, true);
+  };
+
+  const handleMouseUp = (e: React.MouseEvent<HTMLElement>) => {
+    isMouseDownRef.current = false;
+    updateSpotlight(e.clientX, e.clientY, false);
+  };
 
   useEffect(() => {
+    const handleGlobalMouseUp = () => {
+      isMouseDownRef.current = false;
+    };
+    window.addEventListener('mouseup', handleGlobalMouseUp);
+
     const el = wordmarkRef.current;
     if (!el) return;
 
@@ -69,13 +120,33 @@ export const Footer: React.FC = () => {
 
     window.addEventListener('scroll', checkVisibility, { passive: true });
     return () => {
+      window.removeEventListener('mouseup', handleGlobalMouseUp);
       observer.disconnect();
       window.removeEventListener('scroll', checkVisibility);
     };
   }, []);
 
   return (
-    <footer className="w-full bg-black text-white relative z-20 overflow-hidden pt-10 sm:pt-14 pb-0 border-t border-neutral-900 font-['Plus_Jakarta_Sans',sans-serif]">
+    <footer
+      ref={footerRef}
+      onMouseMove={handleMouseMove}
+      onMouseEnter={handleMouseEnter}
+      onMouseLeave={handleMouseLeave}
+      onMouseDown={handleMouseDown}
+      onMouseUp={handleMouseUp}
+      className="w-full bg-black text-white relative z-20 overflow-hidden pt-10 sm:pt-14 pb-0 border-t border-neutral-900 font-['Plus_Jakarta_Sans',sans-serif]"
+    >
+      {/* Interactive Cursor Spotlight Overlay - ONLY active inside footer */}
+      <div
+        ref={spotlightRef}
+        className="absolute inset-0 pointer-events-none transition-opacity duration-300 ease-out z-20"
+        style={{
+          opacity: 0,
+          mixBlendMode: 'screen',
+          willChange: 'background-image, opacity',
+        }}
+        aria-hidden="true"
+      />
       {/* Top Header Section */}
       <div className="max-w-[1440px] mx-auto px-6 sm:px-10 lg:px-14 relative z-10">
         <div className="flex flex-col lg:flex-row items-start justify-between gap-8 lg:gap-0 relative">

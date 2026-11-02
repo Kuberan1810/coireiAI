@@ -1,9 +1,9 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { ArrowUpRight } from 'lucide-react';
 
-import amongManyPng from '../../../assets/startups/Amongmany.png';
-import standApartPng from '../../../assets/startups/StandApart.png';
-import startupUnlockedPng from '../../../assets/startups/StartupUnlocked.png';
+import amongManyPng from '../../../assets/startups/Amongmany.webp';
+import standApartPng from '../../../assets/startups/StandApart.webp';
+import startupUnlockedPng from '../../../assets/startups/StartupUnlocked.webp';
 
 export interface HeroProps {
   onApply?: () => void;

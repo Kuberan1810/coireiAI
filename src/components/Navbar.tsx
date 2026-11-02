@@ -18,7 +18,7 @@ interface FeatureCategory {
 
 const FEATURE_CATEGORIES: FeatureCategory[] = [
   {
-    category: 'RESEARCH',
+    category: 'Analysis',
     items: [
       // {
       //   title: 'Analysis Engine',

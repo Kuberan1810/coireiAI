@@ -45,7 +45,7 @@ export const QuoteSection: React.FC = () => {
       {isActive && (
         <div className="fixed top-0 left-0 w-full h-screen bg-black overflow-hidden flex flex-col items-center justify-center select-none z-10 pointer-events-auto">
           {/* Subtle ambient lighting for depth */}
-          <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[700px] h-[350px] bg-neutral-800/40 rounded-full blur-3xl pointer-events-none -z-0" />
+          <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-full max-w-[700px] h-[350px] bg-neutral-800/40 rounded-full blur-3xl pointer-events-none -z-0" />
 
         <div className="relative z-10 w-full max-w-5xl lg:max-w-6xl mx-auto px-6 sm:px-8 md:px-12 flex flex-col items-center justify-center">
           <blockquote className="w-full text-center">

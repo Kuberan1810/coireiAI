@@ -404,7 +404,7 @@ export const Hero: React.FC = () => {
     triggerTableAddition(firstSearchUrl);
   };
 
-  // Table rows: prefilled list (4 rows) -> additions streamed -> infinite loop when ready
+  // Table reordered  fined
   const activeRows =
     tableStatus === 'ready'
       ? [...competitorsData, ...competitorsData]
@@ -413,7 +413,7 @@ export const Hero: React.FC = () => {
   return (
     <section className="relative w-full overflow-hidden bg-white pt-10 sm:pt-14 pb-14 sm:pb-[80px]">
       {/* Background Subtle Radial Glow */}
-      <div className="absolute top-0 left-1/2 -translate-x-1/2 w-[1100px] h-[450px] bg-gradient-to-b from-blue-50/50 via-indigo-50/15 to-transparent blur-3xl pointer-events-none -z-10" />
+      <div className="absolute top-0 left-1/2 -translate-x-1/2 w-full max-w-[1100px] h-[450px] bg-gradient-to-b from-blue-50/50 via-indigo-50/15 to-transparent blur-3xl pointer-events-none -z-10" />
 
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
         {/* Main Headline */}

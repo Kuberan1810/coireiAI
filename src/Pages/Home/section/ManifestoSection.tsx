@@ -15,6 +15,7 @@ export const ManifestoSection: React.FC = () => {
   const imageRef = useRef<HTMLImageElement>(null);
   const rightTextRef = useRef<HTMLSpanElement>(null);
   const showcaseContentRef = useRef<HTMLDivElement>(null);
+  const leftColRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
     const container = containerRef.current;
@@ -24,6 +25,7 @@ export const ManifestoSection: React.FC = () => {
     const imageEl = imageRef.current;
     const rightText = rightTextRef.current;
     const showcaseContent = showcaseContentRef.current;
+    const leftCol = leftColRef.current;
 
     if (
       !container ||
@@ -32,29 +34,35 @@ export const ManifestoSection: React.FC = () => {
       !imageBox ||
       !imageEl ||
       !rightText ||
-      !showcaseContent
+      !showcaseContent ||
+      !leftCol
     ) {
       return;
     }
 
     const ctx = gsap.context(() => {
-      // 1. Calculate horizontal scroll distance so image lands in center
+      const isDesktop = window.innerWidth >= 768;
+
+      // 1. Calculate horizontal scroll distance so inline image lands in center
       const imgCenter = imageBox.offsetLeft + imageBox.offsetWidth / 2;
       const targetScrollX = Math.max(imgCenter - window.innerWidth / 2, 0);
 
-      // 2. Calculate scaling & leftward shift to keep photo close to the right content
-      const isDesktop = window.innerWidth >= 768;
-      const maxContentWidth = Math.min(window.innerWidth - 64, 1020);
-      const gap = 48;
-      const colWidth = isDesktop ? (maxContentWidth - gap) / 2 : maxContentWidth;
+      // 2. Compute exact position of Left Column target box so image never overlaps text
+      const containerRect = container.getBoundingClientRect();
+      const targetBox = leftCol.getBoundingClientRect();
+
+      const targetCenterX = targetBox.left + targetBox.width / 2;
+      const targetCenterY = targetBox.top + targetBox.height / 2;
+
+      const containerCenterX = containerRect.left + containerRect.width / 2;
+      const containerCenterY = containerRect.top + containerRect.height / 2;
+
+      const targetX = targetCenterX - containerCenterX;
+      const targetY = targetCenterY - containerCenterY;
 
       const currentThumbWidth = imageEl.offsetWidth || 150;
-      const targetPhotoWidth = Math.min(colWidth, 480);
+      const targetPhotoWidth = Math.min(targetBox.width, isDesktop ? 480 : 360);
       const targetScale = Math.max(targetPhotoWidth / currentThumbWidth, 2.0);
-
-      // Shift photo left so it lands snug against the right content (gap = 48px)
-      const shiftX = isDesktop ? gap / 2 + colWidth / 2 : 0;
-      const shiftY = isDesktop ? 0 : -130;
 
       // Initial styles
       gsap.set(textEl, { x: 0 });
@@ -78,7 +86,7 @@ export const ManifestoSection: React.FC = () => {
         scrollTrigger: {
           trigger: container,
           start: "top top",
-          end: "+=2400",
+          end: "+=2600",
           pin: true,
           scrub: 1,
           invalidateOnRefresh: true,
@@ -89,7 +97,7 @@ export const ManifestoSection: React.FC = () => {
       tl.to(textEl, {
         x: -targetScrollX,
         ease: "none",
-        duration: 3.5,
+        duration: 3.2,
       });
 
       // Step 2: The image ZOOMS in place at the center, text disappears
@@ -98,7 +106,7 @@ export const ManifestoSection: React.FC = () => {
         {
           opacity: 0,
           ease: "power2.inOut",
-          duration: 1.4,
+          duration: 1.2,
         },
         "zoom"
       );
@@ -107,25 +115,25 @@ export const ManifestoSection: React.FC = () => {
         imageEl,
         {
           scale: targetScale,
-          boxShadow: "0 25px 60px -12px rgba(0, 0, 0, 0.15)",
+          boxShadow: "0 25px 60px -12px rgba(0, 0, 0, 0.18)",
           ease: "power2.out",
-          duration: 2.0,
+          duration: 1.5,
         },
         "zoom"
       );
 
-      // Step 3: THEN it moves to the left snug against the right content
+      // Step 3: FIRST the image glides into its exact spot in the left column
       tl.to(
         imageEl,
         {
-          x: -shiftX,
-          y: shiftY,
+          x: targetX,
+          y: targetY,
           ease: "power2.inOut",
-          duration: 2.0,
-        },
-        "moveToLeft"
+          duration: 1.8,
+        }
       );
 
+      // Step 4: ONLY AFTER the image has reached its position, THEN the text reveals on the right
       tl.to(
         showcaseContent,
         {
@@ -134,32 +142,36 @@ export const ManifestoSection: React.FC = () => {
           y: 0,
           pointerEvents: "auto",
           ease: "power2.out",
-          duration: 1.6,
-        },
-        "moveToLeft+=0.3"
+          duration: 1.5,
+        }
       );
 
-      // Step 4: Settle hold so user can read before unpinning
-      tl.to({}, { duration: 1.5 });
+      // Step 5: Settle hold so user can comfortably read before unpinning
+      tl.to({}, { duration: 1.2 });
     }, container);
 
-    // Refresh ScrollTrigger once after render
-    const t = setTimeout(() => {
+    const refreshTimer = setTimeout(() => {
       ScrollTrigger.refresh();
-    }, 150);
+    }, 200);
+
+    const handleResize = () => {
+      ScrollTrigger.refresh();
+    };
+    window.addEventListener("resize", handleResize);
 
     return () => {
-      clearTimeout(t);
+      clearTimeout(refreshTimer);
+      window.removeEventListener("resize", handleResize);
       ctx.revert();
     };
   }, []);
 
   return (
     <div className="manifesto-wrapper">
-      <section className="manifesto" id="home-manifesto">
-        <div ref={containerRef} className="container">
+      <section className="home-manifesto" id="home-manifesto">
+        <div ref={containerRef} className="home-manifesto-container">
           {/* THE MANIFESTO TEXT WITH INLINE IMAGE */}
-          <div ref={textRef} className="text">
+          <div ref={textRef} className="home-manifesto-text">
             {/* Left part: "Building Intelligent Solutions That Drive Business" */}
             <span ref={leftTextRef} className="whitespace-nowrap">
               Building Intelligent Solutions That Drive Business
@@ -185,12 +197,15 @@ export const ManifestoSection: React.FC = () => {
           <div className="absolute inset-0 flex items-center justify-center pointer-events-none z-10 px-6 sm:px-10 lg:px-16">
             <div className="max-w-[1020px] w-full mx-auto grid grid-cols-1 md:grid-cols-2 gap-10 lg:gap-12 items-center">
               {/* Left Column Spacer (zoomed photo lands here snug against the right column) */}
-              <div className="pointer-events-none" />
+              <div
+                ref={leftColRef}
+                className="pointer-events-none w-full flex items-center justify-center h-[220px] sm:h-[260px] md:h-auto"
+              />
 
               {/* Right Column: Heading, Subtitle & Button */}
               <div
                 ref={showcaseContentRef}
-                className="text-left flex flex-col items-start justify-center will-change-transform"
+                className="text-left flex flex-col items-start justify-center will-change-transform pt-2 md:pt-0"
               >
                 <h3 className="font-['Plus_Jakarta_Sans',sans-serif] font-bold text-[32px] sm:text-[42px] lg:text-[48px] text-[#0D0D0D] leading-[1.08] tracking-[-0.03em] mb-4 sm:mb-6">
                   Marketing. Start
@@ -206,7 +221,7 @@ export const ManifestoSection: React.FC = () => {
                 </p>
                 <Link
                   to="/startups"
-                  className="inline-block px-6 py-2.5 border border-[#1A1A1A] hover:bg-[#1A1A1A] hover:text-white transition-all duration-200 text-[13.5px] font-medium text-[#1A1A1A] rounded-none cursor-pointer"
+                  className="inline-block px-6 py-2.5 border border-[#1A1A1A] hover:bg-[#1A1A1A] hover:text-white transition-all duration-200 text-[13.5px] font-medium text-[#1A1A1A] rounded-none cursor-pointer pointer-events-auto"
                 >
                   View more
                 </Link>

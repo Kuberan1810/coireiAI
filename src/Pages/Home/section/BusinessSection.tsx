@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { CheckCircle2, Loader2 } from 'lucide-react';
-import image115 from '../../../assets/image115.svg';
+import image115 from '../../../assets/image115.webp';
 import { ScrollReveal } from '../../../components/ui/ScrollReveal';
 
 export const BusinessSection: React.FC = () => {
@@ -78,14 +78,14 @@ export const BusinessSection: React.FC = () => {
                       disabled={status === 'success'}
                       onChange={(e) => setEmail(e.target.value)}
                       placeholder="Enter your business email"
-                      className="w-full h-[66px] bg-white border border-[#AEAEAE] rounded-[8px] px-5 text-[15px] sm:text-base text-[#0B0F19] placeholder-[#AEAEAE] focus:outline-none focus:ring-2 focus:ring-black/10 focus:border-black transition-all disabled:bg-neutral-100 disabled:cursor-not-allowed"
+                      className="w-full h-[54px] sm:h-[66px] bg-white border border-[#AEAEAE] rounded-[8px] px-4 sm:px-5 text-[14px] sm:text-base text-[#0B0F19] placeholder-[#AEAEAE] focus:outline-none focus:ring-2 focus:ring-black/10 focus:border-black transition-all disabled:bg-neutral-100 disabled:cursor-not-allowed"
                     />
                   </div>
 
                   <button
                     type="submit"
                     disabled={status === 'loading' || status === 'success'}
-                    className="w-full h-[66px] bg-black hover:bg-neutral-900 active:scale-[0.99] text-white font-medium text-[15px] sm:text-base rounded-[8px] px-6 flex items-center justify-center gap-2.5 transition-all cursor-pointer shadow-sm disabled:opacity-85 disabled:cursor-default"
+                    className="w-full h-[54px] sm:h-[66px] bg-black hover:bg-neutral-900 active:scale-[0.99] text-white font-medium text-[15px] sm:text-base rounded-[8px] px-6 flex items-center justify-center gap-2.5 transition-all cursor-pointer shadow-sm disabled:opacity-85 disabled:cursor-default"
                   >
                     {status === 'loading' ? (
                       <span className="flex items-center gap-2">
