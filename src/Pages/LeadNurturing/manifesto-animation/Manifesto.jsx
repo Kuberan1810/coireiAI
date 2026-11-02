@@ -16,6 +16,9 @@ export default function Manifesto() {
     const manifestoEl = manifestoRef.current;
     if (!textEl || !containerEl || !manifestoEl) return;
 
+    // Ensure opacity is reset so letters are never invisible
+    textEl.style.opacity = "1";
+
     // Split text into individual letters and spaces
     const originalText = textEl.textContent.trim();
     textEl.innerHTML = originalText
@@ -30,10 +33,10 @@ export default function Manifesto() {
     const letterEls = textEl.querySelectorAll(".letter");
     const lastLetter = letterEls[letterEls.length - 1];
 
-    // Allows "Reach Out." to travel fully across the screen to the left ("fulla left la pogatum")
+    // Allows "Reach Out." to travel fully across and completely off the screen to the left
     const getScrollDistance = () => {
       if (lastLetter) {
-        const targetX = lastLetter.offsetLeft + lastLetter.offsetWidth - window.innerWidth * 0.08;
+        const targetX = lastLetter.offsetLeft + lastLetter.offsetWidth + window.innerWidth * 0.15;
         return Math.max(targetX, 100);
       }
       return textEl.clientWidth - document.body.clientWidth;
@@ -42,16 +45,16 @@ export default function Manifesto() {
     const speedRatio = 0.58;
     const getDuration = () => getScrollDistance() * speedRatio;
 
-    // Pin releases as "Reach Out." reaches the left and fades
+    // Pin holds until horizontal scroll and fade are 100% complete
     const pinTrigger = ScrollTrigger.create({
       trigger: containerEl,
       start: "top top",
-      end: () => `+=${getDuration() * 0.86}`,
+      end: () => `+=${getDuration()}`,
       pin: true,
       invalidateOnRefresh: true,
     });
 
-    // 1. Horizontal scroll continues all the way until "Reach Out." travels across to the left
+    // 1. Horizontal scroll continues all the way until "Reach Out." travels completely past the left edge
     const scrollTween = gsap.to(textEl, {
       x: () => -getScrollDistance(),
       ease: "none",
@@ -64,14 +67,14 @@ export default function Manifesto() {
       },
     });
 
-    // 2. As "Reach Out." finishes moving to the left, it fades away smoothly
+    // 2. As "Reach Out." finishes moving to the left, it fades away smoothly to 0 before unpin
     const fadeTween = gsap.to(textEl, {
       opacity: 0,
       ease: "power2.inOut",
       scrollTrigger: {
         trigger: containerEl,
-        start: () => `top+=${getDuration() * 0.72} top`,
-        end: () => `top+=${getDuration() * 0.98} top`,
+        start: () => `top+=${getDuration() * 0.65} top`,
+        end: () => `top+=${getDuration() * 0.95} top`,
         scrub: true,
         invalidateOnRefresh: true,
       },
@@ -79,16 +82,20 @@ export default function Manifesto() {
 
     // Individual letter entrance physics
     const letterTriggers = [];
+    const isMobile = window.innerWidth <= 768;
+    const ySpread = isMobile ? 80 : 250;
+    const rotSpread = isMobile ? 25 : 50;
+
     letterEls.forEach((letter) => {
       const tween = gsap.from(letter, {
-        yPercent: (Math.random() - 0.5) * 400,
-        rotation: (Math.random() - 0.5) * 60,
+        yPercent: (Math.random() - 0.5) * ySpread,
+        rotation: (Math.random() - 0.5) * rotSpread,
         ease: "elastic.out(1.2, 1)",
         scrollTrigger: {
           trigger: letter,
           containerAnimation: scrollTween,
           start: "left 100%",
-          end: "left 0%",
+          end: "left 35%",
           scrub: 0.5,
         },
       });

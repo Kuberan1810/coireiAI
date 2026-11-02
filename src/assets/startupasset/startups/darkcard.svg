@@ -1,0 +1,16 @@
+<svg width="295" height="230" viewBox="0 0 295 230" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <rect width="295" height="230" rx="12" fill="url(#darkgrad)"/>
+  <path d="M0 130L295 230V230H0V130Z" fill="url(#bottomshadow)" opacity="0.6"/>
+  <path d="M0 130L295 230" stroke="rgba(255,255,255,0.12)" stroke-width="1.5"/>
+  <defs>
+    <linearGradient id="darkgrad" x1="0" y1="0" x2="295" y2="230" gradientUnits="userSpaceOnUse">
+      <stop offset="0%" stop-color="#6E727A"/>
+      <stop offset="50%" stop-color="#555860"/>
+      <stop offset="100%" stop-color="#3A3C42"/>
+    </linearGradient>
+    <linearGradient id="bottomshadow" x1="147.5" y1="130" x2="147.5" y2="230" gradientUnits="userSpaceOnUse">
+      <stop offset="0%" stop-color="#24262A"/>
+      <stop offset="100%" stop-color="#181A1D"/>
+    </linearGradient>
+  </defs>
+</svg>

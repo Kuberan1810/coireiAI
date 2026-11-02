@@ -252,7 +252,7 @@ export const VisibilitySection: React.FC = () => {
   };
 
   return (
-    <section ref={sectionRef} className="relative z-20 w-full border-t border-[#E2E2E2] pt-10 sm:pt-14 pb-12 sm:pb-16 bg-white overflow-hidden">
+    <section ref={sectionRef} className="relative z-20 w-full border-t border-[#E2E2E2] -mt-[160px] sm:-mt-[200px] lg:-mt-[220px] pt-10 sm:pt-14 pb-12 sm:pb-16 bg-white overflow-hidden">
       <div className="w-full max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
 
         {/* Section Header */}

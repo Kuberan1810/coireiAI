@@ -1,5 +1,5 @@
 import React, { useEffect, useRef } from "react";
-import { Link } from "react-router-dom";
+// import { Link } from "react-router-dom";
 import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 import extFirstMeetImg from "../../../assets/startups/ext_firstmeetimg.jpg";
@@ -214,17 +214,17 @@ export const ManifestoSection: React.FC = () => {
                   <br />
                   Growth.
                 </h3>
-                <p className="font-['Manrope',sans-serif] text-[14px] sm:text-[15.5px] text-[#4B5563] leading-[26px] max-w-[460px] mb-6 sm:mb-8">
+                <p className="font-['Manrope',sans-serif] text-[14px] sm:text-[15.5px] text-[#4B5563] leading-[26px] max-w-[460px] mb-0">
                   We combine technology, expertise, and innovation to simplify
                   complex challenges, unlock new opportunities, and accelerate
                   sustainable business growth.
                 </p>
-                <Link
+                {/* <Link
                   to="/startups"
                   className="inline-block px-6 py-2.5 border border-[#1A1A1A] hover:bg-[#1A1A1A] hover:text-white transition-all duration-200 text-[13.5px] font-medium text-[#1A1A1A] rounded-none cursor-pointer pointer-events-auto"
                 >
                   View more
-                </Link>
+                </Link> */}
               </div>
             </div>
           </div>

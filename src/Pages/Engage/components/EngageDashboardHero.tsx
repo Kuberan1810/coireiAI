@@ -309,9 +309,11 @@ export const EngageDashboardHero: React.FC = () => {
       setCursorState('leaving');
     }, 1550);
 
-    // Step 6: Profile slides in from right smoothly, taking place beside the Gmail UI
+    // Step 6: Profile slides in from right smoothly (Desktop/Tablet only, skipped on mobile)
     const tProfile = setTimeout(() => {
-      setIsProfileRevealed(true);
+      if (typeof window !== 'undefined' && window.innerWidth >= 640) {
+        setIsProfileRevealed(true);
+      }
     }, 1650);
 
     const tCursorHidden = setTimeout(() => {
@@ -1022,9 +1024,9 @@ Could we schedule a quick 15-minute walkthrough to explore the platform?
               </div>
             )}
 
-            {/* ---------------- COLUMN 4: CONTACT & LEAD PROFILE (APPEARS BESIDE GMAIL CONVERSATION) ---------------- */}
+            {/* ---------------- COLUMN 4: CONTACT & LEAD PROFILE (APPEARS BESIDE GMAIL CONVERSATION ON DESKTOP/TABLET) ---------------- */}
             <div
-              className={`shrink-0 bg-[#FAFAFA] border-l border-[#F1F5F9] flex flex-col justify-between select-none overflow-y-auto no-scrollbar transition-all duration-600 ease-[cubic-bezier(0.16,1,0.3,1)] ${
+              className={`hidden sm:flex shrink-0 bg-[#FAFAFA] border-l border-[#F1F5F9] flex-col justify-between select-none overflow-y-auto no-scrollbar transition-all duration-600 ease-[cubic-bezier(0.16,1,0.3,1)] ${
                 isProfileRevealed
                   ? 'w-[200px] lg:w-[220px] p-3 opacity-100 translate-x-0'
                   : 'w-0 p-0 border-l-0 opacity-0 translate-x-12 overflow-hidden pointer-events-none'

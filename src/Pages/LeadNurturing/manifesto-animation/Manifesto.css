@@ -60,7 +60,7 @@
   width: max-content;
   color: #0B1329 !important;
   cursor: default;
-  padding: 0 101vw;
+  padding: 0 100vw;
   font-size: 12vw;
   font-family: 'CabinetGrotesk-Variable', 'CabinetGrotesk-Bold', 'Plus Jakarta Sans', Arial, Helvetica, sans-serif;
   font-weight: 700;
@@ -76,9 +76,10 @@
   will-change: transform;
 }
 
-@media (width <= 600px) {
+@media (max-width: 768px) {
   .manifesto .text {
-    font-size: clamp(52px, 15vw, 72px);
+    font-size: clamp(48px, 14vw, 68px);
+    padding: 0 100vw;
   }
 }
 

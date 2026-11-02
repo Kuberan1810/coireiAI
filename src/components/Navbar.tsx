@@ -393,7 +393,7 @@ export const Navbar: React.FC = () => {
               About
             </Link>
 
-            <Link
+            {/* <Link
               to="/startups"
               className={`text-[14.5px] font-medium transition-colors py-1 flex items-center gap-1.5 ${location.pathname.startsWith('/startup')
                 ? 'text-black font-semibold'
@@ -402,7 +402,7 @@ export const Navbar: React.FC = () => {
             >
               <span>Startups</span>
               <span className="text-[10px] font-bold uppercase tracking-wider px-1.5"></span>
-            </Link>
+            </Link> */}
           </nav>
 
           {/* Right Action Buttons */}
@@ -561,14 +561,14 @@ export const Navbar: React.FC = () => {
               About
             </Link>
 
-            <Link
+            {/* <Link
               to="/startups"
               onClick={() => setMobileMenuOpen(false)}
               className="block py-2 text-neutral-700 font-medium text-base hover:text-black flex items-center justify-between"
             >
               <span>Startups</span>
               <span className="text-[10px] font-bold uppercase tracking-wider bg-sky-100 text-sky-700 px-1.5 py-0.5 rounded-full">New</span>
-            </Link>
+            </Link> */}
 
             <div className="pt-4 border-t border-neutral-100 flex flex-col gap-3">
               <Link

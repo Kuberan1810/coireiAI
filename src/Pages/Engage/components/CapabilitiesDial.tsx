@@ -173,10 +173,10 @@ export const CapabilitiesDial: React.FC = () => {
       className="relative w-full bg-white h-[280vh]"
     >
       {/* Sticky Fullscreen Pinned Container - Fixed below navbar with generous spacing between sections */}
-      <div className="sticky top-0 h-screen w-full overflow-hidden flex flex-col justify-start items-center bg-white px-4 sm:px-6 lg:px-8 select-none pt-[86px] sm:pt-[94px] lg:pt-[100px] pb-8">
+      <div className="sticky top-0 h-screen w-full overflow-hidden flex flex-col justify-start items-center bg-white px-4 sm:px-6 lg:px-8 select-none pt-[72px] sm:pt-[84px] lg:pt-[96px] pb-8">
         <div className="w-full max-w-[1000px] mx-auto flex flex-col items-center">
           {/* Main Section Header */}
-          <div className="text-center max-w-[760px] mx-auto mb-7 sm:mb-9 md:mb-11 shrink-0">
+          <div className="text-center max-w-[760px] mx-auto mb-5 sm:mb-7 shrink-0">
             <h2 className="font-['Plus_Jakarta_Sans',sans-serif] text-2xl sm:text-3xl lg:text-[38px] xl:text-[42px] font-semibold tracking-[-1.2px] leading-[1.14] text-[#0D0D0D] mb-2 sm:mb-2.5">
               It doesn't just reply.
               <br />
@@ -187,24 +187,8 @@ export const CapabilitiesDial: React.FC = () => {
             </p>
           </div>
 
-          {/* Active Capability Title & Subtitle with smooth transition */}
-          <div className="text-center max-w-[500px] mx-auto min-h-[58px] sm:min-h-[64px] flex flex-col items-center justify-start mb-3 sm:mb-4 shrink-0">
-            <h3
-              key={`title-${activeIndex}`}
-              className="font-['Plus_Jakarta_Sans',sans-serif] text-lg sm:text-xl lg:text-[22px] font-semibold text-[#0D0D0D] tracking-tight mb-1 transition-all duration-300"
-            >
-              {capabilities[activeIndex].title}
-            </h3>
-            <p
-              key={`desc-${activeIndex}`}
-              className="font-['Plus_Jakarta_Sans',sans-serif] text-[12.5px] sm:text-[13.5px] text-[#64748B] leading-[1.45] max-w-[440px] mx-auto transition-all duration-300"
-            >
-              {capabilities[activeIndex].description}
-            </p>
-          </div>
-
           {/* Rotary Dial Widget */}
-          <div className="w-full max-w-[780px] lg:max-w-[820px] mx-auto select-none shrink-0">
+          <div className="relative w-full max-w-[780px] lg:max-w-[820px] mx-auto select-none shrink-0">
             <svg
               viewBox="0 230 1000 450"
               className="w-full h-auto overflow-visible"
@@ -299,6 +283,22 @@ export const CapabilitiesDial: React.FC = () => {
                 );
               })}
             </svg>
+
+            {/* Active Capability Title & Subtitle with smooth transition (Positioned lower on the bottom of the ring) */}
+            <div className="absolute left-1/2 -translate-x-1/2 top-[88%] sm:top-[82%] lg:top-[78%] w-full max-w-[320px] sm:max-w-[420px] lg:max-w-[460px] px-3 sm:px-4 text-center flex flex-col items-center justify-start pointer-events-none">
+              <h3
+                key={`title-${activeIndex}`}
+                className="font-['Plus_Jakarta_Sans',sans-serif] text-base sm:text-xl lg:text-[22px] font-semibold text-[#0D0D0D] tracking-tight mb-1.5 sm:mb-2 transition-all duration-300"
+              >
+                {capabilities[activeIndex].title}
+              </h3>
+              <p
+                key={`desc-${activeIndex}`}
+                className="font-['Plus_Jakarta_Sans',sans-serif] text-[12px] sm:text-[13px] lg:text-[13.5px] text-[#64748B] leading-[1.45] sm:leading-[1.5] max-w-[280px] sm:max-w-[380px] lg:max-w-[420px] mx-auto transition-all duration-300"
+              >
+                {capabilities[activeIndex].description}
+              </p>
+            </div>
           </div>
         </div>
       </div>

@@ -14,7 +14,7 @@ import SEO from './Pages/SEO/SEO';
 import Engage from './Pages/Engage/Engage';
 import AboutCEO from './Pages/About/AboutCeo/AboutCEO';
 import OurStory from './Pages/About/OurStory/OurStory';
-import Startups from './Pages/Startups/Startups';
+// import Startups from './Pages/Startups/Startups';
 import LeadNurturing from './Pages/LeadNurturing/LeadNurturing';
 
 // Simple Scroll to Top on route change
@@ -47,9 +47,9 @@ const AppContent: FC = () => {
           <Route path="/about" element={<About />} />
           <Route path="/about/ceo" element={<AboutCEO />} />
           <Route path="/about/our-story" element={<OurStory />} />
-          <Route path="/startups" element={<Startups />} />
+          {/* <Route path="/startups" element={<Startups />} />
           <Route path="/startup" element={<Startups />} />
-          <Route path="/coirei-for-startups" element={<Startups />} />
+          <Route path="/coirei-for-startups" element={<Startups />} /> */}
         </Routes>
       </main>
       <Footer />

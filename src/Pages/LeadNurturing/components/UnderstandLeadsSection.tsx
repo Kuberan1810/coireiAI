@@ -2,11 +2,11 @@ import React from 'react';
 
 export const UnderstandLeadsSection: React.FC = () => {
   return (
-    <section className="relative z-20 w-full bg-white text-[#080817] font-['Plus_Jakarta_Sans',sans-serif] overflow-hidden -mt-[30vh] sm:-mt-[34vh]">
+    <section className="relative z-20 w-full bg-white text-[#080817] font-['Plus_Jakarta_Sans',sans-serif] overflow-hidden -mt-[18vh] sm:-mt-[26vh] xl:-mt-[34vh]">
       {/* ========================================================================= */}
       {/* 1. CLEAN HEADING SECTION (NO LINES) */}
       {/* ========================================================================= */}
-      <div className="w-full max-w-[1440px] mx-auto px-6 sm:px-10 lg:px-12 pt-6 sm:pt-10 pb-12 sm:pb-14 text-left relative z-10">
+      <div className="w-full max-w-[1440px] mx-auto px-6 sm:px-10 lg:px-12 pt-6 sm:pt-10 pb-6 sm:pb-12 text-left relative z-10">
         <h2 className="font-['Plus_Jakarta_Sans',sans-serif] font-extrabold text-[36px] sm:text-[46px] lg:text-[56px] text-[#080817] leading-[1.12] tracking-[-0.025em] max-w-[850px]">
           Make Every Lead Interaction
           <br />
@@ -271,7 +271,7 @@ export const UnderstandLeadsSection: React.FC = () => {
       {/* ========================================================================= */}
       <div className="xl:hidden relative w-full border-t border-b border-[#080817]/[0.22] divide-y divide-[#080817]/[0.22]">
         {/* Section 01 Mobile */}
-        <div className="w-full max-w-[640px] mx-auto px-6 py-12 flex flex-col gap-10">
+        <div className="w-full max-w-[640px] mx-auto px-6 py-6 sm:py-10 flex flex-col gap-8 sm:gap-10">
           <div className="text-left">
             <span className="font-semibold text-[11px] sm:text-[12px] tracking-[0.14em] text-[#94A3B8] uppercase mb-3 inline-block">
               01 INTENT

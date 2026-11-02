@@ -281,12 +281,12 @@ export const Footer: React.FC = () => {
                 >
                   Seo
                 </Link>
-                <Link
+                {/* <Link
                   to="/startups"
                   className="text-white hover:text-neutral-300 transition-colors cursor-pointer"
                 >
                   Startups
-                </Link>
+                </Link> */}
               </div>
             </div>
 

@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useRef } from 'react';
+import React, { useEffect, useRef } from 'react';
 import { ScrollReveal } from '../../../components/ui/ScrollReveal';
 
 // SVGs from Downloads

@@ -214,17 +214,17 @@ export const LeadNurturingSection: React.FC = () => {
                       setActiveCardId(card.id);
                     }
                   }}
-                  className={`group relative rounded-[10px] bg-white transition-all duration-300 cursor-pointer overflow-hidden text-left flex flex-col justify-between ${
+                  className={`group relative rounded-[10px] bg-white transition-all duration-300 cursor-pointer overflow-hidden text-left flex flex-col justify-between w-full max-w-[280px] h-[306px] p-4 border border-[#F1F5F9] shadow-[0_2px_10px_rgba(0,0,0,0.02)] ${
                     isActive
-                      ? 'w-full max-w-[320px] sm:w-[265px] h-[374px] p-4 border border-[#E2E8F0] shadow-[0_12px_32px_-4px_rgba(0,0,0,0.08)] z-10 -translate-y-1'
-                      : 'w-full max-w-[280px] sm:w-[175px] h-[306px] p-4 border border-[#F1F5F9] hover:border-[#CBD5E1] shadow-[0_2px_10px_rgba(0,0,0,0.02)]'
+                      ? 'sm:w-[265px] sm:h-[374px] sm:border-[#E2E8F0] sm:shadow-[0_12px_32px_-4px_rgba(0,0,0,0.08)] sm:z-10 sm:-translate-y-1'
+                      : 'sm:w-[175px] sm:h-[306px] sm:hover:border-[#CBD5E1]'
                   }`}
                 >
                   {/* Top Area: Image reveals on hover/active, Left Corner Number shows when inactive */}
                   <div className="relative w-full h-[188px] rounded-[10px] overflow-hidden select-none bg-transparent pointer-events-none">
-                    {/* Revealed Image on Hover / Active */}
+                    {/* Revealed Image on Hover / Active (Hidden on mobile screens) */}
                     <div
-                      className={`absolute inset-0 w-full h-full transition-all duration-400 ease-out ${
+                      className={`hidden sm:block absolute inset-0 w-full h-full transition-all duration-400 ease-out ${
                         isActive
                           ? 'opacity-100 scale-100'
                           : 'opacity-0 scale-95 pointer-events-none'
@@ -240,12 +240,12 @@ export const LeadNurturingSection: React.FC = () => {
                       <div className="absolute bottom-0 left-0 right-0 h-[29px] bg-gradient-to-t from-white via-white/80 to-transparent pointer-events-none" />
                     </div>
 
-                    {/* Left Corner Number (Visible when inactive / idle)
+                    {/* Left Corner Number (Visible when inactive / idle on desktop, always visible on mobile)
                         Typography: Plus Jakarta Sans 800, Size: 128px, Line-height: 48px, Letter-spacing: -1px, Color: #F1F1F1
                         Figma spec: Top: 27px, Left: -21px */}
                     <div
                       className={`relative w-full h-full overflow-visible transition-all duration-300 ${
-                        isActive ? 'opacity-0 pointer-events-none' : 'opacity-100'
+                        isActive ? 'opacity-100 sm:opacity-0 sm:pointer-events-none' : 'opacity-100'
                       }`}
                     >
                       <span
@@ -263,17 +263,15 @@ export const LeadNurturingSection: React.FC = () => {
                   {/* Bottom Text Content */}
                   <div className="pt-2 z-10 relative pointer-events-none">
                     <h3
-                      className={`font-['Plus_Jakarta_Sans',sans-serif] font-bold text-[#0D0D0D] tracking-tight leading-snug mb-1.5 ${
-                        isActive ? 'text-[17px]' : 'text-[16px]'
+                      className={`font-['Plus_Jakarta_Sans',sans-serif] font-bold text-[#0D0D0D] tracking-tight leading-snug mb-1.5 text-[16px] ${
+                        isActive ? 'sm:text-[17px]' : ''
                       }`}
                     >
                       {card.title}
                     </h3>
                     <p
-                      className={`font-['Plus_Jakarta_Sans',sans-serif] font-normal text-[#64748B] ${
-                        isActive
-                          ? 'text-[13px] leading-[20px]'
-                          : 'text-[12.5px] leading-[18.5px]'
+                      className={`font-['Plus_Jakarta_Sans',sans-serif] font-normal text-[#64748B] text-[12.5px] leading-[18.5px] ${
+                        isActive ? 'sm:text-[13px] sm:leading-[20px]' : ''
                       }`}
                     >
                       {card.description}
