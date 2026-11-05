@@ -330,3 +330,99 @@
   }
 }
 
+
+/* ========================================================================= */
+/* PRISM / FUTURE CARDS GRAPHIC ANIMATIONS & FONTS                          */
+/* ========================================================================= */
+@font-face {
+  font-family: 'Lay Grotesk';
+  src: url('/fonts/lay-grotesk/LayGrotesk-Regular.woff2') format('woff2');
+  font-weight: 400;
+  font-style: normal;
+}
+
+@font-face {
+  font-family: 'Lay Grotesk';
+  src: url('/fonts/lay-grotesk/LayGrotesk-Medium.woff2') format('woff2');
+  font-weight: 500;
+  font-style: normal;
+}
+
+@font-face {
+  font-family: 'FT Polar Mono';
+  src: url('/fonts/ft-polar-mono/FTPolarMono-Regular.woff2') format('woff2');
+  font-weight: 400;
+  font-style: normal;
+}
+
+@keyframes graphic-dash {
+  to {
+    stroke-dashoffset: -120px;
+  }
+}
+
+@keyframes graphic-target {
+  0%, 100% { opacity: 0.45; }
+  50% { opacity: 1; }
+}
+
+@keyframes graphic-breathe {
+  0%, 100% { opacity: 0.35; }
+  50% { opacity: 1; }
+}
+
+@keyframes graphic-spin {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
+}
+
+@keyframes graphic-tilt {
+  0%, 100% { transform: scaleX(1); }
+  50% { transform: scaleX(0.08); }
+}
+
+@keyframes graphic-register {
+  0%, 100% { transform: scale(1); }
+  50% { transform: scale(0.955); }
+}
+
+@keyframes graphic-dock {
+  0%, 100% { transform: translate(0); }
+  50% { transform: translate(9px); }
+}
+
+.graphic-tilt,
+.graphic-register,
+.graphic-spin,
+.graphic-spin-fast {
+  transform-box: view-box;
+  transform-origin: 60px 60px;
+}
+
+.graphic-dash {
+  animation: 40s linear infinite graphic-dash;
+}
+
+.graphic-target {
+  animation: 5s ease-in-out infinite graphic-target;
+}
+
+.graphic-breathe {
+  animation: 7s ease-in-out infinite graphic-breathe;
+}
+
+.graphic-dock {
+  animation: 7s ease-in-out infinite graphic-dock;
+}
+
+.graphic-tilt {
+  animation: 13s ease-in-out infinite graphic-tilt;
+}
+
+.graphic-register {
+  animation: 7s ease-in-out infinite graphic-register;
+}
+
+.graphic-spin-fast {
+  animation: 16s linear infinite graphic-spin;
+}

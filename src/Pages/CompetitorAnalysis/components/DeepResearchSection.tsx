@@ -1,180 +1,173 @@
-import React, { useState } from 'react';
-import { ScrollReveal } from '../../../components/ui/ScrollReveal';
-import smartFrequencySvg from '../../../assets/engage/smartfrequency.svg';
-import img01 from '../../../assets/engage/01.svg';
-import img03 from '../../../assets/engage/03.svg';
-import img04 from '../../../assets/engage/04.svg';
+import React from 'react';
 
 interface DeepResearchCardItem {
   id: string;
-  number: string;
   title: string;
   description: string;
-  image: string;
+  renderWatermark: () => React.ReactNode;
 }
 
 const DEEP_RESEARCH_CARDS: DeepResearchCardItem[] = [
   {
-    id: '01',
-    number: '01',
+    id: 'market-positioning',
     title: 'Market Positioning',
     description: 'Compare your brand against competitors and uncover market gaps and opportunities.',
-    image: img01,
+    renderWatermark: () => (
+      <svg
+        viewBox="0 0 100 100"
+        fill="none"
+        className="w-24 h-24 sm:w-28 sm:h-28 text-[#818CF8]/25"
+      >
+        <circle cx="50" cy="50" r="38" stroke="currentColor" strokeWidth="6" />
+        <circle cx="50" cy="50" r="24" stroke="currentColor" strokeWidth="6" />
+        <circle cx="50" cy="50" r="10" stroke="currentColor" strokeWidth="6" />
+        <path
+          d="M50 50L78 78"
+          stroke="currentColor"
+          strokeWidth="7"
+          strokeLinecap="round"
+        />
+      </svg>
+    ),
   },
   {
-    id: '02',
-    number: '02',
+    id: 'competitor-intelligence',
     title: 'Competitor Intelligence',
     description: 'Strengths, weaknesses, pricing and positioning.',
-    image: smartFrequencySvg,
+    renderWatermark: () => (
+      <svg
+        viewBox="0 0 100 100"
+        fill="none"
+        className="w-24 h-24 sm:w-28 sm:h-28 text-[#818CF8]/25"
+      >
+        {/* Sparkle star */}
+        <path
+          d="M56 22C56 32 64 40 74 40C64 40 56 48 56 58C56 48 48 40 38 40C48 40 56 32 56 22Z"
+          stroke="currentColor"
+          strokeWidth="4"
+          fill="currentColor"
+          fillOpacity="0.1"
+          strokeLinejoin="round"
+        />
+        {/* Magnifying glass circle and handle */}
+        <circle cx="44" cy="46" r="26" stroke="currentColor" strokeWidth="6" />
+        <path
+          d="M63 65L82 84"
+          stroke="currentColor"
+          strokeWidth="7"
+          strokeLinecap="round"
+        />
+      </svg>
+    ),
   },
   {
-    id: '03',
-    number: '03',
-    title: 'Competitive Trends',
-    description: 'Track market shifts, evolving customer behaviour, and industry developments.',
-    image: img03,
+    id: 'trend-analysis',
+    title: 'Trend Analysis',
+    description: 'Emerging trends, customer behaviour and industry shifts.',
+    renderWatermark: () => (
+      <svg
+        viewBox="0 0 100 100"
+        fill="none"
+        className="w-24 h-24 sm:w-28 sm:h-28 text-[#818CF8]/25"
+      >
+        {/* Bar chart bars */}
+        <rect x="22" y="60" width="10" height="26" rx="3" fill="currentColor" fillOpacity="0.2" stroke="currentColor" strokeWidth="3" />
+        <rect x="42" y="48" width="10" height="38" rx="3" fill="currentColor" fillOpacity="0.2" stroke="currentColor" strokeWidth="3" />
+        <rect x="62" y="34" width="10" height="52" rx="3" fill="currentColor" fillOpacity="0.2" stroke="currentColor" strokeWidth="3" />
+        {/* Trend arrow */}
+        <path
+          d="M20 52L40 36L58 46L82 20"
+          stroke="currentColor"
+          strokeWidth="6"
+          strokeLinecap="round"
+          strokeLinejoin="round"
+        />
+        <path
+          d="M68 20H82V34"
+          stroke="currentColor"
+          strokeWidth="6"
+          strokeLinecap="round"
+          strokeLinejoin="round"
+        />
+      </svg>
+    ),
   },
   {
-    id: '04',
-    number: '04',
+    id: 'actionable-insights',
     title: 'Actionable Insights',
-    description: 'Uncover strategic opportunities and recommendations to stay ahead.',
-    image: img04,
+    description: 'Clear recommendations to stay ahead.',
+    renderWatermark: () => (
+      <svg
+        viewBox="0 0 100 100"
+        fill="none"
+        className="w-24 h-24 sm:w-28 sm:h-28 text-[#818CF8]/25"
+      >
+        {/* Lightbulb outline */}
+        <path
+          d="M36 44C36 34.0589 42.268 26 50 26C57.732 26 64 34.0589 64 44C64 49.5 60.5 54 59 58H41C39.5 54 36 49.5 36 44Z"
+          stroke="currentColor"
+          strokeWidth="5"
+          strokeLinejoin="round"
+        />
+        <path
+          d="M44 64H56M46 70H54"
+          stroke="currentColor"
+          strokeWidth="5"
+          strokeLinecap="round"
+        />
+        {/* Radiating rays */}
+        <line x1="50" y1="14" x2="50" y2="19" stroke="currentColor" strokeWidth="5" strokeLinecap="round" />
+        <line x1="28" y1="23" x2="32" y2="27" stroke="currentColor" strokeWidth="5" strokeLinecap="round" />
+        <line x1="72" y1="23" x2="68" y2="27" stroke="currentColor" strokeWidth="5" strokeLinecap="round" />
+        <line x1="20" y1="44" x2="25" y2="44" stroke="currentColor" strokeWidth="5" strokeLinecap="round" />
+        <line x1="80" y1="44" x2="75" y2="44" stroke="currentColor" strokeWidth="5" strokeLinecap="round" />
+      </svg>
+    ),
   },
-  {
-    id: "05",
-    number: "05",
-    title: "Voice of Customer",
-    description: "Analyze customer reviews and pain points to understand sentiment and competitor perception.",
-    image: img04,
-  }
 ];
 
 export const DeepResearchSection: React.FC = () => {
-  const [activeCardId, setActiveCardId] = useState<string>('02');
-
   return (
-    <section className="relative w-full py-[56px] sm:py-[72px] lg:py-[88px] px-6 sm:px-8 lg:px-12 bg-white border-t border-[#F1F5F9]">
+    <section className="relative w-full py-20 sm:py-28 px-6 sm:px-10 lg:px-12 bg-white text-[#0B0A09] border-t border-[#F1F5F9] overflow-hidden">
       <div className="max-w-[1240px] mx-auto">
-        {/* Top Header Row */}
-        <div className="grid grid-cols-1 lg:grid-cols-12 gap-6 lg:gap-12 items-start mb-12 sm:mb-16">
-          {/* Left Column: Eyebrow + Headline */}
-          <div className="lg:col-span-7 text-left">
-            <ScrollReveal variant="fade-up" duration={600} distance={18}>
-              <div className="font-['Manrope',sans-serif] font-semibold text-[12px] sm:text-[13px] uppercase tracking-wider text-[#94A3B8] mb-3">
-                DEEP RESEARCH
+        {/* Centered Section Header (Matching Figma) */}
+        <div className="max-w-3xl mx-auto text-center mb-14 sm:mb-18">
+          <div className="font-['Plus_Jakarta_Sans',sans-serif] font-semibold text-[11.5px] sm:text-[12.5px] tracking-[0.14em] uppercase text-[#94A3B8] mb-3">
+            DEEP RESEARCH
+          </div>
+          <h2 className="font-['Plus_Jakarta_Sans',sans-serif] text-3xl sm:text-4xl md:text-[44px] lg:text-[48px] font-bold tracking-tight text-[#0F172A] leading-[1.12]">
+            Understand Your Competitors,
+            <br />
+            Backed by Real Data .
+          </h2>
+          <p className="mt-5 text-[14px] sm:text-[15.5px] text-[#64748B] max-w-2xl mx-auto leading-[1.65] font-normal">
+            Get detailed analysis of market size, growth trends, industry shifts, competitor landscape and emerging opportunities — so you can make smarter, faster decisions.
+          </p>
+        </div>
+
+        {/* 4 Cards Grid */}
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-5 sm:gap-6">
+          {DEEP_RESEARCH_CARDS.map((card) => (
+            <div
+              key={card.id}
+              className="relative rounded-[18px] bg-white border border-[#F1F5F9] p-6 sm:p-7 min-h-[220px] sm:min-h-[240px] flex flex-col justify-between overflow-hidden shadow-[0_4px_24px_rgba(0,0,0,0.03)] hover:shadow-[0_12px_32px_rgba(0,0,0,0.07)] hover:-translate-y-1 transition-all duration-300 group cursor-default"
+            >
+              {/* Card Text Content (Top) */}
+              <div className="relative z-10 text-left">
+                <h3 className="font-['Plus_Jakarta_Sans',sans-serif] font-bold text-[17px] sm:text-[18px] text-[#0F172A] mb-2 leading-snug tracking-tight">
+                  {card.title}
+                </h3>
+                <p className="font-['Plus_Jakarta_Sans',sans-serif] text-[13px] sm:text-[13.5px] text-[#64748B] leading-[1.6] font-normal">
+                  {card.description}
+                </p>
               </div>
-              <h2 className="font-['Plus_Jakarta_Sans',sans-serif] text-3xl sm:text-4xl lg:text-[44px] font-semibold tracking-[-1.2px] leading-[1.14] text-[#0D0D0D]">
-                Understand Your Competitors,
-                <br className="hidden sm:inline" /> Backed by Real Data.
-              </h2>
-            </ScrollReveal>
-          </div>
 
-          {/* Right Column: Paragraph */}
-          <div className="lg:col-span-5 text-left lg:pt-6">
-            <ScrollReveal variant="fade-up" duration={600} distance={18} delay={120}>
-              <p className="font-['Plus_Jakarta_Sans',sans-serif] font-normal text-[14.5px] sm:text-[15.5px] leading-[26px] text-[#64748B] max-w-lg">
-                Get detailed analysis of market size, growth trends, industry shifts, competitor landscape and emerging opportunities — so you can make smarter, faster decisions.
-              </p>
-            </ScrollReveal>
-          </div>
-        </div>
-
-        {/* 4 Cards Container */}
-        <div
-          onMouseLeave={() => setActiveCardId('02')}
-          className="relative flex flex-col sm:flex-row flex-wrap lg:flex-nowrap items-center justify-center gap-4 lg:gap-5 min-h-[390px] py-3 select-none"
-        >
-          {DEEP_RESEARCH_CARDS.map((card, idx) => {
-            const isActive = card.id === activeCardId;
-
-            return (
-              <ScrollReveal
-                key={card.id}
-                variant="fade-up"
-                duration={650}
-                distance={24}
-                delay={idx * 90}
-                className="w-full sm:w-auto flex justify-center"
-              >
-                <div
-                  onMouseEnter={() => setActiveCardId(card.id)}
-                  className={`group relative rounded-[10px] bg-white transition-all duration-300 cursor-pointer overflow-hidden text-left flex flex-col justify-between ${
-                    isActive
-                      ? 'w-full max-w-[320px] sm:w-[265px] h-[374px] p-4 border border-[#E2E8F0] shadow-[0_12px_32px_-4px_rgba(0,0,0,0.08)] z-10 -translate-y-1'
-                      : 'w-full max-w-[280px] sm:w-[175px] h-[306px] p-4 border border-[#F1F5F9] hover:border-[#CBD5E1] shadow-[0_2px_10px_rgba(0,0,0,0.02)]'
-                  }`}
-                >
-                  {/* Top Area: Image reveals on hover/active, Left Corner Number shows when inactive */}
-                  <div className="relative w-full h-[188px] rounded-[10px] overflow-hidden select-none bg-transparent">
-                    {/* Revealed Image on Hover / Active */}
-                    <div
-                      className={`absolute inset-0 w-full h-full transition-all duration-400 ease-out ${
-                        isActive
-                          ? 'opacity-100 scale-100'
-                          : 'opacity-0 scale-95 pointer-events-none'
-                      }`}
-                    >
-                      <img
-                        src={card.image}
-                        alt={card.title}
-                        className="w-full h-full object-cover object-top rounded-[10px]"
-                        loading="lazy"
-                      />
-                      {/* Figma spec: 29px linear gradient fade at bottom into white */}
-                      <div className="absolute bottom-0 left-0 right-0 h-[29px] bg-gradient-to-t from-white via-white/80 to-transparent pointer-events-none" />
-                    </div>
-
-                    {/* Left Corner Number (Visible when inactive / idle)
-                        Typography: Plus Jakarta Sans 800, Size: 128px, Line-height: 48px, Letter-spacing: -1px, Color: #F1F1F1
-                        Figma spec: Top: 27px, Left: -21px */}
-                    <div
-                      className={`relative w-full h-full overflow-visible transition-all duration-300 ${
-                        isActive ? 'opacity-0 pointer-events-none' : 'opacity-100'
-                      }`}
-                    >
-                      <span
-                        className="absolute font-['Plus_Jakarta_Sans',sans-serif] font-extrabold text-[128px] leading-[48px] tracking-[-1px] text-[#F1F1F1] select-none pointer-events-none"
-                        style={{
-                          top: '27px',
-                          left: '-21px',
-                        }}
-                      >
-                        {card.number}
-                      </span>
-                    </div>
-                  </div>
-
-                  {/* Bottom Text Content */}
-                  <div className="pt-2 z-10 relative">
-                    <h3
-                      className={`font-['Plus_Jakarta_Sans',sans-serif] font-bold text-[#0D0D0D] tracking-tight leading-snug mb-1.5 ${
-                        isActive ? 'text-[17px]' : 'text-[16px]'
-                      }`}
-                    >
-                      {card.title}
-                    </h3>
-                    <p
-                      className={`font-['Plus_Jakarta_Sans',sans-serif] font-normal text-[#64748B] ${
-                        isActive
-                          ? 'text-[13px] leading-[20px]'
-                          : 'text-[12.5px] leading-[18.5px]'
-                      }`}
-                    >
-                      {card.description}
-                    </p>
-                  </div>
-                </div>
-              </ScrollReveal>
-            );
-          })}
-        </div>
-
-        {/* View More Button Container (Stationary for Competitor Analysis) */}
-        <div className="mt-12 sm:mt-14 flex justify-center">
-     
+              {/* Watermark SVG Graphic (Bottom Right) */}
+              <div className="absolute -bottom-2 -right-2 pointer-events-none select-none transition-transform duration-300 group-hover:scale-105 group-hover:-translate-x-1 group-hover:-translate-y-1">
+                {card.renderWatermark()}
+              </div>
+            </div>
+          ))}
         </div>
       </div>
     </section>

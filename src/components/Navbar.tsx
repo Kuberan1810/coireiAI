@@ -183,6 +183,7 @@ export const Navbar: React.FC = () => {
       const awardSpacer = document.getElementById('award-parallax-spacer');
       const buildSpacer = document.getElementById('build-parallax-spacer');
       const quoteSpacer = document.getElementById('quote-parallax-spacer');
+      const customerDecisionsSpacer = document.getElementById('customer-decisions-parallax-spacer');
 
       if (awardSpacer) {
         const rect = awardSpacer.getBoundingClientRect();
@@ -200,6 +201,13 @@ export const Navbar: React.FC = () => {
 
       if (quoteSpacer && !nextHide) {
         const rect = quoteSpacer.getBoundingClientRect();
+        if (rect.top <= 80 && rect.bottom >= 80) {
+          nextHide = true;
+        }
+      }
+
+      if (customerDecisionsSpacer && !nextHide) {
+        const rect = customerDecisionsSpacer.getBoundingClientRect();
         if (rect.top <= 80 && rect.bottom >= 80) {
           nextHide = true;
         }

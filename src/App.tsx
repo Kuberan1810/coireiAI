@@ -9,6 +9,7 @@ import Pricing from './Pages/Pricing/Pricing';
 import Contact from './Pages/Contact/Contact';
 import About from './Pages/About/About';
 import CompetitorAnalysis from './Pages/CompetitorAnalysis/CompetitorAnalysis';
+import VoiceOfCustomer from './Pages/CompetitorAnalysis/VoiceOfCustomer';
 import AEO from './Pages/AEO/AEO';
 import SEO from './Pages/SEO/SEO';
 import Engage from './Pages/Engage/Engage';
@@ -37,6 +38,10 @@ const AppContent: FC = () => {
           <Route path="/" element={<Home />} />
           <Route path="/marketing" element={<MarketIntelligence />} />
           <Route path="/competitor-analysis" element={<CompetitorAnalysis />} />
+          <Route path="/competitor-research" element={<CompetitorAnalysis />} />
+          <Route path="/competitors" element={<CompetitorAnalysis />} />
+          <Route path="/voice-of-customer" element={<VoiceOfCustomer />} />
+          <Route path="/voice-of-the-customer" element={<VoiceOfCustomer />} />
           <Route path="/seo" element={<SEO />} />
           <Route path="/aeo" element={<AEO />} />
           <Route path="/engage" element={<Engage />} />
