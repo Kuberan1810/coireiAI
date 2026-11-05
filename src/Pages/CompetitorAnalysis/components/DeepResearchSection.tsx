@@ -150,7 +150,7 @@ export const DeepResearchSection: React.FC = () => {
           {DEEP_RESEARCH_CARDS.map((card) => (
             <div
               key={card.id}
-              className="relative rounded-[18px] bg-white border border-[#F1F5F9] p-6 sm:p-7 min-h-[220px] sm:min-h-[240px] flex flex-col justify-between overflow-hidden shadow-[0_4px_24px_rgba(0,0,0,0.03)] hover:shadow-[0_12px_32px_rgba(0,0,0,0.07)] hover:-translate-y-1 transition-all duration-300 group cursor-default"
+              className="relative rounded-[18px] bg-white border border-[#F1F5F9] p-6 sm:p-7 min-h-[220px] sm:min-h-[240px] flex flex-col justify-between overflow-hidden shadow-[0_4px_24px_rgba(0,0,0,0.03)] cursor-default"
             >
               {/* Card Text Content (Top) */}
               <div className="relative z-10 text-left">

@@ -161,9 +161,9 @@ const CARDS_DATA: CardData[] = [
   },
   {
     id: 'therapeutics',
-    title: 'Who Is Looking for It?',
+    title: 'Who Are Your Ideal Customers?',
     description:
-      'Identify growing interest in products, services, and solutions across your target market.',
+      'Understand customer demographics, behaviors, and purchasing patterns to reach the right audience.',
     background: '#0e1016',
     titleColor: '#ffffff',
     descColor: 'rgba(255, 255, 255, 0.65)',
@@ -287,7 +287,14 @@ export const WhatsNextSection: React.FC = () => {
 
           {/* Headline */}
           <div className="lg:col-span-8">
-            <h2 className="font-['Lay_Grotesk','Plus_Jakarta_Sans',sans-serif] font-medium text-[28px] sm:text-[38px] lg:text-[46px] xl:text-[52px] leading-[1.12] text-[#0B0A09] tracking-[-0.025em] max-w-[820px]">
+            <h2
+              className="font-['Plus_Jakarta_Sans',sans-serif] font-semibold text-[28px] sm:text-[38px] lg:text-[48px] xl:text-[51  px] leading-[1.15] xl:leading-[76px] tracking-normal max-w-[820px]"
+              style={{
+                background: 'linear-gradient(180deg, #716A6A 0%, #332C2C 100%)',
+                WebkitBackgroundClip: 'text',
+                WebkitTextFillColor: 'transparent',
+              }}
+            >
               Discover Where Market Demand Is Growing and Evolving
             </h2>
           </div>
