@@ -97,6 +97,7 @@ const NAV_FEATURE_SECTIONS: NavFeatureSection[] = [
 export const Navbar: React.FC = () => {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const [mobileFeaturesOpen, setMobileFeaturesOpen] = useState(false);
+  const [openMobileSection, setOpenMobileSection] = useState<string | null>(null);
   const [dropdownOpen, setDropdownOpen] = useState(false);
   const [activeNavTab, setActiveNavTab] = useState<string>('research');
   const dropdownTimeoutRef = useRef<ReturnType<typeof setTimeout> | null>(null);
@@ -122,6 +123,8 @@ export const Navbar: React.FC = () => {
   // Close menus on route change
   useEffect(() => {
     setMobileMenuOpen(false);
+    setMobileFeaturesOpen(false);
+    setOpenMobileSection(null);
     setDropdownOpen(false);
     setActiveNavTab('research');
     isScrolledRef.current = false;
@@ -552,7 +555,7 @@ export const Navbar: React.FC = () => {
 
         {/* Mobile dropdown menu */}
         {!isScrolled && mobileMenuOpen && (
-          <div className="md:hidden border-b border-neutral-100 bg-white/98 backdrop-blur-xl px-6 pt-3 pb-6 space-y-3 shadow-xl max-h-[85vh] overflow-y-auto">
+          <div className="md:hidden border-b border-neutral-200/80 bg-white px-5 pt-3 pb-6 space-y-3 shadow-2xl max-h-[85vh] overflow-y-auto">
             <Link
               to="/"
               onClick={() => setMobileMenuOpen(false)}
@@ -565,65 +568,82 @@ export const Navbar: React.FC = () => {
             {/* Features Accordion */}
             <div>
               <button
+                type="button"
                 onClick={() => setMobileFeaturesOpen(!mobileFeaturesOpen)}
                 className="w-full flex items-center justify-between py-2 text-neutral-900 font-semibold text-base cursor-pointer"
               >
                 <span>Features</span>
-                <ChevronDown className={`w-4 h-4 text-neutral-500 transition-transform ${mobileFeaturesOpen ? 'rotate-180' : ''}`} />
+                <ChevronDown className={`w-4 h-4 text-neutral-500 transition-transform duration-200 ${mobileFeaturesOpen ? 'rotate-180' : ''}`} />
               </button>
 
               {mobileFeaturesOpen && (
-                <div className="pl-2 pr-1 py-2 space-y-4 border-l-2 border-neutral-100 ml-1 mt-2 text-left">
-                  {NAV_FEATURE_SECTIONS.map((section) => (
-                    <div key={section.id} className="space-y-2">
-                      <div className="px-2">
-                        <Link
-                          to={section.href}
-                          onClick={() => setMobileMenuOpen(false)}
-                          className="font-bold text-[13.5px] text-neutral-900 hover:text-black flex items-center justify-between"
+                <div className="mt-2 space-y-2.5 text-left">
+                  {NAV_FEATURE_SECTIONS.map((section) => {
+                    const isSectionOpen = openMobileSection === section.id;
+                    return (
+                      <div
+                        key={section.id}
+                        className="border border-neutral-200/70 rounded-xl overflow-hidden bg-neutral-50/50 transition-colors"
+                      >
+                        {/* Agent Section Accordion Toggle */}
+                        <button
+                          type="button"
+                          onClick={() => setOpenMobileSection(isSectionOpen ? null : section.id)}
+                          className="w-full flex items-center justify-between p-3 cursor-pointer text-left hover:bg-neutral-100/60 transition-colors"
                         >
-                          <span>{section.title}</span>
-                          <span className="text-[10px] uppercase font-semibold text-neutral-400 bg-neutral-100 px-1.5 py-0.5 rounded">
-                            Agent
-                          </span>
-                        </Link>
-                        <p className="text-[11.5px] text-neutral-500 mt-0.5">{section.subtitle}</p>
-                      </div>
+                          <div className="flex flex-col min-w-0 pr-2">
+                            <span className="font-semibold text-[13.5px] text-neutral-900 leading-snug">
+                              {section.title}
+                            </span>
+                            <span className="text-[11.5px] text-neutral-500 font-normal leading-tight mt-0.5">
+                              {section.subtitle}
+                            </span>
+                          </div>
+                          <ChevronDown
+                            className={`w-4 h-4 text-neutral-400 shrink-0 transition-transform duration-200 ${
+                              isSectionOpen ? 'rotate-180 text-black' : ''
+                            }`}
+                          />
+                        </button>
 
-                      <div className="space-y-1 pl-2 border-l border-neutral-100 ml-2">
-                        {section.items.map((sub) => (
-                          <Link
-                            key={sub.title}
-                            to={sub.href}
-                            onClick={(e) => {
-                              if (sub.href === '#' || !sub.href) {
-                                e.preventDefault();
-                                return;
-                              }
-                              setMobileMenuOpen(false);
-                              if (sub.href.includes('#')) {
-                                const [path, hashId] = sub.href.split('#');
-                                if (location.pathname === path) {
-                                  const el = document.getElementById(hashId);
-                                  if (el) {
-                                    el.scrollIntoView({ behavior: 'smooth' });
+                        {/* Collapsible Sub-items Dropdown */}
+                        {isSectionOpen && (
+                          <div className="px-2.5 pb-2.5 pt-1 border-t border-neutral-200/60 bg-white flex flex-col gap-1">
+                            {section.items.map((sub) => (
+                              <Link
+                                key={sub.title}
+                                to={sub.href}
+                                onClick={(e) => {
+                                  if (sub.href === '#' || !sub.href) {
+                                    e.preventDefault();
+                                    return;
                                   }
-                                }
-                              }
-                            }}
-                            className="block py-1.5 px-2 rounded-lg text-xs hover:bg-neutral-50 transition-colors"
-                          >
-                            <span className="font-semibold text-[12.5px] text-neutral-800 block">
-                              {sub.title}
-                            </span>
-                            <span className="text-[11px] text-neutral-500 block leading-snug mt-0.5">
-                              {sub.description}
-                            </span>
-                          </Link>
-                        ))}
+                                  setMobileMenuOpen(false);
+                                  if (sub.href.includes('#')) {
+                                    const [path, hashId] = sub.href.split('#');
+                                    if (location.pathname === path) {
+                                      const el = document.getElementById(hashId);
+                                      if (el) {
+                                        el.scrollIntoView({ behavior: 'smooth' });
+                                      }
+                                    }
+                                  }
+                                }}
+                                className="p-2.5 rounded-lg text-left hover:bg-neutral-50 transition-colors flex flex-col group/sub"
+                              >
+                                <span className="font-semibold text-[13px] text-neutral-800 group-hover/sub:text-black leading-snug">
+                                  {sub.title}
+                                </span>
+                                <span className="text-[11.5px] text-neutral-500 font-normal leading-relaxed mt-0.5 group-hover/sub:text-neutral-600">
+                                  {sub.description}
+                                </span>
+                              </Link>
+                            ))}
+                          </div>
+                        )}
                       </div>
-                    </div>
-                  ))}
+                    );
+                  })}
                 </div>
               )}
             </div>
