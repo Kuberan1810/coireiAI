@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React from 'react';
 import {
   Home,
   Megaphone,
@@ -33,74 +33,20 @@ export const GoogleAdsIcon: React.FC<{ className?: string }> = ({ className = 'w
   </svg>
 );
 
-interface NavItem {
-  id: string;
-  label: string;
-  icon: React.ComponentType<{ size?: number; className?: string; strokeWidth?: number }>;
-  headline: string;
-  description: string;
-}
-
-const NAV_ITEMS: NavItem[] = [
-  {
-    id: 'overview',
-    label: 'Overview',
-    icon: Home,
-    headline: 'Understand Competitors on Google',
-    description:
-      'Analyze competitor search and display advertising to understand how they capture demand, target keywords, and position their products across Google’s advertising network.',
-  },
-  {
-    id: 'campaigns',
-    label: 'Campaigns',
-    icon: Megaphone,
-    headline: 'Track Competitor Ad Campaigns',
-    description:
-      'Uncover competitor budget allocation, flight dates, network placements, and campaign objectives to benchmark where rivals are aggressively investing.',
-  },
-  {
-    id: 'ad-groups',
-    label: 'Ad Groups',
-    icon: Layers,
-    headline: 'Deconstruct Competitor Ad Groups',
-    description:
-      'See how rivals cluster product features, target granular customer intents, and structure landing page destinations to maximize relevance and conversion.',
-  },
-  {
-    id: 'ads-assets',
-    label: 'Ads & Assets',
-    icon: Image,
-    headline: 'Inspect Copy, Sitelinks & Creatives',
-    description:
-      'Compare headlines, descriptions, callout extensions, and display assets side-by-side to craft compelling counter-messaging that stands out in the SERP.',
-  },
-  {
-    id: 'keywords',
-    label: 'Keywords',
-    icon: Search,
-    headline: 'Discover High-Intent Paid Keywords',
-    description:
-      'Identify overlapping search terms, competitor bidding aggression, average CPC estimates, and organic keyword gaps your brand can quickly capitalize on.',
-  },
-  {
-    id: 'reports',
-    label: 'Reports',
-    icon: BarChart2,
-    headline: 'Actionable Competitive Intelligence Reports',
-    description:
-      'Generate automated share-of-voice analyses, auction insights trends, and executive summaries to keep your marketing and leadership teams ahead of every market shift.',
-  },
+const NAV_ITEMS = [
+  { id: 'overview', label: 'Overview', icon: Home, active: true },
+  { id: 'campaigns', label: 'Campaigns', icon: Megaphone, active: false },
+  { id: 'ad-groups', label: 'Ad Groups', icon: Layers, active: false },
+  { id: 'ads-assets', label: 'Ads & Assets', icon: Image, active: false },
+  { id: 'keywords', label: 'Keywords', icon: Search, active: false },
+  { id: 'reports', label: 'Reports', icon: BarChart2, active: false },
 ];
 
 export const GoogleAdsSection: React.FC = () => {
-  const [activeTab, setActiveTab] = useState('overview');
-
-  const currentItem = NAV_ITEMS.find((item) => item.id === activeTab) || NAV_ITEMS[0];
-
   return (
     <section className="relative w-full px-4 sm:px-6 lg:px-8 selection:bg-[#38BDF8]/20">
       <div className="max-w-[840px] w-full mx-auto">
-        {/* Main Google Ads Interactive Card */}
+        {/* Main Google Ads Card */}
         <div className="w-full rounded-[22px] sm:rounded-[26px] bg-white border border-[#E2E8F0] shadow-[0_16px_40px_-12px_rgba(0,0,0,0.06),0_2px_8px_rgba(0,0,0,0.02)] overflow-hidden transition-all duration-300 hover:shadow-[0_20px_48px_-12px_rgba(0,0,0,0.09)]">
           {/* Card Top Header */}
           <div className="px-6 py-4 sm:px-8 sm:py-5 flex items-center justify-between border-b border-[#F1F5F9]">
@@ -126,14 +72,12 @@ export const GoogleAdsSection: React.FC = () => {
             <div className="w-full sm:w-[190px] md:w-[210px] shrink-0 border-b sm:border-b-0 sm:border-r border-[#F1F5F9] p-3 sm:p-4 flex flex-col gap-1">
               {NAV_ITEMS.map((item) => {
                 const IconComponent = item.icon;
-                const isActive = activeTab === item.id;
+                const isActive = item.active;
 
                 return (
-                  <button
+                  <div
                     key={item.id}
-                    type="button"
-                    onClick={() => setActiveTab(item.id)}
-                    className={`w-full flex items-center gap-3 px-3.5 py-2.5 rounded-[10px] text-[13.5px] sm:text-[14px] font-medium transition-all duration-200 cursor-pointer select-none text-left ${
+                    className={`w-full flex items-center gap-3 px-3.5 py-2.5 rounded-[10px] text-[13.5px] sm:text-[14px] font-medium transition-all duration-200 select-none text-left ${
                       isActive
                         ? 'bg-[#0066F6] text-white shadow-xs'
                         : 'text-[#334155] hover:bg-[#F8FAFC] hover:text-[#0F172A]'
@@ -147,19 +91,19 @@ export const GoogleAdsSection: React.FC = () => {
                       }`}
                     />
                     <span>{item.label}</span>
-                  </button>
+                  </div>
                 );
               })}
             </div>
 
             {/* Right Content Panel */}
             <div className="flex-1 p-6 sm:p-10 flex flex-col justify-center">
-              <div key={currentItem.id} className="animate-fadeIn">
+              <div>
                 <h3 className="text-[20px] sm:text-[22px] font-bold text-[#0F172A] tracking-[-0.01em] leading-snug">
-                  {currentItem.headline}
+                  Understand Competitors on Google
                 </h3>
                 <p className="mt-4 text-[14.5px] sm:text-[15.5px] text-[#475569] leading-[1.65] font-normal max-w-[500px]">
-                  {currentItem.description}
+                  Analyze competitor search and display advertising to understand how they capture demand, target keywords, and position their products across Google’s advertising network.
                 </p>
               </div>
             </div>

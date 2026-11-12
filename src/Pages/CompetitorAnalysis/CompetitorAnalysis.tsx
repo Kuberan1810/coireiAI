@@ -59,7 +59,7 @@ export const CompetitorAnalysis: React.FC = () => {
       <AdvertisingAnalysisSection />
 
       {/* 4. ADVERTISING INTELLIGENCE SECTIONS (Google Ads & Meta Ads) */}
-      <div className="flex flex-col gap-6 sm:gap-8 pb-12 sm:pb-16">
+      <div className="relative z-10 pointer-events-auto flex flex-col gap-6 sm:gap-8 pb-12 sm:pb-16">
         <GoogleAdsSection />
         <MetaAdsSection />
       </div>
