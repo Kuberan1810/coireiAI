@@ -18,13 +18,34 @@ import OurStory from './Pages/About/OurStory/OurStory';
 // import Startups from './Pages/Startups/Startups';
 import LeadNurturing from './Pages/LeadNurturing/LeadNurturing';
 
-// Simple Scroll to Top on route change
+// Scroll to Top or Hash Target on route change
 function ScrollToTop() {
-  const { pathname } = useLocation();
+  const { pathname, hash } = useLocation();
 
   useEffect(() => {
-    window.scrollTo(0, 0);
-  }, [pathname]);
+    if (hash) {
+      const id = hash.replace('#', '');
+      const scrollToElement = () => {
+        const element = document.getElementById(id);
+        if (element) {
+          element.scrollIntoView({ behavior: 'smooth' });
+          return true;
+        }
+        return false;
+      };
+
+      if (!scrollToElement()) {
+        const timer1 = setTimeout(scrollToElement, 150);
+        const timer2 = setTimeout(scrollToElement, 350);
+        return () => {
+          clearTimeout(timer1);
+          clearTimeout(timer2);
+        };
+      }
+    } else {
+      window.scrollTo(0, 0);
+    }
+  }, [pathname, hash]);
 
   return null;
 }

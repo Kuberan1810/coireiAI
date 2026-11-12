@@ -37,7 +37,7 @@ const PROCESS_STEPS: ProcessStepItem[] = [
   {
     step: '04',
     title: 'Follow-Up',
-    stage: 'Nurture',
+    stage: 'Convert',
     description: 'Automate follow-ups, re-engage prospects, schedule meetings, and hand qualified opportunities to your sales team.',
     image: followupCard,
   },

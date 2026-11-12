@@ -356,7 +356,43 @@ const LeadGenCard: React.FC = () => {
   );
 };
 
-// Card 2: Analyze markets, competitors, and opportunities (Vector 51 & Vector 52 Wave Train + Stationary Pop-up PFPs)
+// SaaS Logo marks for Market Analysis Card
+const ClayLogoMark: React.FC = () => (
+  <svg viewBox="0 0 24 24" className="w-full h-full" fill="none">
+    <path
+      d="M4 6.5C4 5.67157 4.67157 5 5.5 5H18.5C19.3284 5 20 5.67157 20 6.5C20 7.32843 19.3284 8 18.5 8H5.5C4.67157 8 4 7.32843 4 6.5Z"
+      fill="#EA580C"
+    />
+    <path
+      d="M4 12C4 11.1716 4.67157 10.5 5.5 10.5H15.5C16.3284 10.5 17 11.1716 17 12C17 12.8284 16.3284 13.5 15.5 13.5H5.5C4.67157 13.5 4 12.8284 4 12Z"
+      fill="#F43F5E"
+    />
+    <path
+      d="M4 17.5C4 16.6716 4.67157 16 5.5 16H18.5C19.3284 16 20 16.6716 20 17.5C20 18.3284 19.3284 19 18.5 19H5.5C4.67157 19 4 18.3284 4 17.5Z"
+      fill="#8B5CF6"
+    />
+  </svg>
+);
+
+const LinearLogoMark: React.FC = () => (
+  <svg viewBox="0 0 24 24" className="w-full h-full" fill="none">
+    <path
+      d="M3.5 12a8.5 8.5 0 0 1 8.5-8.5c1.8 0 3.4.5 4.8 1.5L4.9 16.8A8.4 8.4 0 0 1 3.5 12Zm3.4 6.7L18.7 6.9c1 1.4 1.5 3 1.5 5.1a8.5 8.5 0 0 1-13.3 6.7Z"
+      fill="#5E6AD2"
+    />
+  </svg>
+);
+
+const CursorLogoMark: React.FC = () => (
+  <svg viewBox="0 0 24 24" className="w-full h-full" fill="none">
+    <path
+      d="M12 2.5L4 7v10l8 4.5 8-4.5V7L12 2.5zm0 2.3l6 3.4-2.8 1.6-6-3.4 2.8-1.6zM5.5 8.1l6 3.4v6.8l-6-3.4V8.1zm7.5 10.2v-6.8l6-3.4v6.8l-6 3.4z"
+      fill="#18181B"
+    />
+  </svg>
+);
+
+// Card 2: Analyze markets, competitors, and opportunities
 const MarketAnalysisCard: React.FC = () => {
   const purplePathRef = useRef<SVGPathElement | null>(null);
   const orangePathRef = useRef<SVGPathElement | null>(null);
@@ -403,28 +439,37 @@ const MarketAnalysisCard: React.FC = () => {
   ];
 
   // Fixed coordinates matching Screenshot 1 exactly relative to viewBox (415 x 170):
-  // 3 stationary PFPs along the curve
-  const pfpData = [
+  // 3 stationary SaaS company logos along the competitor wave
+  const companyLogosData = [
     {
-      name: 'Alex',
-      src: 'https://images.unsplash.com/photo-1500648767791-00dcc994a43e?w=96&auto=format&fit=crop&q=80',
-      initial: 'A',
+      name: 'Clay',
+      domain: 'clay.com',
+      src: 'https://www.google.com/s2/favicons?domain=clay.com&sz=128',
+      fallbackBg: 'bg-gradient-to-tr from-[#EA580C] via-[#F43F5E] to-[#8B5CF6]',
+      initial: 'c',
+      fallbackIcon: <ClayLogoMark />,
       // Crest 1 of Vector 51
       x: `${(57.2 / 415) * 100}%`,
       y: `${(15.0 / 170) * 100}%`,
     },
     {
-      name: 'David',
-      src: 'https://images.unsplash.com/photo-1539571696357-5a69c17a67c6?w=96&auto=format&fit=crop&q=80',
-      initial: 'D',
+      name: 'Linear',
+      domain: 'linear.app',
+      src: 'https://www.google.com/s2/favicons?domain=linear.app&sz=128',
+      fallbackBg: 'bg-[#5E6AD2]',
+      initial: 'L',
+      fallbackIcon: <LinearLogoMark />,
       // Dip near Trough 1
       x: `${(116.0 / 415) * 100}%`,
       y: `${(120.0 / 170) * 100}%`,
     },
     {
-      name: 'Michael',
-      src: 'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=96&auto=format&fit=crop&q=80',
-      initial: 'M',
+      name: 'Cursor',
+      domain: 'cursor.com',
+      src: 'https://www.google.com/s2/favicons?domain=cursor.com&sz=128',
+      fallbackBg: 'bg-[#18181B]',
+      initial: 'C',
+      fallbackIcon: <CursorLogoMark />,
       // Crest 2 of Vector 51
       x: `${(215.7 / 415) * 100}%`,
       y: `${(57.7 / 170) * 100}%`,
@@ -688,8 +733,8 @@ const MarketAnalysisCard: React.FC = () => {
             />
           </svg>
 
-          {/* 3 Stationary PFPs that pop up into their design spots with purple border rings */}
-          {pfpData.map((pfp, idx) => {
+          {/* 3 Stationary SaaS Company Logos that pop up into their design spots with purple border rings */}
+          {companyLogosData.map((logo, idx) => {
             const isRevealed = revealed[idx];
             const isFailed = failedImgs[idx];
 
@@ -698,8 +743,8 @@ const MarketAnalysisCard: React.FC = () => {
                 key={idx}
                 className="absolute transform -translate-x-1/2 -translate-y-1/2 select-none z-20 pointer-events-none"
                 style={{
-                  left: pfp.x,
-                  top: pfp.y,
+                  left: logo.x,
+                  top: logo.y,
                 }}
               >
                 <div
@@ -711,18 +756,27 @@ const MarketAnalysisCard: React.FC = () => {
                     transitionTimingFunction: 'cubic-bezier(0.34, 1.56, 0.64, 1)',
                   }}
                 >
-                  {isFailed ? (
-                    <div className="w-8 h-8 rounded-full bg-gradient-to-tr from-purple-600 to-indigo-500 text-white font-semibold text-[11px] flex items-center justify-center ring-[2.5px] ring-[#9644F9] shadow-[0_4px_12px_rgba(150,68,249,0.25)]">
-                      {pfp.initial}
-                    </div>
-                  ) : (
-                    <img
-                      src={pfp.src}
-                      alt={pfp.name}
-                      onError={() => setFailedImgs((prev) => ({ ...prev, [idx]: true }))}
-                      className="w-8 h-8 rounded-full object-cover ring-[2.5px] ring-[#9644F9] ring-offset-1 ring-offset-white shadow-[0_4px_12px_rgba(150,68,249,0.25)] bg-white"
-                    />
-                  )}
+                  <div
+                    title={logo.name}
+                    className="w-8 h-8 rounded-full bg-white flex items-center justify-center p-1.5 ring-[2.5px] ring-[#9644F9] ring-offset-1 ring-offset-white shadow-[0_4px_14px_rgba(150,68,249,0.28)] overflow-hidden"
+                  >
+                    {isFailed ? (
+                      logo.fallbackIcon || (
+                        <div
+                          className={`w-full h-full rounded-full ${logo.fallbackBg} text-white font-bold text-[10px] flex items-center justify-center`}
+                        >
+                          {logo.initial}
+                        </div>
+                      )
+                    ) : (
+                      <img
+                        src={logo.src}
+                        alt={logo.name}
+                        onError={() => setFailedImgs((prev) => ({ ...prev, [idx]: true }))}
+                        className="w-full h-full object-contain"
+                      />
+                    )}
+                  </div>
                 </div>
               </div>
             );
@@ -750,7 +804,7 @@ const MarketAnalysisCard: React.FC = () => {
 const AudienceIntelligenceCard: React.FC = () => {
   type CursorState = 'hidden' | 'entering' | 'on-target' | 'clicking' | 'clicked' | 'leaving';
 
-  const fullText = 'Find where my customers active';
+  const fullText = 'Find where my customers are active';
   const [displayText, setDisplayText] = useState('');
   const [isChatBottom, setIsChatBottom] = useState(false);
   const [cursorState, setCursorState] = useState<CursorState>('hidden');
@@ -988,7 +1042,7 @@ const AudienceIntelligenceCard: React.FC = () => {
               </>
             ) : (
               <span className="text-neutral-400 font-normal">
-                Find where my customers active
+                Find where my customers are active
               </span>
             )}
           </span>
@@ -1782,37 +1836,32 @@ const AutomateAdsCard: React.FC = () => {
 
             <div className="space-y-4">
               <p className="text-[13px] sm:text-[13.5px] text-[#4E4E4E] leading-[1.65] font-normal max-w-xl">
-                Create and launch smarter ad campaigns with AI-powered audience targeting, messaging, and
-                creative suggestions. Coirei helps you identify the right channels, reach high-intent customers,
-                and optimize your campaigns for better results.
+                Create and launch high-performing ad campaigns with Coirei's AI-powered ad generation and optimization. Generate compelling ad copy, create engaging visuals, build campaigns, and continuously optimize performance to drive better results.
               </p>
 
               {/* Bullet points */}
               <ul className="space-y-2 text-[13px] sm:text-[13.5px] text-[#4E4E4E] font-normal">
                 <li className="flex items-center gap-2.5">
                   <span className="w-1.5 h-1.5 rounded-full bg-neutral-800 shrink-0" />
-                  <span>AI-powered audience targeting</span>
+                  <span>AI-powered ad copy generation</span>
                 </li>
                 <li className="flex items-center gap-2.5">
                   <span className="w-1.5 h-1.5 rounded-full bg-neutral-800 shrink-0" />
-                  <span>Smart ad creative suggestions</span>
+                  <span>Creative and visual generation</span>
                 </li>
                 <li className="flex items-center gap-2.5">
                   <span className="w-1.5 h-1.5 rounded-full bg-neutral-800 shrink-0" />
-                  <span>Platform &amp; channel recommendations</span>
+                  <span> Automated campaign creation</span>
                 </li>
                 <li className="flex items-center gap-2.5">
                   <span className="w-1.5 h-1.5 rounded-full bg-neutral-800 shrink-0" />
-                  <span>Campaign setup &amp; automation</span>
+                  <span>Campaign optimization & performance insights</span>
                 </li>
                 <li className="flex items-center gap-2.5">
                   <span className="w-1.5 h-1.5 rounded-full bg-neutral-800 shrink-0" />
-                  <span>Personalized ad messaging</span>
+                  <span>SEO & AEO </span>
                 </li>
-                <li className="flex items-center gap-2.5">
-                  <span className="w-1.5 h-1.5 rounded-full bg-neutral-800 shrink-0" />
-                  <span>Performance &amp; optimization insights</span>
-                </li>
+                
               </ul>
             </div>
           </div>

@@ -193,7 +193,7 @@ export const LeadNurturingSection: React.FC = () => {
           onMouseEnter={handleMouseEnter}
           onMouseLeave={handleMouseLeave}
           onClick={() => navigate('/lead-nurturing')}
-          className="relative flex flex-col sm:flex-row flex-wrap lg:flex-nowrap items-center justify-center gap-4 lg:gap-5 min-h-[390px] py-3 select-none cursor-pointer"
+          className="relative grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 lg:gap-5 max-w-[1180px] mx-auto py-3 select-none cursor-pointer"
         >
           {NURTURE_CARDS.map((card, idx) => {
             const isActive = card.id === activeCardId;
@@ -205,7 +205,7 @@ export const LeadNurturingSection: React.FC = () => {
                 duration={650}
                 distance={24}
                 delay={idx * 90}
-                className="w-full sm:w-auto flex justify-center"
+                className="w-full h-full flex justify-center"
               >
                 <div
                   onMouseEnter={(e) => {
@@ -214,17 +214,17 @@ export const LeadNurturingSection: React.FC = () => {
                       setActiveCardId(card.id);
                     }
                   }}
-                  className={`group relative rounded-[10px] bg-white transition-all duration-300 cursor-pointer overflow-hidden text-left flex flex-col justify-between w-full max-w-[280px] h-[306px] p-4 border border-[#F1F5F9] shadow-[0_2px_10px_rgba(0,0,0,0.02)] ${
+                  className={`group relative rounded-[10px] bg-white transition-all duration-300 cursor-pointer overflow-hidden text-left flex flex-col justify-between w-full h-[360px] p-4 sm:p-5 border shadow-[0_2px_10px_rgba(0,0,0,0.02)] ${
                     isActive
-                      ? 'sm:w-[265px] sm:h-[374px] sm:border-[#E2E8F0] sm:shadow-[0_12px_32px_-4px_rgba(0,0,0,0.08)] sm:z-10 sm:-translate-y-1'
-                      : 'sm:w-[175px] sm:h-[306px] sm:hover:border-[#CBD5E1]'
+                      ? 'border-[#CBD5E1] shadow-[0_12px_32px_-4px_rgba(0,0,0,0.08)]'
+                      : 'border-[#F1F5F9] hover:border-[#CBD5E1]'
                   }`}
                 >
                   {/* Top Area: Image reveals on hover/active, Left Corner Number shows when inactive */}
-                  <div className="relative w-full h-[188px] rounded-[10px] overflow-hidden select-none bg-transparent pointer-events-none">
-                    {/* Revealed Image on Hover / Active (Hidden on mobile screens) */}
+                  <div className="relative w-full h-[175px] rounded-[8px] overflow-hidden select-none bg-transparent pointer-events-none">
+                    {/* Revealed Image on Hover / Active */}
                     <div
-                      className={`hidden sm:block absolute inset-0 w-full h-full transition-all duration-400 ease-out ${
+                      className={`absolute inset-0 w-full h-full transition-all duration-300 ease-out ${
                         isActive
                           ? 'opacity-100 scale-100'
                           : 'opacity-0 scale-95 pointer-events-none'
@@ -233,23 +233,21 @@ export const LeadNurturingSection: React.FC = () => {
                       <img
                         src={card.image}
                         alt={card.title}
-                        className="w-full h-full object-cover object-top rounded-[10px]"
+                        className="w-full h-full object-cover object-top rounded-[8px]"
                         loading="lazy"
                       />
-                      {/* Figma spec: 29px linear gradient fade at bottom into white */}
-                      <div className="absolute bottom-0 left-0 right-0 h-[29px] bg-gradient-to-t from-white via-white/80 to-transparent pointer-events-none" />
+                      {/* Figma spec: linear gradient fade at bottom into white */}
+                      <div className="absolute bottom-0 left-0 right-0 h-[24px] bg-gradient-to-t from-white via-white/80 to-transparent pointer-events-none" />
                     </div>
 
-                    {/* Left Corner Number (Visible when inactive / idle on desktop, always visible on mobile)
-                        Typography: Plus Jakarta Sans 800, Size: 128px, Line-height: 48px, Letter-spacing: -1px, Color: #F1F1F1
-                        Figma spec: Top: 27px, Left: -21px */}
+                    {/* Left Corner Number (Visible when inactive / idle) */}
                     <div
-                      className={`relative w-full h-full overflow-visible transition-all duration-300 ${
-                        isActive ? 'opacity-100 sm:opacity-0 sm:pointer-events-none' : 'opacity-100'
+                      className={`relative w-full h-full overflow-visible transition-opacity duration-300 ${
+                        isActive ? 'opacity-0 pointer-events-none' : 'opacity-100'
                       }`}
                     >
                       <span
-                        className="absolute font-['Plus_Jakarta_Sans',sans-serif] font-extrabold text-[128px] leading-[48px] tracking-[-1px] text-[#F1F1F1] select-none pointer-events-none"
+                        className="absolute font-['Plus_Jakarta_Sans',sans-serif] font-extrabold text-[120px] leading-[48px] tracking-[-1px] text-[#F1F1F1] select-none pointer-events-none"
                         style={{
                           top: '27px',
                           left: '-21px',
@@ -260,20 +258,12 @@ export const LeadNurturingSection: React.FC = () => {
                     </div>
                   </div>
 
-                  {/* Bottom Text Content */}
-                  <div className="pt-2 z-10 relative pointer-events-none">
-                    <h3
-                      className={`font-['Plus_Jakarta_Sans',sans-serif] font-bold text-[#0D0D0D] tracking-tight leading-snug mb-1.5 text-[16px] ${
-                        isActive ? 'sm:text-[17px]' : ''
-                      }`}
-                    >
+                  {/* Bottom Text Content - Uniformly Aligned */}
+                  <div className="pt-3 flex flex-col flex-1 justify-start z-10 relative pointer-events-none">
+                    <h3 className="font-['Plus_Jakarta_Sans',sans-serif] font-semibold text-[#0D0D0D] tracking-tight leading-[22px] text-[16px] min-h-[44px] flex items-start mb-2">
                       {card.title}
                     </h3>
-                    <p
-                      className={`font-['Plus_Jakarta_Sans',sans-serif] font-normal text-[#64748B] text-[12.5px] leading-[18.5px] ${
-                        isActive ? 'sm:text-[13px] sm:leading-[20px]' : ''
-                      }`}
-                    >
+                    <p className="font-['Plus_Jakarta_Sans',sans-serif] font-normal text-[#64748B] text-[13px] leading-[20px]">
                       {card.description}
                     </p>
                   </div>

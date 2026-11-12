@@ -432,16 +432,15 @@ export const EngageDashboardHero: React.FC = () => {
       `}</style>
       <div className="w-full max-w-[960px] mx-auto">
         {/* Header Section */}
-        <div className="text-center max-w-2xl mx-auto mb-6 sm:mb-8">
-          <h1 className="text-2xl sm:text-3xl md:text-[36px] font-semibold text-[#0D0D0D] tracking-[-0.6px] leading-[1.15]">
-            A team of specialized
+        <div className="text-center max-w-4xl mx-auto mb-8 sm:mb-12">
+          <h1 className="text-3xl sm:text-4xl md:text-[46px] lg:text-[50px] font-semibold text-[#0D0D0D] tracking-[-1px] leading-[1.15]">
+            Reach. Engage. Convert.
             <br />
-            agents, working for you
+            All Through Engage Agent
           </h1>
-          <p className="mt-2 text-[#64748B] text-xs sm:text-[13.5px] max-w-lg mx-auto leading-relaxed">
-            Our AI GTM Strategist coordinates a team of expert agents to
-            <br className="hidden sm:inline" /> research, plan, execute and
-            optimize your growth.
+          <p className="mt-4 text-[#64748B] text-sm sm:text-base md:text-[16px] max-w-xl mx-auto leading-relaxed">
+            Coirei's AI Engage Agent builds meaningful customer connections 
+            <br className="hidden sm:inline" /> through personalized outreach, intelligent follow-ups, and targeted engagement strategies that turn prospects into customers.
           </p>
         </div>
 
@@ -451,7 +450,7 @@ export const EngageDashboardHero: React.FC = () => {
           className="relative w-full rounded-[14px] border border-[#E2E8F0] bg-white shadow-[0_12px_40px_-10px_rgba(0,0,0,0.08)] overflow-hidden pointer-events-none select-none cursor-default"
         >
           {/* Animated Pointer Cursor: exact cursor & speeds from Home Screen Hero */}
-          <div
+          <div  
             className={`absolute pointer-events-none z-50 transition-all ease-out ${
               cursorState === 'hidden'
                 ? 'opacity-0 scale-90 duration-300 pointer-events-none'
@@ -1096,22 +1095,7 @@ Could we schedule a quick 15-minute walkthrough to explore the platform?
                   </div>
 
                   {/* Lead Score Progress */}
-                  <div>
-                    <div className="flex items-center justify-between mb-0.5">
-                      <span className="font-semibold text-[#0D0D0D] text-[9.5px]">
-                        Lead Score
-                      </span>
-                      <span className="font-bold text-[#16A34A] text-[9.5px]">
-                        {activeConv.leadScore}%
-                      </span>
-                    </div>
-                    <div className="w-full h-1 bg-[#E2E8F0] rounded-full overflow-hidden">
-                      <div
-                        className="h-full bg-[#16A34A] rounded-full transition-all duration-500"
-                        style={{ width: `${activeConv.leadScore}%` }}
-                      />
-                    </div>
-                  </div>
+                
 
                   {/* Tags */}
                   <div>
@@ -1132,19 +1116,6 @@ Could we schedule a quick 15-minute walkthrough to explore the platform?
                 </div>
               </div>
 
-              {/* Recent Activity Footer */}
-              <div className="pt-2 border-t border-[#E2E8F0] text-[9.5px] min-w-[175px]">
-                <span className="font-semibold text-[#0D0D0D] block mb-0.5">
-                  Recent Activity
-                </span>
-                <div className="flex items-center justify-between text-[#64748B]">
-                  <div className="flex items-center gap-1 truncate">
-                    <span className="w-1.5 h-1.5 rounded-full bg-[#22C55E]" />
-                    <span className="truncate">Visited pricing</span>
-                  </div>
-                  <span className="text-[#2563EB]">View</span>
-                </div>
-              </div>
             </div>
           </div>
         </div>

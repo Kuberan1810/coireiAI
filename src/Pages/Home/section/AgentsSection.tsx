@@ -42,106 +42,6 @@ interface AgentData {
 
 const AGENTS: AgentData[] = [
   {
-    id: 'engage',
-    name: 'Engage Agent',
-    coverageTitle: 'Engagement Coverage',
-    description:
-      'An AI-powered engagement engine that creates personalized outreach, nurtures prospects, and builds meaningful customer relationships across every stage of the sales journey.',
-    link: '/engage',
-    metrics: [
-      {
-        label: 'Prospects Enriched',
-        value: 100,
-        barColor: 'bg-[#3B82F6]',
-        icon: Mail,
-        iconBg: 'bg-[#EFF6FF]',
-        iconColor: 'text-[#2563EB]',
-      },
-      {
-        label: 'Sequences Automated',
-        value: 86,
-        barColor: 'bg-[#8B5CF6]',
-        icon: Send,
-        iconBg: 'bg-[#F5F3FF]',
-        iconColor: 'text-[#7C3AED]',
-      },
-      {
-        label: 'Deliverability Verified',
-        value: 71,
-        barColor: 'bg-[#06B6D4]',
-        icon: CheckCircle2,
-        iconBg: 'bg-[#ECFEFF]',
-        iconColor: 'text-[#0891B2]',
-      },
-      {
-        label: 'Response Rate Boost',
-        value: 53,
-        barColor: 'bg-[#10B981]',
-        icon: TrendingUp,
-        iconBg: 'bg-[#ECFDF5]',
-        iconColor: 'text-[#059669]',
-      },
-      {
-        label: 'Meetings Booked',
-        value: 30,
-        barColor: 'bg-[#F59E0B]',
-        icon: Calendar,
-        iconBg: 'bg-[#FFFBEB]',
-        iconColor: 'text-[#D97706]',
-      },
-    ],
-  },
-  {
-    id: 'marketing',
-    name: 'Marketing Agent',
-    coverageTitle: 'Marketing Coverage',
-    description:
-      'Generates high-converting multi-channel ad copy, creatives, and targeted funnels tailored precisely to each buyer persona and their unique pain points.',
-    link: '/marketing',
-    metrics: [
-      {
-        label: 'Ad Creatives Generated',
-        value: 100,
-        barColor: 'bg-[#3B82F6]',
-        icon: Sparkles,
-        iconBg: 'bg-[#EFF6FF]',
-        iconColor: 'text-[#2563EB]',
-      },
-      {
-        label: 'Copy Variations Tested',
-        value: 82,
-        barColor: 'bg-[#8B5CF6]',
-        icon: FileText,
-        iconBg: 'bg-[#F5F3FF]',
-        iconColor: 'text-[#7C3AED]',
-      },
-      {
-        label: 'Channel Targeting Set',
-        value: 66,
-        barColor: 'bg-[#06B6D4]',
-        icon: Share2,
-        iconBg: 'bg-[#ECFEFF]',
-        iconColor: 'text-[#0891B2]',
-      },
-      {
-        label: 'Conversion Paths Active',
-        value: 49,
-        barColor: 'bg-[#10B981]',
-        icon: TrendingUp,
-        iconBg: 'bg-[#ECFDF5]',
-        iconColor: 'text-[#059669]',
-      },
-      {
-        label: 'Budget Efficiency Score',
-        value: 29,
-        barColor: 'bg-[#F59E0B]',
-        icon: Lightbulb,
-        iconBg: 'bg-[#FFFBEB]',
-        iconColor: 'text-[#D97706]',
-      },
-    ],
-  },
-  {
     id: 'research',
     name: 'Research Agent',
     coverageTitle: 'Research Coverage',
@@ -191,6 +91,106 @@ const AGENTS: AgentData[] = [
       },
     ],
   },
+  {
+    id: 'marketing',
+    name: 'Marketing Agent',
+    coverageTitle: 'Marketing Coverage',
+    description:
+      'Creates high-converting ad campaigns, compelling creatives, and multi-channel content tailored to your target audience, buyer personas, and their unique pain points.',
+    link: '/marketing',
+    metrics: [
+      {
+        label: 'Ad Creatives Generated',
+        value: 100,
+        barColor: 'bg-[#3B82F6]',
+        icon: Sparkles,
+        iconBg: 'bg-[#EFF6FF]',
+        iconColor: 'text-[#2563EB]',
+      },
+      {
+        label: 'Copy Variations Tested',
+        value: 82,
+        barColor: 'bg-[#8B5CF6]',
+        icon: FileText,
+        iconBg: 'bg-[#F5F3FF]',
+        iconColor: 'text-[#7C3AED]',
+      },
+      {
+        label: 'Channel Targeting Set',
+        value: 66,
+        barColor: 'bg-[#06B6D4]',
+        icon: Share2,
+        iconBg: 'bg-[#ECFEFF]',
+        iconColor: 'text-[#0891B2]',
+      },
+      {
+        label: 'Conversion Paths Active',
+        value: 49,
+        barColor: 'bg-[#10B981]',
+        icon: TrendingUp,
+        iconBg: 'bg-[#ECFDF5]',
+        iconColor: 'text-[#059669]',
+      },
+      {
+        label: 'Budget Efficiency Score',
+        value: 29,
+        barColor: 'bg-[#F59E0B]',
+        icon: Lightbulb,
+        iconBg: 'bg-[#FFFBEB]',
+        iconColor: 'text-[#D97706]',
+      },
+    ],
+  },
+  {
+    id: 'engage',
+    name: 'Engage Agent',
+    coverageTitle: 'Engagement Coverage',
+    description:
+      'An AI-powered engagement engine that creates personalized outreach, nurtures prospects, and builds meaningful customer relationships across every stage of the sales journey.',
+    link: '/engage',
+    metrics: [
+      {
+        label: 'Prospects Enriched',
+        value: 100,
+        barColor: 'bg-[#3B82F6]',
+        icon: Mail,
+        iconBg: 'bg-[#EFF6FF]',
+        iconColor: 'text-[#2563EB]',
+      },
+      {
+        label: 'Sequences Automated',
+        value: 86,
+        barColor: 'bg-[#8B5CF6]',
+        icon: Send,
+        iconBg: 'bg-[#F5F3FF]',
+        iconColor: 'text-[#7C3AED]',
+      },
+      {
+        label: 'Deliverability Verified',
+        value: 71,
+        barColor: 'bg-[#06B6D4]',
+        icon: CheckCircle2,
+        iconBg: 'bg-[#ECFEFF]',
+        iconColor: 'text-[#0891B2]',
+      },
+      {
+        label: 'Response Rate Boost',
+        value: 53,
+        barColor: 'bg-[#10B981]',
+        icon: TrendingUp,
+        iconBg: 'bg-[#ECFDF5]',
+        iconColor: 'text-[#059669]',
+      },
+      {
+        label: 'Meetings Booked',
+        value: 30,
+        barColor: 'bg-[#F59E0B]',
+        icon: Calendar,
+        iconBg: 'bg-[#FFFBEB]',
+        iconColor: 'text-[#D97706]',
+      },
+    ],
+  },
 ];
 
 export const AgentsSection: React.FC = () => {
@@ -229,17 +229,20 @@ export const AgentsSection: React.FC = () => {
     return () => clearInterval(timer);
   }, [isVisible, isPaused, currentIndex]);
 
-  // Handle temporary hover pause that automatically resumes after 2.5s
+  // Stop auto-advancing completely while hovering over the card
   const handleMouseEnter = () => {
+    if (pauseTimeoutRef.current) {
+      clearTimeout(pauseTimeoutRef.current);
+      pauseTimeoutRef.current = null;
+    }
     setIsPaused(true);
-    if (pauseTimeoutRef.current) clearTimeout(pauseTimeoutRef.current);
-    pauseTimeoutRef.current = setTimeout(() => {
-      setIsPaused(false);
-    }, 2500);
   };
 
   const handleMouseLeave = () => {
-    if (pauseTimeoutRef.current) clearTimeout(pauseTimeoutRef.current);
+    if (pauseTimeoutRef.current) {
+      clearTimeout(pauseTimeoutRef.current);
+      pauseTimeoutRef.current = null;
+    }
     setIsPaused(false);
   };
 
@@ -364,7 +367,7 @@ export const AgentsSection: React.FC = () => {
   };
 
   return (
-    <section ref={sectionRef} data-custom-padding className="relative z-20 w-full pt-16 sm:pt-20 md:pt-24 pb-14 sm:pb-18 bg-white overflow-hidden border-t border-[#F1F5F9]">
+    <section ref={sectionRef} data-custom-padding className="relative z-20 w-full pt-16 sm:pt-20 md:pt-24 pb-16 sm:pb-24 lg:pb-28 bg-white overflow-hidden border-t border-[#F1F5F9]">
       <div className="w-full max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         {/* Section Header */}
         <div className="text-center max-w-4xl mx-auto">

@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useRef, useMemo } from 'react';
-import { Sparkles, Globe, Search, Briefcase } from 'lucide-react';
+import { Sparkles, Globe, MapPin, Target } from 'lucide-react';
 import { ScrollReveal } from '../../../components/ui/ScrollReveal';
 import { competitorsData } from './competitorsData';
 
@@ -168,7 +168,7 @@ export const Hero: React.FC = () => {
   }, [typedHeadline, isDeletingHeadline, wordIndex]);
 
   // 2. Second search bar (floating Figma card on the left side): AUTOMATIC TYPEWRITER
-  const targetText = 'Extract My Leads';
+  const targetText = 'Extract top competitors';
   const [typedUrl, setTypedUrl] = useState('');
   const [isTyping, setIsTyping] = useState(true);
   const [isKnobPressed, setIsKnobPressed] = useState(false);
@@ -179,7 +179,7 @@ export const Hero: React.FC = () => {
   const [cursorState, setCursorState] = useState<CursorState>('hidden');
 
   // 3. Desktop mockup search query subheader: types out when send button is clicked
-  const PROMPT_TARGET = 'Extracting all the Leads';
+  const PROMPT_TARGET = 'Extracting top competitors'
   const [promptText, setPromptText] = useState('');
   const [isPromptTyping, setIsPromptTyping] = useState(false);
   const [isPromptVisible, setIsPromptVisible] = useState(false);
@@ -579,16 +579,16 @@ export const Hero: React.FC = () => {
                           <span>Company Industry</span>
                         </div>
                       </th>
-                      <th className="py-2.5 px-4 w-[220px] font-normal text-neutral-600">
+                      <th className="py-2.5 px-4 w-[180px] font-normal text-neutral-600">
                         <div className="flex items-center gap-1.5">
-                          <Search className="w-3.5 h-3.5 text-neutral-400 stroke-[1.8] shrink-0" />
-                          <span>CEO Linkedin Url</span>
+                          <MapPin className="w-3.5 h-3.5 text-neutral-400 stroke-[1.8] shrink-0" />
+                          <span>Location</span>
                         </div>
                       </th>
                       <th className="py-2.5 px-4 font-normal text-neutral-600">
                         <div className="flex items-center gap-1.5">
-                          <Briefcase className="w-3.5 h-3.5 text-neutral-400 stroke-[1.8] shrink-0" />
-                          <span>Scrape Jobs</span>
+                          <Target className="w-3.5 h-3.5 text-neutral-400 stroke-[1.8] shrink-0" />
+                          <span>Positioning</span>
                         </div>
                       </th>
                     </tr>
@@ -649,53 +649,23 @@ export const Hero: React.FC = () => {
                             </span>
                           </td>
 
-                          {/* CEO Linkedin Url */}
+                          {/* Location */}
                           <td className="py-2.5 px-4 whitespace-nowrap truncate">
-                            <div className="flex items-center gap-1.5">
-                              <div className="w-5 h-5 rounded-full bg-gradient-to-tr from-neutral-700 to-neutral-500 text-white flex items-center justify-center text-[10px] font-medium shrink-0">
-                                {row.name.charAt(0).toUpperCase()}
-                              </div>
-                              <span className="text-[12px] text-neutral-600 truncate max-w-[160px] font-normal">
-                                {row.social || 'https://www.linkedin.com/in'}
-                              </span>
-                            </div>
+                            <span className="text-[12.5px] text-neutral-600 truncate font-normal">
+                              {row.hqLocation || row.location || 'San Francisco, CA'}
+                            </span>
                           </td>
 
-                          {/* Scrape Jobs */}
-                          <td className="py-2.5 px-4 whitespace-nowrap text-[12px] truncate">
-                            {index === 0 ? (
-                              <span className="text-neutral-700 font-medium">
-                                6 open roles · Solutions Architect
-                              </span>
-                            ) : index === 1 ? (
-                              <span className="text-neutral-700 font-medium">
-                                20 open roles · Customer Success
-                              </span>
-                            ) : index === 2 ? (
-                              <span className="text-neutral-700 font-medium">
-                                4 open roles · AI Systems Engineer
-                              </span>
-                            ) : index === 3 ? (
-                              <span className="text-neutral-700 font-medium">
-                                15 open roles · Data Infrastructure
-                              </span>
-                            ) : isNewlyAdded && tableStatus === 'adding' ? (
+                          {/* Positioning */}
+                          <td className="py-2.5 px-4 whitespace-nowrap text-[12.5px] truncate">
+                            {isNewlyAdded && tableStatus === 'adding' ? (
                               <span className="flex items-center gap-1.5 text-blue-600 font-medium">
                                 <span className="w-1.5 h-1.5 rounded-full bg-blue-600 animate-ping inline-block" />
-                                Generating Scrape Jobs...
+                                Analyzing Positioning...
                               </span>
                             ) : (
-                              <span className="text-neutral-700 font-medium">
-                                {[
-                                  '8 open roles · Full Stack Engineer',
-                                  '12 open roles · Robotics Specialist',
-                                  '5 open roles · Automation Engineer',
-                                  '9 open roles · Logistics Systems',
-                                  '7 open roles · AI Software Engineer',
-                                  '3 open roles · Operations Lead',
-                                  '11 open roles · Firmware Engineer',
-                                  '6 open roles · Warehouse Robotics',
-                                ][(index - INITIAL_ROWS_COUNT) % 8]}
+                              <span className="text-neutral-700 font-medium truncate">
+                                {row.positioning || row.productType}
                               </span>
                             )}
                           </td>

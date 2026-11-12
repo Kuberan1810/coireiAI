@@ -509,11 +509,11 @@ export const MarketIntelligence: React.FC = () => {
       {/* Top Sections Surface */}
       <div className="relative z-20 bg-white pt-10 sm:pt-14 pb-20 sm:pb-28 px-4 sm:px-6 lg:px-8">
         {/* 1. HERO TITLE SECTION */}
-        <div className="max-w-[960px] mx-auto text-center pb-8 sm:pb-12">
-          <h1 className="text-3xl sm:text-4xl md:text-[46px] lg:text-[50px] font-bold tracking-tight leading-[1.18] sm:leading-[1.15]">
-            <span className="text-[#52525B]">SEO, AEO, Content Creation, Ads, and</span>
+        <div className="max-w-[1080px] mx-auto text-center pb-8 sm:pb-12">
+          <h1 className="text-3xl sm:text-4xl md:text-[44px] lg:text-[48px] font-bold tracking-tight leading-[1.18] sm:leading-[1.15]">
+            <span className="text-[#52525B]">Ad Copy Gen, Creative Gen, Campaign Creation,</span>
             <br />
-            <span className="text-[#52525B]">Automated Marketing </span>
+            <span className="text-[#52525B]">Campaign Optimisation, </span>
             <span className="text-[#09090B] font-extrabold">All in One Platform.</span>
           </h1>
         </div>
@@ -709,7 +709,7 @@ export const MarketIntelligence: React.FC = () => {
                 SEO,AEO
               </h3>
               <p className="font-['Manrope',sans-serif] text-[13px] sm:text-[14px] text-[#71717A] max-w-[280px] sm:max-w-[340px] mx-auto leading-relaxed">
-                Stay on top of everything, from to-dos to long-term projects.
+               Improve your search visibility and rankings with data-driven strategies for search engines and AI-powered discovery.
               </p>
             </div>
           </div>
@@ -727,7 +727,7 @@ export const MarketIntelligence: React.FC = () => {
                 Content Creation
               </h3>
               <p className="font-['Manrope',sans-serif] text-[13px] sm:text-[14px] text-[#71717A] max-w-[280px] sm:max-w-[340px] mx-auto leading-relaxed">
-                Understand where your time goes and maximize every minute.
+               Improve your search visibility and rankings with data-driven strategies for search engines and AI-powered discovery.
               </p>
             </div>
           </div>
@@ -745,7 +745,7 @@ export const MarketIntelligence: React.FC = () => {
                 Blog
               </h3>
               <p className="font-['Manrope',sans-serif] text-[13px] sm:text-[14px] text-[#71717A] max-w-[280px] sm:max-w-[340px] mx-auto leading-relaxed">
-                Stay on top of everything, from to-dos to long-term projects.
+                Create engaging, SEO-friendly blog content tailored to your target audience, industry trends, and content strategy to drive organic leads.
               </p>
             </div>
           </div>
@@ -763,7 +763,7 @@ export const MarketIntelligence: React.FC = () => {
                 Automated Marketing
               </h3>
               <p className="font-['Manrope',sans-serif] text-[13px] sm:text-[14px] text-[#71717A] max-w-[280px] sm:max-w-[340px] mx-auto leading-relaxed">
-                Stay on top of everything, from to-dos to long-term projects.
+                    Automate multi-channel campaigns, streamline execution, and track performance to maximize marketing impact.
               </p>
             </div>
           </div>
@@ -779,7 +779,7 @@ export const MarketIntelligence: React.FC = () => {
         <div className="w-full max-w-[1240px] mx-auto border-t border-neutral-100 my-16 sm:my-20" />
 
         {/* Blog Automation Section: Create, Optimize & Publish Blogs Automatically */}
-        <div className="max-w-[1240px] mx-auto">
+        <div id="automated-blog" className="scroll-mt-24 max-w-[1240px] mx-auto">
           <div className="grid grid-cols-1 lg:grid-cols-12 gap-10 lg:gap-14 items-center">
 
             {/* Left Column: Heading and Large Paragraph */}

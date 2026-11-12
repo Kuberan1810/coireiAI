@@ -15,17 +15,17 @@ export const ChannelPerformanceSection: React.FC = () => {
       </div>
 
       {/* 2. Channel Performance Showcase Grid */}
-      <div className="max-w-[1240px] mx-auto mb-16 sm:mb-24 px-4 sm:px-6 lg:px-8">
+      <div id="cross-media" className="scroll-mt-24 max-w-[1240px] mx-auto mb-16 sm:mb-24 px-4 sm:px-6 lg:px-8">
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-10 lg:gap-14 items-center">
           {/* Left Column: Heading and Description */}
           <div className="lg:col-span-5 text-left flex flex-col justify-center">
             <h2 className="font-['Plus_Jakarta_Sans',sans-serif] font-bold text-[34px] sm:text-[42px] lg:text-[48px] text-[#0D0D0D] leading-[1.12] tracking-tight mb-4 sm:mb-5">
-              Know where your
+              Know Which Channels
               <br />
-              message will perform.
+              Drive Your Growth.
             </h2>
             <p className="font-['Manrope',sans-serif] text-[14px] sm:text-[15px] text-[#71717A] leading-[25px] max-w-[440px]">
-              Discover the best channels for your message by analyzing audience engagement, search demand, and content opportunities to maximize your marketing impact.
+              Identify the most effective channels to reach your target audience. Coirei analyzes engagement patterns, audience behavior, and channel performance to help you focus your marketing efforts where they matter most.
             </p>
           </div>
 

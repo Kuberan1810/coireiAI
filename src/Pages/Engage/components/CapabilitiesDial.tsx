@@ -169,8 +169,9 @@ export const CapabilitiesDial: React.FC = () => {
 
   return (
     <section
+      id="intelligence"
       ref={containerRef}
-      className="relative w-full bg-white h-[280vh]"
+      className="scroll-mt-20 relative w-full bg-white h-[280vh]"
     >
       {/* Sticky Fullscreen Pinned Container - Fixed below navbar with generous spacing between sections */}
       <div className="sticky top-0 h-screen w-full overflow-hidden flex flex-col justify-start items-center bg-white px-4 sm:px-6 lg:px-8 select-none pt-[72px] sm:pt-[84px] lg:pt-[96px] pb-8">

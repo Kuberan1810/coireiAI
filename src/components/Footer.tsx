@@ -224,7 +224,7 @@ export const Footer: React.FC = () => {
               </div>
             </div>
           </div>
-
+  
           {/* Line 174 from Figma: 1px width, 274px height, linear gradient #FFFFFF to #000000, starts flush at top edge */}
           <div
             className="hidden lg:block w-[1px] h-[274px] shrink-0 bg-gradient-to-b from-[#FFFFFF] to-[#000000] -mt-10 sm:-mt-14"
@@ -239,12 +239,18 @@ export const Footer: React.FC = () => {
                 Site Index
               </span>
               <div className="flex flex-col space-y-2 text-[13px] sm:text-[13.5px] font-normal">
-                {/* <Link
+                <Link
                   to="/competitor-analysis"
                   className="text-white hover:text-neutral-300 transition-colors cursor-pointer"
                 >
                   Competitor analysis
-                </Link> */}
+                </Link>
+                <Link
+                  to="/voice-of-customer"
+                  className="text-white hover:text-neutral-300 transition-colors cursor-pointer"
+                >
+                  Voice of customer
+                </Link>
                 <Link
                   to="/lead-nurturing"
                   className="text-white hover:text-neutral-300 transition-colors cursor-pointer"

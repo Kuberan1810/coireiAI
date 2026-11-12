@@ -43,10 +43,10 @@ export const BusinessSection: React.FC = () => {
         <div className="w-full max-w-7xl mx-auto px-6 sm:px-8 lg:px-12">
           <ScrollReveal variant="fade-up" duration={700} distance={20}>
             <h2 className="text-3xl sm:text-4xl md:text-[46px] lg:text-[50px] font-semibold text-[#0B0F19] tracking-tight leading-[1.12]">
-              We work with business
+              Built for Businesses
             </h2>
             <h3 className="text-3xl sm:text-4xl md:text-[46px] lg:text-[50px] font-semibold text-[#9CA3AF] tracking-tight leading-[1.12] mt-1 sm:mt-1.5">
-              Not for consumers
+               For B2B Growth
             </h3>
           </ScrollReveal>
         </div>

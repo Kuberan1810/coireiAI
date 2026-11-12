@@ -19,6 +19,7 @@ export interface Competitor {
   industryDetail?: string;
   companySize?: string;
   location?: string;
+  positioning?: string;
   founded?: string;
   offerings?: string[];
 }

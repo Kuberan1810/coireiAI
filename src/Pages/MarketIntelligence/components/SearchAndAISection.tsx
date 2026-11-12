@@ -248,7 +248,7 @@ export const SearchAndAISection: React.FC = () => {
   };
 
   return (
-    <div ref={sectionRef} className="w-full">
+    <div id="seo-aeo" ref={sectionRef} className="scroll-mt-24 w-full">
       {/* 4. GET FOUND ON SEARCH. GET CITED BY AI. SECTION */}
       <div className="max-w-4xl mx-auto text-center mt-20 sm:mt-28 mb-12 sm:mb-16 px-4">
         <h2 className="font-['Plus_Jakarta_Sans',sans-serif] text-3xl sm:text-4xl md:text-[46px] font-bold text-[#0D0D0D] tracking-tight leading-tight mb-4">

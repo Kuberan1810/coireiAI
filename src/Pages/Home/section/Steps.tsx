@@ -20,13 +20,13 @@ const STEP_CARDS: StepCardItem[] = [
     id: 'understand',
     title: 'Understand',
     description:
-      'We analyze and extract relevant data from your website to build a complete understanding of your company, product, services, target audience,',
+      'We extract insights from your website to understand your company, products, services, value proposition, target audience, and market positioning.',
   },
   {
     id: 'analyse',
     title: 'Analyse',
     description:
-      'We analyze and extract relevant data from your website to build a complete understanding of your company, product, services, target audience, positioning, and what makes you different',
+      'We analyse industry trends, competitors, market positioning, and key differentiators to uncover opportunities and identify where you stand in the market.',
   },
   {
     id: 'find',
@@ -180,10 +180,10 @@ export const Steps: React.FC = () => {
               {STEP_CARDS.map((card) => (
                 <div
                   key={card.id}
-                  className="p-5 sm:p-6 lg:p-7 flex flex-col justify-start text-left bg-white transition-all duration-300"
+                  className="p-5 sm:p-6 lg:p-7 flex flex-col h-full text-left bg-white transition-all duration-300"
                 >
                   {/* Top Illustration Box with BGforthem background */}
-                  <div className="relative w-full aspect-[370/330] sm:aspect-[380/340] overflow-hidden rounded-[16px] border border-[#F1F5F9] flex items-center justify-center select-none bg-[#FAFBFF]">
+                  <div className="relative w-full aspect-[380/320] min-h-[260px] sm:min-h-[280px] lg:min-h-[295px] overflow-hidden rounded-[16px] border border-[#F1F5F9] flex items-center justify-center select-none bg-[#FAFBFF] shrink-0">
                     {/* Background SVG: BGforthem */}
                     <img
                       src={bgForThem}
@@ -194,7 +194,7 @@ export const Steps: React.FC = () => {
 
                     {/* Card 1 Visual: website_analysis + have_we_analysed */}
                     {card.id === 'understand' && (
-                      <div className="relative w-full h-full flex flex-col items-start justify-center px-4 sm:px-6 py-4 gap-3.5 sm:gap-4">
+                      <div className="relative w-full h-full flex flex-col items-center justify-center px-4 sm:px-5 py-3 gap-2.5 sm:gap-3">
                         <div
                           ref={card1TopRef}
                           className="w-full flex justify-center will-change-transform"
@@ -202,7 +202,7 @@ export const Steps: React.FC = () => {
                           <img
                             src={websiteAnalysisCard}
                             alt="Website Analysis"
-                            className="w-[84%] max-w-[270px] self-center drop-shadow-[0_4px_16px_rgba(0,0,0,0.05)] relative z-10 select-none pointer-events-none will-change-transform"
+                            className="w-[80%] max-w-[245px] self-center drop-shadow-[0_4px_16px_rgba(0,0,0,0.05)] relative z-10 select-none pointer-events-none will-change-transform"
                             style={{
                               animation: 'levitateCard1A 4.6s ease-in-out infinite',
                             }}
@@ -211,12 +211,12 @@ export const Steps: React.FC = () => {
                         </div>
                         <div
                           ref={card1BtmRef}
-                          className="w-full will-change-transform"
+                          className="w-full flex justify-start pl-2 sm:pl-4 will-change-transform"
                         >
                           <img
                             src={haveWeAnalysed}
                             alt="Have we analysed all pages?"
-                            className="w-[72%] max-w-[225px] ml-1 sm:ml-2 drop-shadow-[0_4px_16px_rgba(0,0,0,0.06)] relative z-20 select-none pointer-events-none will-change-transform"
+                            className="w-[68%] max-w-[205px] drop-shadow-[0_4px_16px_rgba(0,0,0,0.06)] relative z-20 select-none pointer-events-none will-change-transform"
                             style={{
                               animation: 'levitateCard1B 3.8s ease-in-out infinite',
                             }}
@@ -228,7 +228,7 @@ export const Steps: React.FC = () => {
 
                     {/* Card 2 Visual: website_analysis.csv */}
                     {card.id === 'analyse' && (
-                      <div className="relative w-full h-full flex items-center justify-center p-4 sm:p-6">
+                      <div className="relative w-full h-full flex items-center justify-center p-3 sm:p-4">
                         <div
                           ref={card2Ref}
                           className="w-full flex justify-center will-change-transform"
@@ -236,7 +236,7 @@ export const Steps: React.FC = () => {
                           <img
                             src={websiteAnalysisCsv}
                             alt="Website Analysis CSV"
-                            className="w-[86%] max-w-[275px] drop-shadow-[0_6px_20px_rgba(0,0,0,0.06)] relative z-10 select-none pointer-events-none will-change-transform"
+                            className="w-[80%] max-w-[245px] drop-shadow-[0_6px_20px_rgba(0,0,0,0.06)] relative z-10 select-none pointer-events-none will-change-transform"
                             style={{
                               animation: 'levitateCard2 5.0s ease-in-out infinite',
                             }}
@@ -249,11 +249,11 @@ export const Steps: React.FC = () => {
                     {/* Card 3 Visual: ICPmatch + ICPoverview */}
                     {card.id === 'find' && (
                       <div
-                        className="relative w-full h-full flex items-center justify-center gap-3 sm:gap-4 px-3 sm:px-4"
+                        className="relative w-full h-full flex items-center justify-center gap-2.5 sm:gap-3.5 px-3 sm:px-4"
                       >
                         <div
                           ref={card3MatchRef}
-                          className="w-[62%] max-w-[204px] shrink-0 will-change-transform flex justify-center"
+                          className="w-[58%] max-w-[185px] shrink-0 will-change-transform flex justify-center"
                         >
                           <img
                             src={icpMatch}
@@ -267,7 +267,7 @@ export const Steps: React.FC = () => {
                         </div>
                         <div
                           ref={card3OverviewRef}
-                          className="w-[28.5%] max-w-[94px] shrink-0 will-change-transform flex justify-center"
+                          className="w-[28%] max-w-[88px] shrink-0 will-change-transform flex justify-center"
                         >
                           <img
                             src={icpOverview}
@@ -283,15 +283,15 @@ export const Steps: React.FC = () => {
                     )}
                   </div>
 
-                  {/* Card Title */}
-                  <h3 className="text-[20px] sm:text-[22px] font-bold text-[#111827] tracking-tight mt-6 sm:mt-7 mb-2.5 leading-snug cursor-text select-text">
-                    {card.title}
-                  </h3>
-
-                  {/* Card Description */}
-                  <p className="text-[13.5px] sm:text-[14.5px] text-[#64748B] font-normal leading-[1.6] cursor-text select-text">
-                    {card.description}
-                  </p>
+                  {/* Text Content */}
+                  <div className="flex flex-col flex-1 pt-6 sm:pt-7">
+                    <h3 className="text-[20px] sm:text-[22px] font-bold text-[#111827] tracking-tight mb-2.5 leading-snug cursor-text select-text">
+                      {card.title}
+                    </h3>
+                    <p className="text-[13.5px] sm:text-[14.5px] text-[#64748B] font-normal leading-[1.6] cursor-text select-text">
+                      {card.description}
+                    </p>
+                  </div>
                 </div>
               ))}
             </div>

@@ -1,59 +1,95 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { Link, useLocation } from 'react-router-dom';
-import { Menu, X, ChevronDown, TrendingUp, Sparkles } from 'lucide-react';
+import { Menu, X, ChevronDown, ChevronRight } from 'lucide-react';
 import coireiLogo from '../assets/logo/coireiLogo.png';
 
 interface FeatureSubItem {
   title: string;
   description: string;
   href: string;
-  icon: React.ComponentType<{ className?: string; style?: React.CSSProperties; strokeWidth?: number }>;
-  iconColor: string;
 }
 
-interface FeatureCategory {
-  category: string;
+interface NavFeatureSection {
+  id: string;
+  title: string;
+  subtitle: string;
+  href: string;
   items: FeatureSubItem[];
 }
 
-const FEATURE_CATEGORIES: FeatureCategory[] = [
+const NAV_FEATURE_SECTIONS: NavFeatureSection[] = [
   {
-    category: 'Analysis',
+    id: 'research',
+    title: 'Research Agent',
+    subtitle: 'Competitor & market intelligence',
+    href: '/competitor-analysis',
     items: [
-      // {
-      //   title: 'Analysis Engine',
-      //   description: 'Track competitor moves, pricing, and messaging shifts in real-time.',
-      //   href: '/competitor-analysis',
-      //   icon: BarChart3,
-      //   iconColor: '#F97316', // Orange
-      // },
       {
-        title: 'Marketing Intelligence',
-        description: 'Create targeted campaigns and improve marketing performance.',
-        href: '/marketing',
-        icon: TrendingUp,
-        iconColor: '#3B82F6', // Blue
+        title: 'Competitor Analysis',
+        description: 'Track competitor moves, positioning, messaging, pricing, and ad strategies in real-time.',
+        href: '/competitor-analysis',
       },
+      {
+        title: 'Voice of Customer',
+        description: 'Capture customer sentiment, reviews, and buyer conversations across channels.',
+        href: '/voice-of-customer',
+      },
+      // {
+      //   title: 'Product Analysis',
+      //   description: 'Analyze competitor product capabilities, core features, and discover feature gaps.',
+      //   href: '#',
+      // },
     ],
   },
   {
-    category: 'AGENTS',
+    id: 'engage',
+    title: 'Engage Agent',
+    subtitle: 'Autonomous buyer engagement & pipeline',
+    href: '/engage',
     items: [
-      {
-        title: 'Engage Agent',
-        description: 'Autonomous multi-channel buyer engagement and pipeline conversion.',
-        href: '/engage',
-        icon: Sparkles,
-        iconColor: '#EC4899', // Pink / Rose
-      },
       {
         title: 'Lead-Nurturing',
         description: 'Build meaningful customer relationships with personalized engagement and timely follow-ups.',
         href: '/lead-nurturing',
-        icon: TrendingUp,
-        iconColor: '#8B5CF6', // Purple
       },
-
+      {
+        title: 'Multi-Channel Outreach',
+        description: 'Reach high-intent prospects across email, social channels, and web touchpoints automatically.',
+        href: '/engage#omnichannel',
+      },
+      {
+        title: 'The Intelligence of Engagement',
+        description: 'Automate lead qualification and accelerate conversion across every deal stage.',
+        href: '/engage#intelligence',
+      },
+    ],
+  },
+  {
+    id: 'marketing',
+    title: 'Marketing Intelligence',
+    subtitle: 'Campaign strategy & cross-media performance',
+    href: '/marketing',
+    items: [
+      {
+        title: 'Targeted Campaign Strategy',
+        description: 'Create targeted campaigns and improve marketing ROI across all segments.',
+        href: '/marketing',
+      },
+      {
+        title: 'Cross-Media Optimization',
+        description: 'Optimize ad creative, messaging, and channel distribution with unified insights.',
+        href: '/marketing#cross-media',
+      },
+      {
+        title: 'SEO & AEO',
+        description: 'Improve search rankings with SEO and help AI platforms discover and cite your content.',
+        href: '/marketing#seo-aeo',
+      },
+      {
+        title: 'Automated Blog Posting',
+        description: 'Create, optimize, and publish SEO blogs directly to your website automatically.',
+        href: '/marketing#automated-blog',
+      },
     ],
   },
 ];
@@ -62,6 +98,7 @@ export const Navbar: React.FC = () => {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const [mobileFeaturesOpen, setMobileFeaturesOpen] = useState(false);
   const [dropdownOpen, setDropdownOpen] = useState(false);
+  const [activeNavTab, setActiveNavTab] = useState<string>('research');
   const dropdownTimeoutRef = useRef<ReturnType<typeof setTimeout> | null>(null);
 
   const location = useLocation();
@@ -86,6 +123,7 @@ export const Navbar: React.FC = () => {
   useEffect(() => {
     setMobileMenuOpen(false);
     setDropdownOpen(false);
+    setActiveNavTab('research');
     isScrolledRef.current = false;
     setIsScrolled(false);
     isAtTopRef.current = true;
@@ -339,9 +377,6 @@ export const Navbar: React.FC = () => {
                 : 'rgba(241, 245, 249, 0.9)',
         }}
       >
-        {/* Scroll Progress Bar: Very thin (2px), active only when inside Steps section */}
-
-
         {/* Navbar Inner Content */}
         <div
           className={`w-full h-full relative flex items-center justify-between transition-[padding] duration-500 ease-[cubic-bezier(0.16,1,0.3,1)] ${isScrolled
@@ -376,19 +411,103 @@ export const Navbar: React.FC = () => {
               Home
             </Link>
 
-            {/* Features Link Trigger */}
+            {/* Features Trigger with Floating Two-Pane Mega-Dropdown */}
             <div
-              className="py-4 cursor-pointer"
+              className="relative py-4 cursor-pointer"
               onMouseEnter={handleMouseEnter}
               onMouseLeave={handleMouseLeave}
             >
               <button
                 type="button"
-                className="flex items-center text-[14.5px] font-medium text-neutral-700 hover:text-neutral-900 transition-colors py-1 cursor-pointer select-none group"
+                className="flex items-center gap-1.5 text-[14.5px] font-medium text-neutral-700 hover:text-neutral-900 transition-colors py-1 cursor-pointer select-none group"
                 aria-expanded={dropdownOpen}
               >
                 <span>Features</span>
+                <ChevronDown
+                  className={`w-3.5 h-3.5 text-neutral-500 transition-transform duration-200 ${
+                    dropdownOpen ? 'rotate-180 text-black' : ''
+                  }`}
+                />
               </button>
+
+              {/* Floating Two-Pane Dropdown Card matching requested navbar example */}
+              {!isScrolled && (
+                <div
+                  className={`absolute top-full left-1/2 -translate-x-1/2 pt-2 z-50 transition-all duration-200 ease-out origin-top ${
+                    dropdownOpen
+                      ? 'opacity-100 translate-y-0 pointer-events-auto visible'
+                      : 'opacity-0 -translate-y-2 pointer-events-none invisible'
+                  }`}
+                >
+                  <div className="bg-white rounded-2xl border border-neutral-200/80 shadow-[0_28px_70px_-15px_rgba(0,0,0,0.15)] p-5 flex w-[980px] max-w-[95vw] text-left whitespace-normal">
+                    {/* Left Pane: Categories / Agents list */}
+                    <div className="w-[320px] shrink-0 flex flex-col gap-2 pr-4 border-r border-neutral-200/70">
+                      {NAV_FEATURE_SECTIONS.map((section) => {
+                        const isSelected = activeNavTab === section.id;
+                        return (
+                          <Link
+                            key={section.id}
+                            to={section.href}
+                            onMouseEnter={() => setActiveNavTab(section.id)}
+                            onClick={() => setDropdownOpen(false)}
+                            className={`flex items-center justify-between px-4 py-3.5 rounded-xl min-h-[76px] transition-all duration-150 text-left group ${
+                              isSelected
+                                ? 'bg-neutral-100/90 text-black font-semibold'
+                                : 'hover:bg-neutral-50/80 text-neutral-800 hover:text-black'
+                            }`}
+                          >
+                            <div className="flex flex-col min-w-0 pr-2">
+                              <span className="text-[15px] font-semibold text-neutral-900 group-hover:text-black leading-snug">
+                                {section.title}
+                              </span>
+                              <span className="text-[13px] text-neutral-500 font-normal leading-normal mt-1 group-hover:text-neutral-600">
+                                {section.subtitle}
+                              </span>
+                            </div>
+                            {isSelected && (
+                              <ChevronRight className="w-4.5 h-4.5 text-neutral-500 shrink-0 transition-transform group-hover:translate-x-0.5 ml-2" />
+                            )}
+                          </Link>
+                        );
+                      })}
+                    </div>
+
+                    {/* Right Pane: Sub-items of active category */}
+                    <div className="flex-1 min-w-0 flex flex-col gap-2 pl-4 pr-1">
+                      {NAV_FEATURE_SECTIONS.find((s) => s.id === activeNavTab)?.items.map((item) => (
+                        <Link
+                          key={item.title}
+                          to={item.href}
+                          onClick={(e) => {
+                            if (item.href === '#' || !item.href) {
+                              e.preventDefault();
+                              return;
+                            }
+                            setDropdownOpen(false);
+                            if (item.href.includes('#')) {
+                              const [path, hashId] = item.href.split('#');
+                              if (location.pathname === path) {
+                                const el = document.getElementById(hashId);
+                                if (el) {
+                                  el.scrollIntoView({ behavior: 'smooth' });
+                                }
+                              }
+                            }
+                          }}
+                          className="px-4 py-3.5 rounded-xl min-h-[76px] hover:bg-neutral-50/90 transition-all duration-150 flex flex-col justify-center text-left group"
+                        >
+                          <span className="text-[15px] font-semibold text-neutral-900 group-hover:text-black leading-snug">
+                            {item.title}
+                          </span>
+                          <span className="text-[13px] text-neutral-500 font-normal leading-normal mt-1 group-hover:text-neutral-600 break-words">
+                            {item.description}
+                          </span>
+                        </Link>
+                      ))}
+                    </div>
+                  </div>
+                </div>
+              )}
             </div>
 
             <Link
@@ -400,17 +519,6 @@ export const Navbar: React.FC = () => {
             >
               About
             </Link>
-
-            {/* <Link
-              to="/startups"
-              className={`text-[14.5px] font-medium transition-colors py-1 flex items-center gap-1.5 ${location.pathname.startsWith('/startup')
-                ? 'text-black font-semibold'
-                : 'text-neutral-700 hover:text-neutral-900'
-                }`}
-            >
-              <span>Startups</span>
-              <span className="text-[10px] font-bold uppercase tracking-wider px-1.5"></span>
-            </Link> */}
           </nav>
 
           {/* Right Action Buttons */}
@@ -442,64 +550,7 @@ export const Navbar: React.FC = () => {
           </div>
         </div>
 
-        {/* Full-Screen Width Desktop Mega Menu (Figma W: 1536 / Full-width container) */}
-        {!isScrolled && (
-          <div
-            className={`hidden md:block absolute top-full left-0 right-0 w-full bg-white border-b border-neutral-100 shadow-[0_24px_48px_-12px_rgba(0,0,0,0.06)] transition-all duration-200 ease-out origin-top ${dropdownOpen
-              ? 'opacity-100 translate-y-0 pointer-events-auto visible'
-              : 'opacity-0 -translate-y-2 pointer-events-none invisible'
-              }`}
-            onMouseEnter={handleMouseEnter}
-            onMouseLeave={handleMouseLeave}
-          >
-            <div className="max-w-[1240px] mx-auto px-6 sm:px-8 pt-15 pb-15">
-              <div className="grid grid-cols-2 gap-12 lg:gap-20 max-w-4xl text-left">
-                {FEATURE_CATEGORIES.map((cat) => (
-                  <div key={cat.category} className="flex flex-col">
-                    <span className="text-[11px] font-medium tracking-widest text-neutral-400 uppercase mb-4 px-2">
-                      {cat.category}
-                    </span>
-                    <div className="flex flex-col gap-1.5">
-                      {cat.items.map((item) => {
-                        const Icon = item.icon;
-                        const isActive = location.pathname === item.href;
-                        return (
-                          <Link
-                            key={item.href}
-                            to={item.href}
-                            onClick={() => setDropdownOpen(false)}
-                            className={`flex items-start gap-4 p-3 rounded-xl transition-all duration-150 group ${isActive
-                              ? 'bg-neutral-50 text-black'
-                              : 'hover:bg-neutral-50/80 text-neutral-700 hover:text-black'
-                              }`}
-                          >
-                            <div className="mt-0.5 shrink-0">
-                              <Icon
-                                className="w-5 h-5 transition-transform duration-150 group-hover:scale-110"
-                                style={{ color: item.iconColor }}
-                                strokeWidth={1.8}
-                              />
-                            </div>
-                            <div className="flex flex-col">
-                              <span className="text-[14px] font-semibold tracking-tight text-neutral-900 group-hover:text-black leading-snug">
-                                {item.title}
-                              </span>
-                              <span className="text-[12.5px] text-neutral-500 font-normal leading-relaxed mt-0.5 group-hover:text-neutral-600">
-                                {item.description}
-                              </span>
-                            </div>
-                          </Link>
-                        );
-                      })}
-                    </div>
-                  </div>
-                ))}
-              </div>
-            </div>
-          </div>
-        )}
-
-        {/* Mobile dropdown menu (only active page routes matching App.tsx) */}
+        {/* Mobile dropdown menu */}
         {!isScrolled && mobileMenuOpen && (
           <div className="md:hidden border-b border-neutral-100 bg-white/98 backdrop-blur-xl px-6 pt-3 pb-6 space-y-3 shadow-xl max-h-[85vh] overflow-y-auto">
             <Link
@@ -523,37 +574,53 @@ export const Navbar: React.FC = () => {
 
               {mobileFeaturesOpen && (
                 <div className="pl-2 pr-1 py-2 space-y-4 border-l-2 border-neutral-100 ml-1 mt-2 text-left">
-                  {FEATURE_CATEGORIES.map((cat) => (
-                    <div key={cat.category} className="space-y-2">
-                      <span className="text-[11px] font-bold tracking-wider text-neutral-400 uppercase px-2">
-                        {cat.category}
-                      </span>
-                      <div className="space-y-1">
-                        {cat.items.map((item) => {
-                          const Icon = item.icon;
-                          const isActive = location.pathname === item.href;
-                          return (
-                            <Link
-                              key={item.href}
-                              to={item.href}
-                              onClick={() => setMobileMenuOpen(false)}
-                              className={`flex items-start gap-3 py-2 px-2.5 rounded-lg text-sm transition-colors ${isActive
-                                ? 'bg-neutral-100 text-black font-semibold'
-                                : 'text-neutral-700 hover:text-black hover:bg-neutral-50'
-                                }`}
-                            >
-                              <Icon
-                                className="w-4 h-4 mt-0.5 shrink-0"
-                                style={{ color: item.iconColor }}
-                                strokeWidth={1.8}
-                              />
-                              <div className="flex flex-col">
-                                <span className="font-semibold text-[13.5px] text-neutral-900">{item.title}</span>
-                                <span className="text-[11.5px] text-neutral-500 font-normal mt-0.5 leading-snug">{item.description}</span>
-                              </div>
-                            </Link>
-                          );
-                        })}
+                  {NAV_FEATURE_SECTIONS.map((section) => (
+                    <div key={section.id} className="space-y-2">
+                      <div className="px-2">
+                        <Link
+                          to={section.href}
+                          onClick={() => setMobileMenuOpen(false)}
+                          className="font-bold text-[13.5px] text-neutral-900 hover:text-black flex items-center justify-between"
+                        >
+                          <span>{section.title}</span>
+                          <span className="text-[10px] uppercase font-semibold text-neutral-400 bg-neutral-100 px-1.5 py-0.5 rounded">
+                            Agent
+                          </span>
+                        </Link>
+                        <p className="text-[11.5px] text-neutral-500 mt-0.5">{section.subtitle}</p>
+                      </div>
+
+                      <div className="space-y-1 pl-2 border-l border-neutral-100 ml-2">
+                        {section.items.map((sub) => (
+                          <Link
+                            key={sub.title}
+                            to={sub.href}
+                            onClick={(e) => {
+                              if (sub.href === '#' || !sub.href) {
+                                e.preventDefault();
+                                return;
+                              }
+                              setMobileMenuOpen(false);
+                              if (sub.href.includes('#')) {
+                                const [path, hashId] = sub.href.split('#');
+                                if (location.pathname === path) {
+                                  const el = document.getElementById(hashId);
+                                  if (el) {
+                                    el.scrollIntoView({ behavior: 'smooth' });
+                                  }
+                                }
+                              }
+                            }}
+                            className="block py-1.5 px-2 rounded-lg text-xs hover:bg-neutral-50 transition-colors"
+                          >
+                            <span className="font-semibold text-[12.5px] text-neutral-800 block">
+                              {sub.title}
+                            </span>
+                            <span className="text-[11px] text-neutral-500 block leading-snug mt-0.5">
+                              {sub.description}
+                            </span>
+                          </Link>
+                        ))}
                       </div>
                     </div>
                   ))}
@@ -568,15 +635,6 @@ export const Navbar: React.FC = () => {
             >
               About
             </Link>
-
-            {/* <Link
-              to="/startups"
-              onClick={() => setMobileMenuOpen(false)}
-              className="block py-2 text-neutral-700 font-medium text-base hover:text-black flex items-center justify-between"
-            >
-              <span>Startups</span>
-              <span className="text-[10px] font-bold uppercase tracking-wider bg-sky-100 text-sky-700 px-1.5 py-0.5 rounded-full">New</span>
-            </Link> */}
 
             <div className="pt-4 border-t border-neutral-100 flex flex-col gap-3">
               <Link

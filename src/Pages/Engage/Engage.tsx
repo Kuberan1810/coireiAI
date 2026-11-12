@@ -324,7 +324,7 @@ export const Engage: React.FC = () => {
       {/* =========================================================
           SECTION 4: OMNICHANNEL CONNECTIVITY (Exact Figma Spec)
           ========================================================= */}
-      <section className="relative w-full py-[40px] sm:py-[56px] px-6 sm:px-8 lg:px-12 bg-[#FAF9F6] border-t border-[#F1F5F9]">
+      <section id="omnichannel" className="scroll-mt-20 relative w-full py-[40px] sm:py-[56px] px-6 sm:px-8 lg:px-12 bg-[#FAF9F6] border-t border-[#F1F5F9]">
         <div className="max-w-[1152px] mx-auto text-left">
           {/* Eyebrow */}
           <div className="font-['Manrope',sans-serif] font-semibold text-[13px] uppercase tracking-wider text-[#64748B] mb-2.5">
